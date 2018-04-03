@@ -36,3 +36,7 @@ export SOME_THING=biscuits
 > Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope.
 
  - Add Auth to your application
+ - Do some other stuff
+
+## Additional Reading
+ > List of links or other reading that might be of use / reference for the exercise
