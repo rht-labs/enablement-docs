@@ -1,6 +1,6 @@
-# Exercise Title
+# The PBI Menace
 
-> Short description of the exercise and it's outcomes
+> In this lab; learners will use Ansible to drive automated provisioning of Projects, Access Control, Git, Jenkins and Nexus 
 
 ## Learning Outcomes
 As a learner you will be able to
@@ -14,6 +14,7 @@ As a learner you will be able to
 1. [Jenkins](https://jenkins.io/) - OpenSource build automation server; highly customisable through plugins
 1. [Ansible]() - blah blah ...
 
+
 ## 10,000 Ft View
 > This should contain the goal of the exercise; with enough information that advanced learners could use this to build the exercise without much guidance. The information here
 
@@ -26,7 +27,7 @@ As a learner you will be able to
 ```
 export SOME_THING=biscuits
 ```
-2. Open console and navigate to `New Item` and click it ![new-item](./images/new-item.png)
+2. Open console and navigate to `New Item` and click it ![new-item](../images/new-item.png)
 
 ### Part 2 - do some other things
 3. Do other things
@@ -38,7 +39,4 @@ export SOME_THING=biscuits
  - Do some other stuff
 
 ## Additional Reading
-> List of links or other reading that might be of use / reference for the exercise
-
-## Slide links
-> link back to the deck for the supporting material
+ > List of links or other reading that might be of use / reference for the exercise
