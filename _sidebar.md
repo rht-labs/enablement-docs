@@ -1,5 +1,5 @@
 * [Home](/)
-* [1. The PBI Menace](1-the-pbi-menace/README.md)
+* [1. The Manual Menace](1-the-manual-menace/README.md)
 * [2. Attack of the Pipelines](2-attack-of-the-pipelines/README.md)
 * [3. Revenge of the Automated Testing](3-revenge-of-the-automated-testing/README.md)
 * [4. An Enslaved Hope](4-an-enslaved-hope/README.md)
