@@ -39,18 +39,85 @@ If you're feeling confident and don't want to follow the step-by-step guide thes
 2. Commit your `enablement-ci-cd` repository to the GitLab Instance you've created
 
 ## Step by Step Instructions
-> This is a structured guide with references to exact filenames and sections of text to be added.
+> This is a structured guide with references to exact filenames and explanations.
 
-### Part 1 - do some things
-2. Do thing using tool X.
-2. Insert blah into `file1.txt`
+### Part 1 - Create OpenShift Projects
+3. Clone the scaffold project to your local machine and open it in your favourite editor.
+```bash
+git clone git@github.com:rht-labs/enablement-ci-cd.git
 ```
-export SOME_THING=biscuits
-```
-2. Open console and navigate to `New Item` and click it ![new-item](../images/new-item.png)
 
-### Part 2 - do some other things
-3. Do other things
+3. The project is laid out as follows
+```
+.
+├── README.md
+├── docker
+│   └── jenkins-slave-node
+├── inventory
+│   ├── group_vars
+│   │   └── all.yml
+│   └── hosts
+├── jenkins-s2i
+│   ├── configuration
+├── params
+│   └── project-requests-ci-cd
+├── requirements.yml
+└── templates
+        └── project-requests.yml
+```
+ * `docker` folder contains our jenkins-slave images that will be used by the builds.
+ * `jenkins-s2i` contains the configuration and plugins we want to bring jenkins to life with
+ * `params` houses the variables we will load the templates with
+ * `templates` is a collection of OpenShift templates
+ * `inventory/group_vars/all.yml` is the collection of objects we want to insert into the cluster.
+ * `requirements.yml` is a manifest which contains the ansible modules needed to run the playbook
+Open the `inventory/group_vars/all.yml` file; you should see a some variables setup to create the `ci-cd` namespace. This calls the `templates/project-requests.yml` template with the `params/project-requests-ci-cd` parameters. We will add some additional content here but first let's explore the parameters and the template
+
+3. Open the `params/project-requests-ci-cd` and replace the `<your name or initials>` with your name to create the correstponding projects in the cluster. 
+![new-item](../images/ci-cd-project-namespace.png)
+
+3. Create another two params files for `params/project-requests-dev` & `params/project-requests-test` and add the `NAMESPACE=<your name>-dev` && `NAMESPACE=<your name>-test` and update their Display names.
+
+3. In the `inventory/group_vars/all.yml` file; add the new inventory items for the projects you want to create (dev & test) by adding another object to the content array. You can copy and paste them from the `ci-cd` example and update them accordingly eg
+```yaml
+  - name: <your name>-dev
+    template: "{{ inventory_dir }}/../templates/project-requests.yml"
+    template_action: create
+    params: "{{ inventory_dir }}/../params/project-requests-dev"
+    tags:
+    - projects
+  - name: <your name>-test
+    template: "{{ inventory_dir }}/../templates/project-requests.yml"
+    template_action: create
+    params: "{{ inventory_dir }}/../params/project-requests-test"
+    tags:
+    - projects
+```
+
+3. With the configuration in place; install the OpenShift Applier dependency
+```bash
+$ ansible-galaxy install -r requirements.yml --roles-path=roles
+```
+
+3. Apply the inventory by logging into OpenShift and then running 
+```bash
+$ oc login -p <password> -u <user> <cluster_url>
+$ ansible-playbook roles/casl-ansible/playbooks/openshift-cluster-seed.yml -i inventory/
+``` 
+
+3. Once successful you should see an output similar to this ![playbook-success](../images/play-book-success.png)
+
+### Part 2 - Nexus and GitLab
+4. Add apps ....
+
+
+### Part 3 - Jenkins & s2i
+5. Add new plugin ...
+
+### Part 4 - live, die repeat
+6. Commit your code to the new repo in GitLab
+
+6. Burn it to the ground 
 
 _____
 
