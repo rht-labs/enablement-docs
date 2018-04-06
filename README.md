@@ -1,6 +1,7 @@
 # Red Hat Open Innovation Labs Enablement Materials
 This repo will house all the slides and lab exercises for the Enablement course. It will also be used to track issues, features and new additions to the course.
 
+[Course Content](https://rht-labs.github.io/enablement-docs/#/)
 
 ## Slides
 Use the [Open Innovation Labs reveal.js template](https://github.com/rht-labs/slides-template) to create new content. Add your slides and commit them to the `slides` dir
@@ -13,6 +14,12 @@ A template layout for the lab exercise with headings and what should be included
 To run and serve the docs
 1. `npm i -g docsify-cli`
 2. `cd exercises && docsify serve -p 8085 -P 35727` and open your browser to 8085
+
+## Publishing
+The `exercises` folder is served as the root of the gitpages site from master branch. To update the published content run:
+1. `git checkout master`
+2. `git subtree push --prefix exercises origin gh-pages`
+
 
 ## Contributing & Issues
 For tracking of feature development and task management add the ZenHub plugin extension to [Chrome](https://chrome.google.com/webstore/detail/zenhub-for-github/ogcgkffhplmphkaahpmffcafajaocjbd) or [Firefox](https://www.zenhub.com/extension). 
