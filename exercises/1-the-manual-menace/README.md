@@ -93,6 +93,7 @@ Open the `inventory/group_vars/all.yml` file; you should see a some variables se
     tags:
     - projects
 ```
+![project-request-yaml](../images/project-request-yml.png)
 
 3. With the configuration in place; install the OpenShift Applier dependency
 ```bash
@@ -108,8 +109,17 @@ $ ansible-playbook roles/casl-ansible/playbooks/openshift-cluster-seed.yml -i in
 3. Once successful you should see an output similar to this ![playbook-success](../images/play-book-success.png)
 
 ### Part 2 - Nexus and GitLab
-4. Add apps ....
+> _Now that we have our Projects setup; we can start to populate them with Apps to be used in our dev lifecycle_
 
+4. In the `enablement-ci-cd` repo, checkout the templates for GitLab and Nexus by running
+```bash
+$ git checkout 
+```
+
+4. 
+4. 
+4. 
+4. 
 
 ### Part 3 - Jenkins & s2i
 5. Add new plugin ...
