@@ -182,6 +182,7 @@ GITLAB_ROOT_PASSWORD=<GITLAB_ROOT_USER_PASSWORD>
 GITLAB_DATA_VOL_SIZE=2Gi
 POSTGRESQL_VOL_SIZE=1Gi
 APPLICATION_HOSTNAME=<GITLAB_URL>
+NAMESPACE=<YOUR_NAME>-ci-cd
 ```
 where the following need to be replaced by actual values:
     * `<BIND_USER>` is the user used to query the LDAP
@@ -209,7 +210,12 @@ $ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml 
      -e="filter_tags=gitlab"
 ```
 
-4. Once successful; login to the cluster and navigate to the `<YOUR_NAME>-ci-cd`. You should see GitLab up and running. You can login with using your cluster credentials ![gitlab-up-and-running](../images/gitlab-up-and-running.png)
+4. Once successful; login to the cluster and navigate to the `<YOUR_NAME>-ci-cd`. You should see GitLab up and running. ![gitlab-up-and-running](../images/gitlab-up-and-running.png)
+
+4. Navigate to gitlab. You can login with using your cluster credentials using the LDAP tab displaying your `<LDAP_DESCRIPTION>` from previous steps
+
+![gitlab-ui](../images/gitlab-ui.png)
+
 
 ### Part 3 - Jenkins & s2i
 5. Add new plugin ...
