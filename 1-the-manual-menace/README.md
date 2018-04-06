@@ -145,6 +145,7 @@ MEMORY_LIMIT=2Gi
     tags:
     - nexus
 ```
+![ci-cd-tools-yml](../images/ci-cd-tools-yml.png)
 
 4. Run the OpenShift applier, specifying the tag `nexus` to speed up it's execution.
 ```bash
