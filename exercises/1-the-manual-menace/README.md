@@ -79,26 +79,26 @@ git clone git@github.com:rht-labs/enablement-ci-cd.git
 Open the `inventory/group_vars/all.yml` file; you should see a some variables setup to create the `ci-cd` namespace. This calls the `templates/project-requests.yml` template with the `params/project-requests-ci-cd` parameters. We will add some additional content here but first let's explore the parameters and the template
 
 3. Open the `params/project-requests-ci-cd` and replace the `<YOUR_NAME or initials>` with your name to create the correstponding projects in the cluster. 
-![new-item](../images/ci-cd-project-namespace.png)
+![new-item](../images/exercise1/ci-cd-project-namespace.png)
 
 3. Create another two params files for `params/project-requests-dev` & `params/project-requests-test` and add the `NAMESPACE=<YOUR_NAME>-dev` && `NAMESPACE=<YOUR_NAME>-test` and update their Display names.
 
 3. In the `inventory/group_vars/all.yml` file; add the new inventory items for the projects you want to create (dev & test) by adding another object to the content array. You can copy and paste them from the `ci-cd` example and update them accordingly eg
 ```yaml
-  - name: <YOUR_NAME>-dev
-    template: "{{ inventory_dir }}/../templates/project-requests.yml"
-    template_action: create
-    params: "{{ inventory_dir }}/../params/project-requests-dev"
-    tags:
-    - projects
-  - name: <YOUR_NAME>-test
-    template: "{{ inventory_dir }}/../templates/project-requests.yml"
-    template_action: create
-    params: "{{ inventory_dir }}/../params/project-requests-test"
-    tags:
-    - projects
+    - name: <YOUR_NAME>-dev
+      template: "{{ inventory_dir }}/../templates/project-requests.yml"
+      template_action: create
+      params: "{{ inventory_dir }}/../params/project-requests-dev"
+      tags:
+      - projects
+    - name: <YOUR_NAME>-test
+      template: "{{ inventory_dir }}/../templates/project-requests.yml"
+      template_action: create
+      params: "{{ inventory_dir }}/../params/project-requests-test"
+      tags:
+      - projects
 ```
-![project-request-yaml](../images/project-request-yml.png)
+![project-request-yaml](../images/exercise1/project-request-yml.png)
 
 3. With the configuration in place; install the OpenShift Applier dependency
 ```bash
@@ -111,7 +111,7 @@ $ oc login -p <password> -u <user> <cluster_url>
 $ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml -i inventory/
 ``` 
 
-3. Once successful you should see an output similar to this ![playbook-success](../images/play-book-success.png)
+3. Once successful you should see an output similar to this ![playbook-success](../images/exercise1/play-book-success.png)
 
 ### Part 2 - Nexus and GitLab
 > _Now that we have our Projects setup; we can start to populate them with Apps to be used in our dev lifecycle_
@@ -133,28 +133,28 @@ VOLUME_CAPACITY=5Gi
 MEMORY_LIMIT=2Gi
 ```
 
-4. Create a new object in the inventory variables called `ci-cd-tools` and populate it's `content` is as follows (swapping `<YOUR_NAME>-ci-cd` for the namespace you created earlier)
+4. Create a new object in the inventory variables called `ci-cd-deployments` and populate it's `content` is as follows (swapping `<YOUR_NAME>-ci-cd` for the namespace you created earlier)
 
 ```yaml
-- object: ci-cd-tools
-  content:
-  - name: "nexus"
-    namespace: "<YOUR_NAME>-ci-cd"
-    template: "{{ inventory_dir }}/../templates/nexus.yml"
-    params: "{{ inventory_dir }}/../params/nexus"
-    tags:
-    - nexus
+  - object: ci-cd-deployments
+    content:
+    - name: "nexus"
+      namespace: "<YOUR_NAME>-ci-cd"
+      template: "{{ inventory_dir }}/../templates/nexus.yml"
+      params: "{{ inventory_dir }}/../params/nexus"
+      tags:
+      - nexus
 ```
-![ci-cd-tools-yml](../images/ci-cd-tools-yml.png)
+![ci-cd-deployments-yml](../images/exercise1/ci-cd-deployments-yml.png)
 
 4. Run the OpenShift applier, specifying the tag `nexus` to speed up it's execution.
 ```bash
 $ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml \
      -i inventory/ \
-     -e="filter_tags=nexus"
+     -e "filter_tags=nexus"
 ```
 
-4. Once successful; login to the cluster and navigate to the `<YOUR_NAME>-ci-cd`. You should see Nexus up and running. You can login with default credentials (admin / admin123) ![nexus-up-and-running](../images/nexus-up-and-running.png)
+4. Once successful; login to the cluster and navigate to the `<YOUR_NAME>-ci-cd`. You should see Nexus up and running. You can login with default credentials (admin / admin123) ![nexus-up-and-running](../images/exercise1/nexus-up-and-running.png)
 
 4. Now lets do the same thing for GitLab to get it up and running. Checkout the template provided by running
 ```bash
@@ -195,35 +195,159 @@ where the following need to be replaced by actual values:
 
 4. Create another object in the inventory `all_vars.yml` file to run the build & deploy of this template. Add the following and update the `namespace:` accordingly
 ```yaml
-  - name: "gitlab"
-    namespace: "<YOUR_NAME>-ci-cd"
-    template: "{{ inventory_dir }}/../templates/gitlab.yml"
-    params: "{{ inventory_dir }}/../params/gitlab"
-    tags:
-    - gitlab
+    - name: "gitlab"
+      namespace: "<YOUR_NAME>-ci-cd"
+      template: "{{ inventory_dir }}/../templates/gitlab.yml"
+      params: "{{ inventory_dir }}/../params/gitlab"
+      tags:
+      - gitlab
 ```
 
 4. Run the OpenShift applier, specifying the tag `gitlab` to speed up it's execution.
 ```bash
 $ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml \
      -i inventory/ \
-     -e="filter_tags=gitlab"
+     -e "filter_tags=gitlab"
 ```
 
-4. Once successful; login to the cluster and navigate to the `<YOUR_NAME>-ci-cd`. You should see GitLab up and running. ![gitlab-up-and-running](../images/gitlab-up-and-running.png)
+4. Once successful; login to the cluster and navigate to the `<YOUR_NAME>-ci-cd`. You should see GitLab up and running. ![gitlab-up-and-running](../images/exercise1/gitlab-up-and-running.png)
 
 4. Navigate to gitlab. You can login with using your cluster credentials using the LDAP tab displaying your `<LDAP_DESCRIPTION>` from previous steps
 
-![gitlab-ui](../images/gitlab-ui.png)
+![gitlab-ui](../images/exercise1/gitlab-ui.png)
 
+4. Once logged in create a new project called `enablement-ci-cd` and mark it as public. Once created; copy out the `git remote add origin ...` instructions for use on the next step.
+![gitlab-new-project](../images/exercise1/gitlab-new-project.png)
+<p class="tip">
+Note - we would not normally make the project public here on residency but are for simplicity of the exercise
+</p>
+
+4. Commit your local project to this new origin by first removing the existing origin (github) where the the project was cloned from. Remember to substitute `<YOUR_NEW_GIT_PROJECT>` accordingly
+```bash
+$ git remote remove origin
+$ git remote add origin <YOUR_NEW_GIT_PROJECT>
+$ git add . 
+$ git commit -m "Adding git and nexus config"
+$ git push -u origin --all
+```
 
 ### Part 3 - Jenkins & s2i
-5. Add new plugin ...
+5. Add the Jenkins Build & Deployment configs to the `enablement-ci-cd` repo by merging the contents `exercise1/jenkins` in
+```bash
+$ git checkout exercise1/jenkins templates/jenkins.yml
+```
 
-### Part 4 - live, die repeat
+5. Add the Jenkins Build & Deployment configs to the `enablement-ci-cd` repo by merging the contents `exercise1/jenkins` in
+```bash
+$ git checkout exercise1/jenkins templates/jenkins.yml
+```
+The Jenkins template is essentially the standard persistent jenkins one with OpenShift.
+
+5. As before; create a new set of params by creating a `params/jenkins` file and adding some overrides to the template and updating the `NAMESPACE` value.
+```bash
+MEMORY_LIMIT=8Gi
+VOLUME_CAPACITY=5Gi
+JVM_ARCH=x86_64
+NAMESPACE=<YOUR_NAME>-ci-cd
+JENKINS_OPTS=--sessionTimeout=720
+```
+5. Add a `jenkins` variable to the ansible inventory underneath the git and nexus ones. Remember to replace `<YOUR_NAME>` with the appropriate value.
+```yaml
+    - name: "jenkins"
+      namespace: "<YOUR_NAME>-ci-cd"
+      template: "{{ inventory_dir }}/../templates/jenkins.yml"
+      params: "{{ inventory_dir }}/../params/jenkins"
+      tags:
+      - jenkins
+```
+This configuration if applied now; it will create the deployment configuration needed for Jenkins but the `${NAMESPACE}:${JENKINS_IMAGE_STREAM_TAG}` in the template won't exist yet.
+
+5. To create this image we will take the supported OpenShift Jenkins Image and bake into it some extra configuration using an [s2i](https://github.com/openshift/source-to-image) builder image. More information on Jenkins s2i is found on the [openshift/jenkins](https://github.com/openshift/jenkins#installing-using-s2i-build) github page. To create an s2i configuration for jenkins, check out the pre-canned configuration source in the `enablement-ci-cd` repo
+```bash
+$ git checkout exercise1/jenkins-s2i jenkins-s2i
+```
+The structure of the jenkins s2i config is 
+```
+jenkins-s2i
+├── README.md
+├── configuration
+│   ├── build-failure-analyzer.xml
+│   ├── init.groovy
+│   ├── jenkins.plugins.slack.SlackNotifier.xml
+│   └── jobs
+│       └── seed-multibranch-job
+│           └── config.xml
+└── plugins.txt
+```
+ * `plugins.txt` is a list of `pluginId:version` for Jenkins to pre-install when starting
+ * `./configuration` contains content that is placed in `${JENKINS_HOME}`. A `config.xml` could be placed in here to control the bulk of Jenkins configuration.
+ * `./configuration/jobs/*` contains job names and xml config that jenkins loads when starting. The seed job in there we will return to in later lessons.
+ * `build-failure-analyzer.xml` is config for the plugin to read the logs and look for key items based on a Regex
+ * `init.groovy` contains a collection of settings jenkins configures itself with when launching
+
+5. Let's add a plugin for Jenkins to be started with, [green-balls](https://plugins.jenkins.io/greenballs). This simply changes the default `SUCCESS` status of Jenkins from Blue to Green. Append the `plugins.txt` file with 
+```txt
+greenballs:1.15
+``` 
+![green-balls.png](../images/exercise1/green-balls.png)
+Why does Jenkins have Blue Balls? More can be found [on reddit](https://www.reddit.com/r/programming/comments/4lu6q8/why_does_jenkins_have_blue_balls/) or the [jenkins blog](https://jenkins.io/blog/2012/03/13/why-does-jenkins-have-blue-balls/)
+
+5. Before building and deploying Jenkins; add git credentials to the s2i by either adding them to the `template/jenkins.yml` and `params/jenkins` or for simplicity just replace the `<USERNAME>` && `<PASSWORD>` with your ldap credentials.
+<p class="tip">
+Note in a residency we would not use your GitCredentials for pushing and pulling from Git, A service user would be created here.
+</p>
+```groovy
+gitUsername = System.getenv("GIT_USERNAME") ?: "<USERNAME>"
+gitPassword = System.getenv("GIT_PASSWORD") ?: "<PASSWORD>"
+```
+
+5. Add a new params file in the `params` folder called `jenkins-s2i`
+```bash
+$ touch params/jenkins-s2i
+```
+
+5. Open the `params/jenkins-s2i` file and add the following content; replacing variables as appropriate
+```
+SOURCE_REPOSITORY_URL=<YOUR_ENABLEMENT_REPO>
+NAME=jenkins
+SOURCE_REPOSITORY_CONTEXT_DIR=jenkins-s2i
+IMAGE_STREAM_NAMESPACE=<YOUR_NAME>-ci-cd
+```
+where 
+  * `<YOUR_ENABLEMENT_REPO>` is the full path clone path of the repo where this project is stored (including the https && .git)
+  * `<YOUR_NAME>` is the prefix for your `-ci-cd` project.
+  * Explore some of the other parameters in `templates/jenkins-s2i.yml`
+
+5. Create a new object `ci-cd-builds` in the ansible `all.yml` to drive the s2i build configuration.
+```yaml
+  - object: ci-cd-builds
+    content:
+    - name: "jenkins-s2i"
+      namespace: "<YOUR_NAME>-ci-cd"
+      template: "{{ inventory_dir }}/../templates/jenkins-s2i.yml"
+      params: "{{ inventory_dir }}/../params/jenkins-s2i"
+      tags:
+      - jenkins
+```
+
+5. Commit your code to your GitLab instance
+```bash
+$ git add . 
+$ git commit -m "Adding Jenkins and Jenkins s2i"
+$ git push
+```
+
+5. When your code is commited; run the OpenShift Applier to add the config to the cluster
+```bash
+$ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml \
+     -i inventory/ \
+     -e "filter_tags=jenkins"
+```
+
+### Part 4 - Live, Die, Repeat
 6. Commit your code to the new repo in GitLab
 
-6. Burn your OCP content to the ground 
+6. Burn your OCP content to the ground
 
 6. Re-apply the inventory!
 
@@ -233,6 +357,8 @@ _____
 > Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope.
 
  - Add more secure access for Nexus (ie not admin / admin123) using the automation to drive secret creation
+ - Add a SonarQube persistent deployment to the `ci-cd-deployments` section.
+ - Add `jenkins.plugins.slack.SlackNotifier.xml` to `jenkins-s2i/configuration` to include URL of Slack for team build notifications and rebuild Jenkins S2I
 
 _____
 
