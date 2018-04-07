@@ -102,7 +102,7 @@ npm run serve
     * The server hosting it live reloads; so as you make changes to your code; the app will live update
     * The Data you see in the screen is dummy / stubbed data. This is served up when there is no backend connection found
 
-2. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page you'll loose all additions. This is because there is persistence
+2. The app is a todolist manager built in Vue.js. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page you'll loose all additions. This is because there is persistence
 
 3. The structure of the `todolist-fe` is as follows.
 ```bash
@@ -144,6 +144,122 @@ where the following are the important things:
     * the `./src/router.js` controls routing logic. In our case the app only has one real endpoint.
     * `./src/scss` contains custom  SCSS used in the application.
     * `./*.js` is mostly config files for running and managing the app and the tests
+
+2. Now let's move on to the `todolist-api` and wire them together. As with the `todolist-fe` we need to clone the repo and add it to our GitLab in the cluster.
+```bash
+$ git clone https://github.com/springdo/todolist-api.git
+$ git checkout develop
+```
+
+2. Create a new project (internal) in GitLab called `todolist-api` to host your clone of the project and copy it's remote address.
+
+2. In your local clone of the `todolist-api`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab
+```bash
+$ git remote remove origin
+$ git remote add origin <YOUR_GIT_LAB_PROJECT>
+$ git push -u origin --all
+```
+
+2. Once pushed; explore the application. It is a NodeJS application with the Express.js framework and MongoDB for persistent storage. Same as before, the `package.json` defines most of the configuration etc. Install the dependencies
+```bash
+$ npm i
+```
+
+2. While the dependencies are being installed; explore the project structure.
+```bash
+todolist-api
+├── Dockerfile
+├── Gruntfile.js
+├── README.md
+├── node_modules
+├── package-lock.json
+├── package.json
+├── server
+│   ├── api
+│   │   └── todo
+│   ├── app.js
+│   ├── components
+│   │   └── errors
+│   ├── config
+│   │   ├── environment
+│   │   ├── express.js
+│   │   ├── local.env.sample.js
+│   │   └── seed.js
+│   ├── mocks
+│   │   ├── mock-routes-config.json
+│   │   ├── mock-routes.js
+│   │   └── mock-routes.spec.js
+│   ├── routes.js
+│   └── views
+│       └── 404.html
+└── tasks
+    └── perf-test.js
+```
+where the following are the important things:
+    * `./server` is the main collection of files needed by the app. The entrypoint is the `app.js`
+    * `./node_modules` is where the dependencies are stored
+    * `./server/api` is where the api's controller, data model & unit test are stored. 
+    * `./server/mocks` is a mock server used for when there is no DB access    
+    * `./server/config` stores our Express JS config, header information and other middlewear.
+    * `./server/config/environment` stores enviromnent specific config; such as connectivity to backend services like the MongoDB.
+    * `./tasks` is a collection of additional `Grunt` tasks which will be used in later labs
+    * `package.json` contains the dependency list and a lot of very helpful scripts for managing the app lifecycle
+
+2. The npm scripts are shown below. There are application start scripts, build and test items which will be used in the build. The ones for MongoDB are just provided for convenience and require Docker installed to execute.
+```json
+  "scripts": {
+    "start": "node server/app.js",
+    "dev": "./node_modules/.bin/grunt serve",
+    "jshint": "./node_modules/.bin/grunt jshint",
+    "jshint:ci": "./node_modules/.bin/grunt jshint:ci_server",
+    "clean": "rm -rf reports package-contents*",
+    "build": "mkdir -p package-contents && cp -vr server Dockerfile package.json package-contents",
+    "package": "zip -r package-contents.zip package-contents",
+    "test": "node_modules/.bin/nyc node_modules/.bin/mocha server/**/*.spec.js --exit",
+    "test:ci": "export MOCHA_FILE='reports/server/mocha/test-results.xml' && export NODE_ENV=ci && node_modules/.bin/nyc node_modules/.bin/mocha server/**/*.spec.js -R mocha-junit-reporter --exit",
+    "mongo" : "docker run -i -d --name mongo-local -p 27017:27017 mongo",
+    "mongo:drop" : "npm run mongo:stop && docker rm mongo-local",
+    "mongo:stop" : "docker stop mongo-local",
+    "mongo:start" : "docker start mongo-local"
+  },
+```
+
+2. To run the application; start a new instance of the MongoDB by running. 
+```bash
+$ npm run mongo
+```
+<p class="tip">
+`npm run mongo:drop` is used to completely remove the running container. `npm run mongo:stop` & `npm run mongo:start` will preserve data in the container
+</p>
+
+2. Fire up the `todolist-api` by running.
+```bash
+$ npm run start
+```
+![node-app-started](../images/exercise2/node-app-started.png)
+
+2. Check things are responding correctly by running and checking the response. It contains some seeded data (stored in `server/config/seed.js`)
+```bash
+$ curl localhost:9000/api/todos
+```
+```json
+[{
+    "_id": "5ac8ff1fdfafb02138698948",
+    "title": "Learn some stuff about MongoDB",
+    "completed": false,
+    "__v": 0
+  },
+  {
+    "_id": "5ac8ff1fdfafb02138698949",
+    "title": "Play with NodeJS",
+    "completed": true,
+    "__v": 0
+}]
+```
+
+2. Now let's check out `todolist-fe` app by reloading the browser. We should now see our dummy front end data is replaced by the backend seed data 
+![fullstack-app](../images/exercise2/fullstack-app.png)
+
 
 ### Part 2 - do some other things
 > _prefix of exercise and why we're doing it_
