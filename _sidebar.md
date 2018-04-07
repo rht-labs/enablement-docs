@@ -1,4 +1,5 @@
 * [Home](/)
+* [0. Rogue Cluster: A Setup Guide](0-rogue-cluster/README.md)
 * [1. The Manual Menace](1-the-manual-menace/README.md)
 * [2. Attack of the Pipelines](2-attack-of-the-pipelines/README.md)
 * [3. Revenge of the Automated Testing](3-revenge-of-the-automated-testing/README.md)
