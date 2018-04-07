@@ -47,6 +47,8 @@ If you're feeling confident and don't want to follow the step-by-step guide thes
 > This is a structured guide with references to exact filenames and explanations.
 
 ### Part 1 - Create OpenShift Projects
+> _Using the OpenShift Applier, we will add new project namespaces to the cluster which will be used throughout the exercise._
+
 3. Clone the scaffold project to your local machine and open it in your favourite editor.
 ```bash
 git clone git@github.com:rht-labs/enablement-ci-cd.git
@@ -133,8 +135,7 @@ VOLUME_CAPACITY=5Gi
 MEMORY_LIMIT=2Gi
 ```
 
-4. Create a new object in the inventory variables called `ci-cd-deployments` and populate it's `content` is as follows (swapping `<YOUR_NAME>-ci-cd` for the namespace you created earlier)
-
+4. Create a new object in the inventory variables called `ci-cd-deployments` and populate it's `content` is as follows remembering to swap `<YOUR_NAME>-ci-cd` for the namespace you created previously
 ```yaml
   - object: ci-cd-deployments
     content:
@@ -192,6 +193,9 @@ where the following need to be replaced by actual values:
     * `<LDAP_DESCRIPTION>` is the description to be used on the sign-in header for GitLab eg "Name LDAP Login"
     * `<GITLAB_ROOT_USER_PASSWORD>` is the root user for GOD access on the GitLab instance eg password123
     * `<GITLAB_URL>` is the endpoint for gitlab. It will take the form `gitlab-<YOUR_NAME>-ci-cd.apps.<ENV_ID>.<YOUR_DOMAIN>.com`
+<p class="tip">
+Note - some of the values here for the LDAP will be provided by your tutor.
+</p>
 
 4. Create another object in the inventory `all_vars.yml` file to run the build & deploy of this template. Add the following and update the `namespace:` accordingly
 ```yaml
@@ -216,10 +220,10 @@ $ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml 
 
 ![gitlab-ui](../images/exercise1/gitlab-ui.png)
 
-4. Once logged in create a new project called `enablement-ci-cd` and mark it as public. Once created; copy out the `git remote add origin ...` instructions for use on the next step.
+4. Once logged in create a new project called `enablement-ci-cd` and mark it as internal. Once created; copy out the `git remote add origin ...` instructions for use on the next step.
 ![gitlab-new-project](../images/exercise1/gitlab-new-project.png)
 <p class="tip">
-Note - we would not normally make the project public here on residency but are for simplicity of the exercise
+Note - we would not normally make the project under your name but create an group and add the project there on residency but for simplicity of the exercise we'll do that here
 </p>
 
 4. Commit your local project to this new origin by first removing the existing origin (github) where the the project was cloned from. Remember to substitute `<YOUR_NEW_GIT_PROJECT>` accordingly
@@ -232,6 +236,8 @@ $ git push -u origin --all
 ```
 
 ### Part 3 - Jenkins & s2i
+> _Create a build and deployment config for Jenkins. Add new configuration and plugins to the OCP Stock Jenkins using s2i_
+
 5. Add the Jenkins Build & Deployment configs to the `enablement-ci-cd` repo by merging the contents `exercise1/jenkins` in
 ```bash
 $ git checkout exercise1/jenkins templates/jenkins.yml
@@ -282,7 +288,7 @@ jenkins-s2i
  * `plugins.txt` is a list of `pluginId:version` for Jenkins to pre-install when starting
  * `./configuration` contains content that is placed in `${JENKINS_HOME}`. A `config.xml` could be placed in here to control the bulk of Jenkins configuration.
  * `./configuration/jobs/*` contains job names and xml config that jenkins loads when starting. The seed job in there we will return to in later lessons.
- * `build-failure-analyzer.xml` is config for the plugin to read the logs and look for key items based on a Regex
+ * `build-failure-analyzer.xml` is config for the plugin to read the logs and look for key items based on a Regex. More on this in later lessons.
  * `init.groovy` contains a collection of settings jenkins configures itself with when launching
 
 5. Let's add a plugin for Jenkins to be started with, [green-balls](https://plugins.jenkins.io/greenballs). This simply changes the default `SUCCESS` status of Jenkins from Blue to Green. Append the `plugins.txt` file with 
@@ -294,7 +300,7 @@ Why does Jenkins have Blue Balls? More can be found [on reddit](https://www.redd
 
 5. Before building and deploying Jenkins; add git credentials to the s2i by either adding them to the `template/jenkins.yml` and `params/jenkins` or for simplicity just replace the `<USERNAME>` && `<PASSWORD>` with your ldap credentials.
 <p class="tip">
-Note in a residency we would not use your GitCredentials for pushing and pulling from Git, A service user would be created here.
+Note in a residency we would not use your GitCredentials for pushing and pulling from Git, A service user would be created for this.
 </p>
 ```groovy
 gitUsername = System.getenv("GIT_USERNAME") ?: "<USERNAME>"
@@ -306,17 +312,25 @@ gitPassword = System.getenv("GIT_PASSWORD") ?: "<PASSWORD>"
 $ touch params/jenkins-s2i
 ```
 
-5. Open the `params/jenkins-s2i` file and add the following content; replacing variables as appropriate
+5. Open the `params/jenkins-s2i` file and add the following content; replacing variables as appropriate. 
 ```
 SOURCE_REPOSITORY_URL=<YOUR_ENABLEMENT_REPO>
 NAME=jenkins
 SOURCE_REPOSITORY_CONTEXT_DIR=jenkins-s2i
 IMAGE_STREAM_NAMESPACE=<YOUR_NAME>-ci-cd
+SOURCE_REPOSITORY_USERNAME=<YOUR_LDAP_USERNAME>
+SOURCE_REPOSITORY_PASSWORD=<YOUR_LDAP_PASSWORD>
 ```
 where 
-  * `<YOUR_ENABLEMENT_REPO>` is the full path clone path of the repo where this project is stored (including the https && .git)
-  * `<YOUR_NAME>` is the prefix for your `-ci-cd` project.
-  * Explore some of the other parameters in `templates/jenkins-s2i.yml`
+    * `<YOUR_ENABLEMENT_REPO>` is the full path clone path of the repo where this project is stored (including the https && .git)
+    * `<YOUR_NAME>` is the prefix for your `-ci-cd` project.
+    * Explore some of the other parameters in `templates/jenkins-s2i.yml`
+    * `<YOUR_LDAP_USERNAME>` is the base64encoded username builder pod will use to login and clone the repo with
+    * `<YOUR_LDAP_PASSWORD>` is the base64encoded password the builder pod will use to authenticate and clone the repo using
+You can use `echo -n '<YOUR_LDAP_PASSWORD>' | openssl base64` to encode your username and password accordingly.
+<p class="tip">
+Note in a residency we would not use your GitCredentials for pushing and pulling from Git, A service user would be created for this.
+</p>
 
 5. Create a new object `ci-cd-builds` in the ansible `all.yml` to drive the s2i build configuration.
 ```yaml
@@ -332,7 +346,7 @@ where
 
 5. Commit your code to your GitLab instance
 ```bash
-$ git add . 
+$ git add .
 $ git commit -m "Adding Jenkins and Jenkins s2i"
 $ git push
 ```
@@ -344,17 +358,37 @@ $ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml 
      -e "filter_tags=jenkins"
 ```
 
-### Part 4 - Live, Die, Repeat
-6. Commit your code to the new repo in GitLab
+5. This will trigger a build of the s2i and when it's complete it will add an imagestream of `<YOUR_NAME>-ci-cd/jenkins:latest` to the project. The Deployment config should kick in and deploy the image once it arrives. You can follow the build of the s2i by going to the OpenShift console's project
+![jenkins-s2i-log](../images/exercise1/jenkins-s2i-log.png)
 
-6. Burn your OCP content to the ground
+5. When the Jenkins deployment has completed; login (using your openshift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
 
-6. Re-apply the inventory!
+### Part 4 - Jenkins Hello World 
+> _To test things are working end-to-end; create a hello world job that doesn't do much but proves we can pull code from git and that our balls are green._
+
+6. Log in to Jenkins and hit `New Item` ![new-item](../images/exercise1/new-item.png).
+
+6. Create a freesyle job called `hello-world` ![jenkins-new-hello-world](../images/exercise1/jenkins-new-hello-world.png).
+
+6. On the Source Code Management tab; add your `enablement-ci-cd` git repo and hit the dropdown to add your credentials we baked into the s2i on previous steps`` ![jenkins-scm-git](../images/exercise1/jenkins-scm-git.png).
+
+6. On the build tab add an Execute Shell step and fill it with `echo "Hello World"` ![jenkins-hello-world](../images/exercise1/jenkins-hello-world.png).
+
+6. Run the build and we should see if pass succesfully and with Green Balls! ![jenkins-green-balls](../images/exercise1/jenkins-green-balls.png)
+
+### Part 5 - Live, Die, Repeat
+> _TOOD - improve & flesh out this section ...._
+
+7. Commit your code to the new repo in GitLab
+
+7. Burn your OCP content to the ground
+
+7. Re-apply the inventory!
 
 _____
 
 ## Extension Tasks
-> Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope.
+> _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope._
 
  - Add more secure access for Nexus (ie not admin / admin123) using the automation to drive secret creation
  - Add a SonarQube persistent deployment to the `ci-cd-deployments` section.
