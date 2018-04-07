@@ -56,17 +56,94 @@ _____
 2. Verify that both apps and the DB are talking to one another as expected.
 
 ## Step by Step Instructions
-> This is a fairly structured guide with references to exact filenames and sections of text to be added. Include pictures and code snippets where appropriate. Rule of thumb is learners are dumb.... so over describe _why_ we're doing things
+> This is a fairly structured guide with references to exact filenames and sections of text to be added.
 
-### Part 1 - do some things
-> _prefix of exercise and why we're doing it_
+### Part 1 - Explore the Sample App
+> _In this part of the exercise we will explore the sample application, become familiar with it locally before building and deploying in OCP Land_
 
-2. Do thing using tool X.
-2. Insert blah into `file1.txt`
+2. Git clone the `todolist-fe` project to somewhere sensible and checkout the `develop` branch.
+```bash
+$ git clone https://github.com/springdo/todolist-fe.git
+$ git checkout develop
 ```
-export SOME_THING=biscuits
+
+2. Create a new project (internal) in GitLab called `todolist-fe` to host your clone of the project and copy it's remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
+
+2. In your local clone of the `todolist-fe`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab
+```bash
+$ git remote remove origin
+$ git remote add origin <YOUR_GIT_LAB_PROJECT>
+$ git push -u origin --all
 ```
-2. Open console and navigate to `New Item` and click it ![new-item](./images/new-item.png)
+
+2. To get the app running locally; first check you've got node and npm installed
+```bash
+$ node -v
+$ npm -v
+```
+<p class="tip" > 
+NOTE - If you are missing these dependencies; install them with ease using the [Node Version Manager](https://github.com/creationix/nvm)
+</p>
+![node-version](../images/exercise2/node-version.png)
+
+2. The `todolist-fe` has a package.json at the root of the project, this defines some configuration for the app including it's dependencies, dev dependencies, scripts and other configuration. Install the apps dependencies
+```bash
+$ npm install
+```
+
+2. The `todolist-fe` has some scripts defined in the package.json at the root of the project. To Run any of these scripts run `npm run <SCRIPT_NAME>`. Let's start by serving our application
+ ![npm-scripts](../images/exercise2/npm-scripts.png)
+```bash
+npm run serve
+```
+
+2. This will take sometime to execute; but once done it should open the browser for you displaying the `todolist-fe` app.
+ ![todo-list-app](../images/exercise2/todo-list-app.png)
+    * The server hosting it live reloads; so as you make changes to your code; the app will live update
+    * The Data you see in the screen is dummy / stubbed data. This is served up when there is no backend connection found
+
+2. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page you'll loose all additions. This is because there is persistence
+
+3. The structure of the `todolist-fe` is as follows.
+```bash
+todolist-fe
+├── jest.config.js
+├── jsconfig.json
+├── nightwatch.config.js
+├── node_modules
+├── package.json
+├── public
+│   ├── favicon.ico
+│   ├── img
+│   ├── index.html
+│   └── manifest.json
+├── src
+│   ├── App.vue
+│   ├── assets
+│   ├── components
+│   ├── config
+│   ├── main.js
+│   ├── registerServiceWorker.js
+│   ├── router.js
+│   ├── scss
+│   ├── services
+│   ├── store
+│   └── views
+├── tests
+│   ├── e2e
+│   └── unit
+└── vue.config.js
+```
+where the following are the important things:
+    * `./src` is the main collection of files needed by the app. The entrypoint is the `main.js` which is used to load the root `App.vue` file.
+    * `./node_modules` is where the dependencies are stored
+    * `./test` contains our end-to-end tests and unit tests. More covered on these in later labs.
+    * `./src/components` contains small, lightweight reusable components for our app. These include the `NewTodo` component which encapsulates the styling, logic and data for adding a new todo to our list
+    * `./src/store` is the `vuex` files for managing application state and backend connectivity
+    * `./src/views` is the view containers; which are responsible for loading components and managing their interactions.
+    * the `./src/router.js` controls routing logic. In our case the app only has one real endpoint.
+    * `./src/scss` contains custom  SCSS used in the application.
+    * `./*.js` is mostly config files for running and managing the app and the tests
 
 ### Part 2 - do some other things
 > _prefix of exercise and why we're doing it_
@@ -78,12 +155,15 @@ _____
 ## Extension Tasks
 > _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope._
 
+ - Add a GitHub Webhook to trigger your build on each commit
  - Create a _promote-to-uat_ phase after the <master> branch deploy
  - Add MongoDB Stateful set for the UAT environment (or test)
  - Do some other stuff
 
 ## Additional Reading
 > List of links or other reading that might be of use / reference for the exercise
+
+ -  What's in a package.json?
 
 ## Slide links
 > link back to the deck for the supporting material
