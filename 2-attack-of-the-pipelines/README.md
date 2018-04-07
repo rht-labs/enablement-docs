@@ -261,8 +261,8 @@ $ curl localhost:9000/api/todos
 ![fullstack-app](../images/exercise2/fullstack-app.png)
 
 
-### Part 2 - do some other things
-> _prefix of exercise and why we're doing it_
+### Part 2 - Build > Bake > Deploy 
+> _In this exercise; we take what we have working locally and get it working in OpenShift_
 
 3. Do other things
 
