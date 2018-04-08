@@ -311,25 +311,27 @@ NOTE - Jenkins may need to be restarted for the configuration to appear. To do t
 ### Part 4 - Build > Bake > Deploy 
 > _In this exercise; we take what we have working locally and get it working in OpenShift_
 
-5. This exercise will involve creating three stages (or items) in our pipeline, each of these is detailed below at a very high level. Move on to the next step to begin implementation.
-    * a *build* job is responsible for compiling and packaging our code:
-        1. Checkout from source code (`develop` for `<yourname>-dev` & `master` for `<yourname>-test`)
-        2. Install node dependencies and run a build / package
-        3. Send the package to Nexus
-        4. Archive the workspace to persist the workspace in case of failure
-        4. Tag the GitLab repository with the `${JOB_NAME}.${BUILD_NUMBER}` from Jenkins. This is our `${BUILD_TAG}` which will be used on downstream jobs.
-        5. Trigger the `bake` job with the `${BUILD_TAG}` param
-    * a *bake* job should take the package and put it in a Linux Container
-        1. Take an input of the previous jobs `${BUILD_TAG}` ie `${JOB_NAME}.${BUILD_NUMBER}`.
-        2. Checkout the binary from Nexus and unzip it's contents
-        3. Run an oc start-build of the App's BuildConfig and tag it's imagestream with the provided `${BUILD_TAG}`
-        4. Trigger a deploy job using the parameter `${BUILD_TAG}`
-    * a *deploy* job should roll out the changes by updating the image tag in the DC:
-        1. Take an input of the `${BUILD_TAG}`
-        2. Patch / set the DeploymentConfig to the image's `${BUILD_TAG}`
-        3. Rollout the changes
-        4. Verify the deployment
+This exercise will involve creating three stages (or items) in our pipeline, each of these is detailed below at a very high level. Move on to the next step to begin implementation.
+* a *build* job is responsible for compiling and packaging our code:
+    1. Checkout from source code (`develop` for `<yourname>-dev` & `master` for `<yourname>-test`)
+    2. Install node dependencies and run a build / package
+    3. Send the package to Nexus
+    4. Archive the workspace to persist the workspace in case of failure
+    4. Tag the GitLab repository with the `${JOB_NAME}.${BUILD_NUMBER}` from Jenkins. This is our `${BUILD_TAG}` which will be used on downstream jobs.
+    5. Trigger the `bake` job with the `${BUILD_TAG}` param
+* a *bake* job should take the package and put it in a Linux Container
+    1. Take an input of the previous jobs `${BUILD_TAG}` ie `${JOB_NAME}.${BUILD_NUMBER}`.
+    2. Checkout the binary from Nexus and unzip it's contents
+    3. Run an oc start-build of the App's BuildConfig and tag it's imagestream with the provided `${BUILD_TAG}`
+    4. Trigger a deploy job using the parameter `${BUILD_TAG}`
+* a *deploy* job should roll out the changes by updating the image tag in the DC:
+    1. Take an input of the `${BUILD_TAG}`
+    2. Patch / set the DeploymentConfig to the image's `${BUILD_TAG}`
+    3. Rollout the changes
+    4. Verify the deployment
 We will now to through these steps in detail.
+
+#### Part 4a - Build
 
 5. With the BuildConfig and DeployConfig in place from previous steps; Log into Jenkins and create a `New Item` which is jenkins speak for a new job configuration. ![new-item](../images/exercise2/new-item.png)
 
@@ -383,6 +385,8 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
 
 5. Hit `save` which will take you to the job overview page - and that's it; our *build* phase is complete!
 
+#### Part 4b - Bake
+
 5. Next we will setup our *bake* phase; which is a little simpler. Go to Jenkins home and create another Freestyle Job (as before) called `dev-todolist-fe-bake`.
 
 5. This job is will take in the BUILD_TAG from the previous one so check the `This project is parameterized` box on the General tab.
@@ -426,6 +430,8 @@ oc start-build ${NAME} --from-dir=package-contents/ --follow
 
 5. Hit save! That's our *bake* phase done! Finally; on to our *deploy*
 
+#### Part 4c - Deploy
+
 5. Next we will setup our *deploy* phase. This job is very similar in setup to the *bake* phase so this time go to Jenkins home and create `dev-todolist-fe-deploy` Job and but scroll to the bottom and Copy from `dev-todolist-fe-bake`.
 ![copy-from](../images/exercise2/copy-from.png)
 
@@ -453,7 +459,19 @@ oc rollout latest dc/${NAME}
 
 5. Finally; delete the Post Build Action to trigger another job (by hitting the red X). Save the configuration. We're almost ready to run the pipeline!
 
-5. We can tie all the jobs in the pipeline together into a nice single view using the Build Pipeline view. Back on the Jenkins home screen Click the + beside the all tab on the top. Give the new view a sensible name like `dev-todolist-fe-pipeline`
+#### Part 4d - Pipeline
+
+5. With our Jenkins setup in place; now move to our `todolist-fe` app. Open in it your favourite editor and navigate to `src/config/dev.js`. Update `<YOUR_NAME>` accordingly. For example:
+![fe-dev-config](../images/exercise2/fe-dev-config.png)
+
+5. Repeat this for `src/config/test.js` file. Once done; commit your chanages and push them to GitLab
+```bash
+$ git add .
+$ git commit -m "ADD config for api"
+$ git push
+```
+
+5. Back on Jenkins; can tie all the jobs in the pipeline together into a nice single view using the Build Pipeline view. Back on the Jenkins home screen Click the + beside the all tab on the top. Give the new view a sensible name like `dev-todolist-fe-pipeline`
 ![add-view](../images/exercise2/add-view.png). 
 
 5. Set the Pipeline Flow's Inital Job to `dev-todolist-fe-build` and save.
