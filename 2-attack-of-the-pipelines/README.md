@@ -310,7 +310,8 @@ NOTE - Jenkins may need to be restarted for the configuration to appear. To do t
 ### Part 4 - Build > Bake > Deploy 
 > _In this exercise; we take what we have working locally and get it working in OpenShift_
 
-3. With the Configuration & DB in place,
+3. With the BuildConfig and DeployConfig in place; go to jenkins and create a `New Item` which is jenkins speak for a new job configuration. ![]()
+
 
 3. Do other things
 
@@ -325,12 +326,16 @@ NOTE - Jenkins may need to be restarted for the configuration to appear. To do t
 _____
 
 ## Extension Tasks
-> _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope._
+> _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution available and are provided for additional scope._
 
  - Add a GitHub Webhook to trigger your build on each commit
  - Create a _promote-to-uat_ phase after the <master> branch deploy
+    * Create a `uat` env using the OpenShift Applier as seen before
+    * Tag and promote the image without rebuilding 
  - Add MongoDB Stateful set for the UAT environment (or test)
- - Inject MongoDB config into the NodeJS app
+ - Inject MongoDB config into the NodeJS app using config map & secrets.
+    * Improve the security of the DB by making the user /passwords randomly generated
+ - Setup Nexus as an `npm` mirror registry and use it in the builds to speed up the build time
 
 ## Additional Reading
 > List of links or other reading that might be of use / reference for the exercise
