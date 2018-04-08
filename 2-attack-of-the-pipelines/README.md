@@ -261,8 +261,64 @@ $ curl localhost:9000/api/todos
 ![fullstack-app](../images/exercise2/fullstack-app.png)
 
 
-### Part 2 - do some other things
-> _prefix of exercise and why we're doing it_
+### Part 2 - Create a NodeJS Build slave
+> _In this exercise; we will create a build configuration to generate a slave for Jenkins to use in it's builds_
+
+3. In order for Jenkins to be able to run `npm` builds and installs as we have done locally, we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. In your `enablement-cd-cd` repository, checkout the template and configuration. This will bring in the template, the params & the `Dockerfile`.
+```bash
+$ git checkout exercise2/jenkins-slave docker/ templates/ params/
+```
+
+3. Open the `params/jenkins-slave-npm` file and update `<YOUR_ENABLEMENT_GIT_REPO>` accordingly. This set of parameters will clone from the enablement repo and run a docker build of the Dockerfile stored in `docker/jenkins-slave-npm`.
+```bash
+SOURCE_REPOSITORY_URL=<YOUR_ENABLEMENT_GIT_REPO>
+SOURCE_CONTEXT_DIR=docker/jenkins-slave-npm
+NAME=npm-jenkins-slave
+```
+
+3. Create an item in the ansible variables file under the `ci-cd-builds` object to run the template with. Don't forget to substitute `<YOUR_NAME>`
+```yaml
+  - name: "jenkins-npm-slave"
+    namespace: "<YOUR_NAME>-ci-cd"
+    template: "{{ inventory_dir }}/../templates/jenkins-slave-generic-template.yml"
+    params: "{{ inventory_dir }}/../params/jenkins-slave-npm"
+    tags:
+    - jenkins-slave
+```
+![jenkins-slave-ansible](../images/exercise2/jenkins-slave-ansible.png)
+
+3. Run the OpenShift Applier to trigger a build of this jenkins slave image.
+```bash
+$ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml \
+     -i inventory/ \
+     -e "filter_tags=jenkins-slave"
+```
+
+3. Verify the build executed successfully by logging into the cluster and checking the `builds` tab of the `<YOUR_NAME>-ci-cd` project.
+![jenkins-slave-npm-build](../images/exercise2/jenkins-slave-npm-build.png)
+
+3. You should now be able to apply the label `jenkins-slave-npm` to a build job to run a build on this newly created slave as we will see in the rest of this lab
+<p class="tip">
+NOTE - Jenkins may need to be restarted for the configuration to appear. To do this; navigate to your jenkins instance and add `/restart` to the url.
+</p>
+
+### Part 3 - Add configs to cluster 
+> _In this exercise; we will use the OpenShift Applier to drive the creation of cluster content required by the app such and MongoDB and the Apps Build / Deploy Config_
+
+4. TODO - waiting for Justins example before proceeding here
+
+### Part 4 - Build > Bake > Deploy 
+> _In this exercise; we take what we have working locally and get it working in OpenShift_
+
+3. With the Configuration & DB in place,
+
+3. Do other things
+
+3. Do other things
+
+3. Do other things
+
+3. Do other things
 
 3. Do other things
 
@@ -274,7 +330,7 @@ _____
  - Add a GitHub Webhook to trigger your build on each commit
  - Create a _promote-to-uat_ phase after the <master> branch deploy
  - Add MongoDB Stateful set for the UAT environment (or test)
- - Do some other stuff
+ - Inject MongoDB config into the NodeJS app
 
 ## Additional Reading
 > List of links or other reading that might be of use / reference for the exercise
