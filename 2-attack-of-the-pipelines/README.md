@@ -34,18 +34,19 @@ _____
 2. Deploy a `MongoDB` using the provided template to all project namespace.
 
 2. Create 2 pipline with three stages (`build`, `bake`, `deploy`) in jenkins for `develop` & `master` branches on the `todolist-fe` such that:
-    * `Build` job should:
+    * a `Build` job is responsible for compiling and packaging our code:
         1. Checkout from source code (`develop` for `<yourname>-dev` & `master` for `<yourname>-test`)
         2. Install node dependencies and run a build / package
-        3. Send the package to Nexus (as a zip)
-        4. Tag the git repository with the `${JOB_NAME}.${BUILD_NUMBER}` from Jenkins
-        5. Trigger the `bake` job
-    * `Bake` job should:
+        3. Send the package to Nexus
+        4. Archive the workspace to persist the workspace in case of failure
+        4. Tag the GitLab repository with the `${JOB_NAME}.${BUILD_NUMBER}` from Jenkins. This is our `${BUILD_TAG}` which will be used on downstream jobs.
+        5. Trigger the `bake` job with the `${BUILD_TAG}` param
+    * a `Bake` job should take the package and put it in a Linux Container
         1. Take an input of the previous jobs `${BUILD_TAG}` ie `${JOB_NAME}.${BUILD_NUMBER}`.
         2. Checkout the binary from Nexus and unzip it's contents
-        3. Run and OC build of the App and tag it's imagestream with the provided `${BUILD_TAG}`
+        3. Run an oc start-build of the App's BuildConfig and tag it's imagestream with the provided `${BUILD_TAG}`
         4. Trigger a deploy job using the parameter `${BUILD_TAG}`
-    * `deploy` job should:
+    * a `deploy` job should roll out the changes by updating the image tag in the DC:
         1. Take an input of the `${BUILD_TAG}`
         2. Patch / set the DeploymentConfig to the image's `${BUILD_TAG}`
         3. Rollout the changes
@@ -310,32 +311,97 @@ NOTE - Jenkins may need to be restarted for the configuration to appear. To do t
 ### Part 4 - Build > Bake > Deploy 
 > _In this exercise; we take what we have working locally and get it working in OpenShift_
 
-3. With the BuildConfig and DeployConfig in place; go to jenkins and create a `New Item` which is jenkins speak for a new job configuration. ![]()
+3. This exercise will involve creating three stages (or items) in our pipeline, each of these is detailed below at a very high level. Move on to the next step to begin implementation.
+    * a *build* job is responsible for compiling and packaging our code:
+        1. Checkout from source code (`develop` for `<yourname>-dev` & `master` for `<yourname>-test`)
+        2. Install node dependencies and run a build / package
+        3. Send the package to Nexus
+        4. Archive the workspace to persist the workspace in case of failure
+        4. Tag the GitLab repository with the `${JOB_NAME}.${BUILD_NUMBER}` from Jenkins. This is our `${BUILD_TAG}` which will be used on downstream jobs.
+        5. Trigger the `bake` job with the `${BUILD_TAG}` param
+    * a *bake* job should take the package and put it in a Linux Container
+        1. Take an input of the previous jobs `${BUILD_TAG}` ie `${JOB_NAME}.${BUILD_NUMBER}`.
+        2. Checkout the binary from Nexus and unzip it's contents
+        3. Run an oc start-build of the App's BuildConfig and tag it's imagestream with the provided `${BUILD_TAG}`
+        4. Trigger a deploy job using the parameter `${BUILD_TAG}`
+    * a *deploy* job should roll out the changes by updating the image tag in the DC:
+        1. Take an input of the `${BUILD_TAG}`
+        2. Patch / set the DeploymentConfig to the image's `${BUILD_TAG}`
+        3. Rollout the changes
+        4. Verify the deployment
+We will now to through these steps in detail.
 
+3. With the BuildConfig and DeployConfig in place from previous steps; Log into Jenkins and create a `New Item` which is jenkins speak for a new job configuration. ![new-item](../images/exercise2/new-item.png)
 
-3. Do other things
+3. Name this job `dev-todolist-fe-build` and select `Freestyle Job`. All our jobs will take the form of `<ENV>-<APP_NAME>-<JOB_PURPOSE>`. ![freestyle-job](../images/exercise2/freestyle-job.png)
 
-3. Do other things
+3. The page that loads is the Job Configuration page. It can be returned to at anytime from Jenkins. To conserve space; we will make sure Jenkins only keeps the last builds artifacts. Tick the `Discard old builds` checkbox and set `Max # of builds to keep with artifacts` to 1 as below ![keep-artifacts](../images/exercise2/keep-artifacts.png)
 
-3. Do other things
+3. Our NodeJS build needs to be run on the `jenkins-slave-npm` we created earlier. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-slave](../images/exercise2/label-jenkins-slave.png)
 
-3. Do other things
+3. On the Source Code Management tab, specify the endpoint for our GitLab `todolist-fe` Project and specify your credentials from the dropdown box. Set the Branch Specifier to `develop`. ![git-scm](../images/exercise2/git-scm.png)
 
-3. Do other things
+3. Scroll down to the Build Environment tab and select the `Color ANSI Console Output` checkbox ![ansi](../images/exercise2/ansi.png)
+
+3. Move on to the Build section and select `Add build step`. From the dropdown select `Execute Shell`. On the box tha appears; insert the following, to build package and deploy our app to Nexus:
+```bash
+#!/bin/bash
+set -o xtrace
+scl enable rh-nodejs8 'npm install'
+scl enable rh-nodejs8 'npm run build:ci:dev'
+scl enable rh-nodejs8 'npm run package'
+scl enable rh-nodejs8 'npm run publish'
+```
+![build-step](../images/exercise2/build-step.png)
+
+3. Scroll to the final section; the Post-build Actions. Add a new post-build action from the dropdown called `Archive the artifacts` and specify `**` in the box. This will zip the entire workspace and copy it back to Jenkins for inspection if needed. ![archive-artifacts](../images/exercise2/archive-artifacts.png)
+
+3. On the Post-build Actions; Add another post-build action from the dropdown called `Git Publisher`. This is useful for tying the git check-in to the feature in your tracking tool to the built product.
+    * Tick the box `Push Only If Build Succeeds`
+    * Add the Tag to push of 
+```bash
+${JOB_NAME}.${BUILD_NUMBER}
+```
+    * Specify the commit message to be
+```bash
+Automated commit by jenkins from ${JOB_NAME}.${BUILD_NUMBER}
+```
+![git-publisher](../images/exercise2/git-publisher.png)
+
+3. Finally; add the trigger for the next job in the pipeline. Add another post-build action from the dropdown called `Trigger parameterized build on other projects`. 
+    * Set the project to build to be `dev-todolist-fe-bake` 
+    * Set the condition to be `Stable or unstable but not failed`. 
+    * Click Add Parameters dropdown and select Predefined parameters. 
+    * In the box, insert our BUILD_TAG as follows
+```bash
+BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
+```
+![param-trigger](../images/exercise2/param-trigger.png)
+<p class="tip">
+NOTE - Jenkins might say "No such project ‘dev-todolist-fe-bake’. Did you mean ...." at this point. Don't worry; it's because we have not created the next job yet.
+</p>
+
+3. Hit `save` which will take you to the job overview page.
+
+3. Next we will setup our bake phase; which is a little simpler. Go to Jenkins home and create another Freestyle Job (as before) called `dev-todolist-fe-bake`.
+
 
 _____
 
 ## Extension Tasks
 > _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution available and are provided for additional scope._
 
- - Add a GitHub Webhook to trigger your build on each commit
- - Create a _promote-to-uat_ phase after the <master> branch deploy
+- Git Tasks
+    * Add a GitHub Webhook to trigger your build on each commit
+- Promote build
+    * Create a _promote-to-uat_ phase after the <master> branch deploy 
     * Create a `uat` env using the OpenShift Applier as seen before
-    * Tag and promote the image without rebuilding 
- - Add MongoDB Stateful set for the UAT environment (or test)
- - Inject MongoDB config into the NodeJS app using config map & secrets.
+    * Tag and promote the image without rebuilding after the `test-**-deploy`
+- MongoDB tasks 
+    * Add MongoDB Stateful set for the UAT environment (or test)
+    * Inject MongoDB config into the NodeJS app using config map & secrets.
     * Improve the security of the DB by making the user /passwords randomly generated
- - Setup Nexus as an `npm` mirror registry and use it in the builds to speed up the build time
+- Setup Nexus as an `npm` mirror registry and use it in the builds to speed up the build time
 
 ## Additional Reading
 > List of links or other reading that might be of use / reference for the exercise
