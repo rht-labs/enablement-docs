@@ -262,9 +262,9 @@ $ curl localhost:9000/api/todos
 
 
 ### Part 2 - Create a NodeJS Build slave
-> _In this exercise; we will create a build configuration for to generate a slave for Jenkins to use in it's builds_
+> _In this exercise; we will create a build configuration to generate a slave for Jenkins to use in it's builds_
 
-3. In order for Jenkins to be able to run `npm` builds and installs as we have done locally, we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. In your `enablement-cd-cd` repository, checkout the template and configuration. This will bring in the template, the params & the `Docerfile`.
+3. In order for Jenkins to be able to run `npm` builds and installs as we have done locally, we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. In your `enablement-cd-cd` repository, checkout the template and configuration. This will bring in the template, the params & the `Dockerfile`.
 ```bash
 $ git checkout exercise2/jenkins-slave docker/ templates/ params/
 ```
