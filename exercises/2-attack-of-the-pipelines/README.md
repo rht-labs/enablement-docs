@@ -378,14 +378,55 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
 ```
 ![param-trigger](../images/exercise2/param-trigger.png)
 <p class="tip">
-NOTE - Jenkins might say "No such project ‘dev-todolist-fe-bake’. Did you mean ...." at this point. Don't worry; it's because we have not created the next job yet.
+    NOTE - Jenkins might say "No such project ‘dev-todolist-fe-bake’. Did you mean ...." at this point. Don't worry; it's because we have not created the next job yet.
 </p>
 
-3. Hit `save` which will take you to the job overview page.
+3. Hit `save` which will take you to the job overview page - and that's it; our *build* phase is complete!
 
-3. Next we will setup our bake phase; which is a little simpler. Go to Jenkins home and create another Freestyle Job (as before) called `dev-todolist-fe-bake`.
+3. Next we will setup our *bake* phase; which is a little simpler. Go to Jenkins home and create another Freestyle Job (as before) called `dev-todolist-fe-bake`.
 
+3. This job is will take in the BUILD_TAG from the previous one so check the `This project is parameterized` box on the General tab.
+    * Add string parameter type
+    * set the name to `BUILD_TAG`. This will be available to the job as an Enviroment Variable.
+    * You can set `dev-todolist-fe-build.` as the default value for ease when triggering manually.
+    * The description is not required but a handy one for reference would be `${JOB_NAME}.${BUILD_NUMBER} of previous build eg dev-todolist-fe-build.1232`
+![param-trigger-bake](../images/exercise2/param-trigger-bake.png)
 
+3. This time set the `Restrict where this project can be run` label to `master`.
+<p class="tip">
+    This the default node that jobs run on. We don't want jenkins to execute the *bake* on any other nodes if the `master` is busy so it is always safer to specify it here.
+</p>
+
+3. There is no Git or SCM needed for this job so move down to the Build Environment and tick `Delete workspace before build starts`
+
+3. Scroll down to the Build Environment tab and select the `Color ANSI Console Output` checkbox ![delete-ansi](../images/exercise2/delete-ansi.png)
+
+3. Move on to the Build section and select `Add build step`. From the dropdown select `Execute Shell`. On the box the appears; insert the following, to pull the package from Nexus. We patch the BuildConfig with the Jenkins Tag to get traceablility from feature to source code to built item. Finally; the oc start-build command is run:
+```bash
+#!/bin/bash
+curl -v -f http://admin:admin123@${NEXUS_ENDPOINT}/repository/zip/com/redhat/todolist/${BUILD_TAG}/package-contents.zip -o package-contents.zip
+unzip package-contents.zip
+oc project <YOUR_NAME>-ci-cd # probs not needed
+NAME=todolist-fe
+oc patch bc ${NAME} -p "spec:
+   output:
+     to:
+       kind: ImageStreamTag
+       name: '${NAME}:${BUILD_TAG}'"
+oc start-build ${NAME} --from-dir=package-contents/ --follow
+```
+![bake-step](../images/exercise2/bake-step.png)
+
+3. Finally; add the trigger for the next job in the pipeline. Add a post-build action from the dropdown called `Trigger parameterized build on other projects`.
+    * Set the project to build to be `dev-todolist-fe-deploy`
+    * Set the condition to be `Stable`.
+    * Click Add Parameters dropdown and select Current build parameters. This will pass the ${BUILD_TAG} to the downstream job which we will create next.
+    * In the box, insert our BUILD_TAG as follows
+![downstream-trigger-deploy](../images/exercise2/downstream-trigger-deploy.png)
+
+3. Hit save! That's our *bake* phase done! Finally; on to our *deploy*
+
+3. 
 _____
 
 ## Extension Tasks
@@ -394,7 +435,7 @@ _____
 - Git Tasks
     * Add a GitHub Webhook to trigger your build on each commit
 - Promote build
-    * Create a _promote-to-uat_ phase after the <master> branch deploy 
+    * Create a _promote-to-uat_ phase after the <master> branch deploy
     * Create a `uat` env using the OpenShift Applier as seen before
     * Tag and promote the image without rebuilding after the `test-**-deploy`
 - MongoDB tasks 
