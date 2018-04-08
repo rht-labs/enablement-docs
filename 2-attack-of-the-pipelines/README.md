@@ -311,7 +311,7 @@ NOTE - Jenkins may need to be restarted for the configuration to appear. To do t
 ### Part 4 - Build > Bake > Deploy 
 > _In this exercise; we take what we have working locally and get it working in OpenShift_
 
-3. This exercise will involve creating three stages (or items) in our pipeline, each of these is detailed below at a very high level. Move on to the next step to begin implementation.
+5. This exercise will involve creating three stages (or items) in our pipeline, each of these is detailed below at a very high level. Move on to the next step to begin implementation.
     * a *build* job is responsible for compiling and packaging our code:
         1. Checkout from source code (`develop` for `<yourname>-dev` & `master` for `<yourname>-test`)
         2. Install node dependencies and run a build / package
@@ -331,19 +331,19 @@ NOTE - Jenkins may need to be restarted for the configuration to appear. To do t
         4. Verify the deployment
 We will now to through these steps in detail.
 
-3. With the BuildConfig and DeployConfig in place from previous steps; Log into Jenkins and create a `New Item` which is jenkins speak for a new job configuration. ![new-item](../images/exercise2/new-item.png)
+5. With the BuildConfig and DeployConfig in place from previous steps; Log into Jenkins and create a `New Item` which is jenkins speak for a new job configuration. ![new-item](../images/exercise2/new-item.png)
 
-3. Name this job `dev-todolist-fe-build` and select `Freestyle Job`. All our jobs will take the form of `<ENV>-<APP_NAME>-<JOB_PURPOSE>`. ![freestyle-job](../images/exercise2/freestyle-job.png)
+5. Name this job `dev-todolist-fe-build` and select `Freestyle Job`. All our jobs will take the form of `<ENV>-<APP_NAME>-<JOB_PURPOSE>`. ![freestyle-job](../images/exercise2/freestyle-job.png)
 
-3. The page that loads is the Job Configuration page. It can be returned to at anytime from Jenkins. To conserve space; we will make sure Jenkins only keeps the last builds artifacts. Tick the `Discard old builds` checkbox and set `Max # of builds to keep with artifacts` to 1 as below ![keep-artifacts](../images/exercise2/keep-artifacts.png)
+5. The page that loads is the Job Configuration page. It can be returned to at anytime from Jenkins. To conserve space; we will make sure Jenkins only keeps the last builds artifacts. Tick the `Discard old builds` checkbox and set `Max # of builds to keep with artifacts` to 1 as below ![keep-artifacts](../images/exercise2/keep-artifacts.png)
 
-3. Our NodeJS build needs to be run on the `jenkins-slave-npm` we created earlier. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-slave](../images/exercise2/label-jenkins-slave.png)
+5. Our NodeJS build needs to be run on the `jenkins-slave-npm` we created earlier. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-slave](../images/exercise2/label-jenkins-slave.png)
 
-3. On the Source Code Management tab, specify the endpoint for our GitLab `todolist-fe` Project and specify your credentials from the dropdown box. Set the Branch Specifier to `develop`. ![git-scm](../images/exercise2/git-scm.png)
+5. On the Source Code Management tab, specify the endpoint for our GitLab `todolist-fe` Project and specify your credentials from the dropdown box. Set the Branch Specifier to `develop`. ![git-scm](../images/exercise2/git-scm.png)
 
-3. Scroll down to the Build Environment tab and select the `Color ANSI Console Output` checkbox ![ansi](../images/exercise2/ansi.png)
+5. Scroll down to the Build Environment tab and select the `Color ANSI Console Output` checkbox ![ansi](../images/exercise2/ansi.png)
 
-3. Move on to the Build section and select `Add build step`. From the dropdown select `Execute Shell`. On the box tha appears; insert the following, to build package and deploy our app to Nexus:
+5. Move on to the Build section and select `Add build step`. From the dropdown select `Execute Shell`. On the box tha appears; insert the following, to build package and deploy our app to Nexus:
 ```bash
 #!/bin/bash
 set -o xtrace
@@ -354,9 +354,9 @@ scl enable rh-nodejs8 'npm run publish'
 ```
 ![build-step](../images/exercise2/build-step.png)
 
-3. Scroll to the final section; the Post-build Actions. Add a new post-build action from the dropdown called `Archive the artifacts` and specify `**` in the box. This will zip the entire workspace and copy it back to Jenkins for inspection if needed. ![archive-artifacts](../images/exercise2/archive-artifacts.png)
+5. Scroll to the final section; the Post-build Actions. Add a new post-build action from the dropdown called `Archive the artifacts` and specify `**` in the box. This will zip the entire workspace and copy it back to Jenkins for inspection if needed. ![archive-artifacts](../images/exercise2/archive-artifacts.png)
 
-3. On the Post-build Actions; Add another post-build action from the dropdown called `Git Publisher`. This is useful for tying the git check-in to the feature in your tracking tool to the built product.
+5. On the Post-build Actions; Add another post-build action from the dropdown called `Git Publisher`. This is useful for tying the git check-in to the feature in your tracking tool to the built product.
     * Tick the box `Push Only If Build Succeeds`
     * Add the Tag to push of 
 ```bash
@@ -368,7 +368,7 @@ Automated commit by jenkins from ${JOB_NAME}.${BUILD_NUMBER}
 ```
 ![git-publisher](../images/exercise2/git-publisher.png)
 
-3. Finally; add the trigger for the next job in the pipeline. Add another post-build action from the dropdown called `Trigger parameterized build on other projects`. 
+5. Finally; add the trigger for the next job in the pipeline. Add another post-build action from the dropdown called `Trigger parameterized build on other projects`. 
     * Set the project to build to be `dev-todolist-fe-bake` 
     * Set the condition to be `Stable or unstable but not failed`. 
     * Click Add Parameters dropdown and select Predefined parameters. 
@@ -381,27 +381,27 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
     NOTE - Jenkins might say "No such project ‘dev-todolist-fe-bake’. Did you mean ...." at this point. Don't worry; it's because we have not created the next job yet.
 </p>
 
-3. Hit `save` which will take you to the job overview page - and that's it; our *build* phase is complete!
+5. Hit `save` which will take you to the job overview page - and that's it; our *build* phase is complete!
 
-3. Next we will setup our *bake* phase; which is a little simpler. Go to Jenkins home and create another Freestyle Job (as before) called `dev-todolist-fe-bake`.
+5. Next we will setup our *bake* phase; which is a little simpler. Go to Jenkins home and create another Freestyle Job (as before) called `dev-todolist-fe-bake`.
 
-3. This job is will take in the BUILD_TAG from the previous one so check the `This project is parameterized` box on the General tab.
+5. This job is will take in the BUILD_TAG from the previous one so check the `This project is parameterized` box on the General tab.
     * Add string parameter type
     * set the name to `BUILD_TAG`. This will be available to the job as an Enviroment Variable.
     * You can set `dev-todolist-fe-build.` as the default value for ease when triggering manually.
     * The description is not required but a handy one for reference would be `${JOB_NAME}.${BUILD_NUMBER} of previous build eg dev-todolist-fe-build.1232`
 ![param-trigger-bake](../images/exercise2/param-trigger-bake.png)
 
-3. This time set the `Restrict where this project can be run` label to `master`.
+5. This time set the `Restrict where this project can be run` label to `master`.
 <p class="tip">
     This the default node that jobs run on. We don't want jenkins to execute the *bake* on any other nodes if the `master` is busy so it is always safer to specify it here.
 </p>
 
-3. There is no Git or SCM needed for this job so move down to the Build Environment and tick `Delete workspace before build starts`
+5. There is no Git or SCM needed for this job so move down to the Build Environment and tick `Delete workspace before build starts`
 
-3. Scroll down to the Build Environment tab and select the `Color ANSI Console Output` checkbox ![delete-ansi](../images/exercise2/delete-ansi.png)
+5. Scroll down to the Build Environment tab and select the `Color ANSI Console Output` checkbox ![delete-ansi](../images/exercise2/delete-ansi.png)
 
-3. Move on to the Build section and select `Add build step`. From the dropdown select `Execute Shell`. On the box the appears; insert the following, to pull the package from Nexus. We patch the BuildConfig with the Jenkins Tag to get traceablility from feature to source code to built item. Finally; the oc start-build command is run:
+5. Move on to the Build section and select `Add build step`. From the dropdown select `Execute Shell`. On the box the appears; insert the following, to pull the package from Nexus. We patch the BuildConfig with the Jenkins Tag to get traceablility from feature to source code to built item. Finally; the oc start-build command is run:
 ```bash
 #!/bin/bash
 curl -v -f http://admin:admin123@${NEXUS_ENDPOINT}/repository/zip/com/redhat/todolist/${BUILD_TAG}/package-contents.zip -o package-contents.zip
@@ -417,16 +417,64 @@ oc start-build ${NAME} --from-dir=package-contents/ --follow
 ```
 ![bake-step](../images/exercise2/bake-step.png)
 
-3. Finally; add the trigger for the next job in the pipeline. Add a post-build action from the dropdown called `Trigger parameterized build on other projects`.
+5. Finally; add the trigger for the next job in the pipeline. Add a post-build action from the dropdown called `Trigger parameterized build on other projects`.
     * Set the project to build to be `dev-todolist-fe-deploy`
     * Set the condition to be `Stable`.
     * Click Add Parameters dropdown and select Current build parameters. This will pass the ${BUILD_TAG} to the downstream job which we will create next.
     * In the box, insert our BUILD_TAG as follows
 ![downstream-trigger-deploy](../images/exercise2/downstream-trigger-deploy.png)
 
-3. Hit save! That's our *bake* phase done! Finally; on to our *deploy*
+5. Hit save! That's our *bake* phase done! Finally; on to our *deploy*
 
-3. 
+5. Next we will setup our *deploy* phase. This job is very similar in setup to the *bake* phase so this time go to Jenkins home and create `dev-todolist-fe-deploy` Job and but scroll to the bottom and Copy from `dev-todolist-fe-bake`.
+![copy-from](../images/exercise2/copy-from.png)
+
+5. The only two differences between the jobs is the Build Step and there are no Post Build Actions. First to the Build tab and add the following to the shell box. The process for running the deploy is to tag the image created previously for use in the `dev` project. Then update the DeploymentConfig to use the Jenkins Tag which kicked the process off. Once successful; the changes are rolled out
+```bash
+#!/bin/bash
+set -o xtrace
+# VARS
+PIPELINES_NAMESPACE=donal-ci-cd
+NAMESPACE=donal-dev
+NAME=todolist-fe
+oc project ${NAMESPACE}
+oc tag ${PIPELINES_NAMESPACE}/${NAME}:${BUILD_TAG} ${NAMESPACE}/${NAME}:${BUILD_TAG}
+oc set env dc ${NAME} NODE_ENV=dev
+oc set image dc/${NAME} ${NAME}=docker-registry.default.svc:5000/${NAMESPACE}/${NAME}:${BUILD_TAG}
+oc rollout latest dc/${NAME}
+```
+![deploy-step](../images/exercise2/deploy-step.png)
+
+5. Secondly, add another build step called `Verify OpenShift Deployment` include the following
+    * Set the Project to your `<YOUR_NAME>-dev`
+    * Set the DeploymentConfig to your app's name `todolist-fe`
+    * Set the replica count to `1`
+![verify-deployment](../images/exercise2/verify-deployment.png)
+
+5. Finally; delete the Post Build Action to trigger another job (by hitting the red X). Save the configuration. We're almost ready to run the pipeline!
+
+5. We can tie all the jobs in the pipeline together into a nice single view using the Build Pipeline view. Back on the Jenkins home screen Click the + beside the all tab on the top. Give the new view a sensible name like `dev-todolist-fe-pipeline`
+![add-view](../images/exercise2/add-view.png). 
+
+5. Set the Pipeline Flow's Inital Job to `dev-todolist-fe-build` and save.
+![pipeline-flow](../images/exercise2/pipeline-flow.png)
+
+5. You should now see the pipeline view. Run the pipeline by hitting build and move onto the next part while it is running.
+![dev-pipeline-view](../images/exercise2/dev-pipeline-view.png)
+
+### Part 5 - Backend Pipeline
+> In this exercise we will use the Jobs created already to create a pipeline for the Backend of our todolist app
+
+6. 
+
+6. 
+
+6. 
+
+6. 
+
+6. 
+
 _____
 
 ## Extension Tasks
