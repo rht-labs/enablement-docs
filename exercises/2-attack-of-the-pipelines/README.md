@@ -306,7 +306,53 @@ NOTE - Jenkins may need to be restarted for the configuration to appear. To do t
 ### Part 3 - Add configs to cluster 
 > _In this exercise; we will use the OpenShift Applier to drive the creation of cluster content required by the app such and MongoDB and the Apps Build / Deploy Config_
 
-4. TODO - waiting for Justins example before proceeding here
+4. On your terminal navigate to the root of the `todolist-fe` application. The app contains a hidden folder called `.openshift-applier`. Move (cd .openshift-applier) into this directory and your should seem a familiar looking directory structure for an ansible playbook. 
+```
+.openshift-applier
+├── README.md
+├── apply.yml
+├── inventory
+│   ├── group_vars
+│   │   └── all.yml
+│   └── hosts
+├── params
+│   ├── build
+│   ├── dev
+│   └── test
+├── requirements.yml
+└── templates
+    ├── todolist-api-build.yml
+    └── todolist-api-deploy.yml
+```
+where the following
+    * the `apply.yml` file is the entrypoint.
+    * the `inventory` contains the objects to populate the cluster with.
+    * the `params` contains the variables we'll apply to the `templates`
+    * the `templates` required by the app. These include the Build, Deploy configs as well as the services, health checks and other app definitions.
+
+4. There are a few updates to these manifests we need to make before applying the cluster content. In the `apply.yml` update the namespace `<YOUR_NAME>` variables accordingly.
+```yaml
+    ci_cd_namespace: donal-ci-cd
+    dev_namespace: donal-dev
+    test_namespace: donal-test
+```
+
+4. In the `params` folder update the `dev` and `test` files with the correct `<YOUR_NAME>` as you've done above.
+```bash
+PIPELINES_NAMESPACE=donal-ci-cd
+NAME=todolist-api
+DEPLOYER_USER=jenkins
+APP_TAG=latest
+NAMESPACE=donal-dev
+```
+
+4. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency and then run the playbook. This will populate the cluster with all the config needed for the front end app.
+```bash
+$ ansible-galaxy install -r requirements.yml --roles-path=roles
+$ ansible-playbook apply.yml -i inventory/
+```
+
+
 
 ### Part 4 - Build > Bake > Deploy 
 > _In this exercise; we take what we have working locally and get it working in OpenShift_
