@@ -30,7 +30,7 @@ _____
 
 If you're feeling confident and don't want to follow the step-by-step guide these highlevel instructions should provide a challenge for you:
 
-2. Clone the repo `git@github.com:rht-labs/enablement-ci-cd.git` which contains the scaffold of the project.
+2. Clone the repo `https://github.com/rht-labs/enablement-ci-cd` which contains the scaffold of the project.
 
 2. Create `<your-name>-ci-cd`, `<your-name>-dev` and `<your-name>-test` project namespaces using the inventory and run them with the OpenShift Applier to populate the cluster
 
