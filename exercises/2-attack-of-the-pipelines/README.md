@@ -408,7 +408,7 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
 5. Move on to the Build section and select `Add build step`. From the dropdown select `Execute Shell`. On the box the appears; insert the following, to pull the package from Nexus. We patch the BuildConfig with the Jenkins Tag to get traceablility from feature to source code to built item. Finally; the oc start-build command is run:
 ```bash
 #!/bin/bash
-curl -v -f http://admin:admin123@${NEXUS_ENDPOINT}/repository/zip/com/redhat/todolist/${BUILD_TAG}/package-contents.zip -o package-contents.zip
+curl -v -f http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${BUILD_TAG}/package-contents.zip -o package-contents.zip
 unzip package-contents.zip
 oc project <YOUR_NAME>-ci-cd # probs not needed
 NAME=todolist-fe
@@ -477,21 +477,50 @@ $ git push
 5. Set the Pipeline Flow's Inital Job to `dev-todolist-fe-build` and save.
 ![pipeline-flow](../images/exercise2/pipeline-flow.png)
 
-5. You should now see the pipeline view. Run the pipeline by hitting build and move onto the next part while it is running.
+5. You should now see the pipeline view. Run the pipeline by hitting build (you can move onto the next part while it is running as it may take some time). 
 ![dev-pipeline-view](../images/exercise2/dev-pipeline-view.png)
 
 ### Part 5 - Backend Pipeline
-> In this exercise we will use the Jobs created already to create a pipeline for the Backend of our todolist app
+> In this exercise we will use the Jobs created for the `todolist-fe` as a template to create a pipeline for the `todolist-api` app
 
-6. 
+6. On Jenkins home; create a new job for our backend build called `dev-todolist-api-build`. Use the Copy from section to copy all the configuration from the `dev-todolist-fe-build`.
+![copy-fe-build](../images/exercise2/copy-fe-build.png)
 
-6. 
+6. When this has loaded; find and replace both occurrences `-fe` with `-api` within the Job's configuration. Places to make sure you check are: 
+    * The GitLab project URL
+    * Projects to build on the Post Build Action
 
-6. 
+6. On the Build tab; remove the `:dev` from the `npm run build:ci:dev` so it just reads.
+```bash
+scl enable rh-nodejs8 'npm run build:ci'
+```
+ The rest of the instructions can be left as they are.
 
-6. 
+6. Save the configuration for `dev-todolist-api-build`
 
-6. 
+6. On Jenkins home; create a new job for our backend build called `dev-todolist-api-bake`. Use the Copy from section to copy all the configuration from the `dev-todolist-fe-bake` as you've just done.
+
+6. When this has loaded; find and replace the occurrences `-fe` with `-api` within the Job's configuration. Places to make sure you check are:
+    * The BUILD_TAG default value and description
+    * NAME in the execute shell step
+    * Projects to build on the Post Build Action
+
+6. Save the configuration for `dev-todolist-api-build`
+
+6. On Jenkins home; create a new job for our backend build called `dev-todolist-api-deploy`. Use the Copy from section to copy all the configuration from the `dev-todolist-fe-deploy` as you've just done.
+
+6. When this has loaded; find and replace the occurrences `-fe` with `-api` within the Job's configuration. Places to make sure you check are:
+    * The BUILD_TAG default value and description
+    * NAME in the execute shell step
+    * The name of the DeploymentConfig to validate in the Verify OpenShift Deployment
+
+6. Save the configuration for `dev-todolist-api-build` and that's it for wiring together our `todolist-api` pipeline.
+ 
+6. Before we kick off the build; check our front end app and see if it has deployed successfully. Check the deployment in OpenShift and load the url. If it has been a success we should see our dummyData. This is because there is not backend deployed.
+![no-backend-app](../images/exercise2/no-backend-app.png)
+
+6. Run the `dev-todolist-api-build` to trigger the backend pipeline. When complete we should see the sample data has changed
+![with-backend-app](../images/exercise2/with-backend-app.png)
 
 _____
 
@@ -500,6 +529,9 @@ _____
 
 - Git Tasks
     * Add a GitHub Webhook to trigger your build on each commit
+- Pipeline Tasks
+    * Add pipeline for <master> branch for each project.
+    * Use `test-` instead of `dev-` across all config and names
 - Promote build
     * Create a _promote-to-uat_ phase after the <master> branch deploy
     * Create a `uat` env using the OpenShift Applier as seen before
