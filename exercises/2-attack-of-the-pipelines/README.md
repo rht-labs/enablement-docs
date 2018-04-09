@@ -92,7 +92,7 @@ NOTE - If you are missing these dependencies; install them with ease using the [
 $ npm install
 ```
 
-2. The `todolist-fe` has some scripts defined in the package.json at the root of the project. To Run any of these scripts run `npm run <SCRIPT_NAME>`. Let's start by serving our application
+2. The `todolist-fe` has some scripts defined in the package.json at the root of the project. To run any of these scripts run `npm run <SCRIPT_NAME>`. Let's start by serving our application
  ![npm-scripts](../images/exercise2/npm-scripts.png)
 ```bash
 npm run serve
@@ -329,7 +329,7 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
     2. Patch / set the DeploymentConfig to the image's `${BUILD_TAG}`
     3. Rollout the changes
     4. Verify the deployment
-We will now to through these steps in detail.
+* We will now go through these steps in detail.
 
 #### Part 4a - Build
 
@@ -345,7 +345,7 @@ We will now to through these steps in detail.
 
 5. Scroll down to the Build Environment tab and select the `Color ANSI Console Output` checkbox ![ansi](../images/exercise2/ansi.png)
 
-5. Move on to the Build section and select `Add build step`. From the dropdown select `Execute Shell`. On the box tha appears; insert the following, to build package and deploy our app to Nexus:
+5. Move on to the Build section and select `Add build step`. From the dropdown select `Execute Shell`. On the box that appears; insert the following, to build package and deploy our app to Nexus:
 ```bash
 #!/bin/bash
 set -o xtrace
