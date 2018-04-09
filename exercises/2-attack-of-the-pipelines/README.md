@@ -490,10 +490,11 @@ $ git push
     * The GitLab project URL
     * Projects to build on the Post Build Action
 
-6. On the Build tab; remove the `:dev` from the `npm run build:ci:dev` so it just reads. The rest of the instructions can be left as they are.
+6. On the Build tab; remove the `:dev` from the `npm run build:ci:dev` so it just reads.
 ```bash
 scl enable rh-nodejs8 'npm run build:ci'
 ```
+ The rest of the instructions can be left as they are.
 
 6. Save the configuration for `dev-todolist-api-build`
 
@@ -515,7 +516,7 @@ scl enable rh-nodejs8 'npm run build:ci'
 
 6. Save the configuration for `dev-todolist-api-build` and that's it for wiring together our `todolist-api` pipeline.
  
-6. Before we kick off the build; check out front end app and see if it has deployed successfully. Check the deployment in OpenShift and load the url. If it has been a success we should see our dummyData. This is because there is not backend deployed.
+6. Before we kick off the build; check our front end app and see if it has deployed successfully. Check the deployment in OpenShift and load the url. If it has been a success we should see our dummyData. This is because there is not backend deployed.
 ![no-backend-app](../images/exercise2/no-backend-app.png)
 
 6. Run the `dev-todolist-api-build` to trigger the backend pipeline. When complete we should see the sample data has changed
