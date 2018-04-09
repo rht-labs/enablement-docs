@@ -351,7 +351,7 @@ NAMESPACE=donal-dev
 $ ansible-galaxy install -r requirements.yml --roles-path=roles
 $ ansible-playbook apply.yml -i inventory/
 ```
-
+![ansible-success](../images/exercise2/ansible-success.png)
 
 
 ### Part 4 - Build > Bake > Deploy 
