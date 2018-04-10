@@ -1,6 +1,6 @@
-# Kick Off and Target Outcomes
+# What is Labs?
 
-> Short session with a few slides to introduce and drive a shared understanding of Red Hat Open Innovation Labs.
+> Short session with a few slides to introduce Open Innovation Labs, its use cases and the format of Labs residencies.
 
 _____
 
@@ -12,14 +12,15 @@ The latest version of slides for the session are available [here](https://drive.
 
 ## Facilitation Materials Needed
 
-* Sticky Notes - small square size
-* Sharpie Pens
+* Teams in table size of 4 to 6
+* Sticky Notes - small square size on each table
+* Sharpie Pens (1 per person) on each table
+* Need to be able to play sound from slide presentation (which includes video)
 
 
 
 ## Facilitation Guidelines
 
-* Facilitate a short "Labs is..." exercise (included in slides)
+* Early interactive acitivty to get each participant to think and write down what Labs is
 * Presentation of the slides
-* Play short Labs video (included in slides)
-
+* Show short Labs promotion video
