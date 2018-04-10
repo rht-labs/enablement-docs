@@ -306,7 +306,76 @@ NOTE - Jenkins may need to be restarted for the configuration to appear. To do t
 ### Part 3 - Add configs to cluster 
 > _In this exercise; we will use the OpenShift Applier to drive the creation of cluster content required by the app such and MongoDB and the Apps Build / Deploy Config_
 
-4. TODO - waiting for Justins example before proceeding here
+4. On your terminal navigate to the root of the `todolist-fe` application. The app contains a hidden folder called `.openshift-applier`. Move (cd .openshift-applier) into this directory and you should see a familiar looking directory structure for an ansible playbook. 
+```
+.openshift-applier
+├── README.md
+├── apply.yml
+├── inventory
+│   ├── group_vars
+│   │   └── all.yml
+│   └── hosts
+├── params
+│   ├── build
+│   ├── dev
+│   └── test
+├── requirements.yml
+└── templates
+    ├── todolist-api-build.yml
+    └── todolist-api-deploy.yml
+```
+where the following
+    * the `apply.yml` file is the entrypoint.
+    * the `inventory` contains the objects to populate the cluster with.
+    * the `params` contains the variables we'll apply to the `templates`
+    * the `templates` required by the app. These include the Build, Deploy configs as well as the services, health checks and other app definitions.
+
+4. There are a few updates to these manifests we need to make before applying the cluster content. In the `apply.yml` update the namespace `<YOUR_NAME>` variables accordingly.
+```yaml
+    ci_cd_namespace: donal-ci-cd
+    dev_namespace: donal-dev
+    test_namespace: donal-test
+```
+
+4. In the `params` folder update the `dev` and `test` files with the correct `<YOUR_NAME>` as you've done above. Example for the `dev` file
+```bash
+PIPELINES_NAMESPACE=donal-ci-cd
+NAME=todolist-fe
+DEPLOYER_USER=jenkins
+APP_TAG=latest
+NAMESPACE=donal-dev
+```
+
+4. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency and then run the playbook. This will populate the cluster with all the config needed for the front end app.
+```bash
+$ ansible-galaxy install -r requirements.yml --roles-path=roles
+$ ansible-playbook apply.yml -i inventory/
+```
+![ansible-success](../images/exercise2/ansible-success.png)
+
+4. Back on your terminal navigate to the root of the `todolist-api` application. Open the `.openshift-applier` directory. The same layout of the frontend app should be visible with one noticeable difference; the api requires a `MongoDB` to connect to at runtime.
+
+4. In the `apply.yml` update the namespace `<YOUR_NAME>` variables accordingly. For example:
+```yaml
+    ci_cd_namespace: donal-ci-cd
+    dev_namespace: donal-dev
+    test_namespace: donal-test
+```
+
+4. In the `params` folder update the `dev` and `test` files with the correct `<YOUR_NAME>` as you've done above. Example for the `dev` file:
+```bash
+PIPELINES_NAMESPACE=donal-ci-cd
+NAME=todolist-api
+DEPLOYER_USER=jenkins
+APP_TAG=latest
+NAMESPACE=donal-dev
+```
+
+4. Finally; run the applier and install it's dependencies to run the content into the cluster
+```bash
+$ ansible-galaxy install -r requirements.yml --roles-path=roles
+$ ansible-playbook apply.yml -i inventory/
+```
 
 ### Part 4 - Build > Bake > Deploy 
 > _In this exercise; we take what we have working locally and get it working in OpenShift_
@@ -333,7 +402,7 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
 
 #### Part 4a - Build
 
-5. With the BuildConfig and DeployConfig in place from previous steps; Log into Jenkins and create a `New Item` which is jenkins speak for a new job configuration. ![new-item](../images/exercise2/new-item.png)
+5. With the BuildConfig and DeployConfig in place for both our apps (`*-fe` & `*-api`) from previous steps; Log into Jenkins and create a `New Item`. This is just jenkins speak for a new job configuration. ![new-item](../images/exercise2/new-item.png)
 
 5. Name this job `dev-todolist-fe-build` and select `Freestyle Job`. All our jobs will take the form of `<ENV>-<APP_NAME>-<JOB_PURPOSE>`. ![freestyle-job](../images/exercise2/freestyle-job.png)
 
@@ -532,11 +601,12 @@ _____
 - Pipeline Tasks
     * Add pipeline for <master> branch for each project.
     * Use `test-` instead of `dev-` across all config and names
+    * Do the `.openshift-applier` steps as part of the pipeline.
 - Promote build
     * Create a _promote-to-uat_ phase after the <master> branch deploy
     * Create a `uat` env using the OpenShift Applier as seen before
     * Tag and promote the image without rebuilding after the `test-**-deploy`
-- MongoDB tasks 
+- MongoDB tasks
     * Add MongoDB Stateful set for the UAT environment (or test)
     * Inject MongoDB config into the NodeJS app using config map & secrets.
     * Improve the security of the DB by making the user /passwords randomly generated
