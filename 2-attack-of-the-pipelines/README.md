@@ -306,7 +306,7 @@ NOTE - Jenkins may need to be restarted for the configuration to appear. To do t
 ### Part 3 - Add configs to cluster 
 > _In this exercise; we will use the OpenShift Applier to drive the creation of cluster content required by the app such and MongoDB and the Apps Build / Deploy Config_
 
-4. On your terminal navigate to the root of the `todolist-fe` application. The app contains a hidden folder called `.openshift-applier`. Move (cd .openshift-applier) into this directory and your should seem a familiar looking directory structure for an ansible playbook. 
+4. On your terminal navigate to the root of the `todolist-fe` application. The app contains a hidden folder called `.openshift-applier`. Move (cd .openshift-applier) into this directory and you should see a familiar looking directory structure for an ansible playbook. 
 ```
 .openshift-applier
 ├── README.md
@@ -353,7 +353,7 @@ $ ansible-playbook apply.yml -i inventory/
 ```
 ![ansible-success](../images/exercise2/ansible-success.png)
 
-4. Back on your terminal navigate to the root of the `todolist-api` application. Open the `.openshift-applier` directory. The same layout of the frontend app should be visible with one noticable difference; the api requires a `MongoDB` to connect to at runtime.
+4. Back on your terminal navigate to the root of the `todolist-api` application. Open the `.openshift-applier` directory. The same layout of the frontend app should be visible with one noticeable difference; the api requires a `MongoDB` to connect to at runtime.
 
 4. In the `apply.yml` update the namespace `<YOUR_NAME>` variables accordingly. For example:
 ```yaml
