@@ -1,4 +1,4 @@
-# Event Storming
+# User Story Mapping and Value Slicing
 
 > Session to introduce the practice of User Story Mapping and Value Slicing, how we use it and show some examples of real User Story Map artefacts. This will also include a short interactive exercise to practice value slicing.
 
