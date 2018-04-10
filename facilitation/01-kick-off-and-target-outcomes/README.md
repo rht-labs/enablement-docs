@@ -12,8 +12,9 @@ The latest version of slides for the session are available [here](https://drive.
 
 ## Facilitation Materials Needed
 
-* Sticky Notes - rectangular size
-* Sharpie Pens
+* Teams in table size of 4 to 6
+* Sticky Notes - rectangular size on each table
+* Sharpie Pens (1 per person) on each table
 
 
 
@@ -21,5 +22,4 @@ The latest version of slides for the session are available [here](https://drive.
 
 * Presentation of the slides
 * Early ice breaker activity (provided in slides)
-* Showcase of the room to point of the visual artefacts to be used as a part of running the session (sign posted in slides)
-
+* Showcase of the room to point to the visual artefacts to be used as a part of running the session (sign posted in slides)
