@@ -1,6 +1,6 @@
 # Value Stream Mapping and Metric Based Process Mapping
 
-> Session to introduce the practices of Value Stream Mapping and Metric Based Process Mapping, how we use the and show some examples of real User Story Map artefacts. This will also include a short interactive exercise to practice value slicing.
+> Session to introduce the practices of Value Stream Mapping and Metric Based Process Mapping, how we use the and show some examples of real Metrics Based Process Map artefacts. This will also include a short interactive exercise to practice MBPM.
 
 _____
 
@@ -17,6 +17,7 @@ The latest version of slides for the session are available [here](https://drive.
     * Small Rectangular - lots of one color
 * Sharpie Pens (1 per person) on each table
 * Single color Painters' Tape
+* Lots of board / wall space to fit 2 large MBPMs (with 12 people collaborating around)
 
 
 ## Facilitation Guidelines
