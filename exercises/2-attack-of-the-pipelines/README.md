@@ -509,11 +509,7 @@ curl -v -f http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/rep
 unzip package-contents.zip
 oc project <YOUR_NAME>-ci-cd # probs not needed
 NAME=todolist-fe
-oc patch bc ${NAME} -p "spec:
-   output:
-     to:
-       kind: ImageStreamTag
-       name: '${NAME}:${BUILD_TAG}'"
+oc patch bc ${NAME} -p "{\"spec\":{\"output\":{\"to\":{\"kind\":\"ImageStreamTag\",\"name\":\"${NAME}:${BUILD_TAG}\"}}}}"
 oc start-build ${NAME} --from-dir=package-contents/ --follow
 ```
 ![bake-step](../images/exercise2/bake-step.png)
