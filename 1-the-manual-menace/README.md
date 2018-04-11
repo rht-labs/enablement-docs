@@ -161,23 +161,21 @@ $ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml 
      -e "filter_tags=nexus"
 ```
 
-4. Once successful; login to the cluster and navigate to the `<YOUR_NAME>-ci-cd`. You should see Nexus up and running. You can login with default credentials (admin / admin123) ![nexus-up-and-running](../images/exercise1/nexus-up-and-running.png)
+4. Once successful; login to the cluster through the browser (using cluster URL) and navigate to the `<YOUR_NAME>-ci-cd`. You should see Nexus up and running. You can login with default credentials (admin / admin123) ![nexus-up-and-running](../images/exercise1/nexus-up-and-running.png)
 
-4. Now lets do the same thing for GitLab to get it up and running. Checkout the template provided by running
+4. Now lets do the same thing for GitLab to get it up and running. Checkout the template and params provided by running
 ```bash
-$ git checkout exercise1/gitlab-nexus templates/gitlab.yml
+$ git checkout exercise1/gitlab-nexus templates/gitlab.yml params/gitlab
 ``` 
 Explore the template; it contains the PVC, buildConfig and services. The DeploymentConfig is made up of these apps
  - Redis (3.2.3)
  - PostgreSQL (9.4)
  - GitLab CE (v10.2.3)
 
-4. Add a new params file in the `params` folder called `gitlab`
-```bash
-$ touch params/gitlab
-```
-
-4. Open the `params/gitlab` file and add the following params
+4. Open the `params/gitlab` file and complete the following params
+<p class="tip">
+Note - The values here for the LDAP and BIND credentials will be provided by your tutor.
+</p>
 ```
 LDAP_BIND_DN=uid=<BIND_USER>,ou=People,dc=<YOUR_DOMAIN>,dc=com
 LDAP_USER_FILTER=(memberof=CN=YourGroup,OU=Users,DC=<YOUR_DOMAIN>,DC=com)
@@ -199,9 +197,6 @@ where the following need to be replaced by actual values:
     * `<LDAP_DESCRIPTION>` is the description to be used on the sign-in header for GitLab eg "Name LDAP Login"
     * `<GITLAB_ROOT_USER_PASSWORD>` is the root user for GOD access on the GitLab instance eg password123
     * `<GITLAB_URL>` is the endpoint for gitlab. It will take the form `gitlab-<YOUR_NAME>-ci-cd.apps.<ENV_ID>.<YOUR_DOMAIN>.com`
-<p class="tip">
-Note - some of the values here for the LDAP will be provided by your tutor.
-</p>
 
 4. Create another object in the inventory `all_vars.yml` file to run the build & deploy of this template. Add the following and update the `namespace:` accordingly
 ```yaml
