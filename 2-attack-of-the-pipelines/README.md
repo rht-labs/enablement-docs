@@ -65,15 +65,17 @@ _____
 2. Git clone the `todolist-fe` project to somewhere sensible and checkout the `develop` branch.
 ```bash
 $ git clone https://github.com/springdo/todolist-fe.git
+$ git cd todolist-fe
 $ git checkout develop
 ```
 
-2. Create a new project (internal) in GitLab called `todolist-fe` to host your clone of the project and copy it's remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
+2. Open up Gitlab and login. Create a new project (internal) in GitLab called `todolist-fe` to host your clone of the project and copy it's remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
 
 2. In your local clone of the `todolist-fe`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab
 ```bash
-$ git remote remove origin
-$ git remote add origin <YOUR_GIT_LAB_PROJECT>
+$ git remote set-url origin <YOUR_GIT_LAB_PROJECT>
+# verify the origin has been updated
+$ git remote -v
 $ git push -u origin --all
 ```
 
@@ -98,8 +100,9 @@ $ npm install
 npm run serve
 ```
 
-2. This will take sometime to execute; but once done it should open the browser for you displaying the `todolist-fe` app.
+2. This will take sometime to execute; but once done it should open the browser for you displaying the homepage of the `todolist-fe` app.
  ![todo-list-app](../images/exercise2/todo-list-app.png)
+    * Click 'Todo' at the top of the home page to get to the above page.
     * The server hosting it live reloads; so as you make changes to your code; the app will live update
     * The Data you see in the screen is dummy / stubbed data. This is served up when there is no backend connection found
 
@@ -122,6 +125,7 @@ todolist-fe
 │   ├── App.vue
 │   ├── assets
 │   ├── components
+│   │   └── *
 │   ├── config
 │   ├── main.js
 │   ├── registerServiceWorker.js
@@ -129,7 +133,9 @@ todolist-fe
 │   ├── scss
 │   ├── services
 │   ├── store
+│   │   └── *
 │   └── views
+│       └── *
 ├── tests
 │   ├── e2e
 │   └── unit
@@ -139,7 +145,7 @@ where the following are the important things:
     * `./src` is the main collection of files needed by the app. The entrypoint is the `main.js` which is used to load the root `App.vue` file.
     * `./node_modules` is where the dependencies are stored
     * `./test` contains our end-to-end tests and unit tests. More covered on these in later labs.
-    * `./src/components` contains small, lightweight reusable components for our app. These include the `NewTodo` component which encapsulates the styling, logic and data for adding a new todo to our list
+    * `./src/components` contains small, lightweight reusable components for our app. For example, the `NewTodo` component which encapsulates the styling, logic and data for adding a new todo to our list
     * `./src/store` is the `vuex` files for managing application state and backend connectivity
     * `./src/views` is the view containers; which are responsible for loading components and managing their interactions.
     * the `./src/router.js` controls routing logic. In our case the app only has one real endpoint.
@@ -149,6 +155,7 @@ where the following are the important things:
 2. Now let's move on to the `todolist-api` and wire them together. As with the `todolist-fe` we need to clone the repo and add it to our GitLab in the cluster.
 ```bash
 $ git clone https://github.com/springdo/todolist-api.git
+$ git cd todolist-api
 $ git checkout develop
 ```
 
@@ -156,13 +163,13 @@ $ git checkout develop
 
 2. In your local clone of the `todolist-api`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab
 ```bash
-$ git remote remove origin
-$ git remote add origin <YOUR_GIT_LAB_PROJECT>
+$ git remote set-url origin <YOUR_GIT_LAB_PROJECT>
 $ git push -u origin --all
 ```
 
 2. Once pushed; explore the application. It is a NodeJS application with the Express.js framework and MongoDB for persistent storage. Same as before, the `package.json` defines most of the configuration etc. Install the dependencies
 ```bash
+# npm i === npm install
 $ npm i
 ```
 
@@ -201,9 +208,10 @@ where the following are the important things:
     * `./node_modules` is where the dependencies are stored
     * `./server/api` is where the api's controller, data model & unit test are stored. 
     * `./server/mocks` is a mock server used for when there is no DB access    
-    * `./server/config` stores our Express JS config, header information and other middlewear.
-    * `./server/config/environment` stores enviromnent specific config; such as connectivity to backend services like the MongoDB.
+    * `./server/config` stores our Express JS config, header information and other middleware.
+    * `./server/config/environment` stores enviromnent specific config; such as connectivity to backend services like MongoDB.
     * `./tasks` is a collection of additional `Grunt` tasks which will be used in later labs
+    * `Grunt` is a taskrunner for use with Node.JS projects
     * `package.json` contains the dependency list and a lot of very helpful scripts for managing the app lifecycle
 
 2. The npm scripts are shown below. There are application start scripts, build and test items which will be used in the build. The ones for MongoDB are just provided for convenience and require Docker installed to execute.
@@ -239,7 +247,7 @@ $ npm run start
 ```
 ![node-app-started](../images/exercise2/node-app-started.png)
 
-2. Check things are responding correctly by running and checking the response. It contains some seeded data (stored in `server/config/seed.js`)
+2. Check things are up and running by testing the API with a `curl`. The API should return some seeded data (stored in `server/config/seed.js`)
 ```bash
 $ curl localhost:9000/api/todos
 ```
@@ -258,7 +266,7 @@ $ curl localhost:9000/api/todos
 }]
 ```
 
-2. Now let's check out `todolist-fe` app by reloading the browser. We should now see our dummy front end data is replaced by the backend seed data 
+2. Now let's check out `todolist-fe` app by reloading the browser. We should now see our dummy front end data is replaced by the backend seed data. Adding new todos will add them in the backend, these will persist when the page is refreshed.
 ![fullstack-app](../images/exercise2/fullstack-app.png)
 
 
