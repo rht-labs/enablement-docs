@@ -229,12 +229,12 @@ Note - we would not normally make the project under your name but create an grou
 
 4. Commit your local project to this new origin by first removing the existing origin (github) where the the project was cloned from. Remember to substitute `<YOUR_NEW_GIT_PROJECT>` accordingly
 ```bash
-$ git remote remove origin
-$ git remote add origin <YOUR_NEW_GIT_PROJECT>
+$ git remote set-url origin <YOUR_NEW_GIT_PROJECT>
 $ git add . 
 $ git commit -m "Adding git and nexus config"
 $ git push -u origin --all
 ```
+**Note - When making changes to enablement-ci-cd you should frequently commit the changes to git.**
 
 ### Part 3 - Jenkins & s2i
 > _Create a build and deployment config for Jenkins. Add new configuration and plugins to the OCP Stock Jenkins using s2i_
@@ -299,7 +299,8 @@ greenballs:1.15
 ![green-balls.png](../images/exercise1/green-balls.png)
 Why does Jenkins have Blue Balls? More can be found [on reddit](https://www.reddit.com/r/programming/comments/4lu6q8/why_does_jenkins_have_blue_balls/) or the [jenkins blog](https://jenkins.io/blog/2012/03/13/why-does-jenkins-have-blue-balls/)
 
-5. Before building and deploying Jenkins; add git credentials to the s2i by either adding them to the `template/jenkins.yml` and `params/jenkins` or for simplicity just replace the `<USERNAME>` && `<PASSWORD>` with your ldap credentials.
+5. Before building and deploying the Jenkins s2i; add git credentials to it. These will be used by Jenkins to access the Git Repositories where our apps will be stored. We want Jenkins to be able to push tags to it so write access is required. There are a few ways we can do this; either adding them to the `template/jenkins.yml` as environment Variables and then including them in the `params/jenkins` file.  We could also create a token in GitLab and use it as the source secret in the jenkins template. 
+But for simplicity just replace the `<USERNAME>` && `<PASSWORD>` in the `jenkins-s2i/configuration/init.groovy` with your ldap credentials as seen below. This init file gets run when Jenkins launches and will setup the credentials for use in our Jobs in the next exercises
 <p class="tip">
 Note in a residency we would not use your GitCredentials for pushing and pulling from Git, A service user would be created for this.
 </p>
@@ -308,27 +309,22 @@ gitUsername = System.getenv("GIT_USERNAME") ?: "<USERNAME>"
 gitPassword = System.getenv("GIT_PASSWORD") ?: "<PASSWORD>"
 ```
 
-5. Add a new params file in the `params` folder called `jenkins-s2i`
-```bash
-$ touch params/jenkins-s2i
-```
-
 5. Open the `params/jenkins-s2i` file and add the following content; replacing variables as appropriate. 
 ```
 SOURCE_REPOSITORY_URL=<YOUR_ENABLEMENT_REPO>
 NAME=jenkins
 SOURCE_REPOSITORY_CONTEXT_DIR=jenkins-s2i
 IMAGE_STREAM_NAMESPACE=<YOUR_NAME>-ci-cd
-SOURCE_REPOSITORY_USERNAME=<YOUR_LDAP_USERNAME>
-SOURCE_REPOSITORY_PASSWORD=<YOUR_LDAP_PASSWORD>
+SOURCE_REPOSITORY_USERNAME=<BASE64_YOUR_LDAP_USERNAME>
+SOURCE_REPOSITORY_PASSWORD=<BASE64_YOUR_LDAP_PASSWORD>
 ```
 where 
     * `<YOUR_ENABLEMENT_REPO>` is the full path clone path of the repo where this project is stored (including the https && .git)
     * `<YOUR_NAME>` is the prefix for your `-ci-cd` project.
     * Explore some of the other parameters in `templates/jenkins-s2i.yml`
-    * `<YOUR_LDAP_USERNAME>` is the base64encoded username builder pod will use to login and clone the repo with
-    * `<YOUR_LDAP_PASSWORD>` is the base64encoded password the builder pod will use to authenticate and clone the repo using
-You can use `echo -n '<YOUR_LDAP_PASSWORD>' | openssl base64` to encode your username and password accordingly.
+    * `<BASE64_YOUR_LDAP_USERNAME>` is the base64encoded username builder pod will use to login and clone the repo with
+    * `<BASE64_YOUR_LDAP_PASSWORD>` is the base64encoded password the builder pod will use to authenticate and clone the repo using
+You can use `echo -n '<BASE64_YOUR_LDAP_PASSWORD>' | openssl base64` to encode your username and password accordingly. For example 'password' base64 encoded will look like `cGFzc3dvcmQ=`.
 <p class="tip">
 Note in a residency we would not use your GitCredentials for pushing and pulling from Git, A service user would be created for this.
 </p>
