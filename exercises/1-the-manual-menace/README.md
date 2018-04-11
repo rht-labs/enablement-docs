@@ -17,7 +17,9 @@ As a learner you will be able to
 * [Nexus](https://www.sonatype.com/nexus-repository-sonatype) - Repository manager for storing lots of application types. Can also host `npm` and `Docker` registries.
 * [Jenkins](https://jenkins.io/) - OpenSource Build automation server. Highly customisable with plugins.
 * [Ansible](https://www.ansible.com/) - IT Automation tool used to provision and manage state of cloud and physical infrastructure.
-* [OpenShift Applier](https://github.com/redhat-cop/openshift-applier) - Community driven Git server
+* [OpenShift Applier](https://github.com/redhat-cop/openshift-applier) - used to apply OpenShift objects to an OpenShift Cluster.
+
+
 
 ## Big Picture
 This exercise begins with an empty Cluster
