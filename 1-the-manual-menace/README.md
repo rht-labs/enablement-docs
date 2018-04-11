@@ -84,14 +84,14 @@ done
  * `templates` is a collection of OpenShift templates
  * `inventory/group_vars/all.yml` is the collection of objects we want to insert into the cluster.
  * `requirements.yml` is a manifest which contains the ansible modules needed to run the playbook
-Open the `inventory/group_vars/all.yml` file; you should see a some variables setup to create the `ci-cd` namespace. This calls the `templates/project-requests.yml` template with the `params/project-requests-ci-cd` parameters. We will add some additional content here but first let's explore the parameters and the template
+Open the `inventory/group_vars/all.yml` file; you should see some variables setup to create the `ci-cd` namespace. This calls the `templates/project-requests.yml` template with the `params/project-requests-ci-cd` parameters. We will add some additional content here but first let's explore the parameters and the template
 
 3. Open the `params/project-requests-ci-cd` and replace the `<YOUR_NAME or initials>` with your name to create the correstponding projects in the cluster. 
 ![new-item](../images/exercise1/ci-cd-project-namespace.png)
 
 3. Create another two params files for `params/project-requests-dev` & `params/project-requests-test`. Add `NAMESPACE=<YOUR_NAME>-dev` & `NAMESPACE_DISPLAY_NAME=<YOUR-NAME> Dev` to `params/project-requests-dev`. Add `NAMESPACE=<YOUR_NAME>-test` & `NAMESPACE_DISPLAY_NAME=<YOUR-NAME> Test` to `params/project-requests-test`.
 
-3. In the `inventory/group_vars/all.yml` file; add the new inventory items for the projects you want to create (dev & test) by adding another object to the content array. You can copy and paste them from the `ci-cd` example and update them accordingly eg
+3. In the `inventory/group_vars/all.yml` file; add the new inventory items for the projects you want to create (dev & test) by adding another object to the content array. You can copy and paste them from the `ci-cd` example and update them accordingly e.g.
 ```yaml
     - name: <YOUR_NAME>-dev
       template: "{{ inventory_dir }}/../templates/project-requests.yml"
@@ -113,13 +113,13 @@ Open the `inventory/group_vars/all.yml` file; you should see a some variables se
 $ ansible-galaxy install -r requirements.yml --roles-path=roles
 ```
 
-3. Apply the inventory by logging into OpenShift and then running 
+3. Apply the inventory by logging into OpenShift and running the following: 
 ```bash
 $ oc login -p <password> -u <user> <cluster_url>
 $ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml -i inventory/
 ``` 
 
-3. Once successful you should see an output similar to this ![playbook-success](../images/exercise1/play-book-success.png)
+3. Once successful you should see an output similar to this: ![playbook-success](../images/exercise1/play-book-success.png)
 
 ### Part 2 - Nexus and GitLab
 > _Now that we have our Projects setup; we can start to populate them with Apps to be used in our dev lifecycle_
@@ -128,7 +128,7 @@ $ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml 
 ```bash
 $ git checkout exercise1/git-nexus templates/nexus.yml
 ```
-The tempate contains all the things needed to setup a persistent nexus server, exposing a service and route while also creating the persistent volume needed. Have a read through the template; at the bottom you'll see a collection of parameters we will pass to the template.
+The template contains all the things needed to setup a persistent nexus server, exposing a service and route while also creating the persistent volume needed. Have a read through the template; at the bottom you'll see a collection of parameters we will pass to the template.
 
 4. Add some parameters for running the template by creating a new file in the `params` directory. 
 ```bash
@@ -163,7 +163,7 @@ $ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml 
 
 4. Once successful; login to the cluster through the browser (using cluster URL) and navigate to the `<YOUR_NAME>-ci-cd`. You should see Nexus up and running. You can login with default credentials (admin / admin123) ![nexus-up-and-running](../images/exercise1/nexus-up-and-running.png)
 
-4. Now lets do the same thing for GitLab to get it up and running. Checkout the template and params provided by running
+4. Now let's do the same thing for GitLab to get it up and running. Checkout the template and params provided by running
 ```bash
 $ git checkout exercise1/git-nexus templates/gitlab.yml params/gitlab
 ``` 
@@ -261,7 +261,7 @@ JENKINS_OPTS=--sessionTimeout=720
       tags:
       - jenkins
 ```
-This configuration if applied now; it will create the deployment configuration needed for Jenkins but the `${NAMESPACE}:${JENKINS_IMAGE_STREAM_TAG}` in the template won't exist yet.
+This configuration, if applied now, will create the deployment configuration needed for Jenkins but the `${NAMESPACE}:${JENKINS_IMAGE_STREAM_TAG}` in the template won't exist yet.
 
 5. To create this image we will take the supported OpenShift Jenkins Image and bake into it some extra configuration using an [s2i](https://github.com/openshift/source-to-image) builder image. More information on Jenkins s2i is found on the [openshift/jenkins](https://github.com/openshift/jenkins#installing-using-s2i-build) github page. To create an s2i configuration for jenkins, check out the pre-canned configuration source in the `enablement-ci-cd` repo
 ```bash
@@ -318,7 +318,7 @@ where
     * Explore some of the other parameters in `templates/jenkins-s2i.yml`
     * `<BASE64_YOUR_LDAP_USERNAME>` is the base64encoded username builder pod will use to login and clone the repo with
     * `<BASE64_YOUR_LDAP_PASSWORD>` is the base64encoded password the builder pod will use to authenticate and clone the repo using
-You can use `echo -n '<BASE64_YOUR_LDAP_PASSWORD>' | openssl base64` to encode your username and password accordingly. For example 'password' base64 encoded will look like `cGFzc3dvcmQ=`.
+You can use `echo -n '<YOUR_LDAP_PASSWORD>' | openssl base64` to encode your username and password accordingly. For example 'password' base64 encoded will look like `cGFzc3dvcmQ=`.
 <p class="tip">
 Note in a residency we would not use your GitCredentials for pushing and pulling from Git, A service user would be created for this.
 </p>
@@ -361,7 +361,7 @@ $ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml 
 
 6. Create a freesyle job called `hello-world` ![jenkins-new-hello-world](../images/exercise1/jenkins-new-hello-world.png).
 
-6. On the Source Code Management tab; add your `enablement-ci-cd` git repo and hit the dropdown to add your credentials we baked into the s2i on previous steps`` ![jenkins-scm-git](../images/exercise1/jenkins-scm-git.png).
+6. On the Source Code Management tab; add your `enablement-ci-cd` git repo and hit the dropdown to add your credentials we baked into the s2i on previous steps ![jenkins-scm-git](../images/exercise1/jenkins-scm-git.png)
 
 6. On the build tab add an Execute Shell step and fill it with `echo "Hello World"` ![jenkins-hello-world](../images/exercise1/jenkins-hello-world.png).
 
