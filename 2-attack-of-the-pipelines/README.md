@@ -234,17 +234,22 @@ where the following are the important things:
   },
 ```
 
-2. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run this script:
+2. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables.
 ```bash
-
+export NEXUS_SERVICE_HOST=nexus-<YOUR_NAME>-ci-cd.apps.somedomain.com
+export NEXUS_SERVICE_PORT=80
+npm run prepare-nexus
 ```
+<p class="tip">
+NOTE - This step in a residency would be automated by a more complex nexus deployment in the ci-cd project
+</p>
 
 2. To run the application; start a new instance of the MongoDB by running. 
 ```bash
 $ npm run mongo
 ```
 <p class="tip">
-`npm run mongo:drop` is used to completely remove the running container. `npm run mongo:stop` & `npm run mongo:start` will preserve data in the container
+NOTE - `npm run mongo:drop` is used to completely remove the running container. `npm run mongo:stop` & `npm run mongo:start` will preserve data in the container
 </p>
 
 2. Fire up the `todolist-api` by running.
