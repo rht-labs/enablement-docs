@@ -49,9 +49,15 @@ If you're feeling confident and don't want to follow the step-by-step guide thes
 ### Part 1 - Create OpenShift Projects
 > _Using the OpenShift Applier, we will add new project namespaces to the cluster which will be used throughout the exercise._
 
-3. Clone the scaffold project to your local machine and open it in your favourite editor.
+3. Clone the scaffold project to your local machine and pull all remote branches for use in later labs. Open the repo in your favourite editor.
 ```bash
-git clone git@github.com:rht-labs/enablement-ci-cd.git
+$ git clone https://github.com/rht-labs/enablement-ci-cd && cd enablement-ci-cd
+```
+Followed by;
+```
+$ for branch in `git branch -a | grep remotes | grep -v HEAD | grep -v master`; do
+   git branch --track ${branch#remotes/origin/} $branch
+done
 ```
 
 3. The project is laid out as follows
@@ -83,7 +89,7 @@ Open the `inventory/group_vars/all.yml` file; you should see a some variables se
 3. Open the `params/project-requests-ci-cd` and replace the `<YOUR_NAME or initials>` with your name to create the correstponding projects in the cluster. 
 ![new-item](../images/exercise1/ci-cd-project-namespace.png)
 
-3. Create another two params files for `params/project-requests-dev` & `params/project-requests-test` and add the `NAMESPACE=<YOUR_NAME>-dev` && `NAMESPACE=<YOUR_NAME>-test` and update their Display names.
+3. Create another two params files for `params/project-requests-dev` & `params/project-requests-test`. Add `NAMESPACE=<YOUR_NAME>-dev` & `NAMESPACE_DISPLAY_NAME=<YOUR-NAME> Dev` to `params/project-requests-dev`. Add `NAMESPACE=<YOUR_NAME>-test` & `NAMESPACE_DISPLAY_NAME=<YOUR-NAME> Test` to `params/project-requests-test`.
 
 3. In the `inventory/group_vars/all.yml` file; add the new inventory items for the projects you want to create (dev & test) by adding another object to the content array. You can copy and paste them from the `ci-cd` example and update them accordingly eg
 ```yaml
