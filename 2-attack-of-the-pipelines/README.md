@@ -59,7 +59,7 @@ _____
 ## Step by Step Instructions
 > This is a fairly structured guide with references to exact filenames and sections of text to be added.
 
-### Part 1 - Explore the Sample App
+### Part 1 - Explore the Todo List App
 > _In this part of the exercise we will explore the sample application, become familiar with it locally before building and deploying in OCP Land_
 
 2. Git clone the `todolist-fe` project to somewhere sensible and checkout the `develop` branch.
@@ -285,7 +285,7 @@ SOURCE_CONTEXT_DIR=docker/jenkins-slave-npm
 NAME=npm-jenkins-slave
 ```
 
-3. Create an item in the ansible variables file under the `ci-cd-builds` object to run the template with. Don't forget to substitute `<YOUR_NAME>`
+3. Create an item in the `inventory/group_vars/all.yml` under the `ci-cd-builds` object to run the template with. Don't forget to substitute `<YOUR_NAME>`
 ```yaml
   - name: "jenkins-npm-slave"
     namespace: "<YOUR_NAME>-ci-cd"
@@ -312,9 +312,9 @@ NOTE - Jenkins may need to be restarted for the configuration to appear. To do t
 </p>
 
 ### Part 3 - Add configs to cluster 
-> _In this exercise; we will use the OpenShift Applier to drive the creation of cluster content required by the app such and MongoDB and the Apps Build / Deploy Config_
+> _In this exercise; we will use the OpenShift Applier to drive the creation of cluster content required by the app such as MongoDB and the Apps Build / Deploy Config_
 
-4. On your terminal navigate to the root of the `todolist-fe` application. The app contains a hidden folder called `.openshift-applier`. Move (cd .openshift-applier) into this directory and you should see a familiar looking directory structure for an ansible playbook. 
+4. On your terminal navigate to the root of the `todolist-fe` application. The app contains a hidden folder called `.openshift-applier`. Move `cd .openshift-applier` into this directory and you should see a familiar looking directory structure for an ansible playbook. 
 ```
 .openshift-applier
 ├── README.md
@@ -336,7 +336,7 @@ where the following
     * the `apply.yml` file is the entrypoint.
     * the `inventory` contains the objects to populate the cluster with.
     * the `params` contains the variables we'll apply to the `templates`
-    * the `templates` required by the app. These include the Build, Deploy configs as well as the services, health checks and other app definitions.
+    * the `templates` required by the app. These include the Build, Deploy configs as well as the services, health checks, and other app definitions.
 
 4. There are a few updates to these manifests we need to make before applying the cluster content. In the `apply.yml` update the namespace `<YOUR_NAME>` variables accordingly.
 ```yaml
@@ -345,7 +345,7 @@ where the following
     test_namespace: donal-test
 ```
 
-4. In the `params` folder update the `dev` and `test` files with the correct `<YOUR_NAME>` as you've done above. Example for the `dev` file
+4. In the `params` folder update the `dev` and `test` files with the correct `<YOUR_NAME>` as you've done above. Example for the `dev` file:
 ```bash
 PIPELINES_NAMESPACE=donal-ci-cd
 NAME=todolist-fe
@@ -354,12 +354,14 @@ APP_TAG=latest
 NAMESPACE=donal-dev
 ```
 
-4. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency and then run the playbook. This will populate the cluster with all the config needed for the front end app.
+4. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency and then run the playbook (from the `.openshift-applier` directory). This will populate the cluster with all the config needed for the front end app.
 ```bash
 $ ansible-galaxy install -r requirements.yml --roles-path=roles
 $ ansible-playbook apply.yml -i inventory/
 ```
 ![ansible-success](../images/exercise2/ansible-success.png)
+
+4. Once successful, `commit` and `push` your changes to gitlab.
 
 4. Back on your terminal navigate to the root of the `todolist-api` application. Open the `.openshift-applier` directory. The same layout of the frontend app should be visible with one noticeable difference; the api requires a `MongoDB` to connect to at runtime.
 
