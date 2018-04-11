@@ -165,7 +165,7 @@ $ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml 
 
 4. Now lets do the same thing for GitLab to get it up and running. Checkout the template and params provided by running
 ```bash
-$ git checkout exercise1/gitlab-nexus templates/gitlab.yml params/gitlab
+$ git checkout exercise1/git-nexus templates/gitlab.yml params/gitlab
 ``` 
 Explore the template; it contains the PVC, buildConfig and services. The DeploymentConfig is made up of these apps
  - Redis (3.2.3)
@@ -217,8 +217,7 @@ $ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml 
 
 4. Once successful; login to the cluster and navigate to the `<YOUR_NAME>-ci-cd`. You should see GitLab up and running. ![gitlab-up-and-running](../images/exercise1/gitlab-up-and-running.png)
 
-4. Navigate to gitlab. You can login with using your cluster credentials using the LDAP tab displaying your `<LDAP_DESCRIPTION>` from previous steps
-
+4. Navigate to gitlab. You can login using your cluster credentials using the LDAP tab displaying your `<LDAP_DESCRIPTION>` from previous steps
 ![gitlab-ui](../images/exercise1/gitlab-ui.png)
 
 4. Once logged in create a new project called `enablement-ci-cd` and mark it as internal. Once created; copy out the `git remote add origin ...` instructions for use on the next step.
@@ -238,11 +237,6 @@ $ git push -u origin --all
 
 ### Part 3 - Jenkins & s2i
 > _Create a build and deployment config for Jenkins. Add new configuration and plugins to the OCP Stock Jenkins using s2i_
-
-5. Add the Jenkins Build & Deployment configs to the `enablement-ci-cd` repo by merging the contents `exercise1/jenkins` in
-```bash
-$ git checkout exercise1/jenkins templates/jenkins.yml
-```
 
 5. Add the Jenkins Build & Deployment configs to the `enablement-ci-cd` repo by merging the contents `exercise1/jenkins` in
 ```bash
