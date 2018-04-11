@@ -359,7 +359,7 @@ $ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml 
 
 6. Log in to Jenkins and hit `New Item` ![new-item](../images/exercise1/new-item.png).
 
-6. Create a freesyle job called `hello-world` ![jenkins-new-hello-world](../images/exercise1/jenkins-new-hello-world.png).
+6. Create a freestyle job called `hello-world` ![jenkins-new-hello-world](../images/exercise1/jenkins-new-hello-world.png).
 
 6. On the Source Code Management tab; add your `enablement-ci-cd` git repo and hit the dropdown to add your credentials we baked into the s2i on previous steps ![jenkins-scm-git](../images/exercise1/jenkins-scm-git.png)
 

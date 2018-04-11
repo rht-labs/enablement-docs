@@ -363,7 +363,7 @@ $ ansible-playbook apply.yml -i inventory/
 
 4. Once successful, `commit` and `push` your changes to gitlab.
 
-4. Back on your terminal navigate to the root of the `todolist-api` application. Open the `.openshift-applier` directory. The same layout of the frontend app should be visible with one noticeable difference; the api requires a `MongoDB` to connect to at runtime.
+4. Back on your terminal navigate to the root of the `todolist-api` application. Open the `.openshift-applier` directory. The same layout as seen in `todolist-fe` should be visible with one noticeable difference; the api requires `MongoDB` to connect to at runtime.
 
 4. In the `apply.yml` update the namespace `<YOUR_NAME>` variables accordingly. For example:
 ```yaml
@@ -381,11 +381,15 @@ APP_TAG=latest
 NAMESPACE=donal-dev
 ```
 
-4. Finally; run the applier and install it's dependencies to run the content into the cluster
+4. Finally; run the applier and install its dependencies to run the content into the cluster
 ```bash
 $ ansible-galaxy install -r requirements.yml --roles-path=roles
 $ ansible-playbook apply.yml -i inventory/
 ```
+
+4. Validate the build and deploy configs have been created in Openshift by checking `<YOUR_NAME> CI-CD builds` for the `BuildConfigs`
+
+4. Check `<YOUR_NAME>-dev` for the deployment ![ocp-app-deployment-overview](../images/exercise2/ocp-app-deployment-overview.jpeg)
 
 ### Part 4 - Build > Bake > Deploy 
 > _In this exercise; we take what we have working locally and get it working in OpenShift_
