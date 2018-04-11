@@ -152,6 +152,7 @@ where the following are the important things:
     * `./src/scss` contains custom  SCSS used in the application.
     * `./*.js` is mostly config files for running and managing the app and the tests
 
+
 2. Now let's move on to the `todolist-api` and wire them together. As with the `todolist-fe` we need to clone the repo and add it to our GitLab in the cluster.
 ```bash
 $ git clone https://github.com/springdo/todolist-api.git
@@ -231,6 +232,11 @@ where the following are the important things:
     "mongo:stop" : "docker stop mongo-local",
     "mongo:start" : "docker start mongo-local"
   },
+```
+
+2. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run this script:
+```bash
+
 ```
 
 2. To run the application; start a new instance of the MongoDB by running. 
@@ -602,10 +608,10 @@ scl enable rh-nodejs8 'npm run build:ci'
 
 6. Save the configuration for `dev-todolist-api-build` and that's it for wiring together our `todolist-api` pipeline.
  
-6. Before we kick off the build; check our front end app and see if it has deployed successfully. Check the deployment in OpenShift and load the url. If it has been a success we should see our dummyData. This is because there is not backend deployed.
+6. Run the `dev-todolist-api-build` to trigger the backend pipeline. While this is building, check our front end app and see if it has deployed successfully. Check the deployment in OpenShift and load the url. If it has been a success we should see our dummyData. This is because there is no backend deployed.
 ![no-backend-app](../images/exercise2/no-backend-app.png)
 
-6. Run the `dev-todolist-api-build` to trigger the backend pipeline. When complete we should see the sample data has changed
+6.  When `dev-todolist-api-build` has completed we should see the sample data has changed on refresh.
 ![with-backend-app](../images/exercise2/with-backend-app.png)
 
 _____
@@ -616,11 +622,10 @@ _____
 - Git Tasks
     * Add a GitHub Webhook to trigger your build on each commit
 - Pipeline Tasks
-    * Add pipeline for <master> branch for each project.
-    * Use `test-` instead of `dev-` across all config and names
-    * Do the `.openshift-applier` steps as part of the pipeline.
+    * Add pipeline for `master` branch for each project. Use `test-` instead of `dev-` across all config and names in the pipeline
+    * Do the `.openshift-applier` steps as part of the pipeline for greater end to end automation.
 - Promote build
-    * Create a _promote-to-uat_ phase after the <master> branch deploy
+    * Create a _promote-to-uat_ phase after the `master` branch deploy
     * Create a `uat` env using the OpenShift Applier as seen before
     * Tag and promote the image without rebuilding after the `test-**-deploy`
 - MongoDB tasks
