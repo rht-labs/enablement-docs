@@ -392,7 +392,7 @@ APP_TAG=latest
 NAMESPACE=donal-dev
 ```
 
-4. Finally; run the applier and install its dependencies to run the content into the cluster
+4. Finally; run the Openshift Applier and install its dependencies to run the content into the cluster
 ```bash
 $ ansible-galaxy install -r requirements.yml --roles-path=roles
 $ ansible-playbook apply.yml -i inventory/
