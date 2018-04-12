@@ -1,6 +1,6 @@
 # Exercise Title
 
-> Short description of the exercise and it's outcomes
+> The purpose of this lab is to develop and validate a new feature; and to promote the assured feature to production. The user story for our new feature is as follows
 _____
 
 ## Learning Outcomes
@@ -23,27 +23,56 @@ _____
 ## 10,000 Ft View
 > This should contain the goal of the exercise; with enough information that advanced learners could use this to build the exercise without much guidance. The information here
 
-2. Highlevel instruction 1
-
-2. Highlevel instruction with ref to `file-a` to keep learners in supportable mode
+StoryID: DO421 | As a doer I want to mark todos as high priority so that I can keep track of and complete important todos first  On changing a todos
+-------------  | -------------
+Acceptance Criteria | 
+priority: 
+    should be doable with a single click
+    should add a red flag against the todo when marked high-priority
+    should remove the red colour flag on the flag when high-priority removed
+    should not affect existing todos
+On page load: 
+    should display existing todos that are not marked high-priority 
+    should display existing todos that are marked high-priority with an red flag
 
 ## Step by Step Instructions
 > This is a fairly structured guide with references to exact filenames and sections of text to be added. Include pictures and code snippets where appropriate. Rule of thumb is learners are dumb.... so over describe _why_ we're doing things
 
-### Part 1 - do some things
-> _prefix of exercise and why we're doing it_
+### Part 1 - Tests in our Pipeline 
+> _In this exercise we will improve the pipeline created already by adding some unit tests for the frontend & backend along with some end to end tests (e2e) to validate the full solution_
 
-2. Do thing using tool X.
-2. Insert blah into `file1.txt`
+#### Part 1a - Unit tests
+
+2. TODO - show tests running locally etc (fe and api)
+
+2. TODO - add tests to jenkins with screenshots etc.
+
+#### Part 1b - End to End tests (e2e)
+
+2. Add new part to the dev pipeline (`dev-todolist-fe-e2e`)
+
+2. Add tests and reports to Jenkins
+
+### Part 2 - Our App's new feature
+> _In this exercise we will introduce a new feature to create an important flag on the todos. In order to be able to build and test our feature we will use TDD_
+
+// TODO - OUR USER STORY SHOULD GO HERE !
+
+#### Part 1a - Create todolist-fe tests
+
+3. Create a new branch in your `todolist-fe` app for our feature and push it to the remote
+```bash
+$ git checkout -b feature/important-flag
+$ git push -u origin feature/important-flag
 ```
-export SOME_THING=biscuits
-```
-2. Open console and navigate to `New Item` and click it ![new-item](./images/new-item.png)
 
-### Part 2 - do some other things
-> _prefix of exercise and why we're doing it_
+#### Part 1b - Create todolist-api tests
 
-3. Do other things
+3. TODO
+
+#### Part 1c - Create todolist e2e tests
+
+3. TODO
 
 _____
 
