@@ -344,19 +344,19 @@ NOTE - Jenkins may need to be restarted for the configuration to appear. To do t
     └── todolist-api-deploy.yml
 ```
 where the following
-    * the `apply.yml` file is the entrypoint.
+    * the `apply.yml` file is the entrypoint. 
     * the `inventory` contains the objects to populate the cluster with.
     * the `params` contains the variables we'll apply to the `templates`
     * the `templates` required by the app. These include the Build, Deploy configs as well as the services, health checks, and other app definitions.
 
-4. There are a few updates to these manifests we need to make before applying the cluster content. In the `apply.yml` update the namespace `<YOUR_NAME>` variables accordingly.
+4. There are a few updates to these manifests we need to make before applying the cluster content. In the `apply.yml` update the namespace `<YOUR_NAME>` variables accordingly. 
 ```yaml
     ci_cd_namespace: donal-ci-cd
     dev_namespace: donal-dev
     test_namespace: donal-test
 ```
 
-4. In the `params` folder update the `dev` and `test` files with the correct `<YOUR_NAME>` as you've done above. Example for the `dev` file:
+4. In the `params` folder update the `dev` and `test` files with the correct `<YOUR_NAME>` as you've done above. Example for the `dev` file: 
 ```bash
 PIPELINES_NAMESPACE=donal-ci-cd
 NAME=todolist-fe
