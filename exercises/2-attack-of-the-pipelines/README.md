@@ -65,7 +65,7 @@ _____
 2. Git clone the `todolist-fe` project to somewhere sensible and checkout the `develop` branch.
 ```bash
 $ git clone https://github.com/springdo/todolist-fe.git
-$ git cd todolist-fe
+$ cd todolist-fe
 $ git checkout develop
 ```
 
