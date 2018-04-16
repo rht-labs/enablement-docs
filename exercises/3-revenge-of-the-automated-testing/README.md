@@ -62,18 +62,35 @@ $ npm run test
 $ cd todolist-api
 $ npm run test
 ```
-<!-- 2. Providing that the test runner outputs reports in a JUnit format, Jenkins will be able to report and trend test results. To setup test reporting in
-Jenkins, navigate to the Post-build Actions section and click Add post-build action then select Publish JUnit test result report. In the Test report
-XMLs enter reports/client/karma/**/*.xml. The configuration should look as follows: -->
+
 2. Navigate to your instance of jenkins at `https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/`. 
 Click on `dev-todolist-fe-build` and then click the `configure` button on the left-hand side.
 ![new-gitlab-proj](../images/exercise3/jenkins-configure-job.png)
 
-
 2. Scroll to the `Build` part of the configuration page and add `scl enable rh-nodejs8 'npm run test'` below `scl enable rh-nodejs8 'npm install'`. Click `save` or `apply` at the bottom to save the changes.
 ![new-gitlab-proj](../images/exercise3/jenkins-build-step.png)
 
-2. Scroll to the '
+2. [break me up and add screenshots] Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report`.
+
+2. Click the `Add` button under `Publish xUnit test result report` and select `JUnit`. In the pattern field enter `test-report.xml`. In the `Failed Tests Thresholds`  input box enter 0 under `Red Ball Total`. It should look a little something like this:
+![new-gitlab-proj](../images/exercise3/post-build-actions.png)
+
+2. Click `save` or `apply` at the bottom to save the changes. Rerun the `dev-todolist-fe-build` job and verify that this passes and the `build` and `bake` jobs are both triggered.
+
+2. We're now going to deliberately fail a test to ensure that `bake` and `deploy` jobs aren't triggered if any tests fail. Go to `ListOfTodos.spec.js` in `/tests/unit/vue-components` and head to `line 38`. Add `not.` before `toHaveBeenCalled()`.
+![new-gitlab-proj](../images/exercise3/change-test-to-fail.png)
+
+2. Push this to Gitlab and rerun the build job.
+```bash
+$ git add .
+$ git commit -m "Deliberately failed test to test the pipeline stops me deploying broken code"
+$ git push
+```
+
+2. Rerun the `dev-todolist-fe-build` job. It should have failed and not run any other builds. 
+![new-gitlab-proj](../images/exercise3/jenkins-with-failing-build.png)
+
+2. Undo the changes you made to the `ListOfTodos.spec.js` file, commit your code and rerun the build. This should trigger a full `build --> bake --> deploy`.
 
 <!-- 2. TODO - add tests to jenkins with screenshots etc. -->
 
