@@ -50,7 +50,7 @@ $ cd todolist-fe
 $ npm run test
 ```
 <p class="tip" > 
-`test` is an ?alias? used that runs `vue-cli-service test` from the scripts object in `package.json`
+`test` is an alias used that runs `vue-cli-service test` from the scripts object in `package.json`
 </p>
 ![new-gitlab-proj](../images/exercise3/screenshot-scripts.png)
 
@@ -70,7 +70,8 @@ Click on `dev-todolist-fe-build` and then click the `configure` button on the le
 2. Scroll to the `Build` part of the configuration page and add `scl enable rh-nodejs8 'npm run test'` below `scl enable rh-nodejs8 'npm install'`. Click `save` or `apply` at the bottom to save the changes.
 ![new-gitlab-proj](../images/exercise3/jenkins-build-step.png)
 
-2. [break me up and add screenshots] Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report`.
+2. Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report`.
+![new-gitlab-proj](../images/exercise3/xunit-action.png)
 
 2. Click the `Add` button under `Publish xUnit test result report` and select `JUnit`. In the pattern field enter `test-report.xml`. In the `Failed Tests Thresholds`  input box enter 0 under `Red Ball Total`. It should look a little something like this:
 ![new-gitlab-proj](../images/exercise3/post-build-actions.png)
