@@ -43,7 +43,6 @@ On page load:
 
 #### Part 1a - Unit tests
 
-<!-- 2. TODO - show tests running locally etc (fe and api) -->
 2. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist-fe` directory and run `test`.  
 ```bash
 $ cd todolist-fe
@@ -98,7 +97,7 @@ $ git push
 2. Add `scl enable rh-nodejs8 'npm run test:ci'` above `npm run build:ci`.
 ![new-gitlab-proj](../images/exercise3/api-build-step.png)
 
-2. [break me up and add screenshots] Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report`.
+2. Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report`.
 
 2. Click the `Add` button under `Publish xUnit test result report` and select `JUnit`. In the pattern field enter `reports/server/mocha/test-results.xml`. In the `Failed Tests Thresholds`  input box enter 0 under `Red Ball Total`. It should look a little something like this:
 ![new-gitlab-proj](../images/exercise3/api-post-build.png)
@@ -115,14 +114,12 @@ $ git push
 
 2. If successful this will fail the build and not run the `bake` or `deploy` jobs. Don't forget to remove the changes that you made to your tests!
 
-
-<!-- 2. TODO - add tests to jenkins with screenshots etc. -->
-
 #### Part 1b - End to End tests (e2e)
+> TODO - this section is not complete
 
 2. Add new part to the dev pipeline (`dev-todolist-fe-e2e`)
 
-2. Add tests and reports to Jenkins
+2. Add e2e tests and reporting to Jenkins
 
 ### Part 2 - Our App's new feature
 > _In this exercise we will introduce a new feature to create an important flag on the todos. In order to be able to build and test our feature we will use TDD_
@@ -130,6 +127,7 @@ $ git push
 // TODO - OUR USER STORY SHOULD GO HERE !
 
 #### Part 1a - Create todolist-fe tests
+> In this exercise we will execute our test for the frontend and backend locally. Once verified we will add them to Jenkins.
 
 3. Create a new branch in your `todolist-fe` app for our feature and push it to the remote
 ```bash
