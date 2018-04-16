@@ -210,7 +210,7 @@ $ git push -u origin feature/important-flag
 $ npm run test -- --watch
 ```
 
-3. There are three places we will add new tests to validate our function behaves as expected against the acceptance criteria from Feature Story supplied to us. We will need to write tests for our `TodoItem.vue` to handle having a red flag and that it is clickable. Our app is going to need to persist the changes in the backend so we'll want to make changes to our `actions.js` and `mutations.js` to keep the api and local copy of the store in sync. Let's start with our `TodoItem.vue` component. Open the `tests/unit/vue-components/TodoItem.spec.js` file. This has been templated with some example test to correspont with our A/Cs for speed of doing the lab. Find the describe block for our important flag tests. It is setup already with a `beforeEach()` hook for test setup.
+3. There are three places we will add new tests to validate our function behaves as expected against the acceptance criteria from Feature Story supplied to us. We will need to write tests for our `TodoItem.vue` to handle having a red flag and that it is clickable. Our app is going to need to persist the changes in the backend so we'll want to make changes to our `actions.js` and `mutations.js` to keep the api and local copy of the store in sync. Let's start with our `TodoItem.vue` component. Open the `tests/unit/vue-components/TodoItem.spec.js` file. This has been templated with some example test to correspond with our A/Cs for speed of doing the lab. Find the describe block for our important flag tests. It is setup already with a `beforeEach()` hook for test setup.
 ![important-flag-before](../images/exercise3/important-flag-before.png)
 
 3. Each of our test cases has it's skeleton in place already for example the `TodoItem.vue` component takes a property of `todos` when rendering. This setup is already done for each of our tests so all we have to do is fill in our assertions.
@@ -249,7 +249,7 @@ $ npm run test -- --watch
   });
 ```
 
-3. Finally, we want to make the flag clickable and for it to call a function to update the state. The final test in the `TodoItem.spec.js` we want to create should simulate this behaviour. Implement the `it("call makImportant when clicked", () ` test by first simulating the click of our imporant-flag and asserting the function `markImportant()` to write is executed.
+3. Finally, we want to make the flag clickable and for it to call a function to update the state. The final test in the `TodoItem.spec.js` we want to create should simulate this behaviour. Implement the `it("call makImportant when clicked", () ` test by first simulating the click of our important-flag and asserting the function `markImportant()` to write is executed.
 ```javascript
   it("call makImportant when clicked", () => {
     const wrapper = mount(TodoItem, {
@@ -307,7 +307,7 @@ $ git commit -m "Implementing the todoitem flag"
 $ git push
 ```
 
-3. If we try to use our imporant flag, we should see it's still not behaving as expected; this is because we're not updating the state of the app in response to the click event. We need to implement the `actions` and `mutations` for our feature. Let's start with the tests. Open the `tests/unit/javascript/actions.spec.js` and navigate to the bottom of the file. Our action should should commit the `MARK_TODO_IMPORTANT` to the mutations. Scroll to the end of the test file and implement the skeleton test by adding `expect(commit.firstCall.args[0]).toBe("MARK_TODO_IMPORTANT");` as the assertion.
+3. If we try to use our important flag, we should see it's still not behaving as expected; this is because we're not updating the state of the app in response to the click event. We need to implement the `actions` and `mutations` for our feature. Let's start with the tests. Open the `tests/unit/javascript/actions.spec.js` and navigate to the bottom of the file. Our action should should commit the `MARK_TODO_IMPORTANT` to the mutations. Scroll to the end of the test file and implement the skeleton test by adding `expect(commit.firstCall.args[0]).toBe("MARK_TODO_IMPORTANT");` as the assertion.
 ```javascript
   it("should call MARK_TODO_IMPORTANT", done => {
     const commit = sinon.spy();
@@ -320,7 +320,7 @@ $ git push
   });
 ```
 
-3. We should now have more failing tests, let's fix this by adding the call from out action to the mutation method. Open the `src/store/actions.js` file and scroll to the bottom to the `updateTodo()` method. Complete the if block by adding `commit("MARK_TODO_IMPORTANT", i);` as shown below.
+3. We should now have more failing tests, let's fix this by adding the call from our action to the mutation method. Open the `src/store/actions.js` file and scroll to the bottom to the `updateTodo()` method. Complete the if block by adding `commit("MARK_TODO_IMPORTANT", i);` as shown below.
 ```javascript
 updateTodo({ commit, state }, { id, important }) {
     let i = state.todos.findIndex(todo => todo._id === id);
