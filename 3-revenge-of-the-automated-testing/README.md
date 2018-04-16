@@ -36,16 +36,46 @@ On page load:
     should display existing todos that are marked high-priority with an red flag
 
 ## Step by Step Instructions
-> This is a fairly structured guide with references to exact filenames and sections of text to be added. Include pictures and code snippets where appropriate. Rule of thumb is learners are dumb.... so over describe _why_ we're doing things
+> This is a fairly structured guide with references to exact filenames and sections of text to be added.
 
 ### Part 1 - Tests in our Pipeline 
 > _In this exercise we will improve the pipeline created already by adding some unit tests for the frontend & backend along with some end to end tests (e2e) to validate the full solution_
 
 #### Part 1a - Unit tests
 
-2. TODO - show tests running locally etc (fe and api)
+<!-- 2. TODO - show tests running locally etc (fe and api) -->
+2. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist-fe` directory and run `test`.  
+```bash
+$ cd todolist-fe
+$ npm run test
+```
+<p class="tip" > 
+`test` is an ?alias? used that runs `vue-cli-service test` from the scripts object in `package.json`
+</p>
+![new-gitlab-proj](../images/exercise3/screenshot-scripts.png)
 
-2. TODO - add tests to jenkins with screenshots etc.
+2. You should see an output similar to the following. The above command has run a test suite for every `*.spec.js` file. The table generated in the terminal shows the code coverage. We're going to be focusing on the unit tests for now.
+![new-gitlab-proj](../images/exercise3/test-run-locally.png)
+
+2. Repeat the same process for `todolist-api` and verify that all the tests run.
+```bash
+$ cd todolist-api
+$ npm run test
+```
+<!-- 2. Providing that the test runner outputs reports in a JUnit format, Jenkins will be able to report and trend test results. To setup test reporting in
+Jenkins, navigate to the Post-build Actions section and click Add post-build action then select Publish JUnit test result report. In the Test report
+XMLs enter reports/client/karma/**/*.xml. The configuration should look as follows: -->
+2. Navigate to your instance of jenkins at `https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/`. 
+Click on `dev-todolist-fe-build` and then click the `configure` button on the left-hand side.
+![new-gitlab-proj](../images/exercise3/jenkins-configure-job.png)
+
+
+2. Scroll to the `Build` part of the configuration page and add `scl enable rh-nodejs8 'npm run test'` below `scl enable rh-nodejs8 'npm install'`. Click `save` or `apply` at the bottom to save the changes.
+![new-gitlab-proj](../images/exercise3/jenkins-build-step.png)
+
+2. Scroll to the '
+
+<!-- 2. TODO - add tests to jenkins with screenshots etc. -->
 
 #### Part 1b - End to End tests (e2e)
 
