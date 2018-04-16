@@ -615,13 +615,28 @@ scl enable rh-nodejs8 'npm run build:ci'
 6.  When `dev-todolist-api-build` has completed we should see the sample data has changed on refresh.
 ![with-backend-app](../images/exercise2/with-backend-app.png)
 
+### Part 6 - GitLab Webhook
+> _In this exercise we will link GitLab to Jenkins so that new build jobs are created on each push to the `develop` branch._
+
+7. Configure Global Security and allow anonymous users to build and cancel
+
+7. Head to Jenkins Todolist-fe, click configure, scroll down to build triggers. Click on build when change gitlab. Copy the webhook URL.
+
+7. Head to the Gitlab repository for todolist-fe, Head to settings --> integrations.
+
+7. Paste the webhook URL into the box at the top. Uncheck the box Enable SSL verification.
+
+7. Click the Add webhook button.
+
+7. Commit and push a change to the todolist-fe. Check the Jenkins dashboard to see the build job starting.
+
+7. Repeat the same for todolist-api
+
 _____
 
 ## Extension Tasks
 > _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution available and are provided for additional scope._
 
-- Git Tasks
-    * Add a GitHub Webhook to trigger your build on each commit
 - Pipeline Tasks
     * Add pipeline for `master` branch for each project. Use `test-` instead of `dev-` across all config and names in the pipeline
     * Do the `.openshift-applier` steps as part of the pipeline for greater end to end automation.
