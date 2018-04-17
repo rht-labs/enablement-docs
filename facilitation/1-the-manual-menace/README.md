@@ -1,6 +1,6 @@
 # The Manual Menace
 
-> Exercise focussed on configuration as code and building out environment that will be used for rest of exercises (using code!)
+> Exercise focused on configuration as code and building out environment that will be used for rest of exercises (using code!)
 
 _____
 
@@ -12,7 +12,7 @@ The latest version of slides to introduce this exercise are [here](https://docs.
 
 ## The Exercise
 
-The exerise can be found [here](https://rht-labs.github.io/enablement-docs/#/1-the-manual-menace/README)
+The exercise can be found [here](https://rht-labs.github.io/enablement-docs/#/1-the-manual-menace/README)
 
 
 ## Wrap-Up
@@ -23,7 +23,7 @@ The latest version of slides to introduce this exercise are [here](https://docs.
 ## Facilitation Guidelines
 
 * Present the introduction slides (including playing of the intro crawl embedded)
-* Participants work through exercise instructions following either 10,000 view or step-by-step instruction. Encourage the table teams to work together to get everyone through the exercise and for everyone to gain valuable learning from it.
+* Participants work through exercise instructions following either 10,000 foott view or step-by-step instruction. Encourage the table teams to work together to get everyone through the exercise and for everyone to gain valuable learning from it.
 * Present the wrap-up slides. Invite the participants to showcase any work that relates to the practices in this exercise.
 
 
