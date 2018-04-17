@@ -78,8 +78,18 @@ $ npm run test
 
   - There are 12 Frontend test files stored in these directories: `todolist-fe/tests/unit/vue-components/*` & `todolist-fe/tests/unit/javascript/*`
 
-2. Explanation of JS test syntax through Bananalogy:
+2. Explanation of Mocha and js test syntax through Bananalogy:
 ![todoitem-fail-test](../images/exercise3/bdd-bananas.png)
+
+* `describe` is used to group tests together into a collection about a particular 
+
+2. Visit [mochajs.org](https://mochajs.org/) for more in-depth documentation.
+
+
+
+* `describe` is used to group tests together into a collection asserting some feature; for example the get all todos api.
+* `it` is an individual test statement and should contain an `expect` or a `should` statement asserting behaviour of the API under test.
+
 
 
 
