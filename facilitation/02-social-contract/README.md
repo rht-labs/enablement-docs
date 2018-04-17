@@ -1,4 +1,4 @@
-# Social Contracint
+# Social Contract
 
 > Session to introduce the practice of Social Contracting, how we use it and show some examples of real Social Contract artefacts. This will also include a short interactive exercise for each table group to do some team formation and write a social contract. 
 
