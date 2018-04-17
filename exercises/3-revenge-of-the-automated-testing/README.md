@@ -66,11 +66,20 @@ _On page load:_
 #### Part 0b - Introduction to our tests.
 > _In this part we will get familiar with the layout of our tests_
 
-2. Unit tests:
+2. We'll go into detail on how to write tests further on. To run your test suites run the following in the root of your `todolist-fe` or `todolist-api` repositories.
+```bash
+$ npm run test
+```
+
+2. This command will run all `*spec.js` files. Our test files are stored in the following places:
 
   - There are 2 Api test files: `todolist-api/server/api/todo/todo.spec.js` & `todolist-api/server/mocks/mock-routes.spec.js`
 
   - There are 12 Frontend test files stored in these directories: `todolist-fe/tests/unit/vue-components/*` & `todolist-fe/tests/unit/javascript/*`
+
+2. Explanation of JS test syntax through Bananalogy:
+![todoitem-fail-test](../images/exercise3/bdd-bananas.png)
+
 
 ### Part 1 - Tests in our Pipeline
 
@@ -111,12 +120,12 @@ Click on `dev-todolist-fe-build` and then click the `configure` button on the le
 2. Click the `Add` button under `Publish xUnit test result report` and select `JUnit`. In the pattern field enter `test-report.xml`. In the `Failed Tests Thresholds`  input box enter 0 under `Red Ball Total`. It should look a little something like this:
 ![new-gitlab-proj](../images/exercise3/post-build-actions.png)
 
-2. Click `save` or `apply` at the bottom to save the changes. Rerun the `dev-todolist-fe-build` job and verify that this passes and the `build` and `bake` jobs are both triggered.
+2. Click `save` or `apply` at the bottom to save the changes. Run the `dev-todolist-fe-build` job and verify that this passes and the `build` and `bake` jobs are both triggered.
 
 2. We're now going to deliberately fail a test to ensure that `bake` and `deploy` jobs aren't triggered if any tests fail. Go to `ListOfTodos.spec.js` in `/tests/unit/vue-components` and head to `line 38`. Add `not.` before `toHaveBeenCalled()`.
 ![new-gitlab-proj](../images/exercise3/change-test-to-fail.png)
 
-2. Push this to Gitlab and rerun the build job.
+2. Push this to Gitlab and run the build job.
 ```bash
 $ git add .
 $ git commit -m "Deliberately failed test to test the pipeline stops me deploying broken code"
@@ -141,14 +150,18 @@ $ git push
 2. We're now going to deliberately fail a test again to ensure that `bake` and `deploy` jobs aren't triggered if any tests fail. Go to `todo.spec.js` in `/server/api/todo` and head to `line 35`. Replace `false` with `true`. 
 ![new-gitlab-proj](../images/exercise3/api-fail-build.png)
 
-2. Push this to Gitlab and rerun the build job.
+2. Push this to Gitlab and run the build job.
 ```bash
 $ git add .
 $ git commit -m "Deliberately failed test to test the pipeline stops me deploying broken code"
 $ git push
 ```
 
-2. If successful this will fail the build and not run the `bake` or `deploy` jobs. Don't forget to remove the changes that you made to your tests!
+2. If successful this will fail the build and not run the `bake` or `deploy` jobs. 
+
+<p class="tip">
+  NOTE - Don't forget to undo the changes that you made to your tests!
+</p>
 
 #### Part 1b - End to End tests (e2e)
 > TODO - this section is not complete
