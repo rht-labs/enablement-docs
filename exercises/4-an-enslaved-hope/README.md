@@ -1,11 +1,11 @@
 # An Enslaved Hope
 
-> In this exercise we'll break free from the chains of point'n'click Jenkins by introducting pipeline as code in the form of `Jenkinsfile`. Following this we will introduce some new Jenkins slaves that will be used in later labs. 
+> In this exercise we'll break free from the chains of point'n'click Jenkins by introducing pipeline as code in the form of `Jenkinsfile`. Following this we will introduce some new Jenkins slaves that will be used in later labs. 
 
 There are a number of ways pipeline as code can be achieved in Jenkins.
  * The Job DSL Plugin - this is a slightly older but very functional DSL mechanism to create reusable pipelines. Create a `groovy` file to run Jenkins Domain Specific Language to create jobs, functions and other items. In Jenkins; you then can execute this file which will build all of the config.xml files needed for each Job. 
- * The Scripted Pipelin - The scripted pipeline introduced the Jenkinsfile and the ability for developers to write their jenkins setup as groovy code. A repo with a Jenkinsfile in it's root can be pointed to by Jenkins and it will automatically build out each of the stages described within. The scriped pipeline is ultimately Groovy at it's core.
- * The Declarative Pipelin - This approach looks to simplify and opinionate what you can do and when you can do it in a pipeline. It does this by giving you top level `block` which define sections, directives and steps. The declarative syntax is not run as groovy but you can execute groovy inside script blocks. The advantage of it over scripted is validation of the config and lighter approach with requirement to understand all of the `groovy` syntax
+ * The Scripted Pipeline - The scripted pipeline introduced the Jenkinsfile and the ability for developers to write their jenkins setup as groovy code. A repo with a Jenkinsfile in it's root can be pointed to by Jenkins and it will automatically build out each of the stages described within. The scripted pipeline is ultimately Groovy at it's core.
+ * The Declarative Pipeline - This approach looks to simplify and opinionate what you can do and when you can do it in a pipeline. It does this by giving you top level `block` which define sections, directives and steps. The declarative syntax is not run as groovy but you can execute groovy inside script blocks. The advantage of it over scripted is validation of the config and lighter approach with requirement to understand all of the `groovy` syntax
 
 _____
 
@@ -61,7 +61,7 @@ Some of the key things to note:
 ```groovy
     environment {
         // GLobal Vars
-        PIPELINES_NAMESPACE = "donal-ci-cd"
+        PIPELINES_NAMESPACE = "<YOUR_NAME>-ci-cd"
         APP_NAME = "todolist-api"
 
         JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
@@ -69,8 +69,8 @@ Some of the key things to note:
 
         GIT_SSL_NO_VERIFY = true
         GIT_CREDENTIALS = credentials('jenkins-git-creds')
-        GITLAB_DOMAIN = "gitlab-donal-ci-cd.apps.somedomain.com"
-        GITLAB_PROJECT = "donal"
+        GITLAB_DOMAIN = "gitlab-<YOUR_NAME>-ci-cd.apps.somedomain.com"
+        GITLAB_PROJECT = "<YOUR_NAME>"
     }
 ```
 
@@ -98,7 +98,7 @@ $ git push
 2. Save the Job configuration to run the intial scan. The log will show scans for `master` and `develop` branch which have no `Jenkinsfile` so are skipped. The resulting view will show the `feature/jenkisifle` job corresponding the only branch that currently has one. The build should run automatically. 
 ![todolist-api-multi](../images/exercise4/todolist-api-multi.png)
 
-2. The pipeline file is setup to only run `bake` & `deploy` stages when on `master` or `develop` branch. This is to provide us with very fast feedback for team memebers working on feature or bug fix branches. Each time someone commits or creates a new branch a basic build with testing occurs to give very rapid feedback to the team. Let's now update our branches to include the Jenkinsfile and delete the feature branch.
+2. The pipeline file is setup to only run `bake` & `deploy` stages when on `master` or `develop` branch. This is to provide us with very fast feedback for team members working on feature or bug fix branches. Each time someone commits or creates a new branch a basic build with testing occurs to give very rapid feedback to the team. Let's now update our branches to include the Jenkinsfile and delete the feature branch.
 ```bash
 $ git checkout develop
 $ git merge feature/jenkinsfile
