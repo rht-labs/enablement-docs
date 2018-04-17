@@ -147,12 +147,72 @@ git push -u origin --all
 2. Set the trigger to scan every minute as done previously. Save the configuration and we should see the collection of Jobs as shown below.
 ![todolist-fe-multi](../images/exercise4/todolist-fe-multi.png)
 
-3. Run the jobs and validate the app is working as expected in the `test` environment!
+2. Run the jobs and validate the app is working as expected in the `test` environment!
 
 ### Part 2 - Security Scanning Slaves
 > _This exercise focuses on updating the `enablement-ci-cd` repo with some new jenkins-slave pods for use in future exercise_
 
-3. TODO!
+#### Part 2a - OWASP ZAP
+> _OWASP ZAP (Zed Attack Proxy) is a free open source security tool used for finding security vulnerabilities in web applications._
+
+
+3. _Remove jenkins bit if this is already in somewhere, also check syntax, actually only do one git checkout_ First we're going to take the generic jenkins slave template from our exercise4/zap branch and the params.
+```bash
+$ git checkout exercise4/zap-and-arachni templates/jenkins-slave-generic-template.yml params/
+```
+
+3. This should have created the following files:
+- `templates/jenkins-slave-generic-template.yml`
+- `params/ zap-bulid-pod arachni-build-pod`
+
+3. Create an object in `insert donal's new layout here` called `zap-build-pod` and the following content:
+```yml
+    - name: "zap-build-pod"
+    namespace: "<YOUR_NAME>-ci-cd"
+    template: "{{ inventory_dir }}/../templates/jenkins-slave-generic-template.yml"
+    params: "{{ inventory_dir }}/../params/zap-build-pod"
+    tags:
+    - zap
+```
+
+3. Install ansible-y stuff (only if not run before???)
+```bash
+ansible-galaxy install -r requirements.yml --roles-path=roles
+```
+
+3. Remember to login to the cluster!
+```bash
+oc login https://console.s8.core.rht-labs.com --token=<INSERT_LOGIN_TOKEN_HERE>
+```
+
+3. Run the ansible playbook filtering with tag `zap` so only the zap build pods are run.
+```bash
+ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml \  -i inventory/ \  -e "filter_tags=zap"
+```
+
+3. Head to (https://console.s8.core.rht-labs.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `zap-build-pod`.
+include screenshot here.
+
+#### Part 2b - Arachni Scan
+> _Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of web applications._
+
+3. Create an object in `insert donal's new layout here` called `arachni-build-pod` and the following content:
+```yml
+    - name: "arachni-build-pod"
+    namespace: "<YOUR_NAME>-ci-cd"
+    template: "{{ inventory_dir }}/../templates/jenkins-slave-generic-template.yml"
+    params: "{{ inventory_dir }}/../params/arachni-build-pod"
+    tags:
+    - arachni
+```
+
+3. Run the ansible playbook filtering with tag `arachni` so only the zap build pods are run.
+```bash
+ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml \  -i inventory/ \  -e "filter_tags=arachni"
+```
+
+3. Head to (https://console.s8.core.rht-labs.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `zap-build-pod`.
+include screenshot here.
 
 _____
 
