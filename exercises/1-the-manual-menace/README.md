@@ -66,45 +66,67 @@ done
 ```
 .
 ├── README.md
+├── apply.yml
 ├── docker
-│   └── jenkins-slave-node
+│   └── jenkins-slave-npm
 ├── inventory
-│   ├── group_vars
-│   │   └── all.yml
-│   └── hosts
+│   ├── host_vars
+│   │   ├── ci-cd-tooling.yml
+│   │   └── projects-and-policies.yml
+│   └── hosts
 ├── jenkins-s2i
-│   ├── configuration
 ├── params
-│   └── project-requests-ci-cd
+│   └── project-requests-ci-cd
 ├── requirements.yml
 └── templates
-        └── project-requests.yml
+    └── project-requests.yml
 ```
  * `docker` folder contains our jenkins-slave images that will be used by the builds.
  * `jenkins-s2i` contains the configuration and plugins we want to bring jenkins to life with
  * `params` houses the variables we will load the templates with
  * `templates` is a collection of OpenShift templates
- * `inventory/group_vars/all.yml` is the collection of objects we want to insert into the cluster.
+ * `inventory/host_vars/*.yml` is the collection of objects we want to insert into the cluster.
  * `requirements.yml` is a manifest which contains the ansible modules needed to run the playbook
-Open the `inventory/group_vars/all.yml` file; you should see some variables setup to create the `ci-cd` namespace. This calls the `templates/project-requests.yml` template with the `params/project-requests-ci-cd` parameters. We will add some additional content here but first let's explore the parameters and the template
+ * `apply.yml` is a playbook that sets up some variables and runs the OpenShift Applier role.
 
-3. Open the `params/project-requests-ci-cd` and replace the `<YOUR_NAME or initials>` with your name to create the correstponding projects in the cluster. 
+3. Open the `apply.yml` file in the root of the project. Update the namespace variables by replacing the `<YOUR_NAME>` with your name or initials. For example; my name is Dónal so I've created: 
+```yaml
+  vars:
+    ci_cd_namespace: donal-ci-cd
+    dev_namespace: donal-dev
+    test_namespace: donal-test
+```
+
+3. Open the `inventory/host_vars/projects-and-policies.yml` file; you should see some variables setup already to create the `<YOUR_NAME>-ci-cd` namespace. This object is passed to the OpenShift Applier to call the `templates/project-requests.yml` template with the `params/project-requests-ci-cd` parameters. We will add some additional content here but first let's explore the parameters and the template
+
+3. Open the `params/project-requests-ci-cd` and replace the `<YOUR_NAME>` with your name to create the correstponding projects in the cluster. 
 ![new-item](../images/exercise1/ci-cd-project-namespace.png)
 
-3. Create another two params files for `params/project-requests-dev` & `params/project-requests-test`. Add `NAMESPACE=<YOUR_NAME>-dev` & `NAMESPACE_DISPLAY_NAME=<YOUR-NAME> Dev` to `params/project-requests-dev`. Add `NAMESPACE=<YOUR_NAME>-test` & `NAMESPACE_DISPLAY_NAME=<YOUR-NAME> Test` to `params/project-requests-test`.
+3. Let's add two more param files to pass to our template to be able to create a `dev` and `test` project.
+  * Create another two params files `params/project-requests-dev` & `params/project-requests-test`. 
+  * Add to `params/project-requests-dev` the following; substituting `<YOUR_NAME>` accordingly
+```
+NAMESPACE=<YOUR_NAME>-dev
+NAMESPACE_DISPLAY_NAME=<YOUR-NAME> Dev
+```
+  * Add to `params/project-requests-test` the following; substituting `<YOUR_NAME>` accordingly
+```
+NAMESPACE=<YOUR_NAME>-test
+NAMESPACE_DISPLAY_NAME=<YOUR-NAME> Test
+```
 
-3. In the `inventory/group_vars/all.yml` file; add the new inventory items for the projects you want to create (dev & test) by adding another object to the content array. You can copy and paste them from the `ci-cd` example and update them accordingly e.g.
+3. In the `inventory/host_vars/projects-and-policies.yml` file; add the new objects for the projects you want to create (dev & test) by adding another object to the content array for each. You can copy and paste them from the `ci-cd` example and update them accordingly. If you do this; remember to change the params file! e.g.
 ```yaml
-    - name: <YOUR_NAME>-dev
-      template: "{{ inventory_dir }}/../templates/project-requests.yml"
+    - name: "{{ dev_namespace }}"
+      template: "{{ playbook_dir }}/templates/project-requests.yml"
       template_action: create
-      params: "{{ inventory_dir }}/../params/project-requests-dev"
+      params: "{{ playbook_dir }}/params/project-requests-dev"
       tags:
       - projects
-    - name: <YOUR_NAME>-test
-      template: "{{ inventory_dir }}/../templates/project-requests.yml"
+    - name: "{{ test_namespace }}"
+      template: "{{ playbook_dir }}/templates/project-requests.yml"
       template_action: create
-      params: "{{ inventory_dir }}/../params/project-requests-test"
+      params: "{{ playbook_dir }}/params/project-requests-test"
       tags:
       - projects
 ```
@@ -118,8 +140,9 @@ $ ansible-galaxy install -r requirements.yml --roles-path=roles
 3. Apply the inventory by logging into OpenShift and running the following: 
 ```bash
 $ oc login -p <password> -u <user> <cluster_url>
-$ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml -i inventory/
-``` 
+$ ansible-playbook apply.yml -i inventory/ -e target=bootstrap
+```
+where the `-e target=bootstrap` is passing an additional variable specifying that we run the `bootstrap` inventory
 
 3. Once successful you should see an output similar to this: ![playbook-success](../images/exercise1/play-book-success.png)
 
@@ -144,22 +167,26 @@ VOLUME_CAPACITY=5Gi
 MEMORY_LIMIT=2Gi
 ```
 
-4. Create a new object in the inventory variables called `ci-cd-deployments` and populate it's `content` is as follows remembering to swap `<YOUR_NAME>-ci-cd` for the namespace you created previously
+4. Create a new object in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `ci-cd-deployments` and populate it's `content` is as follows
+
 ```yaml
-  - object: ci-cd-deployments
-    content:
+---
+ansible_connection: local
+openshift_cluster_content:
+- object: ci-cd-tooling
+  content:
     - name: "nexus"
-      namespace: "<YOUR_NAME>-ci-cd"
-      template: "{{ inventory_dir }}/../templates/nexus.yml"
-      params: "{{ inventory_dir }}/../params/nexus"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/nexus.yml"
+      params: "{{ playbook_dir }}/params/nexus"
       tags:
       - nexus
 ```
 ![ci-cd-deployments-yml](../images/exercise1/ci-cd-deployments-yml.png)
 
-4. Run the OpenShift applier, specifying the tag `nexus` to speed up it's execution.
+4. Run the OpenShift applier, specifying the tag `nexus` to speed up it's execution (`-e target=tools` is to run the other inventory).
 ```bash
-$ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml \
+$ ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=nexus"
 ```
@@ -206,19 +233,19 @@ where the following need to be replaced by actual values:
     * `<GITLAB_ROOT_USER_PASSWORD>` is the root user for GOD access on the GitLab instance eg password123
     * `<GITLAB_URL>` is the endpoint for gitlab. It will take the form `gitlab-<YOUR_NAME>-ci-cd.apps.<ENV_ID>.<YOUR_DOMAIN>.com`
 
-4. Create another object in the inventory `all_vars.yml` file to run the build & deploy of this template. Add the following and update the `namespace:` accordingly
+4. Create another object in the inventory `inventory/host_vars/ci-cd-tooling.yml` file to run the build & deploy of this template. Add the following and update the `namespace:` accordingly
 ```yaml
     - name: "gitlab"
-      namespace: "<YOUR_NAME>-ci-cd"
-      template: "{{ inventory_dir }}/../templates/gitlab.yml"
-      params: "{{ inventory_dir }}/../params/gitlab"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/gitlab.yml"
+      params: "{{ playbook_dir }}/params/gitlab"
       tags:
       - gitlab
 ```
 
 4. Run the OpenShift applier, specifying the tag `gitlab` to speed up it's execution.
 ```bash
-$ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml \
+$ ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=gitlab"
 ```
@@ -260,12 +287,13 @@ JVM_ARCH=x86_64
 NAMESPACE=<YOUR_NAME>-ci-cd
 JENKINS_OPTS=--sessionTimeout=720
 ```
-5. Add a `jenkins` variable to the ansible inventory underneath the git and nexus ones. Remember to replace `<YOUR_NAME>` with the appropriate value.
+
+5. Add a `jenkins` variable to the ansible inventory underneath the git (if you have it) and nexus ones.
 ```yaml
     - name: "jenkins"
-      namespace: "<YOUR_NAME>-ci-cd"
-      template: "{{ inventory_dir }}/../templates/jenkins.yml"
-      params: "{{ inventory_dir }}/../params/jenkins"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/jenkins.yml"
+      params: "{{ playbook_dir }}/params/jenkins"
       tags:
       - jenkins
 ```
@@ -331,14 +359,14 @@ You can use `echo -n '<YOUR_LDAP_PASSWORD>' | openssl base64` to encode your use
 Note in a residency we would not use your GitCredentials for pushing and pulling from Git, A service user would be created for this.
 </p>
 
-5. Create a new object `ci-cd-builds` in the ansible `all.yml` to drive the s2i build configuration.
+5. Create a new object `ci-cd-builds` in the ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
 ```yaml
   - object: ci-cd-builds
     content:
     - name: "jenkins-s2i"
-      namespace: "<YOUR_NAME>-ci-cd"
-      template: "{{ inventory_dir }}/../templates/jenkins-s2i.yml"
-      params: "{{ inventory_dir }}/../params/jenkins-s2i"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/jenkins-s2i.yml"
+      params: "{{ playbook_dir }}/params/jenkins-s2i"
       tags:
       - jenkins
 ```
@@ -352,7 +380,7 @@ $ git push
 
 5. When your code is commited; run the OpenShift Applier to add the config to the cluster
 ```bash
-$ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml \
+$ ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=jenkins"
 ```
