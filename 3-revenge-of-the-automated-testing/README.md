@@ -2,6 +2,10 @@
 
 > The purpose of this lab is to develop and validate a new feature using TDD; and to promote the assured feature through the pipeline.
 
+![comic-header](../images/exercise3/comic-header.png)
+
+[Image Source](https://cdn-images-1.medium.com/max/1600/1*wF_fSCH-gLYfMbkwb3gR2w.png)
+
 ---
 
 ## Learning Outcomes
