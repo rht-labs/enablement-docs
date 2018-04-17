@@ -49,6 +49,22 @@ _On page load:_
 ## Step by Step Instructions
 > This is a fairly structured guide with references to exact filenames and sections of text to be added.
 
+### Part 0 - Introduction to TDD.
+> _We'll show you what TDD is, and introduce our existing tests within our code._
+
+#### Part 0a - What is TDD?
+> _Here is a brief introduction of TDD and why we use it._
+
+2. Insert rob's stuff here
+
+2. Fun explanations
+
+#### Part 0b - Introduction to our tests.
+> _In this part we will get familiar with the layout of our tests_
+
+2. Insert rob's stuff here
+
+2. Fun explanations
 
 ### Part 1 - Tests in our Pipeline
 
