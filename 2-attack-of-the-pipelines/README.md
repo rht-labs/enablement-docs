@@ -616,9 +616,13 @@ scl enable rh-nodejs8 'npm run build:ci'
 ![with-backend-app](../images/exercise2/with-backend-app.png)
 
 ### Part 6 - GitLab Webhooks
-> _In this exercise we will link GitLab to Jenkins so that new build jobs are created on each push to the `develop` branch._
+> _In this exercise we will link GitLab to Jenkins so that new build jobs are triggered on each push to the `develop` branch._
 
-7. Head to your Jenkins Dashboard and click on `Manage Jenkins` on the left hand side. Then scroll down and click `Configure Global Security`. Alternatively, type in `https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/configureSecurity/` . You should see a screen like so:
+<p class="tip" >
+NOTE - This section is optional! Git webhooks are useful but not needed for course completion.
+</p>
+
+7. In order to allow GitLab trigger Jenkins (because of the OpenShift Auth Plugin), we need to allow the `Annoymous` user trigger builds. Head to your Jenkins Dashboard and click on `Manage Jenkins` on the left hand side. Then scroll down and click `Configure Global Security`. Alternatively, type in `https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/configureSecurity/` . You should see a screen like so:
 ![jenkins-global-security](../images/exercise2/jenkins-global-security.png)
 
 7. Scroll down to the `Authorization` section and allow `Anonymous` to create jobs. Do this by navigating through the matrix of checkboxes and check `Build` and `Cancel` under the Job heading. Leave all other user behaviour as is. Anonymous is the user that GitLab will act as so this allows the WebHook to trigger builds. (The screenshot has been cropped to bring Job further to the left.) Hit `Save` or `Apply`.
@@ -647,6 +651,7 @@ Check your build status and you should see something like this. With `Started by
 ![jenkins-gitlab-webhook-success](../images/exercise2/jenkins-gitlab-webhook-success.png)
 
 7. We now have a working GitLab webhook so any time we push code it will automatically build! Next up we'll show you how to add tests to your pipeline.
+
 _____
 
 ## Extension Tasks
