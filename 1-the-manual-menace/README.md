@@ -184,9 +184,9 @@ openshift_cluster_content:
 ```
 ![ci-cd-deployments-yml](../images/exercise1/ci-cd-deployments-yml.png)
 
-4. Run the OpenShift applier, specifying the tag `nexus` to speed up it's execution (`-e "target=ci-cd-tools"` is to run the other inventory).
+4. Run the OpenShift applier, specifying the tag `nexus` to speed up it's execution (`-e target=tools` is to run the other inventory).
 ```bash
-$ ansible-playbook apply.yml -e "target=ci-cd-tools" \
+$ ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=nexus"
 ```
@@ -245,7 +245,7 @@ where the following need to be replaced by actual values:
 
 4. Run the OpenShift applier, specifying the tag `gitlab` to speed up it's execution.
 ```bash
-$ ansible-playbook apply.yml -e "target=ci-cd-tools" \
+$ ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=gitlab"
 ```
@@ -380,7 +380,7 @@ $ git push
 
 5. When your code is commited; run the OpenShift Applier to add the config to the cluster
 ```bash
-$ ansible-playbook apply.yml -e "target=ci-cd-tools" \
+$ ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=jenkins"
 ```
