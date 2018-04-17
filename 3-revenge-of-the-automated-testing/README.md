@@ -1,4 +1,4 @@
-# Exercise Title
+# Revenge Of The Automated Testing
 
 > The purpose of this lab is to develop and validate a new feature using TDD; and to promote the assured feature through the pipeline.
 
@@ -81,20 +81,13 @@ $ npm run test
 2. Explanation of Mocha and js test syntax through Bananalogy:
 ![todoitem-fail-test](../images/exercise3/bdd-bananas.png)
 
-* `describe` is used to group tests together into a collection about a particular 
+  * TODO - expand upon this.
+  * `describe` is used to group tests together. The string `"a bunch of ripe bananas"` is for human reading and allows you to identify tests.
+  * `it` is a statement that contains a test. It should contain an assertion such as `expect` or `should`. It follows the syntax of `describe` where the string passed in identifies the statement.
 
 2. Visit [mochajs.org](https://mochajs.org/) for more in-depth documentation.
 
-
-
-* `describe` is used to group tests together into a collection asserting some feature; for example the get all todos api.
-* `it` is an individual test statement and should contain an `expect` or a `should` statement asserting behaviour of the API under test.
-
-
-
-
 ### Part 1 - Tests in our Pipeline
-
 > _In this exercise we will improve the pipeline created already by adding some unit tests for the frontend & backend along with some end to end tests (e2e) to validate the full solution_
 
 #### Part 1a - Unit tests
