@@ -62,9 +62,11 @@ _On page load:_
 #### Part 0b - Introduction to our tests.
 > _In this part we will get familiar with the layout of our tests_
 
-2. Insert rob's stuff here
+2. Unit tests:
 
-2. Fun explanations
+  - There are 2 Api test files: `todolist-api/server/api/todo/todo.spec.js` & `todolist-api/server/mocks/mock-routes.spec.js`
+
+  - There are 12 Frontend test files stored in these directories: `todolist-fe/tests/unit/vue-components/*` & `todolist-fe/tests/unit/javascript/*`
 
 ### Part 1 - Tests in our Pipeline
 
