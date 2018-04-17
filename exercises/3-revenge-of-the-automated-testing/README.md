@@ -67,19 +67,19 @@ The TDD cycle can be illustrated with the following diagram;
 ## The TDD Cycle 
 
 1. `Write a test` -
-In TDD a new feature begins by writing a test. Write a test that can clearly defines a function or one that provides an improvement to a function. It is important the developer clearly understands the features' specification and requirements or the function could be wrong from the get-go. 
+In TDD a new feature begins by writing a test. Write a test that clearly defines a function or one that provides an improvement to an existing function. It's important the developer clearly understands the features specification and requirements, or the feature could be wrong from the get-go. 
 
 2. `Test Fails` -
 When a test is first implemented it is expected to fail. This failure validates the test is working correctly as the feature is yet to be implemented. 
 
 3. `Write code to make test pass` -
-This step involves implementing the feature to pass the failed test. Code written at this stage may pass the test in an inelegant way, however this is acceptable as TDD is a recursive cycle which includes code refactoring.
+This step involves implementing the feature to pass the failed test. Code written at this stage may be inelegant and still pass the test, however this is acceptable as TDD is a recursive cycle which includes code refactoring.
 
 4. `Code Passes tests` -
 If all tests pass, the developer can be confident that the new code meets the test requirements.
 
 5. `Refactor` -
-The refactoring step will allow the developer to clean up their code without changing its behaviour. This ensures it still passes all the tests. The process of refactoring can include; removal of duplication, renaming of Object, class, module, variable and method names to clearly represent their current purpose and use, decoupling of functionality and increasing code cohesion.
+The refactoring step will allow the developer to clean up their code without changing its behaviour. Not changing the behaviour should ensure the tests still pass. The process of refactoring can include; removal of duplication, renaming of Object, class, module, variable and method names to clearly represent their current purpose and use, decoupling of functionality and increasing code cohesion.
 
 6. `Repeat` -
 Starting with another new test, the cycle is then repeated to push forward the functionality. The size of the steps should always be small, with as few as 1 to 10 edits between each test run. If new code does not rapidly satisfy a new test, or other tests fail unexpectedly, the programmer should undo or revert in preference to excessive debugging.
