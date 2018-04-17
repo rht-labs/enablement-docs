@@ -61,8 +61,28 @@ _On page load:_
 
 **Test Driven Development (TDD)** is a software development process that relies on the repetition of a very short development cycle. Requirements are turned into test cases, where the software is developed to pass the tests. In other words, it creates a safety net that serves to keep the developer's problems/bugs at bay while enabling the developer to refactor efficiently. This is opposed to software development that allows software to be added that is not proven to meet requirements.
 
-The TDD can be illustrated with the following diagram;
+The TDD cycle can be illustrated with the following diagram;
 ![TDD-diagram](../images/exercise3/TDD-lifecycle.jpg)
+
+## The TDD Cycle 
+
+1. `Write a test` -
+In TDD a new feature begins by writing a test. Write a test that can clearly defines a function or one that provides an improvement to a function. It is important the developer clearly understands the features' specification and requirements or the function could be wrong from the get-go. 
+
+2. `Test Fails` -
+When a test is first implemented it is expected to fail. This failure validates the test is working correctly as the feature is yet to be implemented. 
+
+3. `Write code to make test pass` -
+This step involves implementing the feature to pass the failed test. Code written at this stage may pass the test in an inelegant way, however this is acceptable as TDD is a recursive cycle which includes code refactoring.
+
+4. `Code Passes tests` -
+If all tests pass, the developer can be confident that the new code meets the test requirements.
+
+5. `Refactor` -
+The refactoring step will allow the developer to clean up their code without changing its behaviour. This ensures it still passes all the tests. The process of refactoring can include; removal of duplication, renaming of Object, class, module, variable and method names to clearly represent their current purpose and use, decoupling of functionality and increasing code cohesion.
+
+6. `Repeat` -
+Starting with another new test, the cycle is then repeated to push forward the functionality. The size of the steps should always be small, with as few as 1 to 10 edits between each test run. If new code does not rapidly satisfy a new test, or other tests fail unexpectedly, the programmer should undo or revert in preference to excessive debugging.
 
 #### Part 0b - Introduction to our tests.
 > _In this part we will get familiar with the layout of our tests_
