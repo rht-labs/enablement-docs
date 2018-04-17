@@ -615,13 +615,48 @@ scl enable rh-nodejs8 'npm run build:ci'
 6.  When `dev-todolist-api-build` has completed we should see the sample data has changed on refresh.
 ![with-backend-app](../images/exercise2/with-backend-app.png)
 
+### Part 6 - GitLab Webhooks
+> _In this exercise we will link GitLab to Jenkins so that new build jobs are triggered on each push to the `develop` branch._
+
+<p class="tip" >
+NOTE - This section is optional! Git webhooks are useful but not needed for course completion.
+</p>
+
+7. In order to allow GitLab trigger Jenkins (because of the OpenShift Auth Plugin), we need to allow the `Annoymous` user trigger builds. Head to your Jenkins Dashboard and click on `Manage Jenkins` on the left hand side. Then scroll down and click `Configure Global Security`. Alternatively, type in `https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/configureSecurity/` . You should see a screen like so:
+![jenkins-global-security](../images/exercise2/jenkins-global-security.png)
+
+7. Scroll down to the `Authorization` section and allow `Anonymous` to create jobs. Do this by navigating through the matrix of checkboxes and check `Build` and `Cancel` under the Job heading. Leave all other user behaviour as is. Anonymous is the user that GitLab will act as so this allows the WebHook to trigger builds. (The screenshot has been cropped to bring Job further to the left.) Hit `Save` or `Apply`.
+![jenkins-anon-permissions](../images/exercise2/jenkins-anon-permissions.png)
+
+7. Go to your `dev-todolist-fe-build` and head to the `configure` section (`https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/job/dev-todolist-fe-build/configure`). Scroll down to the `Build Triggers` section and check the `Build when a change is pushed to GitLab` box. Leave all the other settings as they are but copy the `GitLab webhook URL`. `https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/project/dev-todolist-fe-build`.
+![jenkins-build-triggers-gitlab](../images/exercise2/jenkins-build-triggers-gitlab.png)
+
+7. Switch over to GitLab and select your `todolist-fe` repository. On the left hand task bar hover over the settings cog and select `integrations`. (`https://gitlab-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/<YOUR_NAME>/todolist-fe/settings/integrations`)
+![gitlab-integrations](../images/exercise2/gitlab-integrations.png)
+
+7. Paste the `GitLab webhook URL` that we copied earlier into the `URL` field. Check Push events as the trigger, and make sure you `uncheck` the `SSL verification` checkbox. Click Add webhook at the bottom.
+![gitlab-integrations-details](../images/exercise2/gitlab-integrations-details.png)
+
+7. Before we move on let's test the webhook. Select the Test drop down and click `Push events`. This will trigger the test and return a status code at the top of the page. If all goes well it should be a cool blue 200.
+![gitlab-integrations-details](../images/exercise2/gitlab-webhook-test.png)
+
+7. We can now test this properly by heading into the `todolist-fe` repository through <YOUR_FAVOURITE_EDITOR>. Make a small change to your code, then commit and push it, ensuring you're on the develop branch. Then head over to Jenkins and wait until the `dev-todolist-fe-build` job has been triggered.
+
+7. All that's left to do is to repeat the same steps for `todolist-api`:
+Create Build Trigger: 
+`https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/job/dev-todolist-api-build/configure`
+Create GitLab Integration:
+`https://gitlab-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/donal/todolist-api/settings/integrations`
+Check your build status and you should see something like this. With `Started by Gitlab push by <YOUR_NAME>`:
+![jenkins-gitlab-webhook-success](../images/exercise2/jenkins-gitlab-webhook-success.png)
+
+7. We now have a working GitLab webhook so any time we push code it will automatically build! Next up we'll show you how to add tests to your pipeline.
+
 _____
 
 ## Extension Tasks
 > _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution available and are provided for additional scope._
 
-- Git Tasks
-    * Add a GitHub Webhook to trigger your build on each commit
 - Pipeline Tasks
     * Add pipeline for `master` branch for each project. Use `test-` instead of `dev-` across all config and names in the pipeline
     * Do the `.openshift-applier` steps as part of the pipeline for greater end to end automation.
