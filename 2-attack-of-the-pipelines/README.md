@@ -615,10 +615,16 @@ scl enable rh-nodejs8 'npm run build:ci'
 6.  When `dev-todolist-api-build` has completed we should see the sample data has changed on refresh.
 ![with-backend-app](../images/exercise2/with-backend-app.png)
 
-### Part 6 - GitLab Webhook
+### Part 6 - GitLab Webhooks
 > _In this exercise we will link GitLab to Jenkins so that new build jobs are created on each push to the `develop` branch._
 
-7. Configure Global Security and allow anonymous users to build and cancel
+7. Head to your Jenkins Dashboard and click on `Manage Jenkins` on the left hand side. Then scroll down and click `Configure Global Security`. Alternatively, type in `https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/configureSecurity/` . You should see a screen like so:
+![jenkins-global-security](../images/exercise2/jenkins-global-security.png)
+
+7. Scroll down to the `Authorization` section and allow `Anonymous` to create jobs. Do this by navigating through the matrix of checkboxes and check `Build` and `Cancel` under the Job heading. Leave all other user behaviour as is. Anonymous is the user that GitLab will act as so this allows the WebHook to trigger builds. (The screenshot has been cropped to bring Job further to the left.) Hit `Save` or `Apply`.
+![jenkins-anon-permissions](../images/exercise2/jenkins-anon-permissions.png)
+
+7. Go to your `dev-todolist-fe-build` and head to the `configure` section (`https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/job/dev-todolist-fe-build/configure`). Scroll down to the `Build Triggers` section and check the `Build when a change is pushed to GitLab` box. Leave all the other settings as they are but copy the `GitLab webhook URL`. `https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/project/dev-todolist-fe-build`.
 
 7. Head to Jenkins Todolist-fe, click configure, scroll down to build triggers. Click on build when change gitlab. Copy the webhook URL.
 
