@@ -59,9 +59,10 @@ _On page load:_
 #### Part 0a - What is TDD?
 > _Here is a brief introduction of TDD and why we use it._
 
-2. Insert rob's stuff here
+**Test Driven Development (TDD)** is a software development process that relies on the repetition of a very short development cycle. Requirements are turned into test cases, where the software is developed to pass the tests. In other words, it creates a safety net that serves to keep the developer's problems/bugs at bay while enabling the developer to refactor efficiently. This is opposed to software development that allows software to be added that is not proven to meet requirements.
 
-2. Fun explanations
+The TDD can be illustrated with the following diagram;
+![TDD-diagram](../images/exercise3/TDD-lifecycle.jpg)
 
 #### Part 0b - Introduction to our tests.
 > _In this part we will get familiar with the layout of our tests_
