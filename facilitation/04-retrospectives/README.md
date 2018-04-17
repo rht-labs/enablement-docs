@@ -1,6 +1,6 @@
 # Retrospectives
 
-> Session to introduce the practice of Retrospectives, how we use them and show some examples of real Retrospectives artefacts. This will also include facilitating a retrospective at the end of each day and running a Real-Time retrospective throughout the 4 day session.
+> Session to introduce the practice of Retrospectives, how we use them and show some examples of real Retrospective artefacts. This will also include facilitating a retrospective at the end of each day and running a Real-Time Retrospective throughout the 4 day session.
 
 _____
 
@@ -14,9 +14,9 @@ The latest version of slides for the session are available [here](https://docs.g
 
 ## Facilitation Materials Needed
 
-Different retrospectives will need different materials
-* A 'round the circle' impact feedback session should have an object (e.g. small football) to throw around the room - whoever has the object is the speaker
-* The stop/start/continue format requires sticky notes (ideally different colors), sharpie pens and flip-chart or magic whiteboard paper
+Different retrospectives will need different materials:
+* A 'round the circle' impact feedback session should have an object (e.g. small football) to throw around the room (whoever has the object is the speaker)
+* The stop/start/continue format requires sticky notes (ideally different colors), sharpie pens and flip-chart or magic whiteboard paper to radiate the output
 * The timeline and real-time retrospectives require sticky tape to create the timeline and the same materials as stop/start/continue format
 
 
