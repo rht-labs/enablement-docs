@@ -126,6 +126,7 @@ $ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml 
 ### Part 2 - Nexus and GitLab
 > _Now that we have our Projects setup; we can start to populate them with Apps to be used in our dev lifecycle_
 
+#### Part 2a - Nexus
 4. In the `enablement-ci-cd` repo, checkout the templates for Nexus by running
 ```bash
 $ git checkout exercise1/git-nexus templates/nexus.yml
@@ -164,6 +165,11 @@ $ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml 
 ```
 
 4. Once successful; login to the cluster through the browser (using cluster URL) and navigate to the `<YOUR_NAME>-ci-cd`. You should see Nexus up and running. You can login with default credentials (admin / admin123) ![nexus-up-and-running](../images/exercise1/nexus-up-and-running.png)
+
+#### Part 2b - GitLab
+<p class="tip">
+NOTE - This section may already have been completed for you, please check with your tutor. If this is the case, skip to section 6 to add your code to GitLab.
+</p>
 
 4. Now let's do the same thing for GitLab to get it up and running. Checkout the template and params provided by running
 ```bash
