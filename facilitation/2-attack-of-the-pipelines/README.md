@@ -1,6 +1,6 @@
 # Attack of the Pipelines
 
-> Exercise focussed on creating pipelines and getting a build, bake and deploy for front-end and back-end application working.
+> Exercise focused on creating pipelines and getting a build, bake and deploy for front-end and back-end application working.
 
 _____
 
@@ -12,7 +12,7 @@ The latest version of slides to introduce this exercise are [here](https://docs.
 
 ## The Exercise
 
-The exerise can be found [here](https://rht-labs.github.io/enablement-docs/#/2-attack-of-the-pipelines/README)
+The exercise can be found [here](https://rht-labs.github.io/enablement-docs/#/2-attack-of-the-pipelines/README)
 
 
 ## Wrap-Up
