@@ -296,12 +296,12 @@ SOURCE_CONTEXT_DIR=docker/jenkins-slave-npm
 NAME=npm-jenkins-slave
 ```
 
-3. Create an item in the `inventory/group_vars/all.yml` under the `ci-cd-builds` object to run the template with. Don't forget to substitute `<YOUR_NAME>`
+3. Create an item in the `inventory/host_vars/ci-cd-tooling.yml` under the `ci-cd-builds` object to run the template with.
 ```yaml
   - name: "jenkins-npm-slave"
-    namespace: "<YOUR_NAME>-ci-cd"
-    template: "{{ inventory_dir }}/../templates/jenkins-slave-generic-template.yml"
-    params: "{{ inventory_dir }}/../params/jenkins-slave-npm"
+    namespace: "{{ ci_cd_namespace }}"
+    template: "{{ playbook_dir }}/templates/jenkins-slave-generic-template.yml"
+    params: "{{ playbook_dir }}/params/jenkins-slave-npm"
     tags:
     - jenkins-slave
 ```
@@ -309,7 +309,7 @@ NAME=npm-jenkins-slave
 
 3. Run the OpenShift Applier to trigger a build of this jenkins slave image.
 ```bash
-$ ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml \
+$ ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=jenkins-slave"
 ```
