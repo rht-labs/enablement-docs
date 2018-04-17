@@ -625,19 +625,28 @@ scl enable rh-nodejs8 'npm run build:ci'
 ![jenkins-anon-permissions](../images/exercise2/jenkins-anon-permissions.png)
 
 7. Go to your `dev-todolist-fe-build` and head to the `configure` section (`https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/job/dev-todolist-fe-build/configure`). Scroll down to the `Build Triggers` section and check the `Build when a change is pushed to GitLab` box. Leave all the other settings as they are but copy the `GitLab webhook URL`. `https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/project/dev-todolist-fe-build`.
+![jenkins-build-triggers-gitlab](../images/exercise2/jenkins-build-triggers-gitlab.png)
 
-7. Head to Jenkins Todolist-fe, click configure, scroll down to build triggers. Click on build when change gitlab. Copy the webhook URL.
+7. Switch over to GitLab and select your `todolist-fe` repository. On the left hand task bar hover over the settings cog and select `integrations`. (`https://gitlab-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/<YOUR_NAME>/todolist-fe/settings/integrations`)
+![gitlab-integrations](../images/exercise2/gitlab-integrations.png)
 
-7. Head to the Gitlab repository for todolist-fe, Head to settings --> integrations.
+7. Paste the `GitLab webhook URL` that we copied earlier into the `URL` field. Check Push events as the trigger, and make sure you `uncheck` the `SSL verification` checkbox. Click Add webhook at the bottom.
+![gitlab-integrations-details](../images/exercise2/gitlab-integrations-details.png)
 
-7. Paste the webhook URL into the box at the top. Uncheck the box Enable SSL verification.
+7. Before we move on let's test the webhook. Select the Test drop down and click `Push events`. This will trigger the test and return a status code at the top of the page. If all goes well it should be a cool blue 200.
+![gitlab-integrations-details](../images/exercise2/gitlab-webhook-test.png)
 
-7. Click the Add webhook button.
+7. We can now test this properly by heading into the `todolist-fe` repository through <YOUR_FAVOURITE_EDITOR>. Make a small change to your code, then commit and push it, ensuring you're on the develop branch. Then head over to Jenkins and wait until the `dev-todolist-fe-build` job has been triggered.
 
-7. Commit and push a change to the todolist-fe. Check the Jenkins dashboard to see the build job starting.
+7. All that's left to do is to repeat the same steps for `todolist-api`:
+Create Build Trigger: 
+`https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/job/dev-todolist-api-build/configure`
+Create GitLab Integration:
+`https://gitlab-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/donal/todolist-api/settings/integrations`
+Check your build status and you should see something like this. With `Started by Gitlab push by <YOUR_NAME>`:
+![jenkins-gitlab-webhook-success](../images/exercise2/jenkins-gitlab-webhook-success.png)
 
-7. Repeat the same for todolist-api
-
+7. We now have a working GitLab webhook so any time we push code it will automatically build! Next up we'll show you how to add tests to your pipeline.
 _____
 
 ## Extension Tasks
