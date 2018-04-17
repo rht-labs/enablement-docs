@@ -152,7 +152,7 @@ git push -u origin --all
 ### Part 2 - Security Scanning Slaves
 > _This exercise focuses on updating the `enablement-ci-cd` repo with some new jenkins-slave pods for use in future exercise_
 
-3. Do other things
+3. TODO!
 
 _____
 
@@ -165,6 +165,12 @@ OpenShift Sync plugin
 Jenkins S2I
  - Add the multi-branch configuration to the S2I to have Jenkins come alive with the `todolist-api` and `-fe` configuration cooked into it for future uses.
 
+Jenkins Pipeline Extension
+ - Add an extension to the pipeline that promotes code to UAT environment once the master job has been successful. 
+ - Use a WAIT to allow for manual input to appove the promotion
+
+Jenkins e2e extension (blue/green)
+ - Add a step in the pipeline to only deploy to the `test` environment if the e2e tests have run successfully against which ever environemnt (blue or green) is not deployed.
 
 ## Additional Reading
 > List of links or other reading that might be of use / reference for the exercise
