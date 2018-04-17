@@ -82,6 +82,7 @@ $ npm run test
 ![todoitem-fail-test](../images/exercise3/bdd-bananas.png)
 
 
+
 ### Part 1 - Tests in our Pipeline
 
 > _In this exercise we will improve the pipeline created already by adding some unit tests for the frontend & backend along with some end to end tests (e2e) to validate the full solution_
