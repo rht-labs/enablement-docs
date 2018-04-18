@@ -21,6 +21,8 @@ As a learner you will be able to
 1. [Pipeline](https://jenkins.io/doc/book/pipeline/) - Overview of the Jenkinsfile approach
 1. [Pipeline Syntax](https://jenkins.io/doc/book/pipeline/syntax/) - Documentation for the declarative pipeline
 1. [Groovy](http://groovy-lang.org/) - Groovy is a powerful, optionally typed and dynamic language, with static-typing and static compilation capabilities, for the Java platform aimed at improving developer productivity thanks to a concise, familiar and easy to learn syntax. It integrates smoothly with any Java program, and immediately delivers to your application powerful features, including scripting capabilities, Domain-Specific Language authoring, runtime and compile-time meta-programming and functional programming.
+1. [Zed Attack Proxy](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project) - The OWASP Zed Attack Proxy (ZAP) is one of the world’s most popular free security tools and is actively maintained by hundreds of international volunteers*. It can help you automatically find security vulnerabilities in your web applications while you are developing and testing your applications. Its also a great tool for experienced pentesters to use for manual security testing.
+1. [Arachni Crawler](http://www.arachni-scanner.com/) - Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of modern web applications. It is free, with its source code public and available for review. It is versatile enough to cover a great deal of use cases, ranging from a simple command line scanner utility, to a global high performance grid of scanners, to a Ruby library allowing for scripted audits, to a multi-user multi-scan web collaboration platform. In addition, its simple REST API makes integration a cinch.
 
 ## Big Picture
 This exercise begins cluster containing blah blah
@@ -163,34 +165,32 @@ $ git checkout exercise4/zap-and-arachni params/ templates/jenkins-slave-generic
 
 3. This should have created the following files:
     - `templates/jenkins-slave-generic-template.yml`
-    - `params/ zap-build-pod arachni-build-pod`
+    - `params/zap-build-pod` and `params/arachni-build-pod`
 
 3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `zap-build-pod` and add the following content:
 ```yaml
     - name: "zap-build-pod"
-        namespace: "<YOUR_NAME>-ci-cd"
-        template: "{{ inventory_dir }}/../templates/jenkins-slave-generic-template.yml"
-        params: "{{ inventory_dir }}/../params/zap-build-pod"
-        tags:
-        - zap
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/jenkins-slave-generic-template.yml"
+      params: "{{ playbook_dir }}/params/zap-build-pod"
+      tags:
+      - zap
 ```
-<p class="tip"> NOTE- Install your Openshift Applier dependency if it's disappeared.
-```bash
-ansible-galaxy install -r requirements.yml --roles-path=roles
+<p class="tip">
+NOTE- Install your Openshift Applier dependency if it's disappeared.
+```
+$ ansible-galaxy install -r requirements.yml --roles-path=roles
 ```
 </p>
 
-3. Remember to login to the cluster!
-```bash
-oc login https://console.your.domain.com --token=<INSERT_LOGIN_TOKEN_HERE>
-```
-
 3. Run the ansible playbook filtering with tag `zap` so only the zap build pods are run.
 ```bash
-ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml \  -i inventory/ \  -e "filter_tags=zap"
+$ ansible-playbook apply.yml -e target=tools \
+     -i inventory/ \
+     -e "filter_tags=zap"
 ```
 
-3. Head to (https://console.s8.core.rht-labs.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `zap-build-pod`.
+3. Head to (https://console.somedomain.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `zap-build-pod`.
 include screenshot here.
 
 #### Part 2b - Arachni Scan
@@ -199,19 +199,21 @@ include screenshot here.
 3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `arachni-build-pod` with the following content:
 ```yaml
     - name: "arachni-build-pod"
-        namespace: "<YOUR_NAME>-ci-cd"
-        template: "{{ inventory_dir }}/../templates/jenkins-slave-generic-template.yml"
-        params: "{{ inventory_dir }}/../params/arachni-build-pod"
-        tags:
-        - arachni
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/jenkins-slave-generic-template.yml"
+      params: "{{ playbook_dir }}/params/arachni-build-pod"
+      tags:
+      - arachni
 ```
 
 3. Run the ansible playbook filtering with tag `arachni` so only the arachni build pods are run.
 ```bash
-ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml \  -i inventory/ \  -e "filter_tags=arachni"
+$ ansible-playbook apply.yml -e target=tools \
+     -i inventory/ \
+     -e "filter_tags=arachni"
 ```
 
-3. Head to (https://console.s8.core.rht-labs.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `arachni-build-pod`.
+3. Head to (https://console.somedomain.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `arachni-build-pod`.
 ![todolist-fe-multi](../images/exercise4/builds-zap-arachni.png)
 
 _____
