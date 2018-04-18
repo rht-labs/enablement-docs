@@ -115,7 +115,7 @@ $ cd todolist-api
 $ npm run test
 ```
 
-2. Navigate to your instance of jenkins at `https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/`. 
+2. Navigate to your instance of jenkins at `https://jenkins-<YOUR_NAME>-ci-cd.apps.somedomain.com/`. 
 Click on `dev-todolist-fe-build` and then click the `configure` button on the left-hand side.
 ![jenkins-configure-job](../images/exercise3/jenkins-configure-job.png)
 
