@@ -22,6 +22,6 @@ Learners will create 3 to 4 project namespaces running lightweight NodeJS app * 
  - Learners have access to LDAP bind credentials to be able to auth against gitlab 
  - 
  
-## User privaleges 
- - Learners will require privaleges to run SCC containers ie GitLab
+## User privileges 
+ - Learners will require privileges to run SCC containers ie GitLab
  - 

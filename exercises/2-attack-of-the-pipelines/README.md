@@ -62,11 +62,19 @@ _____
 ### Part 1 - Explore the Todo List App
 > _In this part of the exercise we will explore the sample application, become familiar with it locally before building and deploying in OCP Land_
 
+#### Part 1a Todolist-fe
+
 2. Git clone the `todolist-fe` project to somewhere sensible and checkout the `develop` branch.
 ```bash
 $ git clone https://github.com/springdo/todolist-fe.git
 $ cd todolist-fe
 $ git checkout develop
+```
+Followed by;
+```
+$ for branch in `git branch -a | grep remotes | grep -v HEAD | grep -v master`; do
+   git branch --track ${branch#remotes/origin/} $branch
+done
 ```
 
 2. Open up Gitlab and login. Create a new project (internal) in GitLab called `todolist-fe` to host your clone of the project and copy it's remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
@@ -106,7 +114,7 @@ npm run serve
     * The server hosting it live reloads; so as you make changes to your code; the app will live update
     * The Data you see in the screen is dummy / stubbed data. This is served up when there is no backend connection found
 
-2. The app is a todolist manager built in Vue.js. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page you'll loose all additions. This is because there is persistence
+2. The app is a todolist manager built in Vue.js. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page you'll lose all additions. This is because there is persistence
 
 3. The structure of the `todolist-fe` is as follows.
 ```bash
@@ -152,12 +160,29 @@ where the following are the important things:
     * `./src/scss` contains custom  SCSS used in the application.
     * `./*.js` is mostly config files for running and managing the app and the tests
 
+2. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables.
+```bash
+export NEXUS_SERVICE_HOST=nexus-<YOUR_NAME>-ci-cd.apps.somedomain.com
+export NEXUS_SERVICE_PORT=80
+npm run prepare-nexus
+```
+<p class="tip">
+NOTE - This step in a residency would be automated by a more complex nexus deployment in the ci-cd project
+</p>
+
+#### Part 1b Todolist-api
 
 2. Now let's move on to the `todolist-api` and wire them together. As with the `todolist-fe` we need to clone the repo and add it to our GitLab in the cluster.
 ```bash
 $ git clone https://github.com/springdo/todolist-api.git
 $ git cd todolist-api
 $ git checkout develop
+```
+Followed by;
+```
+$ for branch in `git branch -a | grep remotes | grep -v HEAD | grep -v master`; do
+   git branch --track ${branch#remotes/origin/} $branch
+done
 ```
 
 2. Create a new project (internal) in GitLab called `todolist-api` to host your clone of the project and copy it's remote address.
@@ -234,15 +259,6 @@ where the following are the important things:
   },
 ```
 
-2. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables.
-```bash
-export NEXUS_SERVICE_HOST=nexus-<YOUR_NAME>-ci-cd.apps.somedomain.com
-export NEXUS_SERVICE_PORT=80
-npm run prepare-nexus
-```
-<p class="tip">
-NOTE - This step in a residency would be automated by a more complex nexus deployment in the ci-cd project
-</p>
 
 2. To run the application; start a new instance of the MongoDB by running. 
 ```bash
@@ -431,7 +447,7 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
 
 5. Name this job `dev-todolist-fe-build` and select `Freestyle Job`. All our jobs will take the form of `<ENV>-<APP_NAME>-<JOB_PURPOSE>`. ![freestyle-job](../images/exercise2/freestyle-job.png)
 
-5. The page that loads is the Job Configuration page andi t can be returned to at anytime from Jenkins. Let's start configuring our job. To conserve space; we will make sure Jenkins only keeps the last builds artifacts. Tick the `Discard old builds` checkbox and set `Max # of builds to keep with artifacts` to 1 as below ![keep-artifacts](../images/exercise2/keep-artifacts.png)
+5. The page that loads is the Job Configuration page and it can be returned to at anytime from Jenkins. Let's start configuring our job. To conserve space; we will make sure Jenkins only keeps the last builds artifacts. Tick the `Discard old builds` checkbox and set `Max # of builds to keep with artifacts` to 1 as below ![keep-artifacts](../images/exercise2/keep-artifacts.png)
 
 5. Our NodeJS build needs to be run on the `jenkins-slave-npm` we created earlier. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-slave](../images/exercise2/label-jenkins-slave.png)
 
