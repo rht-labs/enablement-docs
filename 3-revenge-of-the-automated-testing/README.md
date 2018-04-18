@@ -6,6 +6,41 @@
 
 [Image Source](https://cdn-images-1.medium.com/max/1600/1*wF_fSCH-gLYfMbkwb3gR2w.png)
 
+## Introduction to TDD.
+
+> _Here is a brief introduction of TDD and why we use it._
+
+**Test Driven Development (TDD)** is a software development process that relies on the repetition of a very short development cycle. Requirements are turned into test cases, where the software is developed to pass the tests. In other words, it creates a safety net that serves to keep the developer's problems/bugs at bay while enabling the developer to refactor efficiently. This is opposed to software development that allows software to be added that is not proven to meet requirements.
+
+The TDD cycle can be illustrated with the following diagram;
+![TDD-diagram](../images/exercise3/TDD-lifecycle.jpg)
+
+### The TDD Cycle 
+
+1. `Write a test` -
+In TDD a new feature begins by writing a test. Write a test that clearly defines a function or one that provides an improvement to an existing function. It's important the developer clearly understands the features specification and requirements, or the feature could be wrong from the get-go. 
+
+2. `Test Fails` -
+When a test is first implemented it is expected to fail. This failure validates the test is working correctly as the feature is yet to be implemented. 
+
+3. `Write code to make test pass` -
+This step involves implementing the feature to pass the failed test. Code written at this stage may be inelegant and still pass the test, however this is acceptable as TDD is a recursive cycle which includes code refactoring.
+
+4. `Code Passes tests` -
+If all tests pass, the developer can be confident that the new code meets the test requirements.
+
+5. `Refactor` -
+The refactoring step will allow the developer to clean up their code without changing its behaviour. Not changing the behaviour should ensure the tests still pass. The process of refactoring can include; removal of duplication, renaming of Object, class, module, variable and method names to clearly represent their current purpose and use, decoupling of functionality and increasing code cohesion.
+
+6. `Repeat` -
+Starting with another new test, the cycle is then repeated to push forward the functionality. The size of the steps should always be small, with as few as 1 to 10 edits between each test run. If new code does not rapidly satisfy a new test, or other tests fail unexpectedly, the programmer should undo or revert in preference to excessive debugging.
+
+### Testing Bananalogy
+Explanation of Mocha and js test syntax through Bananalogy! Imagine for a moment; we're not building software but creating a bowl of fruit. To create a `Bunch of Bananas` component for our fruit bowl we could start with our tests as shown below.
+![bdd-bananas](../images/exercise3/bdd-bananas.png)
+  * `describe` is used to group tests together. The string `"a bunch of ripe bananas"` is for human reading and allows you to identify tests.
+  * `it` is a statement that contains a test. It should contain an assertion such as `expect` or `should`. It follows the syntax of `describe` where the string passed in identifies the statement.
+
 ---
 
 ## Learning Outcomes
@@ -53,62 +88,8 @@ _On page load:_
 ## Step by Step Instructions
 > This is a fairly structured guide with references to exact filenames and sections of text to be added.
 
-### Part 0 - Introduction to TDD.
-> _We'll show you what TDD is, and introduce our existing tests within our code._
-
-#### Part 0a - What is TDD?
-> _Here is a brief introduction of TDD and why we use it._
-
-**Test Driven Development (TDD)** is a software development process that relies on the repetition of a very short development cycle. Requirements are turned into test cases, where the software is developed to pass the tests. In other words, it creates a safety net that serves to keep the developer's problems/bugs at bay while enabling the developer to refactor efficiently. This is opposed to software development that allows software to be added that is not proven to meet requirements.
-
-The TDD cycle can be illustrated with the following diagram;
-![TDD-diagram](../images/exercise3/TDD-lifecycle.jpg)
-
-## The TDD Cycle 
-
-1. `Write a test` -
-In TDD a new feature begins by writing a test. Write a test that clearly defines a function or one that provides an improvement to an existing function. It's important the developer clearly understands the features specification and requirements, or the feature could be wrong from the get-go. 
-
-2. `Test Fails` -
-When a test is first implemented it is expected to fail. This failure validates the test is working correctly as the feature is yet to be implemented. 
-
-3. `Write code to make test pass` -
-This step involves implementing the feature to pass the failed test. Code written at this stage may be inelegant and still pass the test, however this is acceptable as TDD is a recursive cycle which includes code refactoring.
-
-4. `Code Passes tests` -
-If all tests pass, the developer can be confident that the new code meets the test requirements.
-
-5. `Refactor` -
-The refactoring step will allow the developer to clean up their code without changing its behaviour. Not changing the behaviour should ensure the tests still pass. The process of refactoring can include; removal of duplication, renaming of Object, class, module, variable and method names to clearly represent their current purpose and use, decoupling of functionality and increasing code cohesion.
-
-6. `Repeat` -
-Starting with another new test, the cycle is then repeated to push forward the functionality. The size of the steps should always be small, with as few as 1 to 10 edits between each test run. If new code does not rapidly satisfy a new test, or other tests fail unexpectedly, the programmer should undo or revert in preference to excessive debugging.
-
-#### Part 0b - Introduction to our tests.
-> _In this part we will get familiar with the layout of our tests_
-
-2. We'll go into detail on how to write tests further on. To run your test suites run the following in the root of your `todolist-fe` or `todolist-api` repositories.
-```bash
-$ npm run test
-```
-
-2. This command will run all `*spec.js` files. Our test files are stored in the following places:
-
-  - There are 2 Api test files: `todolist-api/server/api/todo/todo.spec.js` & `todolist-api/server/mocks/mock-routes.spec.js`
-
-  - There are 12 Frontend test files stored in these directories: `todolist-fe/tests/unit/vue-components/*` & `todolist-fe/tests/unit/javascript/*`
-
-2. Explanation of Mocha and js test syntax through Bananalogy:
-![todoitem-fail-test](../images/exercise3/bdd-bananas.png)
-
-  * TODO - expand upon this.
-  * `describe` is used to group tests together. The string `"a bunch of ripe bananas"` is for human reading and allows you to identify tests.
-  * `it` is a statement that contains a test. It should contain an assertion such as `expect` or `should`. It follows the syntax of `describe` where the string passed in identifies the statement.
-
-2. Visit [mochajs.org](https://mochajs.org/) for more in-depth documentation.
-
 ### Part 1 - Tests in our Pipeline
-> _In this exercise we will improve the pipeline created already by adding some unit tests for the frontend & backend along with some end to end tests (e2e) to validate the full solution_
+> _In this part we will get familiar with the layout of our tests. We will also improve the pipeline created already by adding some unit tests for the frontend & backend along with some end to end tests (e2e) to validate the full solution_
 
 #### Part 1a - Unit tests
 > In this exercise we will execute our test for the frontend and backend locally. Once verified we will add them to Jenkins.
@@ -121,12 +102,14 @@ $ npm run test
 <p class="tip" > 
 `test` is an alias used that runs `vue-cli-service test` from the scripts object in `package.json`
 </p>
-![new-gitlab-proj](../images/exercise3/screenshot-scripts.png)
+![screenshot-scripts](../images/exercise3/screenshot-scripts.png)
+
+2. This command will run all `*spec.js` files. Our test files are stored in the following places. There are 12 Frontend test files stored in these directories: `todolist-fe/tests/unit/vue-components/*` & `todolist-fe/tests/unit/javascript/*`
 
 2. You should see an output similar to the following. The above command has run a test suite for every `*.spec.js` file. The table generated in the terminal shows the code coverage. We're going to be focusing on the unit tests for now.
-![new-gitlab-proj](../images/exercise3/test-run-locally.png)
+![test-run-locally](../images/exercise3/test-run-locally.png)
 
-2. Repeat the same process for `todolist-api` and verify that all the tests run.
+2. Repeat the same process for `todolist-api` and verify that all the tests run. There are 2 Api test files: `todolist-api/server/api/todo/todo.spec.js` & `todolist-api/server/mocks/mock-routes.spec.js`
 ```bash
 $ cd todolist-api
 $ npm run test
@@ -134,21 +117,21 @@ $ npm run test
 
 2. Navigate to your instance of jenkins at `https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/`. 
 Click on `dev-todolist-fe-build` and then click the `configure` button on the left-hand side.
-![new-gitlab-proj](../images/exercise3/jenkins-configure-job.png)
+![jenkins-configure-job](../images/exercise3/jenkins-configure-job.png)
 
 2. Scroll to the `Build` part of the configuration page and add `scl enable rh-nodejs8 'npm run test'` below `scl enable rh-nodejs8 'npm install'`. Click `save` or `apply` at the bottom to save the changes.
-![new-gitlab-proj](../images/exercise3/jenkins-build-step.png)
+![jenkins-build-step](../images/exercise3/jenkins-build-step.png)
 
 2. Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report`.
-![new-gitlab-proj](../images/exercise3/xunit-action.png)
+![xunit-action](../images/exercise3/xunit-action.png)
 
 2. Click the `Add` button under `Publish xUnit test result report` and select `JUnit`. In the pattern field enter `test-report.xml`. In the `Failed Tests Thresholds`  input box enter 0 under `Red Ball Total`. It should look a little something like this:
-![new-gitlab-proj](../images/exercise3/post-build-actions.png)
+![post-build-actions](../images/exercise3/post-build-actions.png)
 
 2. Click `save` or `apply` at the bottom to save the changes. Run the `dev-todolist-fe-build` job and verify that this passes and the `build` and `bake` jobs are both triggered.
 
 2. We're now going to deliberately fail a test to ensure that `bake` and `deploy` jobs aren't triggered if any tests fail. Go to `ListOfTodos.spec.js` in `/tests/unit/vue-components` and head to `line 38`. Add `not.` before `toHaveBeenCalled()`.
-![new-gitlab-proj](../images/exercise3/change-test-to-fail.png)
+![change-test-to-fail](../images/exercise3/change-test-to-fail.png)
 
 2. Push this to Gitlab and run the build job.
 ```bash
@@ -158,22 +141,22 @@ $ git push
 ```
 
 2. Rerun the `dev-todolist-fe-build` job. It should have failed and not run any other builds. 
-![new-gitlab-proj](../images/exercise3/jenkins-with-failing-build.png)
+![jenkins-with-failing-build](../images/exercise3/jenkins-with-failing-build.png)
 
 2. Undo the changes you made to the `ListOfTodos.spec.js` file, commit your code and rerun the build. This should trigger a full `build --> bake --> deploy` of `todolist-fe`.
 
 2. We're now going to do the same for the api. Head to the `configure` panel of the `dev-todolist-api-build` job. 
 
 2. Add `scl enable rh-nodejs8 'npm run test:ci'` above `npm run build:ci`.
-![new-gitlab-proj](../images/exercise3/api-build-step.png)
+![api-build-step](../images/exercise3/api-build-step.png)
 
 2. Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report`.
 
 2. Click the `Add` button under `Publish xUnit test result report` and select `JUnit`. In the pattern field enter `reports/server/mocha/test-results.xml`. In the `Failed Tests Thresholds`  input box enter 0 under `Red Ball Total`. It should look a little something like this:
-![new-gitlab-proj](../images/exercise3/api-post-build.png)
+![api-post-build](../images/exercise3/api-post-build.png)
 
 2. We're now going to deliberately fail a test again to ensure that `bake` and `deploy` jobs aren't triggered if any tests fail. Go to `todo.spec.js` in `/server/api/todo` and head to `line 35`. Replace `false` with `true`. 
-![new-gitlab-proj](../images/exercise3/api-fail-build.png)
+![api-fail-build](../images/exercise3/api-fail-build.png)
 
 2. Push this to Gitlab and run the build job.
 ```bash
