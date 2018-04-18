@@ -172,11 +172,46 @@ $ git push
 </p>
 
 #### Part 1b - End to End tests (e2e)
-> TODO - this section is not complete
+> _Unit tests are a great way to get immediate feedback as part of testing an application. End to end tests that drive user behaviour are another amazing way to ensure an application is behaving as expected._
 
-2.  Add new part to the dev pipeline (`dev-todolist-fe-e2e`)
+In this exercise we will add a new stage to our pipeline called `dev-todolist-fe-e2e` that will run after the deploy has been completed. End to end tests will use Nightwatchjs to orchestrate a selenium webdriver instance that controls the web browser; in this case Chrome!
 
-2. Add e2e tests and reporting to Jenkins
+2. Let's start by checking our tests execute locally. On the terminal move to the `todolist-fe` folder. Our end to end tests are stored in `tests/e2e/specs/`. The vuejs cli uses nightwatch and comes pre-configured to run tests against Chrome. We have created some additional configuration in the root of the project `nightwatch.config.js` to run headless in CI mode on Jenkins.
+```bash
+$ cd todolist-fe
+```
+
+2. Run the tests locally by executing the following. This should start the dev server and run the test. You may see the browser pop up and close while tests execute.
+```bash
+$ npm run e2e
+```
+![local-e2e](../images/exercise3/local-e2e.png)
+
+2. With tests executing locally; let's add them to our Jenkins pipeline. To do this; we'll create a new job and connect it up to our `todolist-fe` jobs. Open Jenkins and create a `New Item` called `dev-todolist-fe-e2e`. Make this Job `Freestyle`.
+
+2. On the configuration page; Set the Label for the job to run on as `jenkins-slave-npm` and a build parameter of `BUILD_TAG`
+![e2e-general](../images/exercise3/e2e-general.png)
+
+2. On the Source Code Management tab; set the source code to git and add the url to your `todolist-fe` app. Set the branch to `refs/tags/${BUILD_TAG}`
+![e2e-git](../images/exercise3/e2e-git.png)
+
+2. Set `Color ANSI Console Output` on the `Build Environment` section 
+
+2. On the Build section; add a build step to execute shell and fill in the followin substituting the domain name and `YOUR_NAME` accordingly:
+```bash
+export E2E_TEST_ROUTE="http://todolist-fe-<YOUR_NAME>-dev.apps.somedomain.com/"
+scl enable rh-nodejs8 'npm install'
+scl enable rh-nodejs8 'npm run e2e:ci'
+```
+![e2e-steps](../images/exercise3/e2e-steps.png)
+
+2. Add a Post Build action to publish Junit test scores and add `reports/e2e/specs/*.xml` to the report location.
+![e2e-post-build](../images/exercise3/e2e-post-build.png)
+
+2. Finally; connect the e2e job to our deploy by editing the post build actions on `dev-todolist-fe-deploy`. Set trigger parameterised build on other jobs to be `dev-todolist-fe-e2e` and set the params to the current ones.
+![e2e-trigger](../images/exercise3/e2e-trigger.png)
+
+2. Run the pipeline from the beginning to see the tests executed.
 
 ### Part 2 - TodoList new feature
 > _In this exercise we will introduce a new feature to create an important flag on the todos. In order to be able to build and test our feature we will use TDD_
@@ -193,7 +228,7 @@ _On page load:_
 - [ ] should display existing todos that are not marked important
 - [ ] should display existing todos that are marked important with an red flag
 
-#### Part 1a - Create todolist-api tests
+#### Part 2a - Create todolist-api tests
 > Using [Mocha](https://mochajs.org/) as our test runner; we will now write some tests for backend functionality to persist our important-flag. The changes required to the backend are minimal but we will use TDD to create our test first, then implement the functionality.
 
 3.  Create a new branch in your `todolist-api` app for our feature and push it to the remote
@@ -292,7 +327,7 @@ $ git merge feature/important-flag
 $ git push --all
 ```
 
-#### Part 1b - Create todolist-fe tests
+#### Part 2b - Create todolist-fe tests
 > Using [Jest](https://facebook.github.io/jest/) as our test runner and the `vue-test-utils` library for managing our vue components; we will now write some tests for fronted functionality to persist our important-flag. The changes required to the front end are quite large but we will use TDD to create our test first, then implement the functionality. 
 
 Our TodoList App uses `vuex` to manage the state of the apps' todos and `axios` HTTP library to connect to the backend. `Vuex` is an opinionated framework for managing application state and has some key design features you will need to know to continue with the exercise. 
@@ -490,9 +525,9 @@ $ git push --all
 
 3. Run a build in Jenkins. We should see the test trend increase as we've added more tests. Validate the flag is working as expected.
 
-#### Part 1c - Create todolist e2e tests
+#### Part 2c - Create todolist e2e tests
 
-3.  TODO !!
+3. TODO !!
 
 ---
 
@@ -500,8 +535,11 @@ $ git push --all
 
 > _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope._
 
-* Add Auth to your application
-* Do some other stuff
+* Edit the `dev-todolist-fe-e2e` job so it takes a parameter of the `BUILD_TAG` and only checks out this tag when running the e2e
+* Add Config maps to inject DB creds to the app
+* Create a blue/green deploy based on the success of running e2e tests against either blue or green and flopping load over to new endpoint when successful.
+Advanced
+* Add Auth0 support to your FE app.
 
 ## Additional Reading
 
