@@ -129,7 +129,7 @@ $ git push
 2. If successful this will fail the build and not run the `bake` or `deploy` jobs. Don't forget to remove the changes that you made to your tests!
 
 #### Part 1b - End to End tests (e2e)
-> _Unit tests are a great way to get immediate feedback as part of testing an application. End to end tests that drive user behaviour are another amazing way to assess an application is behaving as expected._
+> _Unit tests are a great way to get immediate feedback as part of testing an application. End to end tests that drive user behaviour are another amazing way to ensure an application is behaving as expected._
 
 In this exercise we will add a new stage to our pipeline called `dev-todolist-fe-e2e` that will run after the deploy has been completed. End to end tests will use Nightwatchjs to orchestrate a selenium webdriver instance that controls the web browser; in this case Chrome!
 
@@ -185,7 +185,7 @@ _On page load:_
 - [ ] should display existing todos that are not marked important
 - [ ] should display existing todos that are marked important with an red flag
 
-#### Part 1a - Create todolist-api tests
+#### Part 2a - Create todolist-api tests
 > Using [Mocha](https://mochajs.org/) as our test runner; we will now write some tests for backend functionality to persist our important-flag. The changes required to the backend are minimal but we will use TDD to create our test first, then implement the functionality.
 
 3.  Create a new branch in your `todolist-api` app for our feature and push it to the remote
@@ -284,7 +284,7 @@ $ git merge feature/important-flag
 $ git push --all
 ```
 
-#### Part 1b - Create todolist-fe tests
+#### Part 2b - Create todolist-fe tests
 > Using [Jest](https://facebook.github.io/jest/) as our test runner and the `vue-test-utils` library for managing our vue components; we will now write some tests for fronted functionality to persist our important-flag. The changes required to the front end are quite large but we will use TDD to create our test first, then implement the functionality. 
 
 Our TodoList App uses `vuex` to manage the state of the apps' todos and `axios` HTTP library to connect to the backend. `Vuex` is an opinionated framework for managing application state and has some key design features you will need to know to continue with the exercise. 
@@ -482,7 +482,7 @@ $ git push --all
 
 3. Run a build in Jenkins. We should see the test trend increase as we've added more tests. Validate the flag is working as expected.
 
-#### Part 1c - Create todolist e2e tests
+#### Part 2c - Create todolist e2e tests
 
 3. TODO !!
 
@@ -493,7 +493,10 @@ $ git push --all
 > _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope._
 
 * Edit the `dev-todolist-fe-e2e` job so it takes a parameter of the `BUILD_TAG` and only checks out this tag when running the e2e
-* Do some other stuff
+* Add Config maps to inject DB creds to the app
+* Create a blue/green deploy based on the success of running e2e tests against either blue or green and flopping load over to new endpoint when successful.
+Advanced
+* Add Auth0 support to your FE app.
 
 ## Additional Reading
 
