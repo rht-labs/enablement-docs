@@ -638,16 +638,16 @@ scl enable rh-nodejs8 'npm run build:ci'
 NOTE - This section is optional! Git webhooks are useful but not needed for course completion.
 </p>
 
-7. In order to allow GitLab trigger Jenkins (because of the OpenShift Auth Plugin), we need to allow the `Annoymous` user trigger builds. Head to your Jenkins Dashboard and click on `Manage Jenkins` on the left hand side. Then scroll down and click `Configure Global Security`. Alternatively, type in `https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/configureSecurity/` . You should see a screen like so:
+7. In order to allow GitLab trigger Jenkins (because of the OpenShift Auth Plugin), we need to allow the `Annoymous` user trigger builds. Head to your Jenkins Dashboard and click on `Manage Jenkins` on the left hand side. Then scroll down and click `Configure Global Security`. Alternatively, type in `https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/configureSecurity/` . You should see a screen like so:
 ![jenkins-global-security](../images/exercise2/jenkins-global-security.png)
 
 7. Scroll down to the `Authorization` section and allow `Anonymous` to create jobs. Do this by navigating through the matrix of checkboxes and check `Build` and `Cancel` under the Job heading. Leave all other user behaviour as is. Anonymous is the user that GitLab will act as so this allows the WebHook to trigger builds. (The screenshot has been cropped to bring Job further to the left.) Hit `Save` or `Apply`.
 ![jenkins-anon-permissions](../images/exercise2/jenkins-anon-permissions.png)
 
-7. Go to your `dev-todolist-fe-build` and head to the `configure` section (`https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/job/dev-todolist-fe-build/configure`). Scroll down to the `Build Triggers` section and check the `Build when a change is pushed to GitLab` box. Leave all the other settings as they are but copy the `GitLab webhook URL`. `https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/project/dev-todolist-fe-build`.
+7. Go to your `dev-todolist-fe-build` and head to the `configure` section (`https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/job/dev-todolist-fe-build/configure`). Scroll down to the `Build Triggers` section and check the `Build when a change is pushed to GitLab` box. Leave all the other settings as they are but copy the `GitLab webhook URL`. `https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/project/dev-todolist-fe-build`.
 ![jenkins-build-triggers-gitlab](../images/exercise2/jenkins-build-triggers-gitlab.png)
 
-7. Switch over to GitLab and select your `todolist-fe` repository. On the left hand task bar hover over the settings cog and select `integrations`. (`https://gitlab-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/<YOUR_NAME>/todolist-fe/settings/integrations`)
+7. Switch over to GitLab and select your `todolist-fe` repository. On the left hand task bar hover over the settings cog and select `integrations`. (`https://gitlab-<YOUR_NAME>-ci-cd.apps.some.domain.com/<YOUR_NAME>/todolist-fe/settings/integrations`)
 ![gitlab-integrations](../images/exercise2/gitlab-integrations.png)
 
 7. Paste the `GitLab webhook URL` that we copied earlier into the `URL` field. Check Push events as the trigger, and make sure you `uncheck` the `SSL verification` checkbox. Click Add webhook at the bottom.
@@ -660,9 +660,9 @@ NOTE - This section is optional! Git webhooks are useful but not needed for cour
 
 7. All that's left to do is to repeat the same steps for `todolist-api`:
 Create Build Trigger: 
-`https://jenkins-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/job/dev-todolist-api-build/configure`
+`https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/job/dev-todolist-api-build/configure`
 Create GitLab Integration:
-`https://gitlab-<YOUR_NAME>-ci-cd.apps.s8.core.rht-labs.com/donal/todolist-api/settings/integrations`
+`https://gitlab-<YOUR_NAME>-ci-cd.apps.some.domain.com/donal/todolist-api/settings/integrations`
 Check your build status and you should see something like this. With `Started by Gitlab push by <YOUR_NAME>`:
 ![jenkins-gitlab-webhook-success](../images/exercise2/jenkins-gitlab-webhook-success.png)
 
