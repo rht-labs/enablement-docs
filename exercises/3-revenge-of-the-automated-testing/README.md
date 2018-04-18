@@ -142,11 +142,30 @@ $ cd todolist-fe
 ```bash
 $ npm run e2e
 ```
+![local-e2e](../images/exercise3/local-e2e.png)
 
-2. With tests executing locally; let's add them to our Jenkins pipeline. To do this; we'll create a new job and connect it up to our `todolist-fe` jobs. Open Jenkins and create a `New Item` called `dev-todolist-fe-e2e`
+2. With tests executing locally; let's add them to our Jenkins pipeline. To do this; we'll create a new job and connect it up to our `todolist-fe` jobs. Open Jenkins and create a `New Item` called `dev-todolist-fe-e2e`. Make this Job `Freestyle`.
 
+2. On the configuration page; Set the Label for the job to run on as `jenkins-slave-npm` and a build parameter of `BUILD_TAG`
+![e2e-general](../images/exercise3/e2e-general.png)
 
-2. Add e2e tests and reporting to Jenkins
+2. On the Source Code Management tab; set the source code to git and add the url to your `todolist-fe` app. Set the branch to `refs/tags/${BUILD_TAG}`
+![e2e-git](../images/exercise3/e2e-git.png)
+
+2. Set `Color ANSI Console Output` on the `Build Environment` section 
+
+2. On the Build section; add a build step to execute shell and fill in the followin substituting the domain name and `YOUR_NAME` accordingly:
+```bash
+export E2E_TEST_ROUTE="http://todolist-fe-<YOUR_NAME>-dev.apps.somedomain.com/"
+scl enable rh-nodejs8 'npm install'
+scl enable rh-nodejs8 'npm run e2e:ci'
+```
+![e2e-steps](../images/exercise3/e2e-steps.png)
+
+2. Add a Post Build action to publish Junit test scores and add `reports/e2e/specs/*.xml` to the report location.
+![e2e-post-build](../images/exercise3/e2e-post-build.png)
+
+2. Run the pipeline from the beginning to see the tests executed.
 
 ### Part 2 - TodoList new feature
 > _In this exercise we will introduce a new feature to create an important flag on the todos. In order to be able to build and test our feature we will use TDD_
@@ -462,7 +481,7 @@ $ git push --all
 
 #### Part 1c - Create todolist e2e tests
 
-3.  TODO !!
+3. TODO !!
 
 ---
 
@@ -470,7 +489,7 @@ $ git push --all
 
 > _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope._
 
-* Add Auth to your application
+* Edit the `dev-todolist-fe-e2e` job so it takes a parameter of the `BUILD_TAG` and only checks out this tag when running the e2e
 * Do some other stuff
 
 ## Additional Reading
