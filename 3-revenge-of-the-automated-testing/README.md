@@ -129,9 +129,22 @@ $ git push
 2. If successful this will fail the build and not run the `bake` or `deploy` jobs. Don't forget to remove the changes that you made to your tests!
 
 #### Part 1b - End to End tests (e2e)
-> TODO - this section is not complete
+> _Unit tests are a great way to get immediate feedback as part of testing an application. End to end tests that drive user behaviour are another amazing way to assess an application is behaving as expected._
 
-2.  Add new part to the dev pipeline (`dev-todolist-fe-e2e`)
+In this exercise we will add a new stage to our pipeline called `dev-todolist-fe-e2e` that will run after the deploy has been completed. End to end tests will use Nightwatchjs to orchestrate a selenium webdriver instance that controls the web browser; in this case Chrome!
+
+2. Let's start by checking our tests execute locally. On the terminal move to the `todolist-fe` folder. Our end to end tests are stored in `tests/e2e/specs/`. The vuejs cli uses nightwatch and comes pre-configured to run tests against Chrome. We have created some additional configuration in the root of the project `nightwatch.config.js` to run headless in CI mode on Jenkins.
+```bash
+$ cd todolist-fe
+```
+
+2. Run the tests locally by executing the following. This should start the dev server and run the test. You may see the browser pop up and close while tests execute.
+```bash
+$ npm run e2e
+```
+
+2. With tests executing locally; let's add them to our Jenkins pipeline. To do this; we'll create a new job and connect it up to our `todolist-fe` jobs. Open Jenkins and create a `New Item` called `dev-todolist-fe-e2e`
+
 
 2. Add e2e tests and reporting to Jenkins
 
