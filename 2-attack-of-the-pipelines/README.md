@@ -62,11 +62,19 @@ _____
 ### Part 1 - Explore the Todo List App
 > _In this part of the exercise we will explore the sample application, become familiar with it locally before building and deploying in OCP Land_
 
+#### Part 1a Todolist-fe
+
 2. Git clone the `todolist-fe` project to somewhere sensible and checkout the `develop` branch.
 ```bash
 $ git clone https://github.com/springdo/todolist-fe.git
 $ cd todolist-fe
 $ git checkout develop
+```
+Followed by;
+```
+$ for branch in `git branch -a | grep remotes | grep -v HEAD | grep -v master`; do
+   git branch --track ${branch#remotes/origin/} $branch
+done
 ```
 
 2. Open up Gitlab and login. Create a new project (internal) in GitLab called `todolist-fe` to host your clone of the project and copy it's remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
@@ -152,12 +160,29 @@ where the following are the important things:
     * `./src/scss` contains custom  SCSS used in the application.
     * `./*.js` is mostly config files for running and managing the app and the tests
 
+2. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables.
+```bash
+export NEXUS_SERVICE_HOST=nexus-<YOUR_NAME>-ci-cd.apps.somedomain.com
+export NEXUS_SERVICE_PORT=80
+npm run prepare-nexus
+```
+<p class="tip">
+NOTE - This step in a residency would be automated by a more complex nexus deployment in the ci-cd project
+</p>
+
+#### Part 1b Todolist-api
 
 2. Now let's move on to the `todolist-api` and wire them together. As with the `todolist-fe` we need to clone the repo and add it to our GitLab in the cluster.
 ```bash
 $ git clone https://github.com/springdo/todolist-api.git
 $ git cd todolist-api
 $ git checkout develop
+```
+Followed by;
+```
+$ for branch in `git branch -a | grep remotes | grep -v HEAD | grep -v master`; do
+   git branch --track ${branch#remotes/origin/} $branch
+done
 ```
 
 2. Create a new project (internal) in GitLab called `todolist-api` to host your clone of the project and copy it's remote address.
@@ -234,15 +259,6 @@ where the following are the important things:
   },
 ```
 
-2. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables.
-```bash
-export NEXUS_SERVICE_HOST=nexus-<YOUR_NAME>-ci-cd.apps.somedomain.com
-export NEXUS_SERVICE_PORT=80
-npm run prepare-nexus
-```
-<p class="tip">
-NOTE - This step in a residency would be automated by a more complex nexus deployment in the ci-cd project
-</p>
 
 2. To run the application; start a new instance of the MongoDB by running. 
 ```bash
