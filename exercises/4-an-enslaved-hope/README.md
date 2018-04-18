@@ -156,16 +156,16 @@ git push -u origin --all
 > _OWASP ZAP (Zed Attack Proxy) is a free open source security tool used for finding security vulnerabilities in web applications._
 
 
-3. _Remove jenkins bit if this is already in somewhere, also check syntax, actually only do one git checkout_ First we're going to take the generic jenkins slave template from our exercise4/zap branch and the params.
+3. First we're going to take the generic jenkins slave template from our exercise4/zap branch and the params.
 ```bash
-$ git checkout exercise4/zap-and-arachni templates/jenkins-slave-generic-template.yml params/
+$ git checkout exercise4/zap-and-arachni params/ templates/jenkins-slave-generic-template.yml 
 ```
 
 3. This should have created the following files:
-- `templates/jenkins-slave-generic-template.yml`
-- `params/ zap-bulid-pod arachni-build-pod`
+    - `templates/jenkins-slave-generic-template.yml`
+    - `params/ zap-bulid-pod arachni-build-pod`
 
-3. Create an object in `insert donal's new layout here` called `zap-build-pod` and the following content:
+3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `zap-build-pod` and the following content:
 ```yml
     - name: "zap-build-pod"
     namespace: "<YOUR_NAME>-ci-cd"
@@ -174,15 +174,15 @@ $ git checkout exercise4/zap-and-arachni templates/jenkins-slave-generic-templat
     tags:
     - zap
 ```
-
-3. Install ansible-y stuff (only if not run before???)
+<p class="tip"> NOTE- Install your Openshift Applier dependency if it's disappeared.
 ```bash
 ansible-galaxy install -r requirements.yml --roles-path=roles
 ```
+</p>
 
 3. Remember to login to the cluster!
 ```bash
-oc login https://console.s8.core.rht-labs.com --token=<INSERT_LOGIN_TOKEN_HERE>
+oc login https://console.your.domain.com --token=<INSERT_LOGIN_TOKEN_HERE>
 ```
 
 3. Run the ansible playbook filtering with tag `zap` so only the zap build pods are run.
@@ -196,7 +196,7 @@ include screenshot here.
 #### Part 2b - Arachni Scan
 > _Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of web applications._
 
-3. Create an object in `insert donal's new layout here` called `arachni-build-pod` and the following content:
+3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `arachni-build-pod` with the following content:
 ```yml
     - name: "arachni-build-pod"
     namespace: "<YOUR_NAME>-ci-cd"
@@ -206,7 +206,7 @@ include screenshot here.
     - arachni
 ```
 
-3. Run the ansible playbook filtering with tag `arachni` so only the zap build pods are run.
+3. Run the ansible playbook filtering with tag `arachni` so only the arachni build pods are run.
 ```bash
 ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml \  -i inventory/ \  -e "filter_tags=arachni"
 ```
