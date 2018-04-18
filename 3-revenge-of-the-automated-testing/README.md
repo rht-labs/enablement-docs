@@ -165,6 +165,9 @@ scl enable rh-nodejs8 'npm run e2e:ci'
 2. Add a Post Build action to publish Junit test scores and add `reports/e2e/specs/*.xml` to the report location.
 ![e2e-post-build](../images/exercise3/e2e-post-build.png)
 
+2. Finally; connect the e2e job to our deploy by editing the post build actions on `dev-todolist-fe-deploy`. Set trigger parameterised build on other jobs to be `dev-todolist-fe-e2e` and set the params to the current ones.
+![e2e-trigger](../images/exercise3/e2e-trigger.png)
+
 2. Run the pipeline from the beginning to see the tests executed.
 
 ### Part 2 - TodoList new feature
