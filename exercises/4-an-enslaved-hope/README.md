@@ -163,16 +163,16 @@ $ git checkout exercise4/zap-and-arachni params/ templates/jenkins-slave-generic
 
 3. This should have created the following files:
     - `templates/jenkins-slave-generic-template.yml`
-    - `params/ zap-bulid-pod arachni-build-pod`
+    - `params/ zap-build-pod arachni-build-pod`
 
-3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `zap-build-pod` and the following content:
-```yml
+3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `zap-build-pod` and add the following content:
+```yaml
     - name: "zap-build-pod"
-    namespace: "<YOUR_NAME>-ci-cd"
-    template: "{{ inventory_dir }}/../templates/jenkins-slave-generic-template.yml"
-    params: "{{ inventory_dir }}/../params/zap-build-pod"
-    tags:
-    - zap
+        namespace: "<YOUR_NAME>-ci-cd"
+        template: "{{ inventory_dir }}/../templates/jenkins-slave-generic-template.yml"
+        params: "{{ inventory_dir }}/../params/zap-build-pod"
+        tags:
+        - zap
 ```
 <p class="tip"> NOTE- Install your Openshift Applier dependency if it's disappeared.
 ```bash
@@ -197,13 +197,13 @@ include screenshot here.
 > _Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of web applications._
 
 3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `arachni-build-pod` with the following content:
-```yml
+```yaml
     - name: "arachni-build-pod"
-    namespace: "<YOUR_NAME>-ci-cd"
-    template: "{{ inventory_dir }}/../templates/jenkins-slave-generic-template.yml"
-    params: "{{ inventory_dir }}/../params/arachni-build-pod"
-    tags:
-    - arachni
+        namespace: "<YOUR_NAME>-ci-cd"
+        template: "{{ inventory_dir }}/../templates/jenkins-slave-generic-template.yml"
+        params: "{{ inventory_dir }}/../params/arachni-build-pod"
+        tags:
+        - arachni
 ```
 
 3. Run the ansible playbook filtering with tag `arachni` so only the arachni build pods are run.
@@ -211,8 +211,8 @@ include screenshot here.
 ansible-playbook roles/openshift-applier/playbooks/openshift-cluster-seed.yml \  -i inventory/ \  -e "filter_tags=arachni"
 ```
 
-3. Head to (https://console.s8.core.rht-labs.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `zap-build-pod`.
-include screenshot here.
+3. Head to (https://console.s8.core.rht-labs.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `arachni-build-pod`.
+![todolist-fe-multi](../images/exercise4/builds-zap-arachni.png)
 
 _____
 
