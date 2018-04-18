@@ -114,7 +114,7 @@ npm run serve
     * The server hosting it live reloads; so as you make changes to your code; the app will live update
     * The Data you see in the screen is dummy / stubbed data. This is served up when there is no backend connection found
 
-2. The app is a todolist manager built in Vue.js. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page you'll loose all additions. This is because there is persistence
+2. The app is a todolist manager built in Vue.js. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page you'll lose all additions. This is because there is persistence
 
 3. The structure of the `todolist-fe` is as follows.
 ```bash
@@ -447,7 +447,7 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
 
 5. Name this job `dev-todolist-fe-build` and select `Freestyle Job`. All our jobs will take the form of `<ENV>-<APP_NAME>-<JOB_PURPOSE>`. ![freestyle-job](../images/exercise2/freestyle-job.png)
 
-5. The page that loads is the Job Configuration page andi t can be returned to at anytime from Jenkins. Let's start configuring our job. To conserve space; we will make sure Jenkins only keeps the last builds artifacts. Tick the `Discard old builds` checkbox and set `Max # of builds to keep with artifacts` to 1 as below ![keep-artifacts](../images/exercise2/keep-artifacts.png)
+5. The page that loads is the Job Configuration page and it can be returned to at anytime from Jenkins. Let's start configuring our job. To conserve space; we will make sure Jenkins only keeps the last builds artifacts. Tick the `Discard old builds` checkbox and set `Max # of builds to keep with artifacts` to 1 as below ![keep-artifacts](../images/exercise2/keep-artifacts.png)
 
 5. Our NodeJS build needs to be run on the `jenkins-slave-npm` we created earlier. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-slave](../images/exercise2/label-jenkins-slave.png)
 
