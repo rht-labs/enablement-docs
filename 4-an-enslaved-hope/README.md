@@ -51,9 +51,9 @@ $ git checkout feature/jenkinsfile
 ![pipeline-overview](../images/exercise4/pipeline-overview.png)
 Some of the key things to note:
     * `pipeline {}` is how all declarative jenkins pipelines begin.
-    * `environment {}` defines environment varibales to be used across all build stages
-    * `options {}` contains specific Job specs you want to run globally across the jobs eg setting the terminal colour
-    * `stage {}` all jobs must have one stage. This is the logical part of the build that will be executed eg `bake-image`
+    * `environment {}` defines environment variables to be used across all build stages
+    * `options {}` contains specific Job specs you want to run globally across the jobs e.g. setting the terminal colour
+    * `stage {}` all jobs must have one stage. This is the logical part of the build that will be executed e.g. `bake-image`
     * `steps {}` each `stage` has one or more steps involved. These could be execute shell or git checkout etc.
     * `agent {}` specifies the node the build should be run on eg `jenkins-slave-npm`
     * `post {}` hook is used to specify the post-build-actions. Jenkins declarative provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
@@ -159,7 +159,7 @@ git push -u origin --all
 
 2. Open the `params/ocp-pipeline` file and update `PIPELINE_SOURCE_REPOSITORY_URL` with the git url of your project (Don't forget to add the `.git` at the end). For example:
 ```
-PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab-donal-ci-cd.apps.somedomain.com/donal/todolist-fe.git
+PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab-<YOUR_NAME>-ci-cd.apps.somedomain.com/<YOUR_NAME>/todolist-fe.git
 PIPELINE_SOURCE_REPOSITORY_REF=develop
 NAME=todolist-fe
 ```
@@ -294,7 +294,7 @@ Jenkins Pipeline Extension
  - Use a WAIT to allow for manual input to appove the promotion
 
 Jenkins e2e extension (blue/green)
- - Add a step in the pipeline to only deploy to the `test` environment if the e2e tests have run successfully against which ever environemnt (blue or green) is not deployed.
+ - Add a step in the pipeline to only deploy to the `test` environment if the e2e tests have run successfully against which ever environment (blue or green) is not deployed.
 
 ## Additional Reading
 > List of links or other reading that might be of use / reference for the exercise
