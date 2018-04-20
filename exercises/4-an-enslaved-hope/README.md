@@ -51,9 +51,9 @@ $ git checkout feature/jenkinsfile
 ![pipeline-overview](../images/exercise4/pipeline-overview.png)
 Some of the key things to note:
     * `pipeline {}` is how all declarative jenkins pipelines begin.
-    * `environment {}` defines environment varibales to be used across all build stages
-    * `options {}` contains specific Job specs you want to run globally across the jobs eg setting the terminal colour
-    * `stage {}` all jobs must have one stage. This is the logical part of the build that will be executed eg `bake-image`
+    * `environment {}` defines environment variables to be used across all build stages
+    * `options {}` contains specific Job specs you want to run globally across the jobs e.g. setting the terminal colour
+    * `stage {}` all jobs must have one stage. This is the logical part of the build that will be executed e.g. `bake-image`
     * `steps {}` each `stage` has one or more steps involved. These could be execute shell or git checkout etc.
     * `agent {}` specifies the node the build should be run on eg `jenkins-slave-npm`
     * `post {}` hook is used to specify the post-build-actions. Jenkins declarative provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
@@ -151,10 +151,75 @@ git push -u origin --all
 
 2. Run the jobs and validate the app is working as expected in the `test` environment!
 
-### Part 2 - Security Scanning Slaves
+
+### Part 2 - OCP Pipeline
+> _This exercise adds a new BuildConfig to our cluster for the todolist-apps to run their pipelines in OpenShift using the OpenShift Jenkins Sync Plugin. We will use the OpenShift Applier to create the content in the cluster_
+
+2. Open the `todolist-fe` app in your favourite editor. Move to the `.openshift-applier` directory. Explore the `template/ocp-pipeline`. This template creates a BuildConfig for OpenShift with a Jenkinsfile from a given repo. In this case; it will be the `Jenkinsfile` at the root of our application.
+
+2. Open the `params/ocp-pipeline` file and update `PIPELINE_SOURCE_REPOSITORY_URL` with the git url of your project (Don't forget to add the `.git` at the end). For example:
+```
+PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab-<YOUR_NAME>-ci-cd.apps.somedomain.com/<YOUR_NAME>/todolist-fe.git
+PIPELINE_SOURCE_REPOSITORY_REF=develop
+NAME=todolist-fe
+```
+
+2. Create a new object in `inventory/group_vars/all.yml` to drive the `ocp-pipeline` template with the parameters file you've just created. It can be put under the existing `todolist-fe-build` object.
+```yaml
+  - name: todolist-ocp-pipeline
+    template: "{{ playbook_dir }}/templates/ocp-pipeline.yml"
+    params: "{{ playbook_dir }}/params/ocp-pipeline"
+    namespace: "{{ ci_cd_namespace }}"
+    tags:
+    - pipeline
+```
+![ocp-pipeline-applier](../images/exercise4/ocp-pipeline-applier.png)
+
+2. Use the OpenShift Applier to create the cluster content 
+```bash
+$ cd .openshift-applier
+$ ansible-playbook apply.yml -i inventory/ \
+     -e "filter_tags=pipeline"
+```
+
+2. Login to your OpenShift Cluster and go to the `<YOUR_NAME>-ci-cd` namespace. On the side menu; hit Builds > Pipeline to see your newly created pipeline running in OCP Land.
+![ocp-pipeline-view](../images/exercise4/ocp-pipeline-view.png)
+
+2. Running the pipeline from here will run it in Jenkins. You can see the job sync between OpenShift and Jenkins if you login to Jenkins. You should see a folder with `<YOUR_NAME>-ci-cd` and your pipeline jobs inside of it.
+![ocp-pipeline-jenkins](../images/exercise4/ocp-pipeline-jenkins.png)
+
+2. With the configuration in place for the `todolist-fe`; repeat the process for the `todolist-api`. Update the `todolist-api/.openshift-applier/inventory/group_vars/all.yml` with a new object to drive the params and template
+```yaml
+    - name: todolist-ocp-pipeline
+    template: "{{ playbook_dir }}/templates/ocp-pipeline.yml"
+    params: "{{ playbook_dir }}/params/ocp-pipeline"
+    namespace: "{{ ci_cd_namespace }}"
+    tags:
+    - pipeline
+```
+
+2. Update the `todolist-api/.openshift-applier/params/ocp-pipeline`
+```
+PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab-ci-cd.apps.somedomain.com/<YOUR_NAME>/todolist-api.git
+PIPELINE_SOURCE_REPOSITORY_REF=develop
+NAME=todolist-api
+```
+
+2. Use the OpenShift Applier to create the cluster content 
+```bash
+$ cd .openshift-applier
+$ ansible-playbook apply.yml -i inventory/ \
+     -e "filter_tags=pipeline"
+```
+
+2. Login to your OpenShift Cluster and go to the `<YOUR_NAME>-ci-cd` namespace. On the side menu; hit Builds > Pipeline to see your newly created pipeline running in OCP Land.
+![ocp-pipeline-view2](../images/exercise4/ocp-pipeline-view2.png)
+
+
+### Part 3 - Security Scanning Slaves
 > _This exercise focuses on updating the `enablement-ci-cd` repo with some new jenkins-slave pods for use in future exercise_
 
-#### Part 2a - OWASP ZAP
+#### Part 3a - OWASP ZAP
 > _OWASP ZAP (Zed Attack Proxy) is a free open source security tool used for finding security vulnerabilities in web applications._
 
 
@@ -193,7 +258,7 @@ $ ansible-playbook apply.yml -e target=tools \
 3. Head to (https://console.somedomain.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `zap-build-pod`.
 include screenshot here.
 
-#### Part 2b - Arachni Scan
+#### Part 3b - Arachni Scan
 > _Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of web applications._
 
 3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `arachni-build-pod` with the following content:
@@ -221,9 +286,6 @@ _____
 ## Extension Tasks
 > _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope._
 
-OpenShift Sync plugin
- - Use the `Jenkinsfile` provided to create a pipeline that runs in OpenShift's pipeline ie using it as the BuildConfig.
-
 Jenkins S2I
  - Add the multi-branch configuration to the S2I to have Jenkins come alive with the `todolist-api` and `-fe` configuration cooked into it for future uses.
 
@@ -232,7 +294,7 @@ Jenkins Pipeline Extension
  - Use a WAIT to allow for manual input to appove the promotion
 
 Jenkins e2e extension (blue/green)
- - Add a step in the pipeline to only deploy to the `test` environment if the e2e tests have run successfully against which ever environemnt (blue or green) is not deployed.
+ - Add a step in the pipeline to only deploy to the `test` environment if the e2e tests have run successfully against which ever environment (blue or green) is not deployed.
 
 ## Additional Reading
 > List of links or other reading that might be of use / reference for the exercise
