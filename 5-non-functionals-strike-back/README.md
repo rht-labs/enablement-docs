@@ -174,18 +174,62 @@ NOTE - your build may have failed but the reports should still be generated!
 </p>
 
 ### Part 2 - Add Code Coverage & Linting to the pipeline
-> _prefix of exercise and why we're doing it_
+> _Let's continue to enhance our pipeline with some non-functional testing. Static code analysis and testing coverage reports can provide a useful indicator on code quality and testing distribution_
 
-3. Do other things
+3. Coverage reports are already being generated as part of the tests. We can have Jenkins produce a HTML report showing in detail where our testing is lacking. Open the `todolist-fe` in your favourite editor.
+
+3. Open the `Jenkinsfile` in the root of the project; move to the `stage("node-build"){ ... }` section. In the post section add a block for producing a `HTML` report as part of our builds.
+```groovy
+    // Post can be used both on individual stages and for the entire build.
+    post {
+        always {
+            archive "**"
+            junit 'test-report.xml'
+            // publish html
+            publishHTML target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: false,
+                keepAll: true,
+                reportDir: 'reports/coverage',
+                reportFiles: 'index.html',
+                reportName: 'Code Coverage'
+            ]
+        }
+```
+
+3. We will add a new step to our `stage("node-build"){ }` section to lint the Javascript code. After the `npm install`; add a command to run the linting! 
+```groovy
+echo '### Install deps ###'
+sh 'npm install'
+
+echo '### Running linting ###'
+sh 'npm run lint:ci'
+```
+
+3. Save the `Jenkinsfile` and commit it to trigger a build with some more enhancements.
+```bash
+$ git add .
+$ git commit -m "ADD - linting and coverage to the pipeline"
+$ git push
+```
+
+3. (Optional Step) - Install the Checkstyle plugin; and add `checkstyle pattern: 'eslint-report.xml'` below the `publishHTML` block to add reporting to Jenkins!
+
+### Part 3 - Early performance testing
+> _TODO - descriptions...._
+
+4. API perf test tasks....
 
 _____
 
 ## Extension Tasks
 > _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope._
 
+ - Enhance the `todolist-api` with the security scanning tools as you've done for the `todolist-api`
+ - Enhance the `todolist-api` with the coverage reporting as you've done for `todolist-api`
  - Add Black Duck or other package scanning tooling for our NodeJS app
  - Add Container Vulnerability scanning tooling to the pipeline
- - Add security scanning tools to the API
+ - Add the Checkstyle plugin to Jenkins for reporting scores
 
 ## Additional Reading
 > List of links or other reading that might be of use / reference for the exercise
