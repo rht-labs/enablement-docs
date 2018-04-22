@@ -39,7 +39,7 @@ _____
 2. Open the `todolist-fe` application's `Jenkinsfile` in your favourite editor. The file is stored in the root of the project.
 
 2. The file is layed out with a collection of stages that correspond to each part of our build as seen below. We will create a new stage to execute in parallel.
-![stages](../images/exercise4/stages.png)
+![stages](../images/exercise5/stages.png)
 
 2. Create a new Parallel Stage called `security scanning` underneath the `stage("e2e test") { }` section as shown below. The contents of the `e2e test` has been removed for simplicity. 
 ```groovy
@@ -158,7 +158,13 @@ stage('OWASP Scan') {
     }
 ```
 
-2. With this config in place run a build on Jenkins. Once the Jobs have completed; navigate to
+2. With this config in place run a build on Jenkins. Once the Jobs have completed; navigate to the Jobs status and see the scores. You can find the graphs and test reports on overview of the Job. Explore the results!
+![report-arachni](../images/exercise5/report-arachni.png)
+![jenkins-arachni](../images/exercise5/jenkins-arachni.png)
+
+<p class="tip">
+NOTE - your build may have failed but the reports should still be generated!
+</p>
 
 ### Part 2 - Add Code Coverage & Linting to the pipeline
 > _prefix of exercise and why we're doing it_
