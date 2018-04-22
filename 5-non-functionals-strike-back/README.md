@@ -158,7 +158,14 @@ stage('OWASP Scan') {
     }
 ```
 
-2. With this config in place run a build on Jenkins. Once the Jobs have completed; navigate to the Jobs status and see the scores. You can find the graphs and test reports on overview of the Job. Explore the results!
+2. With this config in place run a build on Jenkins. To do this; commit your code (from your terminal):
+```bash
+$ git add .
+$ git commit -m "ADD - security scanning tools to pipeline"
+$ git push
+```
+
+2. Once the Jobs have completed; navigate to the Jobs status and see the scores. You can find the graphs and test reports on overview of the Job. Explore the results!
 ![report-arachni](../images/exercise5/report-arachni.png)
 ![jenkins-arachni](../images/exercise5/jenkins-arachni.png)
 
