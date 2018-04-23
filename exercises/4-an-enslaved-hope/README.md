@@ -230,14 +230,14 @@ $ git checkout exercise4/zap-and-arachni params/ templates/jenkins-slave-generic
 
 3. This should have created the following files:
     - `templates/jenkins-slave-generic-template.yml`
-    - `params/zap-build-pod` and `params/arachni-build-pod`
+    - `params/jenkins-slave-zap` and `params/jenkins-slave-arachni`
 
-3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `zap-build-pod` and add the following content:
+3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-zap` and add the following content:
 ```yaml
-    - name: "zap-build-pod"
+    - name: "jenkins-slave-zap"
       namespace: "{{ ci_cd_namespace }}"
       template: "{{ playbook_dir }}/templates/jenkins-slave-generic-template.yml"
-      params: "{{ playbook_dir }}/params/zap-build-pod"
+      params: "{{ playbook_dir }}/params/jenkins-slave-zap"
       tags:
       - zap
 ```
@@ -255,18 +255,18 @@ $ ansible-playbook apply.yml -e target=tools \
      -e "filter_tags=zap"
 ```
 
-3. Head to (https://console.somedomain.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `zap-build-pod`.
+3. Head to (https://console.somedomain.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `jenkins-slave-zap`.
 include screenshot here.
 
 #### Part 3b - Arachni Scan
 > _Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of web applications._
 
-3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `arachni-build-pod` with the following content:
+3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-arachni` with the following content:
 ```yaml
-    - name: "arachni-build-pod"
+    - name: "jenkins-slave-arachni"
       namespace: "{{ ci_cd_namespace }}"
       template: "{{ playbook_dir }}/templates/jenkins-slave-generic-template.yml"
-      params: "{{ playbook_dir }}/params/arachni-build-pod"
+      params: "{{ playbook_dir }}/params/jenkins-slave-arachni"
       tags:
       - arachni
 ```
@@ -278,7 +278,7 @@ $ ansible-playbook apply.yml -e target=tools \
      -e "filter_tags=arachni"
 ```
 
-3. Head to (https://console.somedomain.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `arachni-build-pod`.
+3. Head to (https://console.somedomain.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `jenkins-slave-arachni`.
 ![todolist-fe-multi](../images/exercise4/builds-zap-arachni.png)
 
 _____
