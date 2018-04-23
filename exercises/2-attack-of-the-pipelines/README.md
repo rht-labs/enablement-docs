@@ -706,8 +706,7 @@ _____
  -  What's in a package.json?
 
 ## Slide links
-> link back to the deck for the supporting material
 
-## Slide links
-- [Intro]()
-- [Wrap-up]()
+- [Intro](https://docs.google.com/presentation/d/1t1CONuy-_IRPZYmU010Qgk2rshiDJTennvLyQR8GllE)
+- [Wrap-up](https://docs.google.com/presentation/d/1kZ8SV6iJnrKk_AqPpyPuNZifv7VzItHOB9HYdOnNJjI)
+- [All Material](https://drive.google.com/drive/folders/1lf66ks2tT0eQ4A9RSU48u0ZhvBXzoHWJ)
