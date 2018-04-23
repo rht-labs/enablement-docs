@@ -62,6 +62,9 @@ _____
 2. Save your configuration to see your Build Monitor! 
 ![pipeline-monitor](../images/exercise6/pipeline-monitor.png)
 
+2. Explore the Jenkins Blue Ocean view for some additional monitors and views that make Jenkins look pretty!
+![blue-ocean](../images/exercise6/blue-ocean.png)
+
 ### Part 2 - Seed Jenkins Dashboards
 > _TODO - Add instructions for creating dashboards as part of s2i in Jenkins setup using DSL_
 
