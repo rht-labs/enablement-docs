@@ -25,9 +25,9 @@ The latest version of slides for the session are available [here](https://docs.g
 
 ## Facilitation Guidelines
 
-* Present the slides to introduce Agile values, principles and pracitces
+* Present the slides to introduce Agile values, principles and practices
 * This includes the 15 minute video by Henrik Kniberg, Product Ownership in a Nutshell. After playing this, a group discussion about what some of the memorable messages were
-* Run the Ball game as decsribed on the slides:
+* Run the Ball game as described on the slides:
     * 4 sprints in total
     * Radiate and capture estimates vs actuals
     * Look for trends in improved accuracy of estimation and increased overall velocity
