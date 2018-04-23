@@ -288,7 +288,7 @@ The Jenkins template is essentially the standard persistent jenkins one with Ope
 5. As before; create a new set of params by creating a `params/jenkins` file and adding some overrides to the template and updating the `NAMESPACE` value.
 ```bash
 MEMORY_LIMIT=8Gi
-VOLUME_CAPACITY=5Gi
+VOLUME_CAPACITY=10Gi
 JVM_ARCH=x86_64
 NAMESPACE=<YOUR_NAME>-ci-cd
 JENKINS_OPTS=--sessionTimeout=720
