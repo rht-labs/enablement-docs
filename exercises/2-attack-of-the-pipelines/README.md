@@ -66,7 +66,7 @@ _____
 
 2. Git clone the `todolist-fe` project to somewhere sensible and checkout the `develop` branch.
 ```bash
-$ git clone https://github.com/springdo/todolist-fe.git
+$ git clone https://github.com/rht-labs/todolist-fe.git
 $ cd todolist-fe
 $ git checkout develop
 ```
@@ -174,7 +174,7 @@ NOTE - This step in a residency would be automated by a more complex nexus deplo
 
 2. Now let's move on to the `todolist-api` and wire them together. As with the `todolist-fe` we need to clone the repo and add it to our GitLab in the cluster.
 ```bash
-$ git clone https://github.com/springdo/todolist-api.git
+$ git clone https://github.com/rht-labs/todolist-api.git
 $ git cd todolist-api
 $ git checkout develop
 ```
@@ -457,12 +457,11 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
 
 5. Move on to the Build section and select `Add build step`. From the dropdown select `Execute Shell`. On the box that appears; insert the following, to build package and deploy our app to Nexus:
 ```bash
-#!/bin/bash
 set -o xtrace
-scl enable rh-nodejs8 'npm install'
-scl enable rh-nodejs8 'npm run build:ci:dev'
-scl enable rh-nodejs8 'npm run package'
-scl enable rh-nodejs8 'npm run publish'
+npm install
+npm run build:ci:dev
+npm run package
+npm run publish
 ```
 ![build-step](../images/exercise2/build-step.png)
 
@@ -602,7 +601,7 @@ TODO - change below sscreenshot
 6. On the Build tab; remove the `:dev` from the `npm run build:ci:dev` so the line reads.
  The rest of the instructions can be left as they are.
 ```bash
-scl enable rh-nodejs8 'npm run build:ci'
+npm run build:ci
 ```
 
 6. Save the configuration for `dev-todolist-api-build`
