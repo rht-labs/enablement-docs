@@ -8,6 +8,11 @@ In this exercise we will use automation tooling to create Project namespaces for
 
 This exercise uses Ansible to drive the creation of the cluster content. In particular; we'll use a play book called the `OpenShift Applier`. Once the project namespace have been created; we will add some tools to support CI/CD such as Jenkins, Git and Nexus. These tools will be needed by later lessons to automate the build and deploy of our apps. Again; we will use OpenShift Templates and drive their creation in the cluster using Ansible. To prove things are working, finally we'll delete all our content and re-apply the inventory to re-create our clusters content.
 
+#### Why is config-as-code important? 
+* Assurance - Prevents unwanted config changes from people making arbitrary changes to environments. No more Snowflake servers!
+* Traceability - Commiting config as code means a user has approved and changes can be tracked.
+* Phoenix Server -  Burn it all to the ground and bring it back; exactly the way it was!
+
 _____
 
 ## Learning Outcomes
