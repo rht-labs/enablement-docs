@@ -197,11 +197,10 @@ NOTE - your build may have failed but the reports should still be generated!
         }
 ```
 
-3. We will add a new step to our `stage("node-build"){ }` section to lint the Javascript code. After the `npm install`; add a command to run the linting! 
+3. We will add a new step to our `stage("node-build"){ }` section to lint the Javascript code. After the `npm install`; add a command to run the linting.
 ```groovy
 echo '### Install deps ###'
 sh 'npm install'
-
 echo '### Running linting ###'
 sh 'npm run lint:ci'
 ```
