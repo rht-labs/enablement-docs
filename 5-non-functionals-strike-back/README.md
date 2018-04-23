@@ -229,7 +229,7 @@ NOTE - a good practice for teams is to try and increase the code coverage metric
 
 4. In the SCM section; set the project to use the `todolist-api` git project. Set the credentials accordingly.
 
-4. Create a step to execute shell and add the following to it, replacting `<YOUR_NAME>` and `somedomain` as expected. We will just test the create and show API for the moment. We are grabbing the response code of the perf-rest to keep Jenkins running both shells steps and then exiting with whichever fails:
+4. Create a step to execute shell and add the following to it, replacing `<YOUR_NAME>` and `somedomain` as expected. We will just test the `create` and `show` API for the moment. We are grabbing the response code of the perf-test to keep Jenkins running both shells steps and then exiting with whichever fails:
 ```bash
 export E2E_TEST_ROUTE=todolist-api-<YOUR_NAME>-dev.apps.somedomain.com
 npm install
@@ -244,7 +244,7 @@ exit $(($rc1 | $rc2))
 
 4. On the Post Build actions section we will plot the data from the perf tests in Jenkins. Add a `Post-build Action > Plot Build Data`.
 
-4. On the new dialog, name the Plot group eg `benchmark­-tests` and add `create­-api` as the Plot title. Set the Number of Builds to Include to a large number like `100`. Set the Data Series file to be `reports/server/perf/create­-perf­-score.csv` and mark the Load data from CSV checkbox. Apply those changes
+4. On the new dialog, name the Plot group eg `benchmark­-tests` and add `create­-api` as the Plot title. Set the `Number of Builds to Include` to a large number like `100`. Set the Data Series file to be `reports/server/perf/create­-perf­-score.csv` and mark the Load data from CSV checkbox. Apply those changes
 ![jenkins-plot](../images/exercise5/jenkins-plot.png)
 
 4. Hit `Add Plot` to add another. Fill out the information again but this time setting the Plot title to `show­-api`. Keep the Plot group the same as before: `bench­-tests`. Set the Data Series file to be `reports/server/perf/show­-perf­-score.csv` and mark the `Load data from CSV checkbox`. Save those changes and run the job (Job could take a while to execute!).
