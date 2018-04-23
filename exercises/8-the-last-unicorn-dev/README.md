@@ -56,5 +56,8 @@ _____
 ## Additional Reading
 > List of links or other reading that might be of use / reference for the exercise
 
-## Slide links
-> link back to the deck for the supporting material
+## Slide Links
+
+- [Intro](https://docs.google.com/presentation/d/1XW_k9LYEcA4yk46GvN5yWih545gKUNeQW4-5GF9jYDg/)
+- [Wrap-up](https://docs.google.com/presentation/d/1veO6Q7yG1Kmy-3GfjZnGlsQ7NOXTyRBiYJWMA8y3CEE/)
+- [All Material](https://drive.google.com/drive/folders/1TmpX5uCwzfsZfFHNlXXZZ4r6wiMDDO4i)
