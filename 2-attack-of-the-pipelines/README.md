@@ -4,6 +4,21 @@
 
 ![jenkins-time](../images/exercise2/jenkins-time.jpg)
 
+## Exercise Intro
+This lesson is focused on creating a pipeline for our application. What is a pipeline? A pipeline is a series of steps or stages that takes our code from source to a deployed application. There can be many stages to a pipeline but a simple flow is to run a `build > bake > deploy`. Usually the first stage is trigger by something like a git commit. There could be many steps in each of these stages; such as compiling code, running tests and linting. All of these are done to try and drive up code quality and give more assurance that what is deployed is behaving as expected. In the exercise we will create Jenkins pipeline by configuring it through the UI, this will create an un-gated pathway to production
+
+First we will explore the sample application and get it running locally. The sample app is a `todolist` app - the `Hello World` app of the modern day. 
+
+#### Why create pipelines
+* Assurance - drive up code quality and remove the need for dedicated deployment / release management teams
+* Freedom - allow developers to take ownership of how and when code gets built and shipped
+* Reliablility - pipelines are a bit boring; they execute the same way each and every time they're run!
+* A pathway to production:
+    - Puts the product in the hands of the customer quicker
+    - Enables seamless and repeatable deploys
+    - More prod like infrastructure increases assurance
+    - “We have already done it” behavior de-risks go live
+
 _____
 
 ## Learning Outcomes
