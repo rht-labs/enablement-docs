@@ -44,14 +44,23 @@ _____
 2. Check the box to use Regular Expression and set the value to be something that should scrape our apps such as `.*todolist.*` 
 ![config-regex](../images/exercise6/config-regex.png)
 
-2. Finally; select `Display committers` and set the Failure Analyser to `Description` 
+2. Finally; select `Display committers` and set the Failure Analyser to `Description`. This allows us to write regex for when fails occur in Jenkins and have the reasons plotted on the graph. For example; number of test scores or common compilation errors. 
 ![config-commiters](../images/exercise6/config-commiters.png)
 
 2. Save your configuration to see your Build Monitor! 
 ![](../images/exercise6/.png)
 
-2. Let's create another view for Jenkins using the `Pipeline Aggregator View` plugin. 
-![](../images/exercise6/.png)
+2. Let's create another view for Jenkins using the `Pipeline Aggregator View` plugin. This view is great because it shows lots of valuable information in a clean; easy to visualise way. Create a new view called `todolist-pipelines` and select `Pipeline Aggregator View`
+![config-pipeline-view](../images/exercise6/config-pipeline-view.png)
+
+2. On the configure page; set the regex to `todolist.*`
+![config-pipeline-regex](../images/exercise6/config-pipeline-regex.png)
+
+2. Set the view to `Only display last build` for simplicity of the view.
+![config-pipeline-ui-settings](../images/exercise6/config-pipeline-ui-settings.png)
+
+2. Save your configuration to see your Build Monitor! 
+![pipeline-monitor](../images/exercise6/pipeline-monitor.png)
 
 ### Part 2 - Seed Jenkins Dashboards
 > _TODO - Add instructions for creating dashboards as part of s2i in Jenkins setup using DSL_
