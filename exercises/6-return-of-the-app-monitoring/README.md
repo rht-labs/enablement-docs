@@ -13,6 +13,7 @@ As a learner you will be able to
 
 1. [Build Monitor plugin](https://wiki.jenkins.io/display/JENKINS/Build+Monitor+Plugin) - Build Monitor Plugin provides a highly visible view of the status of selected Jenkins jobs. It easily accommodates different computer screen sizes and is ideal as an Extreme Feedback Device to be displayed on a screen on your office wall. (Inspired by the no longer maintained RadiatorView plugin).
 1. [Build Fail Analyser](https://wiki.jenkins.io/display/JENKINS/Build+Failure+Analyzer) - This plugin analyzes the causes of failed builds and presents the causes on the build page. It does this by using a knowledge base of build failure causes that is built up from scratch. Saving statistics about failure causes is also possible.
+1. [Pipeline Aggregator View](https://wiki.jenkins.io/display/JENKINS/Pipeline+Aggregator+View) - Allows the users to view the history of their pipelines with stage information (failed/In Progress/Passed) and the changes monitored)
 
 ## Big Picture
 This exercise begins cluster containing blah blah
@@ -30,16 +31,32 @@ _____
 > This is a fairly structured guide with references to exact filenames and sections of text to be added. Include pictures and code snippets where appropriate. Rule of thumb is learners are dumb.... so over describe _why_ we're doing things
 
 ### Part 1 - Create a build monitor
-> _prefix of exercise and why we're doing it_
+> _In this exercise we will create a new build monitor to show key information about our builds_
 
-2. Do thing using tool X.
+2. On Jenkins home page; create a new view by hitting the plus icon on the home screen (should be beside the `all` above the jobs list)
 
-2. Insert blah into `file1.txt`
-```
-export SOME_THING=biscuits
-```
+2. Give the job a sensible name such as `todolist-monitor` and select `Build Monitor View` 
+![new-monitor](../images/exercise6/new-monitor.png)
 
-2. Open console and navigate to `New Item` and click it ![new-item](./images/new-item.png)
+2. On the configuration page; select `Recurse in subfolders`
+![config-recursive](../images/exercise6/config-recursive.png)
+
+2. Check the box to use Regular Expression and set the value to be something that should scrape our apps such as `.*todolist.*` 
+![config-regex](../images/exercise6/config-regex.png)
+
+2. Finally; select `Display committers` and set the Failure Analyser to `Description` 
+![config-commiters](../images/exercise6/config-commiters.png)
+
+2. Save your configuration to see your Build Monitor! 
+![](../images/exercise6/.png)
+
+2. Let's create another view for Jenkins using the `Pipeline Aggregator View` plugin. 
+![](../images/exercise6/.png)
+
+### Part 2 - Seed Jenkins Dashboards
+> _TODO - Add instructions for creating dashboards as part of s2i in Jenkins setup using DSL_
+
+2. Open the s2i in `enablement-ci-cd` .....
 
 _____
 
