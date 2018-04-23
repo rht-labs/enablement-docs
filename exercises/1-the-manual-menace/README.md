@@ -1,6 +1,12 @@
 # The Manual Menace
+> In this lab learners will use Ansible to drive automated provisioning of Projects in Openshift, Git, Jenkins and Nexus.
 
-> In this lab learners will use Ansible to drive automated provisioning of Projects, Access Control, Git, Jenkins and Nexus
+![automation-xkcd](https://imgs.xkcd.com/comics/automation.png)
+
+## Exercise Intro
+In this exercise we will use automation tooling to create Project namespaces for our `CI/CD` tooling along with the `dev` and `test` namespaces for our deployments to live. We do this to manually using the OpenShift CLI; but as we go from cluster to cluster or project to project Dev and Ops teams often find themselves having to redo these tasks again and again. Configuring our cluster using code; we can easily store this in Git and repeat the process again and again. By minimising the time taken to do these repetitive tasks we can accelerate our ability to deliver value to our customers; working on the hard problems they face.
+
+This exercise uses Ansible to drive the creation of the cluster content. In particular; we'll use a play book called the `OpenShift Applier`. Once the project namespace have been created; we will add some tools to support CI/CD such as Jenkins, Git and Nexus. These tools will be needed by later lessons to automate the build and deploy of our apps. Again; we will use OpenShift Templates and drive their creation in the cluster using Ansible. To prove things are working, finally we'll delete all our content and re-apply the inventory to re-create our clusters content.
 
 _____
 
@@ -404,13 +410,28 @@ $ ansible-playbook apply.yml -e target=tools \
 6. Run the build and we should see if pass succesfully and with Green Balls! ![jenkins-green-balls](../images/exercise1/jenkins-green-balls.png)
 
 ### Part 5 - Live, Die, Repeat
-> _TOOD - improve & flesh out this section ...._
+> _In this section you will proove the infra as code is working by deleting your Cluster Content and recreating it all_
 
 7. Commit your code to the new repo in GitLab
+```bash
+$ git add .
+$ git commit -m "ADD - all ci/cd contents"
+$ git push
+```
 
 7. Burn your OCP content to the ground
+```bash
+$ oc delete project <YOUR_NAME>-ci-cd
+$ oc delete project <YOUR_NAME>-dev
+$ oc delete project <YOUR_NAME>-test
+```
 
-7. Re-apply the inventory!
+7. Re-apply the inventory to re-create it all!
+```bash
+$ oc login -p <password> -u <user> <cluster_url>
+$ ansible-playbook apply.yml -i inventory/ -e target=bootstrap
+$ ansible-playbook apply.yml -i inventory/ -e target=tools
+```
 
 _____
 
@@ -424,4 +445,4 @@ _____
 _____
 
 ## Additional Reading
- > List of links or other reading that might be of use / reference for the exercise
+> List of links or other reading that might be of use / reference for the exercise
