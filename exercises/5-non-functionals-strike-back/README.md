@@ -1,11 +1,11 @@
-# The Non Functionals Strike back
+# The Non-Functionals Strike back
 > In this exercise we explore the non-functional side of testing. 
 _____
 
 ## Learning Outcomes
 As a learner you will be able to
 - Create additional Jenkins stages to scan for security vulnerabilities in the Apps
-- Assess test quiality by producing coveage reports as part of a build
+- Assess test quality by producing coverage reports as part of a build
 - Improve code readability with linting
 - Do some light performance testing to monitor throughput of APIs
 
@@ -20,7 +20,7 @@ This exercise begins cluster containing blah blah
 _____
 
 ## 10,000 Ft View
-> This lesson will use the Exerisise 4's Zap Slave and Arachni scanner to improve the pipeline. Linting will be included in the build and code coverage too.
+> This lesson will use the Exercise 4's Zap Slave and Arachni scanner to improve the pipeline. Linting will be included in the build and code coverage too.
 
 2. Add a parallel stage after the e2e tests on the front end to run OWASP Zap and Arachni against the deployed apps.
 
@@ -41,7 +41,7 @@ _____
 2. The file is layed out with a collection of stages that correspond to each part of our build as seen below. We will create a new stage to execute in parallel.
 ![stages](../images/exercise5/stages.png)
 
-2. Create a new Parallel Stage called `security scanning` underneath the `stage("e2e test") { }` section as shown below. The contents of the `e2e test` has been removed for simplicity. 
+2. Create a new Parallel Stage called `security scanning` underneath the `stage("e2e test") { }` section as shown below. The contents of the `e2e test` have been removed for simplicity. 
 ```groovy
         stage("e2e test") {
             // ... stuff in here ....
@@ -58,7 +58,7 @@ _____
         }
 ```
 
-2. Let's start filling out the configuration for the OWASP Zap scan first. We will set the label to our slave created in previous exercise and a when condition of the mater or develop branch.
+2. Let's start filling out the configuration for the OWASP Zap scan first. We will set the label to our slave created in previous exercise and a `when` condition of the master or develop branch.
 ```groovy
 stage('OWASP Scan') {
     agent {
@@ -124,7 +124,7 @@ stage('OWASP Scan') {
 }
 ```
 
-2. Let's add our Arachni Scann to the second part of the parallel block. The main difference between these sections is Jenkins will report an XML report too for failing the build accordingly. Below is the snippet for the Arachni scanning.
+2. Let's add our Arachni Scan to the second part of the parallel block. The main difference between these sections is Jenkins will report an XML report too for failing the build accordingly. Below is the snippet for the Arachni scanning.
 ```groovy
     stage('Arachni Scan') {
         agent {
