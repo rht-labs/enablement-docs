@@ -119,7 +119,7 @@ $ npm run test
 Click on `dev-todolist-fe-build` and then click the `configure` button on the left-hand side.
 ![jenkins-configure-job](../images/exercise3/jenkins-configure-job.png)
 
-2. Scroll to the `Build` part of the configuration page and add `scl enable rh-nodejs8 'npm run test'` below `scl enable rh-nodejs8 'npm install'`. Click `save` or `apply` at the bottom to save the changes.
+2. Scroll to the `Build` part of the configuration page and add `npm run test` below `npm install`. Click `save` or `apply` at the bottom to save the changes.
 ![jenkins-build-step](../images/exercise3/jenkins-build-step.png)
 
 2. Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report`.
@@ -147,7 +147,7 @@ $ git push
 
 2. We're now going to do the same for the api. Head to the `configure` panel of the `dev-todolist-api-build` job. 
 
-2. Add `scl enable rh-nodejs8 'npm run test:ci'` above `npm run build:ci`.
+2. Add `npm run test:ci` above `npm run build:ci`.
 ![api-build-step](../images/exercise3/api-build-step.png)
 
 2. Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report`.
@@ -200,8 +200,8 @@ $ npm run e2e
 2. On the Build section; add a build step to execute shell and fill in the followin substituting the domain name and `YOUR_NAME` accordingly:
 ```bash
 export E2E_TEST_ROUTE="http://todolist-fe-<YOUR_NAME>-dev.apps.somedomain.com/"
-scl enable rh-nodejs8 'npm install'
-scl enable rh-nodejs8 'npm run e2e:ci'
+npm install
+npm run e2e:ci
 ```
 ![e2e-steps](../images/exercise3/e2e-steps.png)
 
