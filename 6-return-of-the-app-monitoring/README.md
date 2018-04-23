@@ -84,5 +84,8 @@ Additional Monitoring
 ## Additional Reading
 > List of links or other reading that might be of use / reference for the exercise
 
-## Slide links
-> link back to the deck for the supporting material
+## Slide Links
+
+- [Intro](https://docs.google.com/presentation/d/1nfv1f04HkvN6ruOZ5JRMnHsSfDClyMNOhXxcC7WsSr4/)
+- [Wrap-up](https://docs.google.com/presentation/d/1-HI9Wd5WWlzaMWmFpBEclqdyt9pFumaVbfOUrkfYKY0/)
+- [All Material](https://drive.google.com/drive/folders/1Lx0OotWjisugCY11Ef0dF7EZXMIPoXOO)

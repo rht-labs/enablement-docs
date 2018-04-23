@@ -299,5 +299,8 @@ Jenkins e2e extension (blue/green)
 ## Additional Reading
 > List of links or other reading that might be of use / reference for the exercise
 
-## Slide links
-> link back to the deck for the supporting material
+## Slide Links
+
+- [Intro](https://docs.google.com/presentation/d/1B3Fv4g66zZ8ZkqBq9TYmImJhUDvMecXCt4q3DXGWhjc/)
+- [Wrap-up](https://docs.google.com/presentation/d/1EOk6y798Xh1hsaQlxRuqyr23FIIf7sNY4any_yXIL7A/)
+- [All Material](https://drive.google.com/drive/folders/1oCjpl33Db7aPocmpu3NNF0B9czRvFq3m)
