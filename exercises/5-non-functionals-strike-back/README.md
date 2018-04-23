@@ -1,5 +1,5 @@
 # The Non Functionals Strike back
-> In this exercise we explore the non-functional side of testing. 
+> In this exercise we explore the non-functional side of testing.
 _____
 
 ## Learning Outcomes
@@ -213,12 +213,45 @@ $ git commit -m "ADD - linting and coverage to the pipeline"
 $ git push
 ```
 
+3. To view the resulting graph; go to the job's build page and open the `Code Coverage` report from the nav bar on the side. Open the report to drill down into detail of where testing coverage could be improved! 
+![report-coverage](../images/exercise5/report-coverage.png)
+<p class="tip">
+NOTE - a good practice for teams is to try and increase the code coverage metrics over the life of a project. Teams will often start low and use practices such as retrospective to increase the quality at specific times. 
+</p>
+
 3. (Optional Step) - Install the Checkstyle plugin; and add `checkstyle pattern: 'eslint-report.xml'` below the `publishHTML` block to add reporting to Jenkins!
 
-### Part 3 - Early performance testing
-> _TODO - descriptions...._
+### Part 3 - Nightly light performance testing
+> _In this exercise, we will execute the light performance tasks in our API to collect data about throughtput time in hopes if the API ever has some `Sam` quality code checked in, we will spot it_
 
-4. API perf test tasks....
+4. Create a new Item on Jenkins, `nightly-perf-test`
+
+4. Set the label for where this job can execute to the `jenkins-slave-npm` one used by the build jobs previously.
+
+4. In the SCM section; set the project to use the `todolist-api` git project. Set the credentials accordingly.
+
+4. Create a step to execute shell and add the following to it, replacting `<YOUR_NAME>` and `somedomain` as expected. We will just test the create and show API for the moment. We are grabbing the response code of the perf-rest to keep Jenkins running both shells steps and then exiting with whichever fails:
+```bash
+export E2E_TEST_ROUTE=todolist-api-<YOUR_NAME>-dev.apps.somedomain.com
+npm install
+set +e
+npm run perf-test:create
+rc1=$?
+npm run perf-test:show
+rc2=$?
+set ­-e
+exit $(($rc1 | $rc2))
+```
+
+4. On the Post Build actions section we will plot the data from the perf tests in Jenkins. Add a `Post-build Action > Plot Build Data`.
+
+4. On the new dialog, name the Plot group eg `benchmark­-tests` and add `create­-api` as the Plot title. Set the Number of Builds to Include to a large number like `100`. Set the Data Series file to be `reports/server/perf/create­-perf­-score.csv` and mark the Load data from CSV checkbox. Apply those changes
+![jenkins-plot](../images/exercise5/jenkins-plot.png)
+
+4. Hit `Add Plot` to add another. Fill out the information again but this time setting the Plot title to `show­-api`. Keep the Plot group the same as before: `bench­-tests`. Set the Data Series file to be `reports/server/perf/show­-perf­-score.csv` and mark the `Load data from CSV checkbox`. Save those changes and run the job (Job could take a while to execute!).
+
+4. Run it a few times to start to generate the data points on the plot. The `bench-tests` plot is available on the job's homepage
+![result-plot](../images/exercise5/result-plot.png)
 
 _____
 
@@ -229,6 +262,7 @@ _____
  - Enhance the `todolist-api` with the coverage reporting as you've done for `todolist-api`
  - Add Black Duck or other package scanning tooling for our NodeJS app
  - Add Container Vulnerability scanning tooling to the pipeline
+ - Add `Stryker` to create mutants and do additional non functional testing of the App
  - Add the Checkstyle plugin to Jenkins for reporting scores
 
 ## Additional Reading
