@@ -450,7 +450,7 @@ $ git push
 ![ocp-app-bc](../images/exercise2/ocp-app-bc.png)
 
 4. Check `<YOUR_NAME>-dev` to see the deployment configs are in place
-![ocp-app-deployment-overview](../images/exercise2/ocp-app-deployment-overview.jpeg)
+![ocp-app-dc](../images/exercise2/ocp-app-dc.png)
 
 ### Part 4 - Build > Bake > Deploy 
 > _In this exercise; we take what we have working locally and get it working in OpenShift_
