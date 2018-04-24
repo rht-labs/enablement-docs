@@ -102,11 +102,16 @@ done
 
 3. Open the `apply.yml` file in the root of the project. Update the namespace variables by replacing the `<YOUR_NAME>` with your name or initials. For example; my name is Dónal so I've created: 
 ```yaml
+  hosts: "{{ target }}"
   vars:
     ci_cd_namespace: donal-ci-cd
     dev_namespace: donal-dev
     test_namespace: donal-test
+  tasks:
 ```
+<p class="tip">
+NOTE - yaml is indentation sensitive so keep things lined up properly!
+</p>
 
 3. Open the `inventory/host_vars/projects-and-policies.yml` file; you should see some variables setup already to create the `<YOUR_NAME>-ci-cd` namespace. This object is passed to the OpenShift Applier to call the `templates/project-requests.yml` template with the `params/project-requests-ci-cd` parameters. We will add some additional content here but first let's explore the parameters and the template
 
@@ -156,6 +161,12 @@ $ ansible-playbook apply.yml -i inventory/ -e target=bootstrap
 where the `-e target=bootstrap` is passing an additional variable specifying that we run the `bootstrap` inventory
 
 3. Once successful you should see an output similar to this: ![playbook-success](../images/exercise1/play-book-success.png)
+
+3. You can check to see the projects have been created successfully by running 
+```bash
+$ oc projects
+```
+![project-success](../images/exercise1/project-success.png)
 
 ### Part 2 - Nexus and GitLab
 > _Now that we have our Projects setup; we can start to populate them with Apps to be used in our dev lifecycle_
