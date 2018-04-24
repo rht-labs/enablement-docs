@@ -313,7 +313,7 @@ $ curl localhost:9000/api/todos
 
 3. In order for Jenkins to be able to run `npm` builds and installs as we have done locally, we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. In your `enablement-cd-cd` repository, checkout the template and configuration. This will bring in the template, the params & the `Dockerfile`.
 ```bash
-$ git checkout exercise2/jenkins-slave docker/ templates/ params/
+$ git checkout exercise2/jenkins-slave docker/ templates/ params/jenkins-slave-npm
 ```
 
 3. Open the `params/jenkins-slave-npm` file and update `<YOUR_ENABLEMENT_GIT_REPO>` accordingly. This set of parameters will clone from the enablement repo and run a docker build of the Dockerfile stored in `docker/jenkins-slave-npm`.
@@ -333,6 +333,13 @@ NAME=npm-jenkins-slave
     - jenkins-slave
 ```
 ![jenkins-slave-ansible](../images/exercise2/jenkins-slave-ansible.png)
+
+3. Commit your changes to the `enablement-ci-cd` repository!
+```bash
+$ git add .
+$ git commit -m "ADD npm slave node for Jenkins"
+$ git push
+```
 
 3. Run the OpenShift Applier to trigger a build of this jenkins slave image.
 ```bash
