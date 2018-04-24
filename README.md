@@ -13,6 +13,7 @@ This is a collection of practices and exercises to take a learner through a four
  - Google Chrome Web Browser (>59)
  - Docker 17.x
  - Access to an OpenShift cluster `oc login -u <username> -p <password> <cluster_url>`
+ - Text editor such as Atom, IntelliJ or Visual Studio Code (The exercise were created using VSCode, so the screenshots will match it's layout and colour schemes)
 
 > (TODO) Download the tools-container containing required Ansible and OpenShift tooling pre-installed
 
