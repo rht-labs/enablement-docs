@@ -301,8 +301,8 @@ $ git checkout exercise1/jenkins templates/jenkins.yml
 ```
 The Jenkins template is essentially the standard persistent jenkins one with OpenShift.
 
-5. As before; create a new set of params by creating a `params/jenkins` file and adding some overrides to the template and updating the `NAMESPACE` value.
-```bash
+5. As before; create a new set of params by creating a `params/jenkins` file and adding some overrides to the template and updating the `<YOUR_NAME>` value accordingly.
+```
 MEMORY_LIMIT=8Gi
 VOLUME_CAPACITY=10Gi
 JVM_ARCH=x86_64
@@ -310,7 +310,7 @@ NAMESPACE=<YOUR_NAME>-ci-cd
 JENKINS_OPTS=--sessionTimeout=720
 ```
 
-5. Add a `jenkins` variable to the ansible inventory underneath the git (if you have it) and nexus ones.
+5. Add a `jenkins` variable to the ansible inventory underneath the nexus (and git if you have it) in  `inventory/host_vars/ci-cd-tooling.yml`.
 ```yaml
     - name: "jenkins"
       namespace: "{{ ci_cd_namespace }}"
@@ -325,7 +325,7 @@ This configuration, if applied now, will create the deployment configuration nee
 ```bash
 $ git checkout exercise1/jenkins-s2i jenkins-s2i
 ```
-The structure of the jenkins s2i config is 
+The structure of the jenkins s2i config is
 ```
 jenkins-s2i
 ├── README.md
@@ -333,6 +333,7 @@ jenkins-s2i
 │   ├── build-failure-analyzer.xml
 │   ├── init.groovy
 │   ├── jenkins.plugins.slack.SlackNotifier.xml
+│   ├── scriptApproval.xml
 │   └── jobs
 │       └── seed-multibranch-job
 │           └── config.xml
@@ -344,7 +345,7 @@ jenkins-s2i
  * `build-failure-analyzer.xml` is config for the plugin to read the logs and look for key items based on a Regex. More on this in later lessons.
  * `init.groovy` contains a collection of settings jenkins configures itself with when launching
 
-5. Let's add a plugin for Jenkins to be started with, [green-balls](https://plugins.jenkins.io/greenballs). This simply changes the default `SUCCESS` status of Jenkins from Blue to Green. Append the `plugins.txt` file with 
+5. Let's add a plugin for Jenkins to be started with, [green-balls](https://plugins.jenkins.io/greenballs). This simply changes the default `SUCCESS` status of Jenkins from Blue to Green. Append the `jenkins-s2i/plugins.txt` file with 
 ```txt
 greenballs:1.15
 ``` 
@@ -353,15 +354,20 @@ Why does Jenkins have Blue Balls? More can be found [on reddit](https://www.redd
 
 5. Before building and deploying the Jenkins s2i; add git credentials to it. These will be used by Jenkins to access the Git Repositories where our apps will be stored. We want Jenkins to be able to push tags to it so write access is required. There are a few ways we can do this; either adding them to the `template/jenkins.yml` as environment Variables and then including them in the `params/jenkins` file.  We could also create a token in GitLab and use it as the source secret in the jenkins template. 
 But for simplicity just replace the `<USERNAME>` && `<PASSWORD>` in the `jenkins-s2i/configuration/init.groovy` with your ldap credentials as seen below. This init file gets run when Jenkins launches and will setup the credentials for use in our Jobs in the next exercises
-<p class="tip">
-Note in a residency we would not use your GitCredentials for pushing and pulling from Git, A service user would be created for this.
-</p>
 ```groovy
 gitUsername = System.getenv("GIT_USERNAME") ?: "<USERNAME>"
 gitPassword = System.getenv("GIT_PASSWORD") ?: "<PASSWORD>"
 ```
+<p class="tip">
+Note in a residency we would not use your GitCredentials for pushing and pulling from Git, A service user would be created for this.
+</p>
 
-5. Open the `params/jenkins-s2i` file and add the following content; replacing variables as appropriate. 
+5. Checkout the parms and the templates for the `jenkins-s2i`
+```bash
+$ git checkout exercise1/jenkins-s2i params/jenkins-s2i templates/jenkins-s2i.yml
+```
+
+5. Open `params/jenkins-s2i` and add the following content; replacing variables as appropriate. 
 ```
 SOURCE_REPOSITORY_URL=<YOUR_ENABLEMENT_REPO>
 NAME=jenkins
@@ -377,6 +383,7 @@ where
     * `<BASE64_YOUR_LDAP_USERNAME>` is the base64encoded username builder pod will use to login and clone the repo with
     * `<BASE64_YOUR_LDAP_PASSWORD>` is the base64encoded password the builder pod will use to authenticate and clone the repo using
 You can use `echo -n '<YOUR_LDAP_PASSWORD>' | openssl base64` to encode your username and password accordingly. For example 'password' base64 encoded will look like `cGFzc3dvcmQ=`.
+![base64-pass](../images/exercise1/base64-pass.png)
 <p class="tip">
 Note in a residency we would not use your GitCredentials for pushing and pulling from Git, A service user would be created for this.
 </p>
