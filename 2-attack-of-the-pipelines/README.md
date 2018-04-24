@@ -117,7 +117,7 @@ NOTE - If you are missing these dependencies; install them with ease using the [
 $ npm install
 ```
 
-2. The `todolist-fe` has some scripts defined in the package.json at the root of the project. To run any of these scripts run `npm run <SCRIPT_NAME>`. Let's start by serving our application
+2. The `todolist-fe` has some scripts defined in the package.json at the root of the project. A snippet of the npm scripts are shown below. To run any of these scripts run `npm run <SCRIPT_NAME>`. Let's start by serving our application
  ![npm-scripts](../images/exercise2/npm-scripts.png)
 ```bash
 npm run serve
@@ -126,10 +126,10 @@ npm run serve
 2. This will take sometime to execute; but once done it should open the browser for you displaying the homepage of the `todolist-fe` app.
  ![todo-list-app](../images/exercise2/todo-list-app.png)
     * Click 'Todo' at the top of the home page to get to the above page.
-    * The server hosting it live reloads; so as you make changes to your code; the app will live update
+    * The server hosting it live reloads; so if you make changes to your code base the app will live update
     * The Data you see in the screen is dummy / stubbed data. This is served up when there is no backend connection found
 
-2. The app is a todolist manager built in Vue.js. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page you'll lose all additions. This is because there is persistence
+2. The app is a todolist manager built in Vue.js. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page you'll lose all additions. This is because there is no persistence layer. We will add one in the next part.
 
 3. The structure of the `todolist-fe` is as follows.
 ```bash
@@ -190,7 +190,7 @@ NOTE - This step in a residency would be automated by a more complex nexus deplo
 2. Now let's move on to the `todolist-api` and wire them together. As with the `todolist-fe` we need to clone the repo and add it to our GitLab in the cluster.
 ```bash
 $ git clone https://github.com/rht-labs/todolist-api.git
-$ git cd todolist-api
+$ cd todolist-api
 $ git checkout develop
 ```
 Followed by;
@@ -200,7 +200,7 @@ $ for branch in `git branch -a | grep remotes | grep -v HEAD | grep -v master`; 
 done
 ```
 
-2. Create a new project (internal) in GitLab called `todolist-api` to host your clone of the project and copy it's remote address.
+2. On GitLab; create a new project (internal) called `todolist-api` to host your clone of the project and copy it's remote address as you did for the previous repositories.
 
 2. In your local clone of the `todolist-api`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab
 ```bash
@@ -271,8 +271,7 @@ where the following are the important things:
   },
 ```
 
-
-2. To run the application; start a new instance of the MongoDB by running. 
+2. To run the application; start a new instance of the MongoDB by running the following. This will pull a mongodb image from Dockerhub and then start it for our API to connect to. 
 ```bash
 $ npm run mongo
 ```
