@@ -189,7 +189,7 @@ VOLUME_CAPACITY=5Gi
 MEMORY_LIMIT=2Gi
 ```
 
-4. Create a new object in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `ci-cd-deployments` and populate it's `content` is as follows
+4. Create a new object in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `ci-cd-tooling` and populate it's `content` is as follows
 
 ```yaml
 ---
@@ -197,12 +197,12 @@ ansible_connection: local
 openshift_cluster_content:
 - object: ci-cd-tooling
   content:
-    - name: "nexus"
-      namespace: "{{ ci_cd_namespace }}"
-      template: "{{ playbook_dir }}/templates/nexus.yml"
-      params: "{{ playbook_dir }}/params/nexus"
-      tags:
-      - nexus
+  - name: "nexus"
+    namespace: "{{ ci_cd_namespace }}"
+    template: "{{ playbook_dir }}/templates/nexus.yml"
+    params: "{{ playbook_dir }}/params/nexus"
+    tags:
+    - nexus
 ```
 ![ci-cd-deployments-yml](../images/exercise1/ci-cd-deployments-yml.png)
 
@@ -274,10 +274,10 @@ $ ansible-playbook apply.yml -e target=tools \
 
 4. Once successful; login to the cluster and navigate to the `<YOUR_NAME>-ci-cd`. You should see GitLab up and running. ![gitlab-up-and-running](../images/exercise1/gitlab-up-and-running.png)
 
-4. Navigate to gitlab. You can login using your cluster credentials using the LDAP tab displaying your `<LDAP_DESCRIPTION>` from previous steps
+4. Navigate to gitlab (if you have just skipped straight to this step; ask your tutor for the URL). You can login using your cluster credentials using the LDAP tab
 ![gitlab-ui](../images/exercise1/gitlab-ui.png)
 
-4. Once logged in create a new project called `enablement-ci-cd` and mark it as internal. Once created; copy out the `git remote add origin ...` instructions for use on the next step.
+4. Once logged in create a new project called `enablement-ci-cd` and mark it as internal. Once created; copy out the `git url` for use on the next step.
 ![gitlab-new-project](../images/exercise1/gitlab-new-project.png)
 <p class="tip">
 Note - we would not normally make the project under your name but create an group and add the project there on residency but for simplicity of the exercise we'll do that here
