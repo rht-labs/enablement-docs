@@ -43,9 +43,11 @@ _____
 
 If you're feeling confident and don't want to follow the step-by-step guide these highlevel instructions should provide a challenge for you:
 
-2. Clone the repo `https://github.com/rht-labs/enablement-ci-cd` which contains the scaffold of the project.
+2. Clone the repo `https://github.com/rht-labs/enablement-ci-cd` which contains the scaffold of the project. Ensure you get all remote branches.
 
 2. Create `<your-name>-ci-cd`, `<your-name>-dev` and `<your-name>-test` project namespaces using the inventory and run them with the OpenShift Applier to populate the cluster
+
+2. Use the templates provided to create build of the jenkins-s2i. The templates are in `exercise1/jenkins-s2i`
 
 2. Use the templates provided to create build and deployment configs in `<your-name>-ci-cd` for. Templates are on a branch called `exercise1/git-nexus` && `exercise1/jenkins`:
     * Nexus
@@ -100,7 +102,7 @@ done
  * `requirements.yml` is a manifest which contains the ansible modules needed to run the playbook
  * `apply.yml` is a playbook that sets up some variables and runs the OpenShift Applier role.
 
-3. Open the `apply.yml` file in the root of the project. Update the namespace variables by replacing the `<YOUR_NAME>` with your name or initials. For example; my name is Dónal so I've created: 
+3. Open the `apply.yml` file in the root of the project. Update the namespace variables by replacing the `<YOUR_NAME>` with your name or initials. Don't use uppercase or special characters. For example; my name is Dónal so I've created: 
 ```yaml
   hosts: "{{ target }}"
   vars:
@@ -120,6 +122,9 @@ NOTE - yaml is indentation sensitive so keep things lined up properly!
 
 3. Let's add two more param files to pass to our template to be able to create a `dev` and `test` project.
   * Create another two params files `params/project-requests-dev` & `params/project-requests-test`. 
+```bash
+$ touch params/project-requests-dev params/project-requests-test
+```
   * Add to `params/project-requests-dev` the following; substituting `<YOUR_NAME>` accordingly
 ```
 NAMESPACE=<YOUR_NAME>-dev
@@ -283,9 +288,9 @@ $ ansible-playbook apply.yml -e target=tools \
 Note - we would not normally make the project under your name but create an group and add the project there on residency but for simplicity of the exercise we'll do that here
 </p>
 
-4. Commit your local project to this new origin by first removing the existing origin (github) where the the project was cloned from. Remember to substitute `<YOUR_NEW_GIT_PROJECT>` accordingly
+4. Commit your local project to this new origin by first removing the existing origin (github) where the the project was cloned from. Remember to substitute `<GIT_URL>` accordingly
 ```bash
-$ git remote set-url origin <YOUR_NEW_GIT_PROJECT>
+$ git remote set-url origin <GIT_URL>
 $ git add . 
 $ git commit -m "Adding git and nexus config"
 $ git push -u origin --all
@@ -369,23 +374,21 @@ $ git checkout exercise1/jenkins-s2i params/jenkins-s2i templates/jenkins-s2i.ym
 
 5. Open `params/jenkins-s2i` and add the following content; replacing variables as appropriate. 
 ```
-SOURCE_REPOSITORY_URL=<YOUR_ENABLEMENT_REPO>
+SOURCE_REPOSITORY_URL=<GIT_URL>
 NAME=jenkins
 SOURCE_REPOSITORY_CONTEXT_DIR=jenkins-s2i
 IMAGE_STREAM_NAMESPACE=<YOUR_NAME>-ci-cd
-SOURCE_REPOSITORY_USERNAME=<BASE64_YOUR_LDAP_USERNAME>
-SOURCE_REPOSITORY_PASSWORD=<BASE64_YOUR_LDAP_PASSWORD>
+SOURCE_REPOSITORY_USERNAME=<YOUR_LDAP_USERNAME>
+SOURCE_REPOSITORY_PASSWORD=<YOUR_LDAP_PASSWORD>
 ```
 where 
-    * `<YOUR_ENABLEMENT_REPO>` is the full path clone path of the repo where this project is stored (including the https && .git)
+    * `<GIT_URL>` is the full path clone path of the repo where this project is stored (including the https && .git)
     * `<YOUR_NAME>` is the prefix for your `-ci-cd` project.
     * Explore some of the other parameters in `templates/jenkins-s2i.yml`
-    * `<BASE64_YOUR_LDAP_USERNAME>` is the base64encoded username builder pod will use to login and clone the repo with
-    * `<BASE64_YOUR_LDAP_PASSWORD>` is the base64encoded password the builder pod will use to authenticate and clone the repo using
-You can use `echo -n '<YOUR_LDAP_PASSWORD>' | openssl base64` to encode your username and password accordingly. For example 'password' base64 encoded will look like `cGFzc3dvcmQ=`.
-![base64-pass](../images/exercise1/base64-pass.png)
+    * `<YOUR_LDAP_USERNAME>` is the username builder pod will use to login and clone the repo with
+    * `<YOUR_LDAP_PASSWORD>` is the password the builder pod will use to authenticate and clone the repo using
 <p class="tip">
-Note in a residency we would not use your GitCredentials for pushing and pulling from Git, A service user would be created for this.
+Note in a residency we would not use your GitCredentials for pushing and pulling from Git, A service user would be created or a token generated.
 </p>
 
 5. Create a new object `ci-cd-builds` in the ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
@@ -447,6 +450,11 @@ $ git push
 $ oc delete project <YOUR_NAME>-ci-cd
 $ oc delete project <YOUR_NAME>-dev
 $ oc delete project <YOUR_NAME>-test
+```
+
+7. Check to see the projects that were marked for deletion are removed.
+```bash
+$ oc get projects | egrep '<YOUR_NAME>-ci-cd|<YOUR_NAME>-dev|<YOUR_NAME>-test'
 ```
 
 7. Re-apply the inventory to re-create it all!

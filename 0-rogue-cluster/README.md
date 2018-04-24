@@ -16,12 +16,9 @@ Learners will create 3 to 4 project namespaces running lightweight NodeJS app * 
  - Redis requires 512Mi of storage
  - Nexus requires
 
-
 ## Cluster Access 
  - Learners are in LDAP and can access cluster via `oc login`
  - Learners have access to LDAP bind credentials to be able to auth against gitlab 
- - 
  
 ## User privileges 
  - Learners will require privileges to run SCC containers ie GitLab
- - 
