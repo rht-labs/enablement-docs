@@ -371,11 +371,13 @@ NOTE - Jenkins may need to be restarted for the configuration to appear. To do t
 ├── params
 │   ├── build
 │   ├── dev
+│   ├── ocp-pipeline
 │   └── test
 ├── requirements.yml
 └── templates
-    ├── todolist-api-build.yml
-    └── todolist-api-deploy.yml
+    ├── ocp-pipeline.yml
+    ├── todolist-fe-build.yml
+    └── todolist-fe-deploy.yml
 ```
 where the following
     * the `apply.yml` file is the entrypoint. 
@@ -407,6 +409,11 @@ $ ansible-playbook apply.yml -i inventory/
 ![ansible-success](../images/exercise2/ansible-success.png)
 
 4. Once successful, `commit` and `push` your changes to gitlab.
+```bash
+$ git add .
+$ git commit -m "UPDATE - change namespace vars to donal"
+$ git push
+```
 
 4. Back on your terminal navigate to the root of the `todolist-api` application. Open the `.openshift-applier` directory. The same layout as seen in `todolist-fe` should be visible with one noticeable difference; the api requires `MongoDB` to connect to at runtime.
 
@@ -432,9 +439,18 @@ $ ansible-galaxy install -r requirements.yml --roles-path=roles
 $ ansible-playbook apply.yml -i inventory/
 ```
 
-4. Validate the build and deploy configs have been created in Openshift by checking `<YOUR_NAME> CI-CD builds` for the `BuildConfigs`
+4. Once successful, `commit` and `push` your changes to gitlab.
+```bash
+$ git add .
+$ git commit -m "UPDATE - change namespace vars to donal"
+$ git push
+```
 
-4. Check `<YOUR_NAME>-dev` for the deployment ![ocp-app-deployment-overview](../images/exercise2/ocp-app-deployment-overview.jpeg)
+4. Validate the build and deploy configs have been created in Openshift by checking `<YOUR_NAME> CI-CD builds` for the `BuildConfigs`
+![ocp-app-bc](../images/exercise2/ocp-app-bc.png)
+
+4. Check `<YOUR_NAME>-dev` to see the deployment configs are in place
+![ocp-app-deployment-overview](../images/exercise2/ocp-app-deployment-overview.jpeg)
 
 ### Part 4 - Build > Bake > Deploy 
 > _In this exercise; we take what we have working locally and get it working in OpenShift_
