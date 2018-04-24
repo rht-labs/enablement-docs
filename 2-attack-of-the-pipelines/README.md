@@ -622,7 +622,7 @@ $ git push
 ![pipeline-flow](../images/exercise2/pipeline-flow.png)
 
 5. You should now see the pipeline view. Run the pipeline by hitting run (you can move onto the next part while it is running as it may take some time).
-![dev-pipeline-view](../images/exercise2/dev-pipeline-view.png)
+![dev-pipeline-view](../images/exercise2/dev-pipeline-view.jpeg)
 
 ### Part 5 - Backend Pipeline
 > In this exercise we will use the Jobs created for the `todolist-fe` as a template to create a pipeline for the `todolist-api` app by copying the config.
@@ -729,8 +729,6 @@ _____
 
 ## Additional Reading
 > List of links or other reading that might be of use / reference for the exercise
-
- -  What's in a package.json?
 
 ## Slide links
 
