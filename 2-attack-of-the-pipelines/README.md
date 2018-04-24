@@ -316,9 +316,9 @@ $ curl localhost:9000/api/todos
 $ git checkout exercise2/jenkins-slave docker/ templates/ params/jenkins-slave-npm
 ```
 
-3. Open the `params/jenkins-slave-npm` file and update `<YOUR_ENABLEMENT_GIT_REPO>` accordingly. This set of parameters will clone from the enablement repo and run a docker build of the Dockerfile stored in `docker/jenkins-slave-npm`.
+3. Open the `params/jenkins-slave-npm` file and update `<GIT_URL>` accordingly. This set of parameters will clone from the enablement repo and run a docker build of the Dockerfile stored in `docker/jenkins-slave-npm`.
 ```bash
-SOURCE_REPOSITORY_URL=<YOUR_ENABLEMENT_GIT_REPO>
+SOURCE_REPOSITORY_URL=<GIT_URL>
 SOURCE_CONTEXT_DIR=docker/jenkins-slave-npm
 NAME=npm-jenkins-slave
 ```
