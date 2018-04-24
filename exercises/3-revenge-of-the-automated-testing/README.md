@@ -130,13 +130,13 @@ Click on `dev-todolist-fe-build` and then click the `configure` button on the le
 
 2. Click `save` or `apply` at the bottom to save the changes. Run the `dev-todolist-fe-build` job and verify that this passes and the `build` and `bake` jobs are both triggered.
 
-2. We're now going to deliberately fail a test to ensure that `bake` and `deploy` jobs aren't triggered if any tests fail. Go to `ListOfTodos.spec.js` in `/tests/unit/vue-components` and head to `line 38`. Add `not.` before `toHaveBeenCalled()`.
+2. We're now going to deliberately fail a test to ensure that `bake` and `deploy` jobs aren't triggered if any tests fail. Open the `todolist-fe` source code in your favourite editor. Open `ListOfTodos.spec.js` in `/tests/unit/vue-components` and head to `line 39`. Add `not.` before `toHaveBeenCalled()` to fail the test.
 ![change-test-to-fail](../images/exercise3/change-test-to-fail.png)
 
 2. Push this to Gitlab and run the build job.
 ```bash
 $ git add .
-$ git commit -m "Deliberately failed test to test the pipeline stops me deploying broken code"
+$ git commit -m "TEST - failing build with tests"
 $ git push
 ```
 
@@ -161,11 +161,11 @@ $ git push
 2. Push this to Gitlab and run the build job.
 ```bash
 $ git add .
-$ git commit -m "Deliberately failed test to test the pipeline stops me deploying broken code"
+$ git commit -m "TEST - failing build with tests"
 $ git push
 ```
 
-2. If successful this will fail the build and not run the `bake` or `deploy` jobs. 
+2. If successful this will fail the build and not run the `bake` or `deploy` jobs! Undo your changes and move on to the next section.
 
 <p class="tip">
   NOTE - Don't forget to undo the changes that you made to your tests!
@@ -189,7 +189,7 @@ $ npm run e2e
 
 2. With tests executing locally; let's add them to our Jenkins pipeline. To do this; we'll create a new job and connect it up to our `todolist-fe` jobs. Open Jenkins and create a `New Item` called `dev-todolist-fe-e2e`. Make this Job `Freestyle`.
 
-2. On the configuration page; Set the Label for the job to run on as `jenkins-slave-npm` and a build parameter of `BUILD_TAG`
+2. On the configuration page; Set the Label for the job to run on as `jenkins-slave-npm`. Check the box marking the build parameterised and add a String parameter of `BUILD_TAG` as done before
 ![e2e-general](../images/exercise3/e2e-general.png)
 
 2. On the Source Code Management tab; set the source code to git and add the url to your `todolist-fe` app. Set the branch to `refs/tags/${BUILD_TAG}`
