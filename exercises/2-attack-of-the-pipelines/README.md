@@ -255,18 +255,15 @@ where the following are the important things:
     * `Grunt` is a taskrunner for use with Node.JS projects
     * `package.json` contains the dependency list and a lot of very helpful scripts for managing the app lifecycle
 
-2. The npm scripts are shown below. There are application start scripts, build and test items which will be used in the build. The ones for MongoDB are just provided for convenience and require Docker installed to execute.
+2. A snippet of the npm scripts are shown below. There are application start scripts, build and test items which will be used in the build. The ones for MongoDB are just provided for convenience and require Docker installed to execute.
 ```json
   "scripts": {
     "start": "node server/app.js",
     "dev": "./node_modules/.bin/grunt serve",
     "jshint": "./node_modules/.bin/grunt jshint",
-    "jshint:ci": "./node_modules/.bin/grunt jshint:ci_server",
     "clean": "rm -rf reports package-contents*",
-    "build": "mkdir -p package-contents && cp -vr server Dockerfile package.json package-contents",
     "package": "zip -r package-contents.zip package-contents",
     "test": "node_modules/.bin/nyc node_modules/.bin/mocha server/**/*.spec.js --exit",
-    "test:ci": "export MOCHA_FILE='reports/server/mocha/test-results.xml' && export NODE_ENV=ci && node_modules/.bin/nyc node_modules/.bin/mocha server/**/*.spec.js -R mocha-junit-reporter --exit",
     "mongo" : "docker run -i -d --name mongo-local -p 27017:27017 mongo",
     "mongo:drop" : "npm run mongo:stop && docker rm mongo-local",
     "mongo:stop" : "docker stop mongo-local",
