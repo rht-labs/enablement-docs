@@ -175,7 +175,7 @@ where the following are the important things:
     * `./src/scss` contains custom  SCSS used in the application.
     * `./*.js` is mostly config files for running and managing the app and the tests
 
-2. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables.
+2. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables change `<YOUR_NAME>` and `somedomain` accordingly.
 ```bash
 export NEXUS_SERVICE_HOST=nexus-<YOUR_NAME>-ci-cd.apps.somedomain.com
 export NEXUS_SERVICE_PORT=80
@@ -320,12 +320,12 @@ $ git checkout exercise2/jenkins-slave docker/ templates/ params/jenkins-slave-n
 ```bash
 SOURCE_REPOSITORY_URL=<GIT_URL>
 SOURCE_CONTEXT_DIR=docker/jenkins-slave-npm
-NAME=npm-jenkins-slave
+NAME=jenkins-slave-npm
 ```
 
 3. Create an item in the `inventory/host_vars/ci-cd-tooling.yml` under the `ci-cd-builds` object to run the template with.
 ```yaml
-  - name: "jenkins-npm-slave"
+  - name: "jenkins-slave-npm"
     namespace: "{{ ci_cd_namespace }}"
     template: "{{ playbook_dir }}/templates/jenkins-slave-generic-template.yml"
     params: "{{ playbook_dir }}/params/jenkins-slave-npm"
@@ -481,7 +481,8 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
 
 5. Name this job `dev-todolist-fe-build` and select `Freestyle Job`. All our jobs will take the form of `<ENV>-<APP_NAME>-<JOB_PURPOSE>`. ![freestyle-job](../images/exercise2/freestyle-job.png)
 
-5. The page that loads is the Job Configuration page and it can be returned to at anytime from Jenkins. Let's start configuring our job. To conserve space; we will make sure Jenkins only keeps the last builds artifacts. Tick the `Discard old builds` checkbox and set `Max # of builds to keep with artifacts` to 1 as below ![keep-artifacts](../images/exercise2/keep-artifacts.png)
+5. The page that loads is the Job Configuration page and it can be returned to at anytime from Jenkins. Let's start configuring our job. To conserve space; we will make sure Jenkins only keeps the last builds artifacts. Tick the `Discard old builds` checkbox, then `Advanced` and set `Max # of builds to keep with artifacts` to 1 as indicated below 
+![keep-artifacts](../images/exercise2/keep-artifacts.png)
 
 5. Our NodeJS build needs to be run on the `jenkins-slave-npm` we created earlier. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-slave](../images/exercise2/label-jenkins-slave.png)
 
@@ -659,7 +660,7 @@ npm run build:ci
     * NAME in the execute shell step
     * The name of the DeploymentConfig to validate in the Verify OpenShift Deployment
 
-6. Save the configuration for `dev-todolist-api-build` and that's it for wiring together our `todolist-api` pipeline.
+6. Save the configuration for `dev-todolist-api-deploy` and that's it for wiring together our `todolist-api` pipeline.
  
 6. Run the `dev-todolist-api-build` to trigger the backend pipeline. While this is building, check our front end app and see if it has deployed successfully.
 
@@ -679,7 +680,7 @@ npm run build:ci
 NOTE - This section is optional! Git webhooks are useful but not needed for course completion.
 </p>
 
-7. In order to allow GitLab trigger Jenkins (because of the OpenShift Auth Plugin), we need to allow the `Annoymous` user trigger builds. Head to your Jenkins Dashboard and click on `Manage Jenkins` on the left hand side. Then scroll down and click `Configure Global Security`. Alternatively, type in `https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/configureSecurity/` . You should see a screen like so:
+7. In order to allow GitLab trigger Jenkins (because of the OpenShift Auth Plugin), we need to allow the `Anonymous` user trigger builds. Head to your Jenkins Dashboard and click on `Manage Jenkins` on the left hand side. Then scroll down and click `Configure Global Security`. Alternatively, type in `https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/configureSecurity/` . You should see a screen like so:
 ![jenkins-global-security](../images/exercise2/jenkins-global-security.png)
 
 7. Scroll down to the `Authorization` section and allow `Anonymous` to create jobs. Do this by navigating through the matrix of checkboxes and check `Build` and `Cancel` under the Job heading. Leave all other user behaviour as is. Anonymous is the user that GitLab will act as so this allows the WebHook to trigger builds. (The screenshot has been cropped to bring Job further to the left.) Hit `Save` or `Apply`.
