@@ -29,7 +29,7 @@ As a learner by the end of this lesson you will be able to
 - Add branching to the pipeline to target specific namespace
 
 ## Tools and Frameworks
-> The following tools are used throughout this exercise. Familiarity with them is not required but knowing what they are may help!
+> The following tools are used throughout this exercise. Familiarity with them is not required but knowing what they are may help. You will not need to install Vue or Mongodb they are taken care of by our `todolist` app.
 
 1. [Jenkins](https://jenkins.io/) - OpenSource build automation server; highly customisable through plugins
 1. [NodeJS](https://nodejs.org/en/) - Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient. Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
@@ -556,7 +556,7 @@ Remember to replace `<YOUR_NAME>` accordingly.
 #!/bin/bash
 curl -v -f http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${BUILD_TAG}/package-contents.zip -o package-contents.zip
 unzip package-contents.zip
-oc project <YOUR_NAME>-ci-cd # probs not needed
+oc project <YOUR_NAME>-ci-cd
 NAME=todolist-fe
 oc patch bc ${NAME} -p "{\"spec\":{\"output\":{\"to\":{\"kind\":\"ImageStreamTag\",\"name\":\"${NAME}:${BUILD_TAG}\"}}}}"
 oc start-build ${NAME} --from-dir=package-contents/ --follow
@@ -592,7 +592,7 @@ oc rollout latest dc/${NAME}
 ```
 ![deploy-step](../images/exercise2/deploy-step.png)
 
-5. Secondly, add another build step called `Verify OpenShift Deployment` including the following:
+5. When a deployment has completed; OpenShift can verify it's success. Add another step called by clicking the `Add build Step` on the Build tab then `Verify OpenShift Deployment` including the following:
     * Set the Project to your `<YOUR_NAME>-dev`
     * Set the DeploymentConfig to your app's name `todolist-fe`
     * Set the replica count to `1`
@@ -602,7 +602,7 @@ oc rollout latest dc/${NAME}
 
 #### Part 4d - Pipeline
 
-5. With our Jenkins setup in place; now move to our `todolist-fe` app. We need to add our configuration to the frontend to tell it where the API layer is hosted. Open in it your favourite editor and navigate to `src/config/dev.js`. Update `<YOUR_NAME>` accordingly with the root where the Todo List API will live. For example:
+5. With our Jenkins setup in place; now move to our `todolist-fe` app's source code. We have to add our configuration to the frontend to tell it where the API layer will be hosted. Open the source in your favourite editor and navigate to `src/config/dev.js`. Update `<YOUR_NAME>` accordingly with the route where the Todo List API will live when it is deployed, update the `somedomain` to the clusters domain. For example:
 ![fe-dev-config](../images/exercise2/fe-dev-config.png)
 
 5. Repeat this for `src/config/test.js` file. Once done; commit your chanages and push them to GitLab
@@ -612,14 +612,16 @@ $ git commit -m "ADD config for api"
 $ git push
 ```
 
-5. Back on Jenkins; We can tie all the jobs in the pipeline together into a nice single view using the Build Pipeline view. Back on the Jenkins home screen Click the + beside the all tab on the top. Give the new view a sensible name like `dev-todolist-fe-pipeline`
-![add-view](../images/exercise2/add-view.png). 
+5. Back on Jenkins; We can tie all the jobs in the pipeline together into a nice single view using the Build Pipeline view. Back on the Jenkins home screen Click the + beside the all tab on the top.
+![add-view](../images/exercise2/add-view.png)
+
+5. On the view that loads; Give the new view a sensible name like `dev-todolist-fe-pipeline` and select Build Pipeline
+![new-pipeline](../images/exercise2/new-pipeline.png)
 
 5. Set the Pipeline Flow's Inital Job to `dev-todolist-fe-build` and save.
-TODO - change below sscreenshot
 ![pipeline-flow](../images/exercise2/pipeline-flow.png)
 
-5. You should now see the pipeline view. Run the pipeline by hitting run (you can move onto the next part while it is running as it may take some time). 
+5. You should now see the pipeline view. Run the pipeline by hitting run (you can move onto the next part while it is running as it may take some time).
 ![dev-pipeline-view](../images/exercise2/dev-pipeline-view.png)
 
 ### Part 5 - Backend Pipeline
@@ -637,6 +639,7 @@ TODO - change below sscreenshot
 ```bash
 npm run build:ci
 ```
+![api-build-step](../images/exercise2/api-build-step.png)
 
 6. Save the configuration for `dev-todolist-api-build`
 
@@ -658,7 +661,12 @@ npm run build:ci
 
 6. Save the configuration for `dev-todolist-api-build` and that's it for wiring together our `todolist-api` pipeline.
  
-6. Run the `dev-todolist-api-build` to trigger the backend pipeline. While this is building, check our front end app and see if it has deployed successfully. Check the deployment in OpenShift and load the url. If it has been a success we should see our dummyData. This is because there is no backend deployed.
+6. Run the `dev-todolist-api-build` to trigger the backend pipeline. While this is building, check our front end app and see if it has deployed successfully.
+
+6. To check the deployment in OpenShifty; open the console and go to your `dev` namespace. You should see the deployment was successful; hit the URL to open the app (the screenshot below has both apps deployed).
+![ocp-deployment](../images/exercise2/ocp-deployment.png)
+
+6. If it has been a success we should see our dummyData. This is because there is no backend deployed.
 ![no-backend-app](../images/exercise2/no-backend-app.png)
 
 6.  When `dev-todolist-api-build` has completed we should see the sample data has changed on refresh.
