@@ -366,6 +366,11 @@ $ git merge feature/important-flag
 $ git push
 ```
 
+3.  After pushing your changes; start back up the `todolist-api` app on a new terminal session
+```bash
+$ npm run start
+```
+
 #### Part 2b - Create todolist-fe tests
 > Using [Jest](https://facebook.github.io/jest/) as our test runner and the `vue-test-utils` library for managing our vue components; we will now write some tests for fronted functionality to persist our important-flag. The changes required to the front end are quite large but we will use TDD to create our test first, then implement the functionality. 
 
@@ -376,12 +381,14 @@ In `vuex` the application state is managed by a `store`. The `store` houses all 
 There are two parts of the lifecycle to updating the store, the `actions` & `mutations`. When the user clicks a todo to mark it as complete; the `actions` are called. An action could involve a call to the backend or some pre-processing of the data. Once this is done, the change is committed to the store by calling the `mutation` function. A store should only ever be manipulated through a mutation function. Calling the mutation will then update the todo object in the apps local store for rendering in the view.
 
 For example; when marking a todo as done in the UI, the following flow occurs
-    * The `TodoItem.vue` calls the `markTodoDone()` function which dispatches an event to the store.
-    * This calls the `updateTodo()` function in the `actions.js` file
-    * The action will update the backend db (calling our `todolist-api`) with our updated todo object.
-    * The action will commit the change to the store by calling the mutation method `MARK_TODO_COMPLETED`
-    * The `MARK_TODO_COMPLETED` will directly access the store object and update it with the new state value
-    * The `ListOfTodos.vue` component is watching the store for changes and when something gets updated it re-renders the `TodoItem.vue`.
+  * The `TodoItem.vue` calls the `markTodoDone()` function which dispatches an event to the store.
+  * This calls the `updateTodo()` function in the `actions.js` file
+  * The action will update the backend db (calling our `todolist-api`) with our updated todo object.
+  * The action will commit the change to the store by calling the mutation method `MARK_TODO_COMPLETED`
+  * The `MARK_TODO_COMPLETED` will directly access the store object and update it with the new state value
+  * The `ListOfTodos.vue` component is watching the store for changes and when something gets updated it re-renders the `TodoItem.vue`.
+
+The implementation of our `important` flag will follow this same flow.
 
 3. Let's implement our feature by first creating a branch. Our new feature, important flag will behave in the same way as the `MARK_TODO_COMPLETED`. Create a new branch in your `todolist-fe` app for our feature and push it to the remote
 ```bash
@@ -389,18 +396,21 @@ $ git checkout -b feature/important-flag
 $ git push -u origin feature/important-flag
 ```
 
-3. Let's get our tests running by executing a `--watch` on our tests. This will keep re-running our tests everytime there is a file change. All the tests should be passing when we begin
+3. Let's get our tests running by executing a `--watch` on our tests. This will keep re-running our tests everytime there is a file change. It is hany to have this running in a new terminal session.
 ```bash
 $ npm run test -- --watch
 ```
 
-3. There are three places we will add new tests to validate our function behaves as expected against the acceptance criteria from Feature Story supplied to us. We will need to write tests for our `TodoItem.vue` to handle having a red flag and that it is clickable. Our app is going to need to persist the changes in the backend so we'll want to make changes to our `actions.js` and `mutations.js` to keep the api and local copy of the store in sync. Let's start with our `TodoItem.vue` component. Open the `tests/unit/vue-components/TodoItem.spec.js` file. This has been templated with some example test to correspond with our A/Cs for speed of doing the lab. Find the describe block for our important flag tests. It is setup already with a `beforeEach()` hook for test setup.
+3. All the tests should be passing when we begin. If `No tests found related to files changed since last commit` is on show; hit `a` on the terminal to re-run `all` tests.
+![rerun-all](../images/exercise3/rerun-all.png)
+
+3. There are three places we will add new tests to validate our function behaves as expected against the acceptance criteria from the Feature Story supplied to us. We will need to write tests for our `TodoItem.vue` to handle having a red flag and that it is clickable. Our app is going to need to persist the changes in the backend so we'll want to make changes to our `actions.js` and `mutations.js` to keep the api and local copy of the store in sync. Let's start with our `TodoItem.vue` component. Open the `tests/unit/vue-components/TodoItem.spec.js` file. This has been templated with some example test to correspond with our A/Cs for speed of doing the lab. Find the describe block for our important flag tests. It is setup already with a `beforeEach()` hook for test setup.
 ![important-flag-before](../images/exercise3/important-flag-before.png)
 
 3. Each of our test cases has it's skeleton in place already for example the `TodoItem.vue` component takes a property of `todos` when rendering. This setup is already done for each of our tests so all we have to do is fill in our assertions.
 ![todoitem-skeleton-tests](../images/exercise3/todoitem-skeleton-tests.png)
 
-3. Let's implement the first test `it("should render a button with important flag"`. This test will assert if the button is present on the page and it contains the `.important-flag` CSS class. To implement this; add the expect statement as follows.  
+3. Let's implement the first test `it("should render a button with important flag"`. This test will assert if the button is present on the page and it contains the `.important-flag` CSS class. To implement this; add the `expect` statement as follows below the `// TODO - test goes here!` comment.  
 ```javascript
   it("should render a button with important flag", () => {
     const wrapper = mount(TodoItem, {
@@ -414,7 +424,7 @@ $ npm run test -- --watch
 3. Save the file and we should see in our test watch the test case has started failing because we have not yet implemented the feature!
 ![todoitem-fail-test](../images/exercise3/todoitem-fail-test.png)
 
-3. With a basic assertion in place, let's continue on to the next few tests. We want the important flag to be red when an item in the todolist is marked accordingly. Conversely we want it to be not red when false. Let's create a check for `.red-flag` CSS property to be present when imporant is true and not when false.
+3. With a basic assertion in place, let's continue on to the next few tests. We want the important flag to be red when an item in the todolist is marked accordingly. Conversely we want it to be not red when false. Let's create a check for `.red-flag` CSS property to be present when imporant is true and not when false. Complete the `expect` statements in your test file as shown below for both tests.
 ```javascript
   it("should set the colour to red when true", () => {
     const wrapper = mount(TodoItem, {
@@ -447,11 +457,12 @@ $ npm run test -- --watch
   });
 ```
 
-3. With our tests written for the feature's UI component, let's implement our code to pass the tests. Open up the `src/components/TodoItem.vue`. Each vue file is broken down into 3 sections
+3. With our tests written for the feature's UI component, let's implement our code to pass the tests. Explore the `src/components/TodoItem.vue`. Each vue file is broken down into 3 sections
     * The `<template></template>` contains the HTML of our component. This could include references to other Components also
     * The `<script></script>` contains the JavaScript of our component and is essentially the logic for our component. It defines things like `properties`, `methods` and other `components`
     * The `<style></style>` contains the encapsulated CSS of our component
-Underneath the `</md-list-item>` tag, let's add a new md-button. Add a `.important-flag` class on the `md-button` and put the svg of the flag provided inside it.
+
+3. Underneath the `</md-list-item>` tag, let's add a new md-button. Add a `.important-flag` class on the `md-button` and put the svg of the flag provided inside it.
 ```html
     </md-list-item>
     <!-- TODO - SVG for use in Lab3 -->
