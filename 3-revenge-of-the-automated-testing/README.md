@@ -289,25 +289,28 @@ describe("GET /api/todos", function() {
 });
 ```
 where:
-_ `describe` is used to group tests together into a collection asserting some feature; for example the get all todos api.
-_ `it` is an individual test statement and should contain an `expect` or a `should` statement asserting behaviour of the API under test.
-_ `request` is a library for making http calls to the api.
-_ `.expect(200)` asserts the HTTP Return Code
-_ `res.body.should.be.instanceof(Array);` is the actual test call
-_ `done();` tells the test runner that `mocha` has finished execution. This is needed as the http calls are asynchronous.
+  - `describe` is used to group tests together into a collection asserting some feature; for example the get all todos api.
+  - `it` is an individual test statement and should contain an `expect` or a `should` statement asserting behaviour of the API under test.
+  - `request` is a library for making http calls to the api.
+  - `.expect(200)` asserts the HTTP Return Code
+  - `res.body.should.be.instanceof(Array);` is the actual test call
+  - `done();` tells the test runner that `mocha` has finished execution. This is needed as the http calls are asynchronous.
 
-3.  With this knowledge; let's implement our test for the `important` flag. We expect the fronted to introduce a new property on each `todo` that gets passed to the backend called `important`. The API will need to handle this new property and pass it into the mongodb. Let's begin implementing this functionality by writing our test case. Navigate to the `PUT /api/todos` section of the test which should be at the bottom ![todo-api-tests](../images/exercise3/todo-api-tests.png).
+3.  With this knowledge; let's implement our test for the `important` flag. We expect the fronted to introduce a new property on each `todo` that gets passed to the backend called `important`. The API will need to handle this new property and pass it into the mongodb. Let's begin implementing this functionality by writing our test case. Navigate to the `PUT /api/todos` section of the `server/api/todo/todo.spec.js` test file (which should be at the bottom) 
+![todo-api-tests](../images/exercise3/todo-api-tests.png)
 
-3.  Before writing our test; let's first make sure all the existing tests are passing.
+3. Before writing our test; let's first make sure all the existing tests are passing.
 ```bash
 $ npm run test
 ```
 
-3.  With all the tests passing; let's add our new one. For ease of completing this exercise a template of a new test has been written at the very end of the file. A PUT request responds in our API with the data that it just updated, so provided that MongoDB accepted the change, it will respond with an object that has the `important` property on it. To write our test; edit the `it("should ....", function(done) {` by completing the following:
+3. With all the tests passing; let's add our new one. For ease of completing this exercise a template of a new test has been written at the very end of the file (just below the `  // Exercise 3 test case!` comment). A PUT request responds in our API with the data that it has just updated. So provided that MongoDB accepted the change, the API will respond with an object that has the `important` property on it. To write our test; edit the template test by completing the following:
     * Edit the `it("should ...")` to describe the imporant flag we're testing
     * Edit the `.send()` to include `important: true` property
+    * Edit the `.expect()` to be `.expect(200)`
     * Add a new test assertion to check that `res.body.important` is `true` below the `// YOUR TEST GO HERE` line.
 ```javascript
+// Exercise 3 test case!
 it("should mark todo as important and persist it", function(done) {
     request(app)
       .put("/api/todos/" + todoId)
@@ -335,7 +338,7 @@ $ npm run test
 ```
 ![fail-mocha](../images/exercise3/fail-mocha.png)
 
-3.  With our test now failing; let's implement the feature. This is quite a simple change; all we need to do it update the `server/api/todo/todo.model.js` to allow an additional property on the schema called `important` of type Boolean.
+3.  With our test now failing; let's implement the feature. This is quite a simple change - all we need to do is update the `server/api/todo/todo.model.js`. Add an additional property on the schema called `important` and make it's type Boolean.
 ```javascript
 const TodoSchema = new Schema({
   title: String,
@@ -356,9 +359,11 @@ NOTE - At this point in a residency we would peer review the code before pushing
 ```bash
 $ git add .
 $ git commit -m "ADD backend schema updates"
+$ git push
+# Now Update our develop branch to trigger a build!
 $ git checkout develop
 $ git merge feature/important-flag
-$ git push --all
+$ git push
 ```
 
 #### Part 2b - Create todolist-fe tests
