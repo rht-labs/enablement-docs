@@ -568,7 +568,7 @@ $ git commit -m "Implementing the store and actions"
 $ git push
 ```
 
-3. Before running a build in Jenkins, let's add our tests and code to the develop branch. Ask your neighbour to review your code changes and if they approve; merge them to Develop!
+3. Before running a build in Jenkins, let's add our tests and code to the develop branch. Ask your neighbour to review your code changes and if they approve; merge them to Develop! (If you're feeling adventurous - raise a PR through GitLab and have someone on your desk peer review it!)
 <p class="tip">
 NOTE - At this point in a residency we would peer review the code before pushing it to develop or master branch!
 </p>
