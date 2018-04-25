@@ -233,7 +233,7 @@ $ npm run e2e
 
 2. On the Build section; add a build step to execute shell and fill in the followin substituting the domain name and `<YOUR_NAME>` and `somedomain` accordingly:
 ```bash
-export E2E_TEST_ROUTE="http://todolist-fe-<YOUR_NAME>-dev.apps.somedomain.com/"
+export E2E_TEST_ROUTE=todolist-fe-<YOUR_NAME>-dev.apps.somedomain.com
 npm install
 npm run e2e:ci
 ```
