@@ -197,7 +197,7 @@ $ npm run e2e
 
 2. Set `Color ANSI Console Output` on the `Build Environment` section 
 
-2. On the Build section; add a build step to execute shell and fill in the followin substituting the domain name and `YOUR_NAME` accordingly:
+2. On the Build section; add a build step to execute shell and fill in the followin substituting the domain name and `<YOUR_NAME>` and `somedomain` accordingly:
 ```bash
 export E2E_TEST_ROUTE="http://todolist-fe-<YOUR_NAME>-dev.apps.somedomain.com/"
 npm install
@@ -205,13 +205,13 @@ npm run e2e:ci
 ```
 ![e2e-steps](../images/exercise3/e2e-steps.png)
 
-2. Add a Post Build action to publish Junit test scores and add `reports/e2e/specs/*.xml` to the report location.
+2. Add a Post Build action to publish Junit test scores and add `reports/e2e/specs/*.xml` to the report location. Save the configuration.
 ![e2e-post-build](../images/exercise3/e2e-post-build.png)
 
-2. Finally; connect the e2e job to our deploy by editing the post build actions on `dev-todolist-fe-deploy`. Set trigger parameterised build on other jobs to be `dev-todolist-fe-e2e` and set the params to the current ones.
+2. Finally; connect the e2e job to our dev pipleline by editing the post build actions on `dev-todolist-fe-deploy` job. Set trigger parameterised build on other jobs to be `dev-todolist-fe-e2e`. Add a Parameter and set the it to the `Current build parameters` and save the settings.
 ![e2e-trigger](../images/exercise3/e2e-trigger.png)
 
-2. Run the pipeline from the beginning to see the tests executed.
+2. Run the pipeline from the beginning to see the tests executed (two executions will show tests scores on the graph!).
 
 ### Part 2 - TodoList new feature
 > _In this exercise we will introduce a new feature to create an important flag on the todos. In order to be able to build and test our feature we will use TDD_

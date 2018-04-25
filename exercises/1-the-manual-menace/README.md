@@ -36,6 +36,8 @@ As a learner you will be able to
 This exercise begins with an empty Cluster
 > TODO - add big picture here...
 
+![ds-messing-around.gif](../images/exercise1/ds-messing-around.gif)
+
 _____
 
 ## 10,000 Ft View
