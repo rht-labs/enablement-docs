@@ -91,8 +91,8 @@ _On page load:_
 ### Part 1 - Tests in our Pipeline
 > _In this part we will get familiar with the layout of our tests. We will also improve the pipeline created already by adding some unit tests for the frontend & backend along with some end to end tests (e2e) to validate the full solution_
 
-#### Part 1a - Unit tests
-> In this exercise we will execute our test for the frontend and backend locally. Once verified we will add them to Jenkins.
+#### Part 1a - FE Unit tests
+> In this exercise we will execute our test for the frontend locally. Once verified we will add them to Jenkins.
 
 2. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist-fe` directory and run `test`.
 ```bash
@@ -122,7 +122,7 @@ Click on `dev-todolist-fe-build` and then click the `configure` button on the le
 2. Scroll to the `Build` part of the configuration page and add `npm run test` below `npm install`. Click `save` or `apply` at the bottom to save the changes.
 ![jenkins-build-step](../images/exercise3/jenkins-build-step.png)
 
-2. Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report`.
+2. Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report` (Jenkins might place this at the top of the `Post-build Actions` list).
 ![xunit-action](../images/exercise3/xunit-action.png)
 
 2. Click the `Add` button under `Publish xUnit test result report` and select `JUnit`. In the pattern field enter `test-report.xml`. In the `Failed Tests Thresholds`  input box enter 0 under `Red Ball Total`. It should look a little something like this:
@@ -140,13 +140,16 @@ $ git commit -m "TEST - failing build with tests"
 $ git push
 ```
 
-2. Rerun the `dev-todolist-fe-build` job. It should have failed and not run any other builds. 
+2. Rerun the `dev-todolist-fe-build` job. It should have failed and not run any other jobs. 
 ![jenkins-with-failing-build](../images/exercise3/jenkins-with-failing-build.png)
 
 2. You can examine the test results on the jobs home page. Drill down into the tests to see which failed and other useful stats
 ![fe-test-fails](../images/exercise3/fe-test-fails.png)
 
 2. Undo the changes you made to the `ListOfTodos.spec.js` file, commit your code and rerun the build. This should trigger a full `build --> bake --> deploy` of `todolist-fe`.
+
+#### Part 1b - BE Unit tests
+> In this exercise we will execute our test for the backend locally. Once verified we will add them to Jenkins and add a mongodb to Jenkins for running tests there.
 
 2. We're now going to do the same for the api. However, in order to run our API tests in CI; we need there to be a MongoDB available for testing. In our `enablement-ci-cd` repo; checkout the mongo branch as shown below to bring in the template and params. The mongodb template we're using is the same as the one for our `todolist-fe` created in previous lab.
 ```bash
@@ -186,7 +189,7 @@ $ ansible-playbook apply.yml -e target=tools \
 
 2. Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report`.
 
-2. Click the `Add` button under `Publish xUnit test result report` and select `JUnit`. In the pattern field enter `reports/server/mocha/test-results.xml`. In the `Failed Tests Thresholds`  input box enter 0 under `Red Ball Total`. It should look a little something like this:
+2. Click the `Add` button under `Publish xUnit test result report` and select `JUnit`. In the pattern field enter `reports/server/mocha/test-results.xml`. In the `Failed Tests Thresholds`  input box enter 0 under `Red Ball Total`. It should look a little something like this. Save your changes:
 ![api-post-build](../images/exercise3/api-post-build.png)
 
 2. We're now going to deliberately fail a test again to ensure that `bake` and `deploy` jobs aren't triggered if any tests fail. Go to `todo.spec.js` in `/server/api/todo` and head to `line 35`. Replace `false` with `true`. 
@@ -205,7 +208,7 @@ $ git push
   NOTE - Don't forget to undo the changes that you made to your tests!
 </p>
 
-#### Part 1b - End to End tests (e2e)
+#### Part 1c - End to End tests (e2e)
 > _Unit tests are a great way to get immediate feedback as part of testing an application. End to end tests that drive user behaviour are another amazing way to ensure an application is behaving as expected._
 
 In this exercise we will add a new stage to our pipeline called `dev-todolist-fe-e2e` that will run after the deploy has been completed. End to end tests will use Nightwatchjs to orchestrate a selenium webdriver instance that controls the web browser; in this case Chrome!
@@ -223,15 +226,15 @@ $ npm run e2e
 
 2. With tests executing locally; let's add them to our Jenkins pipeline. To do this; we'll create a new job and connect it up to our `todolist-fe` jobs. Open Jenkins and create a `New Item` called `dev-todolist-fe-e2e`. Make this Job `Freestyle`.
 
-2. On the configuration page; Set the Label for the job to run on as `jenkins-slave-npm`. Check the box marking the build parameterised and add a String parameter of `BUILD_TAG` as done before
+2. On the configuration page (under the general tab); Set the Label for the job to run on as `jenkins-slave-npm`. Check the box marking the build parameterised and add a String parameter of `BUILD_TAG` as done before
 ![e2e-general](../images/exercise3/e2e-general.png)
 
 2. On the Source Code Management tab; set the source code to git and add the url to your `todolist-fe` app. Set the branch to `refs/tags/${BUILD_TAG}`
 ![e2e-git](../images/exercise3/e2e-git.png)
 
-2. Set `Color ANSI Console Output` on the `Build Environment` section 
+2. Set `Color ANSI Console Output` on the `Build Environment` section
 
-2. On the Build section; add a build step to execute shell and fill in the followin substituting the domain name and `<YOUR_NAME>` and `somedomain` accordingly:
+2. On the Build section; add a build step to execute shell and fill in the following substituting `<YOUR_NAME>` and `somedomain` accordingly:
 ```bash
 export E2E_TEST_ROUTE=todolist-fe-<YOUR_NAME>-dev.apps.somedomain.com
 npm install
@@ -239,10 +242,10 @@ npm run e2e:ci
 ```
 ![e2e-steps](../images/exercise3/e2e-steps.png)
 
-2. Add a Post Build action to publish Junit test scores and add `reports/e2e/specs/*.xml` to the report location. Save the configuration.
+2. Add a Post Build action to `Publish Junit test result report`. Add `reports/e2e/specs/*.xml` to the report location and save the configuration to be brought back to the Job's homepage.
 ![e2e-post-build](../images/exercise3/e2e-post-build.png)
 
-2. Finally; connect the e2e job to our dev pipleline by editing the post build actions on `dev-todolist-fe-deploy` job. Set trigger parameterised build on other jobs to be `dev-todolist-fe-e2e`. Add a Parameter and set the it to the `Current build parameters` and save the settings.
+2. We want to connect the e2e job we just created to our dev pipleline by editing the post build actions on `dev-todolist-fe-deploy` job. Open the `dev-todolist-fe-deploy` job and hit `configure`. In the `Post-build actions` section of this job add a `Trigger parameterised build` on other jobs. Set the `Projects to build` to be `dev-todolist-fe-e2e`. Add a Parameter and set the it to the `Current build parameters`. Save the settings.
 ![e2e-trigger](../images/exercise3/e2e-trigger.png)
 
 2. Run the pipeline from the beginning to see the tests executed (two executions will show tests scores on the graph!).
@@ -527,8 +530,7 @@ updateTodo({ commit, state }, { id, important }) {
     }
 ```
 
-3. Finally, let's implement the `mutation` for our feature. Again, starting with the tests..... Open the `tests/unit/javascript/mutations.spec.js`. Our mutation method is responsible to toggling the todo's `important` property between true and 
-false. Let's implement the tests for this functionality by setting imporant to be true and calling the method expecting the inverse and setting it to false and calling the method expecting the inverse. 
+3. Finally, let's implement the `mutation` for our feature. Again, starting with the tests..... Open the `tests/unit/javascript/mutations.spec.js` to find our skeleton tests at the bottom of the file. Our mutation method is responsible for toggling the todo's `important` property between `true` and `false`. Let's implement the tests for this functionality by setting important to be true and calling the method expecting the inverse. Then let's set it to false and call the method expecting the inverse. Add the expectations below the `// TODO - test goes here!` comment as done previously.
 ```javascript
   it("it should MARK_TODO_IMPORTANT as false", () => {
     state.todos = importantTodos;
@@ -546,7 +548,7 @@ false. Let's implement the tests for this functionality by setting imporant to b
   });
 ```
 
-3. With our tests running and failing, let's implement the feature to their spec. Open the `src/store/mutations.js` and add another function called `MARK_TODO_IMPORTANT` below the `MARK_TODO_COMPLETED` to toggle `todo.important` between true and false.
+3. With our tests running and failing, let's implement the feature to their spec. Open the `src/store/mutations.js` and add another function called `MARK_TODO_IMPORTANT` below the `MARK_TODO_COMPLETED` to toggle `todo.important` between true and false. NOTE - add a `,` at the end of the `MARK_TODO_COMPLETED(){}` function call.
 ```javascript
   MARK_TODO_IMPORTANT(state, index) {
     console.log("INFO - MARK_TODO_IMPORTANT");
@@ -554,7 +556,7 @@ false. Let's implement the tests for this functionality by setting imporant to b
   }
 ```
 
-3. All our tests should now be passing. On the watch tab where they are running, hit `u` to re-run all tests and update any snapshots.
+3. All our tests should now be passing. On the watch tab where they are running, hit `a` to re-run all tests and update any snapshots with `u` if needed.
 
 3. With all our tests now passing, let's commit our code. On the terminal, run
 ```bash
