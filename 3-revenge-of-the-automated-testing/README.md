@@ -143,6 +143,9 @@ $ git push
 2. Rerun the `dev-todolist-fe-build` job. It should have failed and not run any other builds. 
 ![jenkins-with-failing-build](../images/exercise3/jenkins-with-failing-build.png)
 
+2. You can examine the test results on the jobs home page. Drill down into the tests to see which failed and other useful stats
+![fe-test-fails](../images/exercise3/fe-test-fails.png)
+
 2. Undo the changes you made to the `ListOfTodos.spec.js` file, commit your code and rerun the build. This should trigger a full `build --> bake --> deploy` of `todolist-fe`.
 
 2. We're now going to do the same for the api. However, in order to run our API tests in CI; we need there to be a MongoDB available for testing. In our `enablement-ci-cd` repo; checkout the mongo branch as shown below to bring in the template and params. The mongodb template we're using is the same as the one for our `todolist-fe` created in previous lab.
