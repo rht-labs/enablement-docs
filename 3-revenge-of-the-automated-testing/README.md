@@ -490,7 +490,7 @@ $ npm run test -- --watch
     },
 ```
 
-3. Finally - let's connect the click button in the DOM to the Javascript function we've just created. In the template, add a click handler to the md-button to call the function `markImportant()` by adding ` @click="markImportant()"` to the `<md-button> tag 
+3. Finally - let's connect the click button in the DOM to the Javascript function we've just created. In the template, add a click handler to the md-button to call the function `markImportant()` by adding ` @click="markImportant()"` to the `<md-button>` tag
 ```html
     <!-- TODO - SVG for use in Lab3 -->
     <md-button class="important-flag" @click="markImportant()">
@@ -505,7 +505,9 @@ $ git commit -m "Implementing the todoitem flag"
 $ git push
 ```
 
-3. If we try to use our important flag, we should see it's still not behaving as expected; this is because we're not updating the state of the app in response to the click event. We need to implement the `actions` and `mutations` for our feature. Let's start with the tests. Open the `tests/unit/javascript/actions.spec.js` and navigate to the bottom of the file. Our action should should commit the `MARK_TODO_IMPORTANT` to the mutations. Scroll to the end of the test file and implement the skeleton test by adding `expect(commit.firstCall.args[0]).toBe("MARK_TODO_IMPORTANT");` as the assertion.
+3. Open our local todolist app (http://localhost:8080/#/todo). If we try to use our important flag, we should see it's still not behaving as expected; this is because we're not updating the state of the app in response to the click event.
+
+3. We need to implement the `actions` and `mutations` for our feature. Let's start with the tests. Open the `tests/unit/javascript/actions.spec.js` and navigate to the bottom of the file. Our action should should commit the `MARK_TODO_IMPORTANT` to the mutations. Scroll to the end of the test file and implement the skeleton test by adding `expect(commit.firstCall.args[0]).toBe("MARK_TODO_IMPORTANT");` as the assertion.
 ```javascript
   it("should call MARK_TODO_IMPORTANT", done => {
     const commit = sinon.spy();
@@ -555,6 +557,7 @@ updateTodo({ commit, state }, { id, important }) {
     state.todos[index].important = !state.todos[index].important;
   }
 ```
+![mark-todo-important](../images/exercise3/mark-todo-important.png)
 
 3. All our tests should now be passing. On the watch tab where they are running, hit `a` to re-run all tests and update any snapshots with `u` if needed.
 
@@ -565,7 +568,7 @@ $ git commit -m "Implementing the store and actions"
 $ git push
 ```
 
-3. Before running a build in Jenkins, let's add our tests and code to the develop branch
+3. Before running a build in Jenkins, let's add our tests and code to the develop branch. Ask your neighbour to review your code changes and if they approve; merge them to Develop!
 <p class="tip">
 NOTE - At this point in a residency we would peer review the code before pushing it to develop or master branch!
 </p>
@@ -575,7 +578,8 @@ $ git merge feature/important-flag
 $ git push --all
 ```
 
-3. Run a build in Jenkins. We should see the test trend increase as we've added more tests. Validate the flag is working as expected.
+3. Run a build in Jenkins. If all things were successful; our application should be deployed as expected! Validate the flag is working as expected.
+![todolist-important](../images/exercise3/todolist-important.png)
 
 #### Part 2c - Create todolist e2e tests
 
@@ -587,7 +591,6 @@ $ git push --all
 
 > _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope._
 
-* Edit the `dev-todolist-fe-e2e` job so it takes a parameter of the `BUILD_TAG` and only checks out this tag when running the e2e
 * Add Config maps to inject DB creds to the app
 * Create a blue/green deploy based on the success of running e2e tests against either blue or green and flopping load over to new endpoint when successful.
 Advanced
