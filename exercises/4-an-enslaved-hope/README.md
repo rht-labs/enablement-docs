@@ -100,10 +100,13 @@ $ git push
 2. Save the Job configuration to run the intial scan. The log will show scans for `master` and `develop` branch which have no `Jenkinsfile` so are skipped. The resulting view will show the `feature/jenkisifle` job corresponding the only branch that currently has one. The build should run automatically. 
 ![todolist-api-multi](../images/exercise4/todolist-api-multi.png)
 
-2. The pipeline file is setup to only run `bake` & `deploy` stages when on `master` or `develop` branch. This is to provide us with very fast feedback for team members working on feature or bug fix branches. Each time someone commits or creates a new branch a basic build with testing occurs to give very rapid feedback to the team. Let's now update our branches to include the Jenkinsfile and delete the feature branch.
+2. The pipeline file is setup to only run `bake` & `deploy` stages when on `master` or `develop` branch. This is to provide us with very fast feedback for team members working on feature or bug fix branches. Each time someone commits or creates a new branch a basic build with testing occurs to give very rapid feedback to the team. Let's now update our  `master` and `develop` branches to include the Jenkinsfile and delete the feature branch.
 ```bash
 $ git checkout develop
 $ git merge feature/jenkinsfile
+# you may get merge conflicts at this point
+$ git add .
+$ git commit -m "Jenkinsfile updates"
 $ git checkout master
 $ git merge develop
 $ git push -u origin --all
@@ -124,7 +127,8 @@ $ cd todolist-fe
 $ git checkout feature/jenkinsfile
 ```
 
-2. Open up your `todolist-fe` application in your favourite editor and move to the `Jenkinsfile` in the root of the project. Update all `<YOUR_NAME>` and `<GIT_USERNAME>` as you did before. Check the  `GITLAB_DOMAIN` is set too. 
+2. Open up your `todolist-fe` application in your favourite editor and move to the `Jenkinsfile` in the root of the project. Update all `<YOUR_NAME>` and `<GIT_USERNAME>` as you did before, including in the prepare environment steps. Check the  `GITLAB_DOMAIN` is set too. 
+![jenkinsfile-prep](../images/exercise4/jenkinsfile-prep.png)
 
 2. Commit your changes to your feature branch as you did previously. 
 ```bash
@@ -135,11 +139,16 @@ $ git push
 
 2. This time update your master and develop branches before creating config in Jenkins
 ```
-git checkout develop
-git merge feature/jenkinsfile
-git checkout master
-git merge develop
-git push -u origin --all
+$ git checkout develop
+$ git merge feature/jenkinsfile
+# you may get merge conflicts at this point
+$ git add .
+$ git commit -m "Jenkinsfile updates"
+$ git checkout master
+$ git merge develop
+# this is to delete the branch from the remote
+$ git push origin :feature/jenkinsfile
+$ git push -u origin --all
 ```
 
 2. On Jenkins; create a new `Multibranch Pipeline` job called `todolist-fe`.
@@ -150,7 +159,7 @@ git push -u origin --all
 ![todolist-fe-multi](../images/exercise4/todolist-fe-multi.png)
 
 2. Run the jobs and validate the app is working as expected in the `test` environment!
-
+![todolist-test](../images/exercise4/todolist-test.png)
 
 ### Part 2 - OCP Pipeline
 > _This exercise adds a new BuildConfig to our cluster for the todolist-apps to run their pipelines in OpenShift using the OpenShift Jenkins Sync Plugin. We will use the OpenShift Applier to create the content in the cluster_
