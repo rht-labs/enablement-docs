@@ -59,7 +59,7 @@ Some of the key things to note:
     * `post {}` hook is used to specify the post-build-actions. Jenkins declarative provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
     * `when {}` is used for flow control. It can be used at stage level and be used to stop pipeline entering that stage. eg when branch is master; deploy to `test` environment.
 
-2. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous labs. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile and update the `GITLAB_DOMAIN` accordingly. 
+2. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous labs. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
 ```groovy
     environment {
         // GLobal Vars
@@ -71,8 +71,8 @@ Some of the key things to note:
 
         GIT_SSL_NO_VERIFY = true
         GIT_CREDENTIALS = credentials('jenkins-git-creds')
-        GITLAB_DOMAIN = "gitlab-<YOUR_NAME>-ci-cd.apps.somedomain.com"
-        GITLAB_PROJECT = "<YOUR_NAME>"
+        GITLAB_DOMAIN = "gitlab.apps.lader.rht-labs.com"
+        GITLAB_PROJECT = "<GIT_USERNAME>"
     }
 ```
 
@@ -91,7 +91,7 @@ $ git push
 2. On the job's configure page; set the Branch Sources to `git`
 ![multibranch-select-git](../images/exercise4/multibranch-select-git.png)
 
-2. Fill in the Git settings with your `todolist-api` project url and setting the credentials
+2. Fill in the Git settings with your `todolist-api` GitLab url and set the credentials as you've done before.
 ![multibranch-git](../images/exercise4/multibranch-git.png)
 
 2. Set the `Scan Multibranch Pipeline Triggers` to be periodical and the internal to 1 minute. This will poll the gitlab instance for new branches or change sets to build.
@@ -124,7 +124,7 @@ $ cd todolist-fe
 $ git checkout feature/jenkinsfile
 ```
 
-2. Open up your `todolist-fe` application in your favourite editor and move to the `Jenkinsfile` in the root of the project. Update all `<YOUR_NAME>` and `GITLAB_DOMAIN` references accordingly. 
+2. Open up your `todolist-fe` application in your favourite editor and move to the `Jenkinsfile` in the root of the project. Update all `<YOUR_NAME>` and `<GIT_USERNAME>` as you did before. Check the  `GITLAB_DOMAIN` is set too. 
 
 2. Commit your changes to your feature branch as you did previously. 
 ```bash
@@ -159,7 +159,7 @@ git push -u origin --all
 
 2. Open the `params/ocp-pipeline` file and update `PIPELINE_SOURCE_REPOSITORY_URL` with the git url of your project (Don't forget to add the `.git` at the end). For example:
 ```
-PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab-<YOUR_NAME>-ci-cd.apps.somedomain.com/<YOUR_NAME>/todolist-fe.git
+PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab.apps.lader.rht-labs.com/<GIT_USERNAME>/todolist-fe.git
 PIPELINE_SOURCE_REPOSITORY_REF=develop
 NAME=todolist-fe
 ```
@@ -200,7 +200,7 @@ $ ansible-playbook apply.yml -i inventory/ \
 
 2. Update the `todolist-api/.openshift-applier/params/ocp-pipeline`
 ```
-PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab-ci-cd.apps.somedomain.com/<YOUR_NAME>/todolist-api.git
+PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab.apps.lader.rht-labs.com/<GIT_USERNAME>/todolist-api.git
 PIPELINE_SOURCE_REPOSITORY_REF=develop
 NAME=todolist-api
 ```
