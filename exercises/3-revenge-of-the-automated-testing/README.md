@@ -145,8 +145,39 @@ $ git push
 
 2. Undo the changes you made to the `ListOfTodos.spec.js` file, commit your code and rerun the build. This should trigger a full `build --> bake --> deploy` of `todolist-fe`.
 
-2. We're now going to do the same for the api. Head to the `configure` panel of the `dev-todolist-api-build` job. 
+2. We're now going to do the same for the api. However, in order to run our API tests in CI; we need there to be a MongoDB available for testing. In our `enablement-ci-cd` repo; checkout the mongo branch as shown below to bring in the template and params. The mongodb template we're using is the same as the one for our `todolist-fe` created in previous lab.
+```bash
+$ git checkout exercise3/mongodb params/mongodb templates/mongodb.yml
+```
 
+2. Open `enablement-ci-cd` in your favourite editor. Edit the `inventory/host_vars/ci-cd-tooling.yml` to include a new object for our mongodb  as shown below. This item can be added below the jenkins slave in the `ci-cd-builds` section.
+```yaml
+  - name: "jenkins-mongodb"
+    namespace: "{{ ci_cd_namespace }}"
+    template: "{{ playbook_dir }}/templates/mongodb.yml"
+    params: "{{ playbook_dir }}/params/mongodb"
+    tags:
+    - mongodb
+```
+![jenkins-mongo](../images/exercise3/jenkins-mongo.png)
+
+2. Git commit your updates to the inventory to git for traceability.
+```bash
+$ git add .
+$ git commit -m "ADD - mongodb for use in the pipeline"
+$ git push
+```
+
+2. Apply this change as done previously using ansible. The deployment can be validated by going to your `<YOUR_NAME>-ci-cd` namespace! 
+```bash
+$ ansible-playbook apply.yml -e target=tools \
+  -i inventory/ \
+  -e "filter_tags=mongodb"
+```
+![ocp-mongo](../images/exercise3/ocp-mongo.png)
+
+2. With the mongodb in place Open up Jenkins and head to the `configure` panel of the `dev-todolist-api-build` job. 
+ 
 2. Add `npm run test:ci` above `npm run build:ci`.
 ![api-build-step](../images/exercise3/api-build-step.png)
 
