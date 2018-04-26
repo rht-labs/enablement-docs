@@ -206,7 +206,7 @@ NOTE - your build may have failed because of the a security failure but the repo
         }
 ```
 
-3. To get the linting working; we will add a new step to our `stage("node-build"){ }` section to lint the Javascript code. After the `npm install`; add a command to run the linting.
+3. To get the linting working; we will add a new step to our `stage("node-build"){ }` section to lint the Javascript code. Continuing in the `Jenkinsfile`, After the `npm install`; add a command to run the linting.
 ```groovy
 echo '### Install deps ###'
 sh 'npm install'
@@ -225,6 +225,9 @@ $ git push
 ![linting-issue](../images/exercise5/linting-issue.png)
 
 3. To view the coverage graph; go to the job's build page and open the `Code Coverage` report from the nav bar on the side. 
+<p class="tip">
+NOTE - Sometimes this won't display on the `yourjenkins.com/job/todolist-fe/job/branch/` sidebar, click on an individual build in the build history and it should appear on the side navbar.
+</p>
 ![report-location](../images/exercise5/report-location.png)
 
 3. Open the report to drill down into detail of where testing coverage could be improved! 
@@ -254,7 +257,7 @@ An arbitrary value for the API's to respond in has been chosen. It is set in the
 
 4. Set the `Color ANSI Console Output` on the Build Environment section.
 
-4. Create a step to execute shell and add the following to it, replacing `<YOUR_NAME>` and `somedomain` as expected. We will just test the `create` and `show` API for the moment. We are grabbing the response code of the perf-test to keep Jenkins running both shells steps and then exiting with whichever fails:
+4. Click `add build step` and select `execute shell` and add the following to it, replacing `<YOUR_NAME>` and `somedomain` as expected. We will just test the `create` and `show` API for the moment. We are grabbing the response code of the perf-test to keep Jenkins running both shells steps and then exiting with whichever fails:
 ```bash
 export E2E_TEST_ROUTE=todolist-api-<YOUR_NAME>-dev.apps.somedomain.com
 npm install
@@ -272,7 +275,7 @@ exit $(($rc1 | $rc2))
 4. On the new dialog, name the Plot group eg `benchmark-tests` and add `create­-api` as the Plot title. Set the `Number of Builds to Include` to a large number like `100`. Set the Data Series file to be `reports/server/perf/create-perf-score.csv` and mark the `Load data from CSV fiel` checkbox. Apply those changes
 ![jenkins-plot](../images/exercise5/jenkins-plot.png)
 
-4. Hit `Add Plot` to add another. Set Plot group to `benchmark-tests` again but this time setting the Plot title to `show­-api`. Set the Data Series file to be `reports/server/perf/show-perf-score.csv` and mark the `Load data from CSV checkbox`. Save those changes and run the job (Job could take a while to execute!).
+4. Hit `Add Plot` to add another. Set Plot group to `benchmark-tests` again but this time setting the Plot title to `show­-api`. Set the Data Series file to be `reports/server/perf/show-perf-score.csv` and mark the `Load data from CSV` radio button. Save those changes and run the job (Job could take a while to execute!).
 
 4. Run it a few times to start to generate the data points on the plot. The `bench-tests` plot is available on the job's homepage
 ![result-plot](../images/exercise5/result-plot.png)
