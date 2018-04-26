@@ -269,10 +269,10 @@ exit $(($rc1 | $rc2))
 
 4. On the Post Build actions section we will plot the data from the perf tests in Jenkins. Add a `Post-build Action > Plot Build Data`.
 
-4. On the new dialog, name the Plot group eg `benchmark­-tests` and add `create­-api` as the Plot title. Set the `Number of Builds to Include` to a large number like `100`. Set the Data Series file to be `reports/server/perf/create­-perf­-score.csv` and mark the `Load data from CSV fiel` checkbox. Apply those changes
+4. On the new dialog, name the Plot group eg `benchmark-tests` and add `create­-api` as the Plot title. Set the `Number of Builds to Include` to a large number like `100`. Set the Data Series file to be `reports/server/perf/create-perf-score.csv` and mark the `Load data from CSV fiel` checkbox. Apply those changes
 ![jenkins-plot](../images/exercise5/jenkins-plot.png)
 
-4. Hit `Add Plot` to add another. Set Plot group to `benchmark­-tests` again but this time setting the Plot title to `show­-api`. Set the Data Series file to be `reports/server/perf/show­-perf­-score.csv` and mark the `Load data from CSV checkbox`. Save those changes and run the job (Job could take a while to execute!).
+4. Hit `Add Plot` to add another. Set Plot group to `benchmark-tests` again but this time setting the Plot title to `show­-api`. Set the Data Series file to be `reports/server/perf/show-perf-score.csv` and mark the `Load data from CSV checkbox`. Save those changes and run the job (Job could take a while to execute!).
 
 4. Run it a few times to start to generate the data points on the plot. The `bench-tests` plot is available on the job's homepage
 ![result-plot](../images/exercise5/result-plot.png)
