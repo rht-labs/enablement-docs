@@ -30,7 +30,7 @@ This step involves implementing the feature to pass the failed test. Code writte
 If all tests pass, the developer can be confident that the new code meets the test requirements.
 
 5. `Refactor` -
-The refactoring step will allow the developer to clean up their code without changing its behaviour. Not changing the behaviour should ensure the tests still pass. The process of refactoring can include; removal of duplication, renaming of Object, class, module, variable and method names to clearly represent their current purpose and use, decoupling of functionality and increasing code cohesion.
+The refactoring step will allow the developer to clean up their code without changing its behaviour. Not changing the behaviour should ensure the tests still pass. The process of refactoring can include; removal of duplication, renaming of object, class, module, variable and method names to clearly represent their current purpose and use, decoupling of functionality and increasing code cohesion.
 
 6. `Repeat` -
 Starting with another new test, the cycle is then repeated to push forward the functionality. The size of the steps should always be small, with as few as 1 to 10 edits between each test run. If new code does not rapidly satisfy a new test, or other tests fail unexpectedly, the programmer should undo or revert in preference to excessive debugging.
