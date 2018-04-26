@@ -119,7 +119,7 @@ $ npm run test
 Click on `dev-todolist-fe-build` and then click the `configure` button on the left-hand side.
 ![jenkins-configure-job](../images/exercise3/jenkins-configure-job.png)
 
-2. Scroll to the `Build` part of the configuration page and add `npm run test` below `npm install`. Click `save` or `apply` at the bottom to save the changes.
+2. Scroll to the `Build` part of the configuration page and add `npm run test` below `npm install`.
 ![jenkins-build-step](../images/exercise3/jenkins-build-step.png)
 
 2. Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report` (Jenkins might place this at the top of the `Post-build Actions` list).
