@@ -191,6 +191,13 @@ $ ansible-playbook apply.yml -i inventory/ \
      -e "filter_tags=pipeline"
 ```
 
+2. With these changes in place, commit your changes to GitLab
+```bash
+$ git add .
+$ git commit -m "ADD - ocp pipeline in git repo"
+$ git push
+```
+
 2. Login to your OpenShift Cluster and go to the `<YOUR_NAME>-ci-cd` namespace. On the side menu; hit Builds > Pipeline to see your newly created pipeline running in OCP Land.
 ![ocp-pipeline-view](../images/exercise4/ocp-pipeline-view.png)
 
@@ -199,7 +206,7 @@ $ ansible-playbook apply.yml -i inventory/ \
 
 2. With the configuration in place for the `todolist-fe`; repeat the process for the `todolist-api`. Update the `todolist-api/.openshift-applier/inventory/group_vars/all.yml` with a new object to drive the params and template
 ```yaml
-    - name: todolist-ocp-pipeline
+  - name: todolist-ocp-pipeline
     template: "{{ playbook_dir }}/templates/ocp-pipeline.yml"
     params: "{{ playbook_dir }}/params/ocp-pipeline"
     namespace: "{{ ci_cd_namespace }}"
@@ -216,7 +223,7 @@ NAME=todolist-api
 
 2. Use the OpenShift Applier to create the cluster content 
 ```bash
-$ cd .openshift-applier
+$ cd todolist-api/.openshift-applier
 $ ansible-playbook apply.yml -i inventory/ \
      -e "filter_tags=pipeline"
 ```
@@ -224,17 +231,23 @@ $ ansible-playbook apply.yml -i inventory/ \
 2. Login to your OpenShift Cluster and go to the `<YOUR_NAME>-ci-cd` namespace. On the side menu; hit Builds > Pipeline to see your newly created pipeline running in OCP Land.
 ![ocp-pipeline-view2](../images/exercise4/ocp-pipeline-view2.png)
 
+2. Commit your changes to GitLab
+```bash
+$ git add .
+$ git commit -m "ADD - ocp pipeline in git repo"
+$ git push
+```
 
 ### Part 3 - Security Scanning Slaves
 > _This exercise focuses on updating the `enablement-ci-cd` repo with some new jenkins-slave pods for use in future exercise_
 
-#### Part 3a - OWASP ZAP
+#### 3a - OWASP ZAP
 > _OWASP ZAP (Zed Attack Proxy) is a free open source security tool used for finding security vulnerabilities in web applications._
 
 
 3. First we're going to take the generic jenkins slave template from our exercise4/zap branch and the params.
 ```bash
-$ git checkout exercise4/zap-and-arachni params/ templates/jenkins-slave-generic-template.yml 
+$ git checkout exercise4/zap-and-arachni params/ templates/jenkins-slave-generic-template.yml
 ```
 
 3. This should have created the following files:
@@ -267,7 +280,7 @@ $ ansible-playbook apply.yml -e target=tools \
 3. Head to (https://console.somedomain.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `jenkins-slave-zap`.
 include screenshot here.
 
-#### Part 3b - Arachni Scan
+#### 3b - Arachni Scan
 > _Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of web applications._
 
 3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-arachni` with the following content:
