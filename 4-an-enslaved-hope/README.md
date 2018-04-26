@@ -59,7 +59,7 @@ Some of the key things to note:
     * `post {}` hook is used to specify the post-build-actions. Jenkins declarative provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
     * `when {}` is used for flow control. It can be used at stage level and be used to stop pipeline entering that stage. eg when branch is master; deploy to `test` environment.
 
-2. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous labs. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile and update the `GITLAB_DOMAIN` accordingly. 
+2. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous labs. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
 ```groovy
     environment {
         // GLobal Vars
@@ -71,8 +71,8 @@ Some of the key things to note:
 
         GIT_SSL_NO_VERIFY = true
         GIT_CREDENTIALS = credentials('jenkins-git-creds')
-        GITLAB_DOMAIN = "gitlab-<YOUR_NAME>-ci-cd.apps.somedomain.com"
-        GITLAB_PROJECT = "<YOUR_NAME>"
+        GITLAB_DOMAIN = "gitlab.apps.lader.rht-labs.com"
+        GITLAB_PROJECT = "<GIT_USERNAME>"
     }
 ```
 
@@ -91,7 +91,7 @@ $ git push
 2. On the job's configure page; set the Branch Sources to `git`
 ![multibranch-select-git](../images/exercise4/multibranch-select-git.png)
 
-2. Fill in the Git settings with your `todolist-api` project url and setting the credentials
+2. Fill in the Git settings with your `todolist-api` GitLab url and set the credentials as you've done before.
 ![multibranch-git](../images/exercise4/multibranch-git.png)
 
 2. Set the `Scan Multibranch Pipeline Triggers` to be periodical and the internal to 1 minute. This will poll the gitlab instance for new branches or change sets to build.
@@ -100,10 +100,13 @@ $ git push
 2. Save the Job configuration to run the intial scan. The log will show scans for `master` and `develop` branch which have no `Jenkinsfile` so are skipped. The resulting view will show the `feature/jenkisifle` job corresponding the only branch that currently has one. The build should run automatically. 
 ![todolist-api-multi](../images/exercise4/todolist-api-multi.png)
 
-2. The pipeline file is setup to only run `bake` & `deploy` stages when on `master` or `develop` branch. This is to provide us with very fast feedback for team members working on feature or bug fix branches. Each time someone commits or creates a new branch a basic build with testing occurs to give very rapid feedback to the team. Let's now update our branches to include the Jenkinsfile and delete the feature branch.
+2. The pipeline file is setup to only run `bake` & `deploy` stages when on `master` or `develop` branch. This is to provide us with very fast feedback for team members working on feature or bug fix branches. Each time someone commits or creates a new branch a basic build with testing occurs to give very rapid feedback to the team. Let's now update our  `master` and `develop` branches to include the Jenkinsfile and delete the feature branch.
 ```bash
 $ git checkout develop
 $ git merge feature/jenkinsfile
+# you may get merge conflicts at this point
+$ git add .
+$ git commit -m "Jenkinsfile updates"
 $ git checkout master
 $ git merge develop
 $ git push -u origin --all
@@ -124,7 +127,8 @@ $ cd todolist-fe
 $ git checkout feature/jenkinsfile
 ```
 
-2. Open up your `todolist-fe` application in your favourite editor and move to the `Jenkinsfile` in the root of the project. Update all `<YOUR_NAME>` and `GITLAB_DOMAIN` references accordingly. 
+2. Open up your `todolist-fe` application in your favourite editor and move to the `Jenkinsfile` in the root of the project. Update all `<YOUR_NAME>` and `<GIT_USERNAME>` as you did before, including in the prepare environment steps. Check the  `GITLAB_DOMAIN` is set too. 
+![jenkinsfile-prep](../images/exercise4/jenkinsfile-prep.png)
 
 2. Commit your changes to your feature branch as you did previously. 
 ```bash
@@ -135,11 +139,16 @@ $ git push
 
 2. This time update your master and develop branches before creating config in Jenkins
 ```
-git checkout develop
-git merge feature/jenkinsfile
-git checkout master
-git merge develop
-git push -u origin --all
+$ git checkout develop
+$ git merge feature/jenkinsfile
+# you may get merge conflicts at this point
+$ git add .
+$ git commit -m "Jenkinsfile updates"
+$ git checkout master
+$ git merge develop
+# this is to delete the branch from the remote
+$ git push origin :feature/jenkinsfile
+$ git push -u origin --all
 ```
 
 2. On Jenkins; create a new `Multibranch Pipeline` job called `todolist-fe`.
@@ -150,7 +159,7 @@ git push -u origin --all
 ![todolist-fe-multi](../images/exercise4/todolist-fe-multi.png)
 
 2. Run the jobs and validate the app is working as expected in the `test` environment!
-
+![todolist-test](../images/exercise4/todolist-test.png)
 
 ### Part 2 - OCP Pipeline
 > _This exercise adds a new BuildConfig to our cluster for the todolist-apps to run their pipelines in OpenShift using the OpenShift Jenkins Sync Plugin. We will use the OpenShift Applier to create the content in the cluster_
@@ -159,7 +168,7 @@ git push -u origin --all
 
 2. Open the `params/ocp-pipeline` file and update `PIPELINE_SOURCE_REPOSITORY_URL` with the git url of your project (Don't forget to add the `.git` at the end). For example:
 ```
-PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab-<YOUR_NAME>-ci-cd.apps.somedomain.com/<YOUR_NAME>/todolist-fe.git
+PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab.apps.lader.rht-labs.com/<GIT_USERNAME>/todolist-fe.git
 PIPELINE_SOURCE_REPOSITORY_REF=develop
 NAME=todolist-fe
 ```
@@ -182,6 +191,13 @@ $ ansible-playbook apply.yml -i inventory/ \
      -e "filter_tags=pipeline"
 ```
 
+2. With these changes in place, commit your changes to GitLab
+```bash
+$ git add .
+$ git commit -m "ADD - ocp pipeline in git repo"
+$ git push
+```
+
 2. Login to your OpenShift Cluster and go to the `<YOUR_NAME>-ci-cd` namespace. On the side menu; hit Builds > Pipeline to see your newly created pipeline running in OCP Land.
 ![ocp-pipeline-view](../images/exercise4/ocp-pipeline-view.png)
 
@@ -190,7 +206,7 @@ $ ansible-playbook apply.yml -i inventory/ \
 
 2. With the configuration in place for the `todolist-fe`; repeat the process for the `todolist-api`. Update the `todolist-api/.openshift-applier/inventory/group_vars/all.yml` with a new object to drive the params and template
 ```yaml
-    - name: todolist-ocp-pipeline
+  - name: todolist-ocp-pipeline
     template: "{{ playbook_dir }}/templates/ocp-pipeline.yml"
     params: "{{ playbook_dir }}/params/ocp-pipeline"
     namespace: "{{ ci_cd_namespace }}"
@@ -200,14 +216,14 @@ $ ansible-playbook apply.yml -i inventory/ \
 
 2. Update the `todolist-api/.openshift-applier/params/ocp-pipeline`
 ```
-PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab-ci-cd.apps.somedomain.com/<YOUR_NAME>/todolist-api.git
+PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab.apps.lader.rht-labs.com/<GIT_USERNAME>/todolist-api.git
 PIPELINE_SOURCE_REPOSITORY_REF=develop
 NAME=todolist-api
 ```
 
 2. Use the OpenShift Applier to create the cluster content 
 ```bash
-$ cd .openshift-applier
+$ cd todolist-api/.openshift-applier
 $ ansible-playbook apply.yml -i inventory/ \
      -e "filter_tags=pipeline"
 ```
@@ -215,22 +231,26 @@ $ ansible-playbook apply.yml -i inventory/ \
 2. Login to your OpenShift Cluster and go to the `<YOUR_NAME>-ci-cd` namespace. On the side menu; hit Builds > Pipeline to see your newly created pipeline running in OCP Land.
 ![ocp-pipeline-view2](../images/exercise4/ocp-pipeline-view2.png)
 
+2. Commit your changes to GitLab
+```bash
+$ git add .
+$ git commit -m "ADD - ocp pipeline in git repo"
+$ git push
+```
 
 ### Part 3 - Security Scanning Slaves
 > _This exercise focuses on updating the `enablement-ci-cd` repo with some new jenkins-slave pods for use in future exercise_
 
-#### Part 3a - OWASP ZAP
+#### 3a - OWASP ZAP
 > _OWASP ZAP (Zed Attack Proxy) is a free open source security tool used for finding security vulnerabilities in web applications._
 
-
-3. First we're going to take the generic jenkins slave template from our exercise4/zap branch and the params.
+3. On your  terminal; move to the `enablement-ci-cd` repo. We already have the `templates/jenkins-slave-generic-template.yml` template we're going to re-use from the previous lab so all we need is to check out the params file
 ```bash
-$ git checkout exercise4/zap-and-arachni params/ templates/jenkins-slave-generic-template.yml 
+$ git checkout exercise4/zap-and-arachni params/jenkins-slave-zap
 ```
 
-3. This should have created the following files:
-    - `templates/jenkins-slave-generic-template.yml`
-    - `params/jenkins-slave-zap` and `params/jenkins-slave-arachni`
+3. This should have created the following files which we will fill out. We will use a `ZAP` image hosted on the `rht-labs/ci-cd` repo so there will be no `Dockerfile` needed as we did with the `jenkins-slave-npm` in exercise 2:
+    - `params/jenkins-slave-zap`
 
 3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-zap` and add the following content:
 ```yaml
@@ -241,12 +261,7 @@ $ git checkout exercise4/zap-and-arachni params/ templates/jenkins-slave-generic
       tags:
       - zap
 ```
-<p class="tip">
-NOTE- Install your Openshift Applier dependency if it's disappeared.
-```
-$ ansible-galaxy install -r requirements.yml --roles-path=roles
-```
-</p>
+![zap-object](../images/exercise4/zap-project.png)
 
 3. Run the ansible playbook filtering with tag `zap` so only the zap build pods are run.
 ```bash
@@ -256,10 +271,15 @@ $ ansible-playbook apply.yml -e target=tools \
 ```
 
 3. Head to (https://console.somedomain.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `jenkins-slave-zap`.
-include screenshot here.
+![zap-build](../images/exercise4/zap-build.png)
 
-#### Part 3b - Arachni Scan
+#### 3b - Arachni Scan
 > _Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of web applications._
+
+3. On your terminal; checkout the params and Docker file. The Dockerfile for the `Arachni` scanner is included here and we will point the build to it. 
+```bash
+$ git checkout exercise4/zap-and-arachni params/jenkins-slave-arachni docker/jenkins-slave-arachni 
+```
 
 3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-arachni` with the following content:
 ```yaml
@@ -269,6 +289,22 @@ include screenshot here.
       params: "{{ playbook_dir }}/params/jenkins-slave-arachni"
       tags:
       - arachni
+```
+
+3. Update the params files `SOURCE_REPOSITORY_URL` to point to your gitlab's hosted version of the `enablement-ci-cd` repo.
+```
+SOURCE_REPOSITORY_URL=https://gitlab.apps.lader.rht-labs.com/<GIT_USERNAME>/enablement-ci-cd.git
+SOURCE_CONTEXT_DIR=docker/jenkins-slave-arachni
+BUILDER_IMAGE_NAME=registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:latest
+NAME=jenkins-slave-arachni
+SOURCE_REPOSITORY_REF=master
+```
+
+3. With these changes in place, push your changes to the `master` branch.
+```bash
+$ git add .
+$ git commit -m "ADD - Arachni scanning image"
+$ git push
 ```
 
 3. Run the ansible playbook filtering with tag `arachni` so only the arachni build pods are run.
