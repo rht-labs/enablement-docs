@@ -77,7 +77,7 @@ _____
 ### Part 1 - Explore the Todo List App
 > _In this part of the exercise we will explore the sample application, become familiar with it locally before building and deploying in OCP Land_
 
-#### Part 1a Todolist-fe
+#### 1a Todolist-fe
 
 2. Git clone the `todolist-fe` project to somewhere sensible and checkout the `develop` branch.
 ```bash
@@ -185,7 +185,7 @@ npm run prepare-nexus
 NOTE - This step in a residency would be automated by a more complex nexus deployment in the ci-cd project
 </p>
 
-#### Part 1b Todolist-api
+#### 1b Todolist-api
 
 2. Now let's move on to the `todolist-api` and wire them together. As with the `todolist-fe` we need to clone the repo and add it to our GitLab in the cluster.
 ```bash
@@ -475,7 +475,7 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
     4. Verify the deployment
 * We will now go through these steps in detail.
 
-#### Part 4a - Build
+#### 4a - Build
 
 5. With the BuildConfig and DeployConfig in place for both our apps (`*-fe` & `*-api`) from previous steps; Log into Jenkins and create a `New Item`. This is just jenkins speak for a new job configuration. ![new-item](../images/exercise2/new-item.png)
 
@@ -531,7 +531,7 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
 
 5. Hit `save` which will take you to the job overview page - and that's it; our *build* phase is complete!
 
-#### Part 4b - Bake
+#### 4b - Bake
 
 5. Next we will setup our *bake* phase; which is a little simpler. Go to Jenkins home and create another Freestyle Job (as before) called `dev-todolist-fe-bake`.
 
@@ -572,7 +572,7 @@ oc start-build ${NAME} --from-dir=package-contents/ --follow
 
 5. Hit save! That's our *bake* phase done! Finally; on to our *deploy*
 
-#### Part 4c - Deploy
+#### 4c - Deploy
 
 5. Next we will setup our *deploy* phase. This job is very similar in setup to the *bake* phase so this time go to Jenkins home and create `dev-todolist-fe-deploy` Job but scroll to the bottom and Copy from `dev-todolist-fe-bake`.
 ![copy-from](../images/exercise2/copy-from.png)
@@ -601,7 +601,7 @@ oc rollout latest dc/${NAME}
 
 5. Finally; delete the Post Build Action to trigger another job (by hitting the red X). Save the configuration. We're almost ready to run the pipeline!
 
-#### Part 4d - Pipeline
+#### 4d - Pipeline
 
 5. With our Jenkins setup in place; now move to our `todolist-fe` app's source code. We have to add our configuration to the frontend to tell it where the API layer will be hosted. Open the source in your favourite editor and navigate to `src/config/dev.js`. Update `<YOUR_NAME>` accordingly with the route where the Todo List API will live when it is deployed, update the `somedomain` to the clusters domain. For example:
 ![fe-dev-config](../images/exercise2/fe-dev-config.png)
