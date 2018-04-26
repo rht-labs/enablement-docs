@@ -688,7 +688,7 @@ NOTE - This section is optional! Git webhooks are useful but not needed for cour
 7. Scroll down to the `Authorization` section and allow `Anonymous` to create jobs. Do this by navigating through the matrix of checkboxes and check `Build` and `Cancel` under the Job heading. Leave all other user behaviour as is. Anonymous is the user that GitLab will act as so this allows the WebHook to trigger builds. (The screenshot has been cropped to bring Job further to the left.) Hit `Save` or `Apply`.
 ![jenkins-anon-permissions](../images/exercise2/jenkins-anon-permissions.png)
 
-7. Go to your `dev-todolist-fe-build` and head to the `configure` section (`https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/job/dev-todolist-fe-build/configure`). Scroll down to the `Build Triggers` section and check the `Build when a change is pushed to GitLab` box. Leave all the other settings as they are but copy the `GitLab webhook URL`. `https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/project/dev-todolist-fe-build`.
+7. Go to your `dev-todolist-fe-build` and head to the `configure` section (`https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/job/dev-todolist-fe-build/configure`). Scroll down to the `Build Triggers` section and check the `Build when a change is pushed to GitLab` box. Leave all the other settings as they are but copy the `GitLab webhook URL`. `https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/project/dev-todolist-fe-build`. Remember to Save and Apply this change.
 ![jenkins-build-triggers-gitlab](../images/exercise2/jenkins-build-triggers-gitlab.png)
 
 7. Switch over to GitLab and select your `todolist-fe` repository. On the left hand task bar hover over the settings cog and select `integrations`. (`https://gitlab-<YOUR_NAME>-ci-cd.apps.some.domain.com/<YOUR_NAME>/todolist-fe/settings/integrations`)
@@ -702,7 +702,7 @@ NOTE - This section is optional! Git webhooks are useful but not needed for cour
 
 7. We can now test this properly by heading into the `todolist-fe` repository through <YOUR_FAVOURITE_EDITOR>. Make a small change to your code, then commit and push it, ensuring you're on the develop branch. Then head over to Jenkins and wait until the `dev-todolist-fe-build` job has been triggered.
 
-7. All that's left to do is to repeat the same steps for `todolist-api`:
+7. All that's left to do is to repeat the same steps for `todolist-api` (Starting from step 3):
 Create Build Trigger: 
 `https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/job/dev-todolist-api-build/configure`
 Create GitLab Integration:
