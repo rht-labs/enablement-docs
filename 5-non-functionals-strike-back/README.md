@@ -73,22 +73,23 @@ stage('OWASP Scan') {
 }
 ```
 
-2.  A command to run the tool by passing in the URL of the app we're going to test.
+2.  Add a `step` with a `sh` command to run the tool by passing in the URL of the app we're going to test.
 ```groovy
 stage('OWASP Scan') {
-    agent {
-        node {
-            label "jenkins-slave-zap"
+        agent {
+            node {
+                label "jenkins-slave-zap"
+            }
         }
-    }
-    when {
-        expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
-    }
-    steps {
-        sh '''
-            /zap/zap-baseline.py -r index.html -t ${E2E_TEST_ROUTE}
-        '''
-    }
+        when {
+            expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+        }
+        steps {
+            sh '''
+                /zap/zap-baseline.py -r index.html -t ${E2E_TEST_ROUTE} || return_code=$?
+                echo "exit value was  - " $return_code
+            '''
+        }
 }
 ```
 
@@ -105,8 +106,8 @@ stage('OWASP Scan') {
     }
     steps {
         sh '''
-            /zap/zap-baseline.py -r index.html -t http://${E2E_TEST_ROUTE}
-            exit $?
+            /zap/zap-baseline.py -r index.html -t http://${E2E_TEST_ROUTE} || return_code=$?
+            echo "exit value was  - " $return_code
         '''
     }
     post {
@@ -166,12 +167,15 @@ $ git commit -m "ADD - security scanning tools to pipeline"
 $ git push
 ```
 
+2. Check out the Blue Ocean Jenkins view for how the parallel stage is viewed!
+![jenkins-parallel](../images/exercise5/jenkins-parallel.png)
+
 2. Once the Jobs have completed; navigate to the Jobs status and see the scores. You can find the graphs and test reports on overview of the Job. Explore the results!
 ![report-arachni](../images/exercise5/report-arachni.png)
 ![jenkins-arachni](../images/exercise5/jenkins-arachni.png)
 
 <p class="tip">
-NOTE - your build may have failed but the reports should still be generated!
+NOTE - your build may have failed because of the a security failure but the reports should still be generated, it is OK to proceed with the next exercise!
 </p>
 
 ### Part 2 - Add Code Coverage & Linting to the pipeline
@@ -179,7 +183,7 @@ NOTE - your build may have failed but the reports should still be generated!
 
 3. Coverage reports are already being generated as part of the tests. We can have Jenkins produce a HTML report showing in detail where our testing is lacking. Open the `todolist-fe` in your favourite editor.
 
-3. Open the `Jenkinsfile` in the root of the project; move to the `stage("node-build"){ ... }` section. In the post section add a block for producing a `HTML` report as part of our builds.
+3. Open the `Jenkinsfile` in the root of the project; move to the `stage("node-build"){ ... }` section. In the `post` section add a block for producing a `HTML` report as part of our builds. This is all that is needed for Jenkins to repor the coverage stats.
 ```groovy
     // Post can be used both on individual stages and for the entire build.
     post {
@@ -198,12 +202,12 @@ NOTE - your build may have failed but the reports should still be generated!
         }
 ```
 
-3. We will add a new step to our `stage("node-build"){ }` section to lint the Javascript code. After the `npm install`; add a command to run the linting.
+3. To get the linting working; we will add a new step to our `stage("node-build"){ }` section to lint the Javascript code. After the `npm install`; add a command to run the linting.
 ```groovy
 echo '### Install deps ###'
 sh 'npm install'
 echo '### Running linting ###'
-sh 'npm run lint:ci'
+sh 'npm run lint'
 ```
 
 3. Save the `Jenkinsfile` and commit it to trigger a build with some more enhancements.
@@ -213,7 +217,13 @@ $ git commit -m "ADD - linting and coverage to the pipeline"
 $ git push
 ```
 
-3. To view the resulting graph; go to the job's build page and open the `Code Coverage` report from the nav bar on the side. Open the report to drill down into detail of where testing coverage could be improved! 
+3. When the build has completed; fix the linting errors if there are any and commit your changes. Look in Jenkins log for what the issue might be....
+![linting-issue](../images/exercise5/linting-issue.png)
+
+3. To view the coverage graph; go to the job's build page and open the `Code Coverage` report from the nav bar on the side. 
+![report-location](../images/exercise5/report-location.png)
+
+3. Open the report to drill down into detail of where testing coverage could be improved! 
 ![report-coverage](../images/exercise5/report-coverage.png)
 <p class="tip">
 NOTE - a good practice for teams is to try and increase the code coverage metrics over the life of a project. Teams will often start low and use practices such as retrospective to increase the quality at specific times. 
