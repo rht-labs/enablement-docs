@@ -308,7 +308,7 @@ $ npm run test
 ```
 
 3. With all the tests passing; let's add our new one. For ease of completing this exercise a template of a new test has been written at the very end of the file (just below the `  // Exercise 3 test case!` comment). A PUT request responds in our API with the data that it has just updated. So provided that MongoDB accepted the change, the API will respond with an object that has the `important` property on it. To write our test; edit the template test by completing the following:
-    * Edit the `it("should ...")` to describe the imporant flag we're testing
+    * Edit the `it("should ...")` to describe the important flag we're testing
     * Edit the `.send()` to include `important: true` property
     * Edit the `.expect()` to be `.expect(200)`
     * Add a new test assertion to check that `res.body.important` is `true` below the `// YOUR TEST GO HERE` line.
@@ -341,7 +341,7 @@ $ npm run test
 ```
 ![fail-mocha](../images/exercise3/fail-mocha.png)
 
-3.  With our test now failing; let's implement the feature. This is quite a simple change - all we need to do is update the `server/api/todo/todo.model.js`. Add an additional property on the schema called `important` and make it's type Boolean.
+3.  With our test now failing; let's implement the feature. This is quite a simple change - we first need to update the `server/api/todo/todo.model.js`. Add an additional property on the schema called `important` and make its type Boolean.
 ```javascript
 const TodoSchema = new Schema({
   title: String,
@@ -349,6 +349,9 @@ const TodoSchema = new Schema({
   important: Boolean
 });
 ```
+
+3. Next we need to update the `server/config/seed.js` file so that the pre-generated todos have an important propety. Add `important: true` below `completed: *` for each object. Don't forget to add a comma at the end of the `completed: *` line. 
+![api-add-seed-important](../images/exercise3/api-add-seed-important.png)
 
 3.  With your changes to the Database schema updated; re-run your tests.
 ```bash
@@ -374,8 +377,8 @@ $ git push
 $ npm run start
 ```
 
-#### 2b - Create todolist-fe tests
-> Using [Jest](https://facebook.github.io/jest/) as our test runner and the `vue-test-utils` library for managing our vue components; we will now write some tests for fronted functionality to persist our important-flag. The changes required to the front end are quite large but we will use TDD to create our test first, then implement the functionality. 
+#### Part 2b - Create todolist-fe tests
+> Using [Jest](https://facebook.github.io/jest/) as our test runner and the `vue-test-utils` library for managing our vue components; we will now write some tests for frontend functionality to persist our important-flag. The changes required to the front end are quite large but we will use TDD to create our test first, then implement the functionality. 
 
 Our TodoList App uses `vuex` to manage the state of the apps' todos and `axios` HTTP library to connect to the backend. `Vuex` is an opinionated framework for managing application state and has some key design features you will need to know to continue with the exercise. 
 
@@ -427,7 +430,7 @@ $ npm run test -- --watch
 3. Save the file and we should see in our test watch the test case has started failing because we have not yet implemented the feature!
 ![todoitem-fail-test](../images/exercise3/todoitem-fail-test.png)
 
-3. With a basic assertion in place, let's continue on to the next few tests. We want the important flag to be red when an item in the todolist is marked accordingly. Conversely we want it to be not red when false. Let's create a check for `.red-flag` CSS property to be present when imporant is true and not when false. Complete the `expect` statements in your test file as shown below for both tests.
+3. With a basic assertion in place, let's continue on to the next few tests. We want the important flag to be red when an item in the todolist is marked accordingly. Conversely we want it to be not red when false. Let's create a check for `.red-flag` CSS property to be present when important is true and not when false. Complete the `expect` statements in your test file as shown below for both tests.
 ```javascript
   it("should set the colour to red when true", () => {
     const wrapper = mount(TodoItem, {
@@ -481,7 +484,7 @@ $ npm run test -- --watch
 </md-button>
 ```
 
-3. More tests should now be passing. Let's wire the click of the flag to an event in Javascript. In the methods section of the `<script></script>` tags in the Vue file, implement the `markImportant()`. We want to wire this to the action to updateTodo, just like we have in the `markCompleted()` call above it. We also need to pass and additional property to this method call `imporant`
+3. More tests should now be passing. Let's wire the click of the flag to an event in Javascript. In the methods section of the `<script></script>` tags in the Vue file, implement the `markImportant()`. We want to wire this to the action to updateTodo, just like we have in the `markCompleted()` call above it. We also need to pass and additional property to this method call `important`
 ```javascript
     markImportant() {
       // TODO - FILL THIS OUT IN THE LAB EXERCISE
@@ -490,13 +493,18 @@ $ npm run test -- --watch
     },
 ```
 
-3. Finally - let's connect the click button in the DOM to the Javascript function we've just created. In the template, add a click handler to the md-button to call the function `markImportant()` by adding ` @click="markImportant()"` to the `<md-button>` tag
+3. Let's connect the click button in the DOM to the Javascript function we've just created. In the template, add a click handler to the md-button to call the function `markImportant()` by adding ` @click="markImportant()"` to the `<md-button> tag 
+
 ```html
     <!-- TODO - SVG for use in Lab3 -->
     <md-button class="important-flag" @click="markImportant()">
         <svg :class="{'red-flag': todoItem.important}"  height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" ><path d="M0 0h24v24H0z" fill="none"/><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
     </md-button>
 ```
+
+3. Finally - we need to make it so that when a new todo item is created it will have an important property. Head to `store/actions.js` and add `important: false`  below `completed: false` in the `addTodo(){}` action.
+![fe-add-actions-important](../images/exercise3/fe-add-actions-important.png)
+
 
 3. The previously failing tests should have started to pass now. With this work done, let's commit our code. On the terminal, run 
 ```bash
@@ -525,7 +533,7 @@ $ git push
 updateTodo({ commit, state }, { id, important }) {
     let i = state.todos.findIndex(todo => todo._id === id);
     if (important) {
-        // TODO - add commit imporant here!
+        // TODO - add commit important here!
         commit("MARK_TODO_IMPORTANT", i);
     } else {
         commit("MARK_TODO_COMPLETED", i);
