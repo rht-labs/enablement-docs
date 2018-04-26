@@ -1,6 +1,8 @@
 
 # The Non-Functionals Strike back
 > In this exercise we explore the non-functional side of testing.
+
+![death-star-vent](../images/exercise5/death-star-vent.jpeg)
 _____
 
 ## Learning Outcomes
