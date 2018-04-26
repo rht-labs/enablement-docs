@@ -261,7 +261,7 @@ $ git checkout exercise4/zap-and-arachni params/jenkins-slave-zap
       tags:
       - zap
 ```
-![zap-object](../images/exercise4/zap-project.png)
+![zap-object](../images/exercise4/zap-object.png)
 
 3. Run the ansible playbook filtering with tag `zap` so only the zap build pods are run.
 ```bash
