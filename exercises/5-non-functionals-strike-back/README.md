@@ -180,6 +180,8 @@ $ git push
 NOTE - your build may have failed because of the a security failure but the reports should still be generated, it is OK to proceed with the next exercise!
 </p>
 
+2. TODO - add solution for failing Security scans!
+
 ### Part 2 - Add Code Coverage & Linting to the pipeline
 > _Let's continue to enhance our pipeline with some non-functional testing. Static code analysis and testing coverage reports can provide a useful indicator on code quality and testing distribution_
 
@@ -236,11 +238,21 @@ NOTE - a good practice for teams is to try and increase the code coverage metric
 ### Part 3 - Nightly light performance testing
 > _In this exercise, we will execute the light performance tasks in our API to collect data about throughtput time in hopes if the API ever has some `Sam` quality code checked in, we will spot it_
 
-4. Create a new Item on Jenkins, `nightly-perf-test`
+An arbitrary value for the API's to respond in has been chosen. It is set in the `todolist-api/tasks/perf-test.js` file. In this exercise we will get Jenkins to execute the tests and fail based on the score set there!
 
-4. Set the label for where this job can execute to the `jenkins-slave-npm` one used by the build jobs previously.
+4. Create a new Item on Jenkins, `nightly-perf-test` and make it a freestyle job.
+![new-job](../images/exercise5/new-job.png)
+
+4. Set the `label` on `Restrict where this project can be run` to `jenkins-slave-npm` one used by the build jobs previously.
+![slave-label](../images/exercise5/slave-label.png)
 
 4. In the SCM section; set the project to use the `todolist-api` git project. Set the credentials accordingly.
+![git-settings](../images/exercise5/git-settings.png)
+
+4. Set the build to execute each night; for example 0300 in the morning. Hit `Build periodically` on the Build Triggers section and set it to `H 3 * * *`.
+![build-schedule](../images/exercise5/build-schedule.png)
+
+4. Set the `Color ANSI Console Output` on the Build Environment section.
 
 4. Create a step to execute shell and add the following to it, replacing `<YOUR_NAME>` and `somedomain` as expected. We will just test the `create` and `show` API for the moment. We are grabbing the response code of the perf-test to keep Jenkins running both shells steps and then exiting with whichever fails:
 ```bash
@@ -257,10 +269,10 @@ exit $(($rc1 | $rc2))
 
 4. On the Post Build actions section we will plot the data from the perf tests in Jenkins. Add a `Post-build Action > Plot Build Data`.
 
-4. On the new dialog, name the Plot group eg `benchmark­-tests` and add `create­-api` as the Plot title. Set the `Number of Builds to Include` to a large number like `100`. Set the Data Series file to be `reports/server/perf/create­-perf­-score.csv` and mark the Load data from CSV checkbox. Apply those changes
+4. On the new dialog, name the Plot group eg `benchmark­-tests` and add `create­-api` as the Plot title. Set the `Number of Builds to Include` to a large number like `100`. Set the Data Series file to be `reports/server/perf/create­-perf­-score.csv` and mark the `Load data from CSV fiel` checkbox. Apply those changes
 ![jenkins-plot](../images/exercise5/jenkins-plot.png)
 
-4. Hit `Add Plot` to add another. Fill out the information again but this time setting the Plot title to `show­-api`. Keep the Plot group the same as before: `bench­-tests`. Set the Data Series file to be `reports/server/perf/show­-perf­-score.csv` and mark the `Load data from CSV checkbox`. Save those changes and run the job (Job could take a while to execute!).
+4. Hit `Add Plot` to add another. Set Plot group to `benchmark­-tests` again but this time setting the Plot title to `show­-api`. Set the Data Series file to be `reports/server/perf/show­-perf­-score.csv` and mark the `Load data from CSV checkbox`. Save those changes and run the job (Job could take a while to execute!).
 
 4. Run it a few times to start to generate the data points on the plot. The `bench-tests` plot is available on the job's homepage
 ![result-plot](../images/exercise5/result-plot.png)
