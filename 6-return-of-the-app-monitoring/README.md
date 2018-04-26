@@ -1,6 +1,8 @@
 # Return of the Application Monitoring
 
 > In this exercise we will create a build monitor to radiate vital build information and statistics
+
+![monitoring-meme](../images/exercise6/monitoring-meme.jpg)
 _____
 
 ## Learning Outcomes
