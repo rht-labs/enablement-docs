@@ -91,7 +91,7 @@ _On page load:_
 ### Part 1 - Tests in our Pipeline
 > _In this part we will get familiar with the layout of our tests. We will also improve the pipeline created already by adding some unit tests for the frontend & backend along with some end to end tests (e2e) to validate the full solution_
 
-#### Part 1a - FE Unit tests
+#### 1a - FE Unit tests
 > In this exercise we will execute our test for the frontend locally. Once verified we will add them to Jenkins.
 
 2. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist-fe` directory and run `test`.
@@ -148,7 +148,7 @@ $ git push
 
 2. Undo the changes you made to the `ListOfTodos.spec.js` file, commit your code and rerun the build. This should trigger a full `build --> bake --> deploy` of `todolist-fe`.
 
-#### Part 1b - BE Unit tests
+#### 1b - BE Unit tests
 > In this exercise we will execute our test for the backend locally. Once verified we will add them to Jenkins and add a mongodb to Jenkins for running tests there.
 
 2. We're now going to do the same for the api. However, in order to run our API tests in CI; we need there to be a MongoDB available for testing. In our `enablement-ci-cd` repo; checkout the mongo branch as shown below to bring in the template and params. The mongodb template we're using is the same as the one for our `todolist-fe` created in previous lab.
@@ -208,7 +208,7 @@ $ git push
   NOTE - Don't forget to undo the changes that you made to your tests!
 </p>
 
-#### Part 1c - End to End tests (e2e)
+#### 1c - End to End tests (e2e)
 > _Unit tests are a great way to get immediate feedback as part of testing an application. End to end tests that drive user behaviour are another amazing way to ensure an application is behaving as expected._
 
 In this exercise we will add a new stage to our pipeline called `dev-todolist-fe-e2e` that will run after the deploy has been completed. End to end tests will use Nightwatchjs to orchestrate a selenium webdriver instance that controls the web browser; in this case Chrome!
@@ -265,7 +265,7 @@ _On page load:_
 - [ ] should display existing todos that are not marked important
 - [ ] should display existing todos that are marked important with an red flag
 
-#### Part 2a - Create todolist-api tests
+#### 2a - Create todolist-api tests
 > Using [Mocha](https://mochajs.org/) as our test runner; we will now write some tests for backend functionality to persist our important-flag. The changes required to the backend are minimal but we will use TDD to create our test first, then implement the functionality.
 
 3.  Create a new branch in your `todolist-api` app for our feature and push it to the remote
@@ -494,6 +494,7 @@ $ npm run test -- --watch
 ```
 
 3. Let's connect the click button in the DOM to the Javascript function we've just created. In the template, add a click handler to the md-button to call the function `markImportant()` by adding ` @click="markImportant()"` to the `<md-button> tag 
+
 ```html
     <!-- TODO - SVG for use in Lab3 -->
     <md-button class="important-flag" @click="markImportant()">
@@ -512,7 +513,9 @@ $ git commit -m "Implementing the todoitem flag"
 $ git push
 ```
 
-3. If we try to use our important flag, we should see it's still not behaving as expected; this is because we're not updating the state of the app in response to the click event. We need to implement the `actions` and `mutations` for our feature. Let's start with the tests. Open the `tests/unit/javascript/actions.spec.js` and navigate to the bottom of the file. Our action should should commit the `MARK_TODO_IMPORTANT` to the mutations. Scroll to the end of the test file and implement the skeleton test by adding `expect(commit.firstCall.args[0]).toBe("MARK_TODO_IMPORTANT");` as the assertion.
+3. Open our local todolist app (http://localhost:8080/#/todo). If we try to use our important flag, we should see it's still not behaving as expected; this is because we're not updating the state of the app in response to the click event.
+
+3. We need to implement the `actions` and `mutations` for our feature. Let's start with the tests. Open the `tests/unit/javascript/actions.spec.js` and navigate to the bottom of the file. Our action should should commit the `MARK_TODO_IMPORTANT` to the mutations. Scroll to the end of the test file and implement the skeleton test by adding `expect(commit.firstCall.args[0]).toBe("MARK_TODO_IMPORTANT");` as the assertion.
 ```javascript
   it("should call MARK_TODO_IMPORTANT", done => {
     const commit = sinon.spy();
@@ -562,6 +565,7 @@ updateTodo({ commit, state }, { id, important }) {
     state.todos[index].important = !state.todos[index].important;
   }
 ```
+![mark-todo-important](../images/exercise3/mark-todo-important.png)
 
 3. All our tests should now be passing. On the watch tab where they are running, hit `a` to re-run all tests and update any snapshots with `u` if needed.
 
@@ -572,7 +576,7 @@ $ git commit -m "Implementing the store and actions"
 $ git push
 ```
 
-3. Before running a build in Jenkins, let's add our tests and code to the develop branch
+3. Before running a build in Jenkins, let's add our tests and code to the develop branch. Ask your neighbour to review your code changes and if they approve; merge them to Develop! (If you're feeling adventurous - raise a PR through GitLab and have someone on your desk peer review it!)
 <p class="tip">
 NOTE - At this point in a residency we would peer review the code before pushing it to develop or master branch!
 </p>
@@ -582,9 +586,10 @@ $ git merge feature/important-flag
 $ git push --all
 ```
 
-3. Run a build in Jenkins. We should see the test trend increase as we've added more tests. Validate the flag is working as expected.
+3. Run a build in Jenkins. If all things were successful; our application should be deployed as expected! Validate the flag is working as expected.
+![todolist-important](../images/exercise3/todolist-important.png)
 
-#### Part 2c - Create todolist e2e tests
+#### 2c - Create todolist e2e tests
 
 3. TODO !!
 
@@ -594,7 +599,6 @@ $ git push --all
 
 > _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope._
 
-* Edit the `dev-todolist-fe-e2e` job so it takes a parameter of the `BUILD_TAG` and only checks out this tag when running the e2e
 * Add Config maps to inject DB creds to the app
 * Create a blue/green deploy based on the success of running e2e tests against either blue or green and flopping load over to new endpoint when successful.
 Advanced
