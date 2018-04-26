@@ -244,15 +244,13 @@ $ git push
 #### 3a - OWASP ZAP
 > _OWASP ZAP (Zed Attack Proxy) is a free open source security tool used for finding security vulnerabilities in web applications._
 
-
-3. First we're going to take the generic jenkins slave template from our exercise4/zap branch and the params.
+3. On your  terminal; move to the `enablement-ci-cd` repo. We already have the `templates/jenkins-slave-generic-template.yml` template we're going to re-use from the previous lab so all we need is to check out the params file
 ```bash
-$ git checkout exercise4/zap-and-arachni params/ templates/jenkins-slave-generic-template.yml
+$ git checkout exercise4/zap-and-arachni params/jenkins-slave-zap
 ```
 
-3. This should have created the following files:
-    - `templates/jenkins-slave-generic-template.yml`
-    - `params/jenkins-slave-zap` and `params/jenkins-slave-arachni`
+3. This should have created the following files which we will fill out. We will use a `ZAP` image hosted on the `rht-labs/ci-cd` repo so there will be no `Dockerfile` needed as we did with the `jenkins-slave-npm` in exercise 2:
+    - `params/jenkins-slave-zap`
 
 3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-zap` and add the following content:
 ```yaml
@@ -263,12 +261,7 @@ $ git checkout exercise4/zap-and-arachni params/ templates/jenkins-slave-generic
       tags:
       - zap
 ```
-<p class="tip">
-NOTE- Install your Openshift Applier dependency if it's disappeared.
-```
-$ ansible-galaxy install -r requirements.yml --roles-path=roles
-```
-</p>
+![zap-object](../images/exercise4/zap-project.png)
 
 3. Run the ansible playbook filtering with tag `zap` so only the zap build pods are run.
 ```bash
@@ -278,10 +271,15 @@ $ ansible-playbook apply.yml -e target=tools \
 ```
 
 3. Head to (https://console.somedomain.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `jenkins-slave-zap`.
-include screenshot here.
+![zap-build](../images/exercise4/zap-build.png)
 
 #### 3b - Arachni Scan
 > _Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of web applications._
+
+3. On your terminal; checkout the params and Docker file. The Dockerfile for the `Arachni` scanner is included here and we will point the build to it. 
+```bash
+$ git checkout exercise4/zap-and-arachni params/jenkins-slave-arachni docker/jenkins-slave-arachni 
+```
 
 3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-arachni` with the following content:
 ```yaml
@@ -291,6 +289,22 @@ include screenshot here.
       params: "{{ playbook_dir }}/params/jenkins-slave-arachni"
       tags:
       - arachni
+```
+
+3. Update the params files `SOURCE_REPOSITORY_URL` to point to your gitlab's hosted version of the `enablement-ci-cd` repo.
+```
+SOURCE_REPOSITORY_URL=https://gitlab.apps.lader.rht-labs.com/<GIT_USERNAME>/enablement-ci-cd.git
+SOURCE_CONTEXT_DIR=docker/jenkins-slave-arachni
+BUILDER_IMAGE_NAME=registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:latest
+NAME=jenkins-slave-arachni
+SOURCE_REPOSITORY_REF=master
+```
+
+3. With these changes in place, push your changes to the `master` branch.
+```bash
+$ git add .
+$ git commit -m "ADD - Arachni scanning image"
+$ git push
 ```
 
 3. Run the ansible playbook filtering with tag `arachni` so only the arachni build pods are run.
