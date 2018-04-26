@@ -359,7 +359,7 @@ NOTE - Jenkins may need to be restarted for the configuration to appear. To do t
 ### Part 3 - Add configs to cluster 
 > _In this exercise; we will use the OpenShift Applier to drive the creation of cluster content required by the app such as MongoDB and the Apps Build / Deploy Config_
 
-4. On your terminal navigate to the root of the `todolist-fe` application. The app contains a hidden folder called `.openshift-applier`. Move `cd .openshift-applier` into this directory and you should see a familiar looking directory structure for an ansible playbook. 
+4. On your terminal navigate to the root of the `todolist-fe` application. The app contains a hidden folder called `.openshift-applier`. Move into this `.openshift-applier` directory and you should see a familiar looking directory structure for an ansible playbook. 
 ```
 .openshift-applier
 ├── README.md
@@ -567,7 +567,7 @@ oc start-build ${NAME} --from-dir=package-contents/ --follow
 5. Finally; add the trigger for the next job in the pipeline. Add a post-build action from the dropdown called `Trigger parameterized build on other projects`.
     * Set the project to build to be `dev-todolist-fe-deploy`
     * Set the condition to be `Stable`.
-    * Click Add Parameters dropdown and select Current build parameters. This will pass the ${BUILD_TAG} to the downstream job which we will create next.
+    * Click Add Parameters dropdown and select `Current build parameters`. This will pass the `${BUILD_TAG}` to the downstream job which we will create next.
 ![downstream-trigger-deploy](../images/exercise2/downstream-trigger-deploy.png)
 
 5. Hit save! That's our *bake* phase done! Finally; on to our *deploy*
@@ -593,7 +593,7 @@ oc rollout latest dc/${NAME}
 ```
 ![deploy-step](../images/exercise2/deploy-step.png)
 
-5. When a deployment has completed; OpenShift can verify it's success. Add another step called by clicking the `Add build Step` on the Build tab then `Verify OpenShift Deployment` including the following:
+5. When a deployment has completed; OpenShift can verify it's success. Add another step by clicking the `Add build Step` on the Build tab then `Verify OpenShift Deployment` including the following:
     * Set the Project to your `<YOUR_NAME>-dev`
     * Set the DeploymentConfig to your app's name `todolist-fe`
     * Set the replica count to `1`
@@ -603,10 +603,12 @@ oc rollout latest dc/${NAME}
 
 #### 4d - Pipeline
 
-5. With our Jenkins setup in place; now move to our `todolist-fe` app's source code. We have to add our configuration to the frontend to tell it where the API layer will be hosted. Open the source in your favourite editor and navigate to `src/config/dev.js`. Update `<YOUR_NAME>` accordingly with the route where the Todo List API will live when it is deployed, update the `somedomain` to the clusters domain. For example:
+5. With our Jenkins setup in place; now move to our `todolist-fe` app's source code. We have to add our configuration to the frontend to tell it where the API layer will be hosted. Open the source in your favourite editor and navigate to `src/config/dev.js`.
+
+5. Update `<YOUR_NAME>` accordingly with the route where the Todo List API will live when it is deployed, update the `somedomain` to the clusters domain. The correct full URL can also be found on the OpenShift Console; if you copy it from there remember to append `/api/todos` to the URL. For example:
 ![fe-dev-config](../images/exercise2/fe-dev-config.png)
 
-5. Repeat this for `src/config/test.js` file. Once done; commit your chanages and push them to GitLab
+5. Repeat this for `src/config/test.js` file. If you copy the URL from the previous step; change `dev` to `test`. Once done; commit your chanages and push them to GitLab
 ```bash
 $ git add .
 $ git commit -m "ADD config for api"
@@ -664,7 +666,7 @@ npm run build:ci
  
 6. Run the `dev-todolist-api-build` to trigger the backend pipeline. While this is building, check our front end app and see if it has deployed successfully.
 
-6. To check the deployment in OpenShifty; open the console and go to your `dev` namespace. You should see the deployment was successful; hit the URL to open the app (the screenshot below has both apps deployed).
+6. To check the deployment in OpenShift; open the console and go to your `dev` namespace. You should see the deployment was successful; hit the URL to open the app (the screenshot below has both apps deployed).
 ![ocp-deployment](../images/exercise2/ocp-deployment.png)
 
 6. If it has been a success we should see our dummyData. This is because there is no backend deployed.
