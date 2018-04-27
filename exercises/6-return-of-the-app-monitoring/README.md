@@ -72,7 +72,7 @@ _____
 
 2. Open the `todolist-fe` app in your favourite editor. In this exercise, we will fail a test and capture the message in the log and visualise it on a dashboard.
 
-2. Open the one of the tests you wrote in previous labs; for example `tests/unit/vue-components/TodoItem.spec.js`. Negate the test at the very bottom of the file to by adding a `.not` to the `expect()` statement as shown below.
+2. Open one of the tests you wrote in previous labs; for example `tests/unit/vue-components/TodoItem.spec.js`. Negate the test at the very bottom of the file by adding a `.not` to the `expect()` statement as shown below.
 ```javascript
   it("call makImportant when clicked", () => {
     const wrapper = mount(TodoItem, {
@@ -87,15 +87,15 @@ _____
 });
 ```
 
-2. Run your tests locally and you should see one failing test as shown below. Jenkins will have the same out put so we can capture this as code!
+2. Run your tests locally and you should see one failing test as shown below. Jenkins will have the same output so we can capture this as code!
 ![fail-local](../images/exercise6/fail-local.png)
 
-2. The `Test Suites: 1 failed, 11 passed, 12 total` string can be coded into a regex. On Jenkin homepage; hit the `Failure Cause Management` nav on the left hand menu. On the page that loads; hit `Create new`.
+2. The `Test Suites: 1 failed, 11 passed, 12 total` string can be coded into a regex. On Jenkins homepage; hit the `Failure Cause Management` nav on the left hand menu. On the page that loads; hit `Create new`.
 
 2. Call the new Failure Cause `jest-tests`. Set the Description to be `${1,1} failed out of ${1,2}`. The `${1,1}` refers to the first capture group in a regex. Click `Add indication > Build log`. Set the Pattern to match for the test output we've seen in our test execution on the terminal using this regex `.*Tests:.*(\d+) failed.*(\d+) total.*`. 
 ![fail-cause](../images/exercise6/fail-cause.png)
 
-2. Our dashboards are set to show the `Description` field from the `Build Fail Analyser`. Run a build by checking in our failed tests and check the result on the Build Monitor created in previous step
+2. Our dashboards are set to show the `Description` field from the `Build Fail Analyser`. Run a build by checking in our failed tests and check the result on the Build Monitor created in the previous step
 ```bash
 $ git add .
 $ git commit -m "TEST - failing build"
