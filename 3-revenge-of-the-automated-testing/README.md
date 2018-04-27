@@ -48,7 +48,7 @@ Explanation of Mocha and js test syntax through Bananalogy! Imagine for a moment
 As a learner you will be able to
 
 * Understand the why behind TDD
-* Implement a feature using TDD for frontend and backend
+* Implement a feature using TDD for front end and backend
 * Write end to end tests for the feature and run them in CI
 
 ## Tools and Frameworks
@@ -89,10 +89,10 @@ _On page load:_
 > This is a fairly structured guide with references to exact filenames and sections of text to be added.
 
 ### Part 1 - Tests in our Pipeline
-> _In this part we will get familiar with the layout of our tests. We will also improve the pipeline created already by adding some unit tests for the frontend & backend along with some end to end tests (e2e) to validate the full solution_
+> _In this part we will get familiar with the layout of our tests. We will also improve the pipeline created already by adding some unit tests for the front end & backend along with some end to end tests (e2e) to validate the full solution_
 
 #### 1a - FE Unit tests
-> In this exercise we will execute our test for the frontend locally. Once verified we will add them to Jenkins.
+> In this exercise we will execute our test for the front end locally. Once verified we will add them to Jenkins.
 
 2. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist-fe` directory and run `test`.
 ```bash
@@ -104,7 +104,7 @@ $ npm run test
 </p>
 ![screenshot-scripts](../images/exercise3/screenshot-scripts.png)
 
-2. This command will run all `*spec.js` files. Our test files are stored in the following places. There are 12 Frontend test files stored in these directories: `todolist-fe/tests/unit/vue-components/*` & `todolist-fe/tests/unit/javascript/*`
+2. This command will run all `*spec.js` files. Our test files are stored in the following places. There are 12 front end test files stored in these directories: `todolist-fe/tests/unit/vue-components/*` & `todolist-fe/tests/unit/javascript/*`
 
 2. You should see an output similar to the following. The above command has run a test suite for every `*.spec.js` file. The table generated in the terminal shows the code coverage. We're going to be focusing on the unit tests for now.
 ![test-run-locally](../images/exercise3/test-run-locally.png)
@@ -299,7 +299,7 @@ where:
   - `res.body.should.be.instanceof(Array);` is the actual test call
   - `done();` tells the test runner that `mocha` has finished execution. This is needed as the http calls are asynchronous.
 
-3.  With this knowledge; let's implement our test for the `important` flag. We expect the fronted to introduce a new property on each `todo` that gets passed to the backend called `important`. The API will need to handle this new property and pass it into the mongodb. Let's begin implementing this functionality by writing our test case. Navigate to the `PUT /api/todos` section of the `server/api/todo/todo.spec.js` test file (which should be at the bottom) 
+3.  With this knowledge; let's implement our test for the `important` flag. We expect the front end to introduce a new property on each `todo` that gets passed to the backend called `important`. The API will need to handle this new property and pass it into the mongodb. Let's begin implementing this functionality by writing our test case. Navigate to the `PUT /api/todos` section of the `server/api/todo/todo.spec.js` test file (which should be at the bottom) 
 ![todo-api-tests](../images/exercise3/todo-api-tests.png)
 
 3. Before writing our test; let's first make sure all the existing tests are passing.
@@ -377,8 +377,8 @@ $ git push
 $ npm run start
 ```
 
-#### Part 2b - Create todolist-fe tests
-> Using [Jest](https://facebook.github.io/jest/) as our test runner and the `vue-test-utils` library for managing our vue components; we will now write some tests for frontend functionality to persist our important-flag. The changes required to the front end are quite large but we will use TDD to create our test first, then implement the functionality. 
+#### 2b - Create todolist-fe tests
+> Using [Jest](https://facebook.github.io/jest/) as our test runner and the `vue-test-utils` library for managing our vue components; we will now write some tests for front end functionality to persist our important-flag. The changes required to the front end are quite large but we will use TDD to create our test first, then implement the functionality. 
 
 Our TodoList App uses `vuex` to manage the state of the apps' todos and `axios` HTTP library to connect to the backend. `Vuex` is an opinionated framework for managing application state and has some key design features you will need to know to continue with the exercise. 
 
