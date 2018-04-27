@@ -1,0 +1,7 @@
+
+
+The Jedi Developers have returned to their home planet of Jenkins2 in an attempt to rescue their sprint time from the clutches of the vile gangsters Project Managers.
+
+Little does the Jedi know that the MANUALTEST EMPIRE has secretly begun construction on a new armored space station even more powerful than the first dreaded Gantt Chart which threatens the resources on Jenkins2.
+
+To combat this, the wise Jedi create monitors and dashboards for each level of their system to alert them of attacks by the Empire. This quick feedback allow the Jedi to restore balance to the DevOps force before the Empire can capitalize on the downtime…

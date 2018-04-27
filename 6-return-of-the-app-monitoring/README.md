@@ -1,4 +1,4 @@
-# Return of the Application Monitoring
+# Return of the Monitoring
 
 > In this exercise we will create a build monitor to radiate vital build information and statistics
 

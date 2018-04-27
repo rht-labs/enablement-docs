@@ -1,0 +1,5 @@
+It is a period of testing war. Rebel automation engineers, striking from a hidden base, have won their first  victory against the evil Manualtest Empire.
+
+During the battle, Rebel spies managed to steal secret plans to the Empire's ultimate weapon, the GANTT CHART, an armored space station with enough milestones and waterfall phases to crush the jenkins pipeline to dust.
+
+Pursued by the Empire's sinister agents and armed with a plan too, the Rebel automaters plan their own pipeline-as-code and create slave agents in a hope to save their residency and continuously deliver to production before the GANTT CHART destroys all agility.....

@@ -1,0 +1,5 @@
+The Project is crumbling under attacks by the ruthless Sith Lord, Regression. There are failures on both client and server sides. Bugs are everywhere.
+
+In a stunning move, the heroic Jedi developers, Mocha Skywalker and his friend Hans Jest have swept into the Galactic codebase and rescued Code Integrity, leader of the Galactic Development Principles.
+
+As the Separatist army of Sith Developers attempt to flee the besieged project with their valuable hostage, manual testing. Two Jedi Knights lead a desperate mission with an alliance of jenkins build jobs to automate the running of functional tests in the pipeline and demonstrate their commitment to the republic by implementing a new feature using TDD.

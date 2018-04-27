@@ -1,0 +1,9 @@
+Exercise 1
+The Manual Menace
+
+Turmoil has engulfed the Infrastructure Republic. The manual configuration of applications in outlying cluster systems is in dispute.
+
+
+Hoping to resolve the matter with a blockade of deadly manual hotfixes, the greedy  Manual Federation has broken all configuration changes on the small planet of Kubernetes.
+
+While the Congress of the Republic endlessly debates this alarming chain of events, the Supreme Chancellor-as-Code, has secretly dispatched two Jedi Knights, Ansible & OpenShift, the guardians of automation and regression in the galaxy, to settle the conflict....
