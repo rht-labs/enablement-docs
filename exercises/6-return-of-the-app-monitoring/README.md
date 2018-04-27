@@ -5,10 +5,8 @@
 ![monitoring-meme](../images/exercise6/monitoring-meme.jpg)
 
 ## Exercise Intro
-Why do we use visual monitors? Gamification.
-What are we doing in this exercise
-_____
-
+Why do we use visual monitors? Visual monitors support the tight feedback loop which is vital to an agile working environment. Being in a centrally visible location, visual monitors radiate information rapidly, meaning the team doesn't have to go looking for it. Visual monitors also provide a degree of accountibility while also keeping the team motivated to fix problems. With broken components visualised, seeing progress monitors change from red to green can give the collective feeling that progress is being made. Finally visual monitors can promote team cohesion as it enables all team members to be on the same page regarding the current project status. 
+____
 ## Learning Outcomes
 As a learner you will be able to
 - Create dashboards in Jenkins to display build status
