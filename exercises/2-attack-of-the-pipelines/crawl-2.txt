@@ -1,0 +1,5 @@
+There is unrest in the Project Senate. Several thousand stakeholders have declared their intentions to run the code in their own environments at their own version.
+
+This separatist movement, under the leadership of the mysterious aCount Managers, have made it difficult for the limited number of Jedi Developers to maintain peace and order in the galaxy.
+
+Senator Jenkins, the former Queen of Hudson, is returning to the Project Senate to implement a pipeline to production by creating an ARMY OF BUILD JOBS FOR THE RESIDENCY to assist the overwhelmed Jedi developers....

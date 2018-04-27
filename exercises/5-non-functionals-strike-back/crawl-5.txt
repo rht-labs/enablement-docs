@@ -1,0 +1,6 @@
+
+It is a dark time for the automation Rebellion. Although the Gantt Chart has been destroyed, Imperial Vulnerability troops have driven the Rebel forces from their hidden base, pursued them across the galaxy and disabled the pipeline's pathway to production
+
+Evading the dreaded Imperial Starfleet, a group of security scanners led by Zap Scanwalker has established a new secret base on the remote ice world of Docker.
+
+The genius Jedi Scanwalker, obsessed with finding a solution to the Pipeline problem, has dispatched thousands of linters and code coverage reporters into the far reaches of Cloud City in hopes to improve builds,thus enhancing their pipeline quality...
