@@ -3,6 +3,10 @@
 > In this exercise we will create a build monitor to radiate vital build information and statistics
 
 ![monitoring-meme](../images/exercise6/monitoring-meme.jpg)
+
+## Exercise Intro
+Why do we use visual monitors? Gamification.
+What are we doing in this exercise
 _____
 
 ## Learning Outcomes
