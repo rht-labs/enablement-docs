@@ -5,7 +5,9 @@
 ![monitoring-meme](../images/exercise6/monitoring-meme.jpg)
 
 ## Exercise Intro
-Why do we use visual monitors? Visual monitors support the tight feedback loop which is vital to an agile working environment. Being in a centrally visible location, visual monitors radiate information rapidly, meaning the team doesn't have to go looking for it. Visual monitors also provide a degree of accountibility while also keeping the team motivated to fix problems. With broken components visualised, seeing progress monitors change from red to green can give the collective feeling that progress is being made. Finally visual monitors can promote team cohesion as it enables all team members to be on the same page regarding the current project status. 
+Why do we use build monitors? Build monitors provide a tight feedback loop which is vital to an agile working environment. Being in a highly visible location, build monitors radiate information rapidly, meaning the team doesn't have to out of their way to find it. Build monitors also provide a degree of accountability whilst also keeping the team motivated to fix problems. By displaying failed builds, and showing the changes from red to green can give the collective feeling that progress is being made. Finally, build monitors can promote team cohesion as they enable all team members to be on the same page regarding the current project status. The most important thing here isn't the tool, but the visual feedback. In previous labs we've displayed the below build monitors on Raspberry Pi's hooked up to large TV screens that everyone can see at a glance. We've also used colour-changing lightbulbs in the labs that change from Green to Red depending on the success/fail status of jobs.
+
+In this Exercise we will be creating a build monitor to display all of our jobs in one visual display as well as pipeline views. We will then add the cause of build failures for each job to the monitors. This will allow you to rapidly see twhy a particular build is failing and fix it faster.
 ____
 ## Learning Outcomes
 As a learner you will be able to
