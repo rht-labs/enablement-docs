@@ -27,10 +27,10 @@ _____
 
 2. Create a new Dashboard for our Builds using the plugin above. Use Regex to add jobs to it. Use the BuildFail Analyser to add meaningful data to the reason for failures.
 
-2. Use the pipeline views in OpenShift and Jenkins to produce dashboards that teams can use. 
+2. Use the pipeline views in OpenShift and Jenkins to produce dashboards that teams can use.
 
 ## Step by Step Instructions
-> This is a fairly structured guide with references to exact filenames and sections of text to be added. Include pictures and code snippets where appropriate. Rule of thumb is learners are dumb.... so over describe _why_ we're doing things
+> This is a fairly structured guide with references to exact filenames and sections of text to be added. Include pictures and code snippets where appropriate.
 
 ### Part 1 - Create a build monitor
 > _In this exercise we will create a new build monitor to show key information about our builds_
