@@ -1,0 +1,10 @@
+Exercise 7
+
+THE CLUSTER AWAKENS
+
+Dashboard Skywalker has vanished. In his absence, the sinister INFRASTRUCTURE ORDER has risen from the ashes with extreme memory & CPU usage and will not rest until Prometheus, the last monitor,
+has been destroyed.
+
+With the support of the REPUBLIC, General Grafana leads a brave RESISTANCE. She is desperate to find her brother Dashboard and gain his help in restoring visualisation and statistics to bring quick feedback to the galaxy.
+
+Grafana has sent her most daring pilot on a secret mission to Red Hat Open Innovation Labs, where an old ally has discovered a clue to Dashboard's whereabouts....
