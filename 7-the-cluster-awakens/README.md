@@ -1,6 +1,9 @@
 # Exercise Title
 
-> Short description of the exercise and it's outcomes
+> In this exercise; we will monitor the core of the OpenShift Cluster. Watch for spikes in memory usage, harddisk space and other cluster stats. 
+
+![monitoring-mayhem](../images/exercise7/monitoring-mayhem.jpg)
+
 _____
 
 ## Learning Outcomes
