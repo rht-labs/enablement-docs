@@ -1,5 +1,5 @@
 # The Manual Menace
-> In this lab learners will use Ansible to drive automated provisioning of Projects in Openshift, Git, Jenkins and Nexus.
+> In this exercise learners will use Ansible to drive automated provisioning of Projects in Openshift, Git, Jenkins and Nexus.
 
 ![automation-xkcd](https://imgs.xkcd.com/comics/automation.png)
 
@@ -41,7 +41,7 @@ This exercise begins with an empty Cluster
 _____
 
 ## 10,000 Ft View
-> This lab is aimed at the creation of the tooling that will be used to support the rest of the Exercises. The highlevel goal is to create a collection of project namespaces and populate them with Git, Jenkins & Nexus.
+> This exercise is aimed at the creation of the tooling that will be used to support the rest of the Exercises. The highlevel goal is to create a collection of project namespaces and populate them with Git, Jenkins & Nexus.
 
 If you're feeling confident and don't want to follow the step-by-step guide these highlevel instructions should provide a challenge for you:
 
@@ -66,7 +66,7 @@ If you're feeling confident and don't want to follow the step-by-step guide thes
 ### Part 1 - Create OpenShift Projects
 > _Using the OpenShift Applier, we will add new project namespaces to the cluster which will be used throughout the exercise._
 
-3. Clone the scaffold project to your local machine and pull all remote branches for use in later labs. Open the repo in your favourite editor.
+3. Clone the scaffold project to your local machine and pull all remote branches for use in later exercises. Open the repo in your favourite editor.
 ```bash
 $ git clone https://github.com/rht-labs/enablement-ci-cd && cd enablement-ci-cd
 ```
