@@ -7,7 +7,7 @@
 ## Exercise Intro
 Build monitors provide a tight feedback loop which is vital to high performing teams. Being in a highly visible location, build monitors radiate crucial build and test information, meaning the team doesn't have to go out of their way to find it. Build monitors also provide a degree of accountability whilst also keeping the team motivated to fix problems. With broken components visualised, seeing build monitors change from red to green can give the collective feeling that progress is being made. 
 
-On residencies we display the build monitors on Raspberry Pi's hooked up to large TV screens that everyone can see at a glance. We've also used colour-changing lightbulbs in the labs that change from Green to Red depending on the success/fail status of jobs. There are many other ways to notify people of Build Failures such as Slack notices, text messages or just plain old email. This lab is about radiating the information to allow teams respond quickly to change.
+On residencies we display the build monitors on Raspberry Pi's hooked up to large TV screens that everyone can see at a glance. We've also used colour-changing lightbulbs in the labs that change from Green to Red depending on the success/fail status of jobs. There are many other ways to notify people of Build Failures such as Slack notices, text messages or just plain old email. This exercise is about radiating the information to allow teams respond quickly to change.
 
 In this Exercise we will be creating a build monitor to display all of our jobs in one visual display as well as pipeline views. We will then add the cause of build failures for each job to the monitors. This will allow you to rapidly see why a particular build is failing and fix it faster.
 
@@ -86,7 +86,7 @@ _____
 
 2. Open the `todolist-fe` app in your favourite editor. In this exercise, we will fail a test and capture the message in the log and visualise it on a dashboard.
 
-2. Open one of the tests you wrote in previous labs; for example `tests/unit/vue-components/TodoItem.spec.js`. Negate the test at the very bottom of the file by adding a `.not` to the `expect()` statement as shown below.
+2. Open one of the tests you wrote in previous exercises; for example `tests/unit/vue-components/TodoItem.spec.js`. Negate the test at the very bottom of the file by adding a `.not` to the `expect()` statement as shown below.
 ```javascript
   it("call makImportant when clicked", () => {
     const wrapper = mount(TodoItem, {

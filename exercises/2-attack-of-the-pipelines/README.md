@@ -1,6 +1,6 @@
 # Attack of the Pipelines
 
-> In this lab we will explore the sample TODO List application and create a pipeline in Jenkins to build and deploy our code.
+> In this exercise we will explore the sample TODO List application and create a pipeline in Jenkins to build and deploy our code.
 
 ![jenkins-time](../images/exercise2/jenkins-time.jpg)
 
@@ -167,7 +167,7 @@ todolist-fe
 where the following are the important things:
     * `./src` is the main collection of files needed by the app. The entrypoint is the `main.js` which is used to load the root `App.vue` file.
     * `./node_modules` is where the dependencies are stored
-    * `./test` contains our end-to-end tests and unit tests. More covered on these in later labs.
+    * `./test` contains our end-to-end tests and unit tests. More covered on these in later exercises.
     * `./src/components` contains small, lightweight reusable components for our app. For example, the `NewTodo` component which encapsulates the styling, logic and data for adding a new todo to our list
     * `./src/store` is the `vuex` files for managing application state and backend connectivity
     * `./src/views` is the view containers; which are responsible for loading components and managing their interactions.
@@ -251,7 +251,7 @@ where the following are the important things:
     * `./server/mocks` is a mock server used for when there is no DB access    
     * `./server/config` stores our Express JS config, header information and other middleware.
     * `./server/config/environment` stores enviromnent specific config; such as connectivity to backend services like MongoDB.
-    * `./tasks` is a collection of additional `Grunt` tasks which will be used in later labs
+    * `./tasks` is a collection of additional `Grunt` tasks which will be used in later exercises
     * `Grunt` is a taskrunner for use with Node.JS projects
     * `package.json` contains the dependency list and a lot of very helpful scripts for managing the app lifecycle
 
@@ -351,7 +351,7 @@ $ ansible-playbook apply.yml -e target=tools \
 3. Verify the build executed successfully by logging into the cluster and checking the `builds` tab of the `<YOUR_NAME>-ci-cd` project.
 ![jenkins-slave-npm-build](../images/exercise2/jenkins-slave-npm-build.png)
 
-3. You should now be able to apply the label `jenkins-slave-npm` to a build job to run a build on this newly created slave as we will see in the rest of this lab
+3. You should now be able to apply the label `jenkins-slave-npm` to a build job to run a build on this newly created slave as we will see in the rest of this exercise
 <p class="tip">
 NOTE - Jenkins may need to be restarted for the configuration to appear. To do this; navigate to your jenkins instance and add `/restart` to the url.
 </p>
