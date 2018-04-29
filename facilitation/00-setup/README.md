@@ -1,6 +1,6 @@
 # Setting up the Enablement Session
 
-> These notes are intended to evolve into a set of shared notes on how to set up and facilitate the Open Innovation Labs DevOps Culture and Practice Enablement.
+> These notes are intended to evolve into a set of shared thoughts on how to set up and facilitate the Open Innovation Labs DevOps Culture and Practice Enablement.
 
 _____
 
@@ -27,7 +27,7 @@ Key requirements for the venue include:
     * Henrik Kniberg Skateboard Picture
     * The Agile Manifesto Values and Principles
     * What DevOps is Not
-* Some spare adapters for overseas' participants to connect laptops to power
+* Some spare adapters for overseas' participants to connect laptops to power    
 * Bluetac
 * A1 Sticky Chart Paper
 * Boards (especially if wall space is lacking)
@@ -40,7 +40,6 @@ Key requirements for the venue include:
 * Fun activities (e.g. a mini golf set and mini ping pong set)
 * Option to project build monitors (e.g. through Rasperry Pis) - organise extra monitors or bring projector
 * Think about capturing the Enablement by bringing, for example, GoPro Camera, 360 cameera, etc.
-
 
 
 ## Setting up the Room
