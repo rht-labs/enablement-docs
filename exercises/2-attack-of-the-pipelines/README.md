@@ -683,7 +683,7 @@ npm run build:ci
 > _In this exercise we will link GitLab to Jenkins so that new build jobs are triggered on each push to the `develop` branch._
 
 <p class="tip" >
-NOTE - This section is optional! Git webhooks are useful but not needed for course completion.
+NOTE - This section is optional! Git webhooks are useful but not needed for Enablement completion.
 </p>
 
 7. In order to allow GitLab trigger Jenkins (because of the OpenShift Auth Plugin), we need to allow the `Anonymous` user trigger builds. Head to your Jenkins Dashboard and click on `Manage Jenkins` on the left hand side. Then scroll down and click `Configure Global Security`. Alternatively, type in `https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/configureSecurity/` . You should see a screen like so:

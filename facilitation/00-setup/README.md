@@ -14,7 +14,7 @@ Key requirements for the venue include:
 * LOTS of wall space (more than you could think.... we may need to supplement with "portable wall" boards) 
 * Projector that supports HDMI
 * Ability to play sound from laptop
-* Strong WiFi (all delegates will need to be connected throughout the course)
+* Strong WiFi (all delegates will need to be connected throughout the Enablement)
 * At least one break out area - ideally a small room near the main room
 
 
