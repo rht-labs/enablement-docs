@@ -70,3 +70,5 @@ Think about the wall space that will be used for:
 
 * Facilitation Guides have been prepared for each of the exercises (technical and non-technical). These are intended to be living and breathing documents which will be updated as more Enablement sessions are run.
 * Slideware includes lots of real world residency examples of practices being taught. It is expected that these examples will change session-by-session and the Labs facilitators will inject their own stories, photos and videos in here.
+* Catering is an important factor to consider. Having group breakfasts and lunch emulates what we do on Residencies
+* Having a group social during the week is also an important aspect of the Enablement
