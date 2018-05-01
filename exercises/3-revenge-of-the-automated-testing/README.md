@@ -1,6 +1,6 @@
 # Revenge Of The Automated Testing
 
-> The purpose of this lab is to develop and validate a new feature using TDD; and to promote the assured feature through the pipeline.
+> The purpose of this exercise is to develop and validate a new feature using TDD; and to promote the assured feature through the pipeline.
 
 ![comic-header](../images/exercise3/comic-header.png)
 
@@ -151,7 +151,7 @@ $ git push
 #### 1b - BE Unit tests
 > In this exercise we will execute our test for the backend locally. Once verified we will add them to Jenkins and add a mongodb to Jenkins for running tests there.
 
-2. We're now going to do the same for the api. However, in order to run our API tests in CI; we need there to be a MongoDB available for testing. In our `enablement-ci-cd` repo; checkout the mongo branch as shown below to bring in the template and params. The mongodb template we're using is the same as the one for our `todolist-fe` created in previous lab.
+2. We're now going to do the same for the api. However, in order to run our API tests in CI; we need there to be a MongoDB available for testing. In our `enablement-ci-cd` repo; checkout the mongo branch as shown below to bring in the template and params. The mongodb template we're using is the same as the one for our `todolist-fe` created in previous exercise.
 ```bash
 $ git checkout exercise3/mongodb params/mongodb templates/mongodb.yml
 ```
@@ -410,7 +410,7 @@ $ npm run test -- --watch
 3. All the tests should be passing when we begin. If `No tests found related to files changed since last commit` is on show; hit `a` on the terminal to re-run `all` tests.
 ![rerun-all](../images/exercise3/rerun-all.png)
 
-3. There are three places we will add new tests to validate our function behaves as expected against the acceptance criteria from the Feature Story supplied to us. We will need to write tests for our `TodoItem.vue` to handle having a red flag and that it is clickable. Our app is going to need to persist the changes in the backend so we'll want to make changes to our `actions.js` and `mutations.js` to keep the api and local copy of the store in sync. Let's start with our `TodoItem.vue` component. Open the `tests/unit/vue-components/TodoItem.spec.js` file. This has been templated with some example test to correspond with our A/Cs for speed of doing the lab. Find the describe block for our important flag tests. It is setup already with a `beforeEach()` hook for test setup.
+3. There are three places we will add new tests to validate our function behaves as expected against the acceptance criteria from the Feature Story supplied to us. We will need to write tests for our `TodoItem.vue` to handle having a red flag and that it is clickable. Our app is going to need to persist the changes in the backend so we'll want to make changes to our `actions.js` and `mutations.js` to keep the api and local copy of the store in sync. Let's start with our `TodoItem.vue` component. Open the `tests/unit/vue-components/TodoItem.spec.js` file. This has been templated with some example test to correspond with our A/Cs for speed of doing the exercise. Find the describe block for our important flag tests. It is setup already with a `beforeEach()` hook for test setup.
 ![important-flag-before](../images/exercise3/important-flag-before.png)
 
 3. Each of our test cases has it's skeleton in place already for example the `TodoItem.vue` component takes a property of `todos` when rendering. This setup is already done for each of our tests so all we have to do is fill in our assertions.
@@ -471,7 +471,7 @@ $ npm run test -- --watch
 3. Underneath the `</md-list-item>` tag, let's add a new md-button. Add a `.important-flag` class on the `md-button` and put the svg of the flag provided inside it.
 ```html
     </md-list-item>
-    <!-- TODO - SVG for use in Lab3 -->
+    <!-- TODO - SVG for use in Exercise3 -->
     <md-button class="important-flag">
         <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" ><path d="M0 0h24v24H0z" fill="none"/><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
     </md-button>
@@ -487,7 +487,7 @@ $ npm run test -- --watch
 3. More tests should now be passing. Let's wire the click of the flag to an event in Javascript. In the methods section of the `<script></script>` tags in the Vue file, implement the `markImportant()`. We want to wire this to the action to updateTodo, just like we have in the `markCompleted()` call above it. We also need to pass and additional property to this method call `important`
 ```javascript
     markImportant() {
-      // TODO - FILL THIS OUT IN THE LAB EXERCISE
+      // TODO - FILL THIS OUT IN THE EXERCISE
       this.$store.dispatch("updateTodo", {id: this.todoItem._id, important: true});
       console.info("INFO - Mark todo as important ", this.todoItem.important);
     },
@@ -496,7 +496,7 @@ $ npm run test -- --watch
 3. Let's connect the click button in the DOM to the Javascript function we've just created. In the template, add a click handler to the md-button to call the function `markImportant()` by adding ` @click="markImportant()"` to the `<md-button> tag 
 
 ```html
-    <!-- TODO - SVG for use in Lab3 -->
+    <!-- TODO - SVG for use in Exercise3 -->
     <md-button class="important-flag" @click="markImportant()">
         <svg :class="{'red-flag': todoItem.important}"  height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" ><path d="M0 0h24v24H0z" fill="none"/><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
     </md-button>

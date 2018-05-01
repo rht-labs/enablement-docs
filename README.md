@@ -1,5 +1,5 @@
 # Red Hat Open Innovation Labs Enablement Materials
-This repo will house all the slides and lab exercises for the Enablement course. It will also be used to track issues, features and new additions to the course.
+This repo will house all the slides and lab exercises for the Enablement. It will also be used to track issues, features and new additions to the Enablement.
 
 [Course Content](https://rht-labs.github.io/enablement-docs/#/)
 

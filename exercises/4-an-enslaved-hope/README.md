@@ -1,6 +1,6 @@
 # An Enslaved Hope
 
-> In this exercise we'll break free from the chains of point'n'click Jenkins by introducing pipeline as code in the form of `Jenkinsfile`. Following this we will introduce some new Jenkins slaves that will be used in later labs. 
+> In this exercise we'll break free from the chains of point'n'click Jenkins by introducing pipeline as code in the form of `Jenkinsfile`. Following this we will introduce some new Jenkins slaves that will be used in later exercises. 
 
 ![jenkins-fail-meme](../images/exercise4/jenkins-fail-meme.jpeg)
 
@@ -15,7 +15,7 @@ _____
 As a learner you will be able to
 - Use a Jenkinsfile to create a declarative pipeline to build, bake and deploy the Todolist App 
 - Identify the differences between scripted, declarative and DSL pipelines 
-- Create Jenkins slave nodes for use in builds in future labs
+- Create Jenkins slave nodes for use in builds in future exercises
 
 ## Tools and Frameworks
 > Name of tool - short description and link to docs or website
@@ -32,7 +32,7 @@ This exercise begins cluster containing blah blah
 _____
 
 ## 10,000 Ft View
-> The goal of this exercise is to move to using the Jenkinsfile in the todolist-api and todolist-fe projects. Additionally we will create new slaves for use in the next lab
+> The goal of this exercise is to move to using the Jenkinsfile in the todolist-api and todolist-fe projects. Additionally we will create new slaves for use in the next exercise.
 
 2. On Jenkins; create a multibranch pipeline project to scan the GitLab endpoint for each app. Use the Jenkinsfile provided to run the stages. Replace the `<YOUR_NAME>` with appropriate variable.
 
@@ -42,7 +42,7 @@ _____
 > This is a fairly structured guide with references to exact filenames and sections of text to be added. 
 
 ### Part 1 - The Jenkinsfile
-> _In this exercise we'll replace the Pipeline we created in Lab 2 with a Jenkinsfile approach_
+> _In this exercise we'll replace the Pipeline we created in Exercise 2 with a Jenkinsfile approach_
 
 2. On your terminal navigate to your `todolist-api` project and checkout the pipeline feature branch that's been already created for you.
 ```bash
@@ -61,7 +61,7 @@ Some of the key things to note:
     * `post {}` hook is used to specify the post-build-actions. Jenkins declarative provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
     * `when {}` is used for flow control. It can be used at stage level and be used to stop pipeline entering that stage. eg when branch is master; deploy to `test` environment.
 
-2. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous labs. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
+2. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous exercises. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
 ```groovy
     environment {
         // GLobal Vars
