@@ -190,7 +190,7 @@ The template contains all the things needed to setup a persistent nexus server, 
 $ touch params/nexus
 ```
 
-4. The essential params to inclue in this file are: `params` directory. 
+4. The essential params to inclue in this file are:
 ```bash
 VOLUME_CAPACITY=5Gi
 MEMORY_LIMIT=2Gi
