@@ -73,7 +73,7 @@ Some of the key things to note:
 
         GIT_SSL_NO_VERIFY = true
         GIT_CREDENTIALS = credentials('jenkins-git-creds')
-        GITLAB_DOMAIN = "gitlab.apps.lader.rht-labs.com"
+        GITLAB_DOMAIN = "gitlab.apps.<SOME_DOMAIN>.com"
         GITLAB_PROJECT = "<GIT_USERNAME>"
     }
 ```
@@ -170,7 +170,7 @@ $ git push -u origin --all
 
 2. Open the `params/ocp-pipeline` file and update `PIPELINE_SOURCE_REPOSITORY_URL` with the git url of your project (Don't forget to add the `.git` at the end). For example:
 ```
-PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab.apps.lader.rht-labs.com/<GIT_USERNAME>/todolist-fe.git
+PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab.apps.<SOME_DOMAIN>.com/<GIT_USERNAME>/todolist-fe.git
 PIPELINE_SOURCE_REPOSITORY_REF=develop
 NAME=todolist-fe
 ```
@@ -218,7 +218,7 @@ $ git push
 
 2. Update the `todolist-api/.openshift-applier/params/ocp-pipeline`
 ```
-PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab.apps.lader.rht-labs.com/<GIT_USERNAME>/todolist-api.git
+PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab.apps.<SOME_DOMAIN>.com/<GIT_USERNAME>/todolist-api.git
 PIPELINE_SOURCE_REPOSITORY_REF=develop
 NAME=todolist-api
 ```
@@ -295,7 +295,7 @@ $ git checkout exercise4/zap-and-arachni params/jenkins-slave-arachni docker/jen
 
 3. Update the `jenkins-slave-arachni` files `SOURCE_REPOSITORY_URL` to point to your gitlab's hosted version of the `enablement-ci-cd` repo.
 ```
-SOURCE_REPOSITORY_URL=https://gitlab.apps.lader.rht-labs.com/<GIT_USERNAME>/enablement-ci-cd.git
+SOURCE_REPOSITORY_URL=https://gitlab.apps.<SOME_DOMAIN>.com/<GIT_USERNAME>/enablement-ci-cd.git
 SOURCE_CONTEXT_DIR=docker/jenkins-slave-arachni
 BUILDER_IMAGE_NAME=registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:latest
 NAME=jenkins-slave-arachni
