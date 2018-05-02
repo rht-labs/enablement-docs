@@ -369,7 +369,7 @@ gitPassword = System.getenv("GIT_PASSWORD") ?: "<PASSWORD>"
 Note in a residency we would not use your GitCredentials for pushing and pulling from Git, A service user would be created for this.
 </p>
 
-5. Checkout the parms and the templates for the `jenkins-s2i`
+5. Checkout the params and the templates for the `jenkins-s2i`
 ```bash
 $ git checkout exercise1/jenkins-s2i params/jenkins-s2i templates/jenkins-s2i.yml
 ```
