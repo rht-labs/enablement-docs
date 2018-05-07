@@ -379,7 +379,7 @@ NOTE - Jenkins may need to be restarted for the configuration to appear. To do t
     ├── todolist-fe-build.yml
     └── todolist-fe-deploy.yml
 ```
-where the following
+with the following
     * the `apply.yml` file is the entrypoint. 
     * the `inventory` contains the objects to populate the cluster with.
     * the `params` contains the variables we'll apply to the `templates`
