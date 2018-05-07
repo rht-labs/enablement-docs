@@ -190,7 +190,7 @@ The template contains all the things needed to setup a persistent nexus server, 
 $ touch params/nexus
 ```
 
-4. The essential params to inclue in this file are: `params` directory. 
+4. The essential params to include in this file are:
 ```bash
 VOLUME_CAPACITY=5Gi
 MEMORY_LIMIT=2Gi
@@ -369,7 +369,7 @@ gitPassword = System.getenv("GIT_PASSWORD") ?: "<PASSWORD>"
 Note in a residency we would not use your GitCredentials for pushing and pulling from Git, A service user would be created for this.
 </p>
 
-5. Checkout the parms and the templates for the `jenkins-s2i`
+5. Checkout the params and the templates for the `jenkins-s2i`
 ```bash
 $ git checkout exercise1/jenkins-s2i params/jenkins-s2i templates/jenkins-s2i.yml
 ```
