@@ -111,9 +111,13 @@ _____
 
 2. Our dashboards are set to show the `Description` field from the `Build Fail Analyser`. Run a build by checking in our failed tests and check the result on the Build Monitor created in the previous step
 ```bash
-$ git add .
-$ git commit -m "TEST - failing build"
-$ git push
+git add .
+```
+```bash
+git commit -m "TEST - failing build"
+```
+```bash
+git push
 ```
 ![fail-dashboard](../images/exercise6/fail-dashboard.png)
 
