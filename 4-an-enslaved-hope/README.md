@@ -46,7 +46,7 @@ _____
 
 2. On your terminal navigate to your `todolist-api` project and checkout the pipeline feature branch that's been already created for you.
 ```bash
-$ git checkout feature/jenkinsfile
+git checkout feature/jenkinsfile
 ```
 
 2. Open up your `todolist-api` application in your favourite editor and move to the `Jenkinsfile` in the root of the project. The highlevel structure of the file is shown collapsed below. 
@@ -80,9 +80,13 @@ Some of the key things to note:
 
 2. With these changes in place, push your changes to the `feature/jenkinsfile` branch.
 ```bash
-$ git add Jenkinsfile
-$ git commit -m "ADD - namespace and git repo to pipeline"
-$ git push
+git add Jenkinsfile
+```
+```bash
+git commit -m "ADD - namespace and git repo to pipeline"
+```
+```bash
+git push
 ```
 
 2. When the changes have been successfully pushed; Open Jenkins.
@@ -104,16 +108,30 @@ $ git push
 
 2. The pipeline file is setup to only run `bake` & `deploy` stages when on `master` or `develop` branch. This is to provide us with very fast feedback for team members working on feature or bug fix branches. Each time someone commits or creates a new branch a basic build with testing occurs to give very rapid feedback to the team. Let's now update our  `master` and `develop` branches to include the Jenkinsfile and delete the feature branch.
 ```bash
-$ git checkout develop
-$ git merge feature/jenkinsfile
+git checkout develop
+```
+```bash
+git merge feature/jenkinsfile
 # you may get merge conflicts at this point
-$ git add .
-$ git commit -m "Jenkinsfile updates"
-$ git checkout master
-$ git merge develop
-$ git push -u origin --all
+```
+```bash
+git add .
+```
+```bash
+git commit -m "Jenkinsfile updates"
+```
+```bash
+git checkout master
+```
+```bash
+git merge develop
+```
+```bash
+git push -u origin --all
+```
+```bash
 # this is to delete the branch from the remote
-$ git push origin :feature/jenkinsfile
+git push origin :feature/jenkinsfile
 ```
 
 2. Back on Jenkins we should see our `todolist-api` pipelines have changed with the `develop` and `master` now appearing. The feature was deleted so this job should have gone away.
@@ -125,8 +143,10 @@ $ git push origin :feature/jenkinsfile
 
 2.  We can move on to the `todolist-fe` job. The process is the same as before, checkout the feature branch
 ```bash
-$ cd todolist-fe
-$ git checkout feature/jenkinsfile
+cd todolist-fe
+```
+```bash
+git checkout feature/jenkinsfile
 ```
 
 2. Open up your `todolist-fe` application in your favourite editor and move to the `Jenkinsfile` in the root of the project. Update all `<YOUR_NAME>` and `<GIT_USERNAME>` as you did before, including in the prepare environment steps. Check the  `GITLAB_DOMAIN` is set too. 
@@ -134,23 +154,41 @@ $ git checkout feature/jenkinsfile
 
 2. Commit your changes to your feature branch as you did previously. 
 ```bash
-$ git add Jenkinsfile
-$ git commit -m "ADD - namespace and git repo to pipeline"
-$ git push
+git add Jenkinsfile
+```
+```bash
+git commit -m "ADD - namespace and git repo to pipeline"
+```
+```bash
+git push
 ```
 
 2. This time update your master and develop branches before creating config in Jenkins
 ```
-$ git checkout develop
-$ git merge feature/jenkinsfile
+git checkout develop
+```
+```bash
+git merge feature/jenkinsfile
 # you may get merge conflicts at this point
-$ git add .
-$ git commit -m "Jenkinsfile updates"
-$ git checkout master
-$ git merge develop
+```
+```bash
+git add .
+```
+```bash
+git commit -m "Jenkinsfile updates"
+```
+```bash
+git checkout master
+```
+```bash
+git merge develop
+```
+```bash
 # this is to delete the branch from the remote
-$ git push origin :feature/jenkinsfile
-$ git push -u origin --all
+git push origin :feature/jenkinsfile
+```
+```bash
+git push -u origin --all
 ```
 
 2. On Jenkins; create a new `Multibranch Pipeline` job called `todolist-fe`.
@@ -188,16 +226,22 @@ NAME=todolist-fe
 
 2. Use the OpenShift Applier to create the cluster content 
 ```bash
-$ cd .openshift-applier
-$ ansible-playbook apply.yml -i inventory/ \
+cd .openshift-applier
+```
+```bash
+ansible-playbook apply.yml -i inventory/ \
      -e "filter_tags=pipeline"
 ```
 
 2. With these changes in place, commit your changes to GitLab
 ```bash
-$ git add .
-$ git commit -m "ADD - ocp pipeline in git repo"
-$ git push
+git add .
+```
+```bash
+git commit -m "ADD - ocp pipeline in git repo"
+```
+```bash
+git push
 ```
 
 2. Login to your OpenShift Cluster and go to the `<YOUR_NAME>-ci-cd` namespace. On the side menu; hit Builds > Pipeline to see your newly created pipeline running in OCP Land.
@@ -225,8 +269,10 @@ NAME=todolist-api
 
 2. Use the OpenShift Applier to create the cluster content 
 ```bash
-$ cd todolist-api/.openshift-applier
-$ ansible-playbook apply.yml -i inventory/ \
+cd todolist-api/.openshift-applier
+```
+```bash
+ansible-playbook apply.yml -i inventory/ \
      -e "filter_tags=pipeline"
 ```
 
@@ -235,9 +281,13 @@ $ ansible-playbook apply.yml -i inventory/ \
 
 2. Commit your changes to GitLab
 ```bash
-$ git add .
-$ git commit -m "ADD - ocp pipeline in git repo"
-$ git push
+git add .
+```
+```bash
+git commit -m "ADD - ocp pipeline in git repo"
+```
+```bash
+git push
 ```
 
 ### Part 3 - Security Scanning Slaves
@@ -248,7 +298,7 @@ $ git push
 
 3. On your  terminal; move to the `enablement-ci-cd` repo. We already have the `templates/jenkins-slave-generic-template.yml` template we're going to re-use from the previous lab so all we need is to check out the params file
 ```bash
-$ git checkout exercise4/zap-and-arachni params/jenkins-slave-zap
+git checkout exercise4/zap-and-arachni params/jenkins-slave-zap
 ```
 
 3. This should have created the following files which we will fill out. We will use a `ZAP` image hosted on the `rht-labs/ci-cd` repo so there will be no `Dockerfile` needed as we did with the `jenkins-slave-npm` in exercise 2:
@@ -267,7 +317,7 @@ $ git checkout exercise4/zap-and-arachni params/jenkins-slave-zap
 
 3. Run the ansible playbook filtering with tag `zap` so only the zap build pods are run.
 ```bash
-$ ansible-playbook apply.yml -e target=tools \
+ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=zap"
 ```
@@ -280,7 +330,7 @@ $ ansible-playbook apply.yml -e target=tools \
 
 3. On your terminal; checkout the params and Docker file. The Dockerfile for the `Arachni` scanner is included here and we will point the build to it. 
 ```bash
-$ git checkout exercise4/zap-and-arachni params/jenkins-slave-arachni docker/jenkins-slave-arachni 
+git checkout exercise4/zap-and-arachni params/jenkins-slave-arachni docker/jenkins-slave-arachni 
 ```
 
 3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-arachni` with the following content:
@@ -304,14 +354,18 @@ SOURCE_REPOSITORY_REF=master
 
 3. With these changes in place, push your changes to the `master` branch.
 ```bash
-$ git add .
-$ git commit -m "ADD - Arachni scanning image"
-$ git push
+git add .
+```
+```bash
+git commit -m "ADD - Arachni scanning image"
+```
+```bash
+git push
 ```
 
 3. Run the ansible playbook filtering with tag `arachni` so only the arachni build pods are run.
 ```bash
-$ ansible-playbook apply.yml -e target=tools \
+ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=arachni"
 ```

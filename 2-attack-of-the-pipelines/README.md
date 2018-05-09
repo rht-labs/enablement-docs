@@ -81,12 +81,19 @@ _____
 
 2. Git clone the `todolist-fe` project to somewhere sensible and checkout the `develop` branch.
 ```bash
+cd ~/innovation-labs
+```
+```bash
 git clone https://github.com/rht-labs/todolist-fe.git
+```
+```bash
 cd todolist-fe
-git checkout develop
 ```
 ```bash
 ./git-pull-all.sh
+```
+```bash
+git checkout develop
 ```
 
 2. Open up Gitlab and login. Create a new project (internal) in GitLab called `todolist-fe` to host your clone of the project and copy it's remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
@@ -186,12 +193,19 @@ NOTE - This step in a residency would be automated by a more complex nexus deplo
 
 2. Now let's move on to the `todolist-api` and wire them together. As with the `todolist-fe` we need to clone the repo and add it to our GitLab in the cluster.
 ```bash
+cd ~/innovation-labs
+```
+```bash
 git clone https://github.com/rht-labs/todolist-api.git
+```
+```bash
 cd todolist-api
-git checkout develop
 ```
 ```bash
 ./git-pull-all.sh
+```
+```bash
+git checkout develop
 ```
 
 2. On GitLab; create a new project (internal) called `todolist-api` to host your clone of the project and copy it's remote address as you did for the previous repositories.
@@ -206,7 +220,6 @@ git push -u origin --all
 
 2. Once pushed; explore the application. It is a NodeJS application with the Express.js framework and MongoDB for persistent storage. Same as before, the `package.json` defines most of the configuration etc. Install the dependencies
 ```bash
-# npm i === npm install
 npm i
 ```
 

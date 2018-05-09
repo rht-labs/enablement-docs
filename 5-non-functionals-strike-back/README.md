@@ -191,9 +191,13 @@ stage('OWASP Scan') {
 
 2. With this config in place run a build on Jenkins. To do this; commit your code (from your terminal):
 ```bash
-$ git add .
-$ git commit -m "ADD - security scanning tools to pipeline"
-$ git push
+git add .
+```
+```bash
+git commit -m "ADD - security scanning tools to pipeline"
+```
+```bash
+git push
 ```
 
 2. Check out the Blue Ocean Jenkins view for how the parallel stage is viewed!
@@ -243,9 +247,13 @@ sh 'npm run lint'
 
 3. Save the `Jenkinsfile` and commit it to trigger a build with some more enhancements.
 ```bash
-$ git add .
-$ git commit -m "ADD - linting and coverage to the pipeline"
-$ git push
+git add .
+```
+```bash
+git commit -m "ADD - linting and coverage to the pipeline"
+```
+```bash
+git push
 ```
 
 3. When the build has completed; fix the linting errors if there are any and commit your changes. Look in Jenkins log for what the issue might be....
