@@ -177,7 +177,7 @@ where the following are the important things:
 
 2. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables change `<YOUR_NAME>` and `somedomain` accordingly.
 ```bash
-export NEXUS_SERVICE_HOST=nexus-<YOUR_NAME>-ci-cd.apps.somedomain.com
+export NEXUS_SERVICE_HOST=$(oc get route nexus --template='{{.spec.host}}' -n <YOUR_NAME>-ci-cd)
 export NEXUS_SERVICE_PORT=80
 npm run prepare-nexus
 ```
