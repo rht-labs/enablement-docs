@@ -31,7 +31,7 @@ _____
 2. Highlevel instruction with ref to `file-a` to keep learners in supportable mode
 
 ## Step by Step Instructions
-> This is a fairly structured guide with references to exact filenames and sections of text to be added. Include pictures and code snippets where appropriate. Rule of thumb is learners are dumb.... so over describe _why_ we're doing things
+> This is a fairly structured guide with references to exact filenames and sections of text to be added. Include pictures and code snippets where appropriate. Over describe _why_ we're doing things
 
 ### Part 1 - do some things
 > _prefix of exercise and why we're doing it_

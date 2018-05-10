@@ -96,8 +96,10 @@ _On page load:_
 
 2. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist-fe` directory and run `test`.
 ```bash
-$ cd todolist-fe
-$ npm run test
+cd todolist-fe
+```
+```bash
+npm run test
 ```
 <p class="tip" > 
 `test` is an alias used that runs `vue-cli-service test` from the scripts object in `package.json`
@@ -111,8 +113,10 @@ $ npm run test
 
 2. Repeat the same process for `todolist-api` and verify that all the tests run. If you have an ExpressJS server already running from previous exercise; you should kill it before running the tests. The `mocha` test suite will launch a dev server for running the tests. There are 2 Api test files: `todolist-api/server/api/todo/todo.spec.js` & `todolist-api/server/mocks/mock-routes.spec.js` for our API and the Mocks server.
 ```bash
-$ cd todolist-api
-$ npm run test
+cd todolist-api
+```
+```bash
+npm run test
 ```
 
 2. Navigate to your instance of jenkins at `https://jenkins-<YOUR_NAME>-ci-cd.apps.somedomain.com/`. 
@@ -135,9 +139,13 @@ Click on `dev-todolist-fe-build` and then click the `configure` button on the le
 
 2. Push this to Gitlab and run the build job.
 ```bash
-$ git add .
-$ git commit -m "TEST - failing build with tests"
-$ git push
+git add .
+```
+```bash
+git commit -m "TEST - failing build with tests"
+```
+```bash
+git push
 ```
 
 2. Rerun the `dev-todolist-fe-build` job. It should have failed and not run any other jobs. 
@@ -153,7 +161,7 @@ $ git push
 
 2. We're now going to do the same for the api. However, in order to run our API tests in CI; we need there to be a MongoDB available for testing. In our `enablement-ci-cd` repo; checkout the mongo branch as shown below to bring in the template and params. The mongodb template we're using is the same as the one for our `todolist-fe` created in previous exercise.
 ```bash
-$ git checkout exercise3/mongodb params/mongodb templates/mongodb.yml
+git checkout exercise3/mongodb params/mongodb templates/mongodb.yml
 ```
 
 2. Open `enablement-ci-cd` in your favourite editor. Edit the `inventory/host_vars/ci-cd-tooling.yml` to include a new object for our mongodb  as shown below. This item can be added below the jenkins slave in the `ci-cd-builds` section.
@@ -169,14 +177,18 @@ $ git checkout exercise3/mongodb params/mongodb templates/mongodb.yml
 
 2. Git commit your updates to the inventory to git for traceability.
 ```bash
-$ git add .
-$ git commit -m "ADD - mongodb for use in the pipeline"
-$ git push
+git add .
+```
+```bash
+git commit -m "ADD - mongodb for use in the pipeline"
+```
+```bash
+git push
 ```
 
 2. Apply this change as done previously using ansible. The deployment can be validated by going to your `<YOUR_NAME>-ci-cd` namespace! 
 ```bash
-$ ansible-playbook apply.yml -e target=tools \
+ansible-playbook apply.yml -e target=tools \
   -i inventory/ \
   -e "filter_tags=mongodb"
 ```
@@ -197,9 +209,13 @@ $ ansible-playbook apply.yml -e target=tools \
 
 2. Push this to Gitlab and run the build job.
 ```bash
-$ git add .
-$ git commit -m "TEST - failing build with tests"
-$ git push
+git add .
+```
+```bash
+git commit -m "TEST - failing build with tests"
+```
+```bash
+git push
 ```
 
 2. If successful this will fail the build and not run the `bake` or `deploy` jobs! Undo your changes and move on to the next section.
@@ -215,12 +231,12 @@ In this exercise we will add a new stage to our pipeline called `dev-todolist-fe
 
 2. Let's start by checking our tests execute locally. On the terminal move to the `todolist-fe` folder. Our end to end tests are stored in `tests/e2e/specs/`. The vuejs cli uses nightwatch and comes pre-configured to run tests against Chrome. We have created some additional configuration in the root of the project `nightwatch.config.js` to run headless in CI mode on Jenkins.
 ```bash
-$ cd todolist-fe
+cd todolist-fe
 ```
 
 2. Run the tests locally by executing the following. This should start the dev server and run the test. You may see the browser pop up and close while tests execute.
 ```bash
-$ npm run e2e
+npm run e2e
 ```
 ![local-e2e](../images/exercise3/local-e2e.png)
 
@@ -270,8 +286,10 @@ _On page load:_
 
 3.  Create a new branch in your `todolist-api` app for our feature and push it to the remote
 ```bash
-$ git checkout -b feature/important-flag
-$ git push -u origin feature/important-flag
+git checkout -b feature/important-flag
+```
+```bash
+git push -u origin feature/important-flag
 ```
 
 3.  Navigate to the `server/api/todo/todo.spec.js` file. This contains all of the existing todo list api tests. These are broken down into simple `describe("api definition", function(){})` blocks which is BDD speak for how the component being tested should behave. Inside of each `it("should do something ", function(){})` statements we use some snappy language to illustrate the expected behaviour of the test. For example a `GET` request of the api is described and tested for the return to be of type Array as follows.
@@ -304,7 +322,7 @@ where:
 
 3. Before writing our test; let's first make sure all the existing tests are passing.
 ```bash
-$ npm run test
+npm run test
 ```
 
 3. With all the tests passing; let's add our new one. For ease of completing this exercise a template of a new test has been written at the very end of the file (just below the `  // Exercise 3 test case!` comment). A PUT request responds in our API with the data that it has just updated. So provided that MongoDB accepted the change, the API will respond with an object that has the `important` property on it. To write our test; edit the template test by completing the following:
@@ -337,7 +355,7 @@ it("should mark todo as important and persist it", function(done) {
 
 3.  Run your test. It should fail.
 ```bash
-$ npm run test
+npm run test
 ```
 ![fail-mocha](../images/exercise3/fail-mocha.png)
 
@@ -355,7 +373,7 @@ const TodoSchema = new Schema({
 
 3.  With your changes to the Database schema updated; re-run your tests.
 ```bash
-$ npm run test
+npm run test
 ```
 
 3.  Commit your code to the `feature/important-flag` branch and then merge onto the `develop` branch as follows
@@ -363,18 +381,27 @@ $ npm run test
 NOTE - At this point in a residency we would peer review the code before pushing it to develop or master branch!
 </p>
 ```bash
-$ git add .
-$ git commit -m "ADD backend schema updates"
-$ git push
-# Now Update our develop branch to trigger a build!
-$ git checkout develop
-$ git merge feature/important-flag
-$ git push
+git add .
+```
+```bash
+git commit -m "ADD backend schema updates"
+```
+```bash
+git push
+```
+```bash
+git checkout develop
+```
+```bash
+git merge feature/important-flag
+```
+```bash
+git push
 ```
 
 3.  After pushing your changes; start back up the `todolist-api` app on a new terminal session
 ```bash
-$ npm run start
+npm run start
 ```
 
 #### 2b - Create todolist-fe tests
@@ -398,13 +425,15 @@ The implementation of our `important` flag will follow this same flow.
 
 3. Let's implement our feature by first creating a branch. Our new feature, important flag will behave in the same way as the `MARK_TODO_COMPLETED`. Create a new branch in your `todolist-fe` app for our feature and push it to the remote
 ```bash
-$ git checkout -b feature/important-flag
-$ git push -u origin feature/important-flag
+git checkout -b feature/important-flag
+```
+```bash
+git push -u origin feature/important-flag
 ```
 
 3. Let's get our tests running by executing a `--watch` on our tests. This will keep re-running our tests everytime there is a file change. It is hany to have this running in a new terminal session.
 ```bash
-$ npm run test -- --watch
+npm run test -- --watch
 ```
 
 3. All the tests should be passing when we begin. If `No tests found related to files changed since last commit` is on show; hit `a` on the terminal to re-run `all` tests.
@@ -494,7 +523,6 @@ $ npm run test -- --watch
 ```
 
 3. Let's connect the click button in the DOM to the Javascript function we've just created. In the template, add a click handler to the md-button to call the function `markImportant()` by adding ` @click="markImportant()"` to the `<md-button> tag 
-
 ```html
     <!-- TODO - SVG for use in Exercise3 -->
     <md-button class="important-flag" @click="markImportant()">
@@ -508,9 +536,13 @@ $ npm run test -- --watch
 
 3. The previously failing tests should have started to pass now. With this work done, let's commit our code. On the terminal, run 
 ```bash
-$ git add .
-$ git commit -m "Implementing the todoitem flag"
-$ git push
+git add .
+```
+```bash
+git commit -m "Implementing the todoitem flag"
+```
+```bash
+git push
 ```
 
 3. Open our local todolist app (http://localhost:8080/#/todo). If we try to use our important flag, we should see it's still not behaving as expected; this is because we're not updating the state of the app in response to the click event.
@@ -571,9 +603,13 @@ updateTodo({ commit, state }, { id, important }) {
 
 3. With all our tests now passing, let's commit our code. On the terminal, run
 ```bash
-$ git add .
-$ git commit -m "Implementing the store and actions"
-$ git push
+git add .
+```
+```bash
+git commit -m "Implementing the store and actions"
+```
+```bash
+git push
 ```
 
 3. Before running a build in Jenkins, let's add our tests and code to the develop branch. Ask your neighbour to review your code changes and if they approve; merge them to Develop! (If you're feeling adventurous - raise a PR through GitLab and have someone on your desk peer review it!)
@@ -581,9 +617,13 @@ $ git push
 NOTE - At this point in a residency we would peer review the code before pushing it to develop or master branch!
 </p>
 ```bash
-$ git checkout develop
-$ git merge feature/important-flag
-$ git push --all
+git checkout develop
+```
+```bash
+git merge feature/important-flag
+```
+```bash
+git push --all
 ```
 
 3. Run a build in Jenkins. If all things were successful; our application should be deployed as expected! Validate the flag is working as expected.

@@ -81,31 +81,35 @@ _____
 
 2. Git clone the `todolist-fe` project to somewhere sensible and checkout the `develop` branch.
 ```bash
-$ git clone https://github.com/rht-labs/todolist-fe.git
-$ cd todolist-fe
-$ git checkout develop
+cd ~/innovation-labs
 ```
-Followed by;
+```bash
+git clone https://github.com/rht-labs/todolist-fe.git
 ```
-$ for branch in `git branch -a | grep remotes | grep -v HEAD | grep -v master`; do
-   git branch --track ${branch#remotes/origin/} $branch
-done
+```bash
+cd todolist-fe
+```
+```bash
+./git-pull-all.sh
+```
+```bash
+git checkout develop
 ```
 
 2. Open up Gitlab and login. Create a new project (internal) in GitLab called `todolist-fe` to host your clone of the project and copy it's remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
 
 2. In your local clone of the `todolist-fe`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab
 ```bash
-$ git remote set-url origin <YOUR_GIT_LAB_PROJECT>
+git remote set-url origin <YOUR_GIT_LAB_PROJECT>
 # verify the origin has been updated
-$ git remote -v
-$ git push -u origin --all
+git remote -v
+git push -u origin --all
 ```
 
 2. To get the app running locally; first check you've got node and npm installed
 ```bash
-$ node -v
-$ npm -v
+node -v
+npm -v
 ```
 <p class="tip" > 
 NOTE - If you are missing these dependencies; install them with ease using the [Node Version Manager](https://github.com/creationix/nvm)
@@ -114,7 +118,7 @@ NOTE - If you are missing these dependencies; install them with ease using the [
 
 2. The `todolist-fe` has a package.json at the root of the project, this defines some configuration for the app including it's dependencies, dev dependencies, scripts and other configuration. Install the apps dependencies
 ```bash
-$ npm install
+npm install
 ```
 
 2. The `todolist-fe` has some scripts defined in the package.json at the root of the project. A snippet of the npm scripts are shown below. To run any of these scripts run `npm run <SCRIPT_NAME>`. Let's start by serving our application
@@ -189,29 +193,34 @@ NOTE - This step in a residency would be automated by a more complex nexus deplo
 
 2. Now let's move on to the `todolist-api` and wire them together. As with the `todolist-fe` we need to clone the repo and add it to our GitLab in the cluster.
 ```bash
-$ git clone https://github.com/rht-labs/todolist-api.git
-$ cd todolist-api
-$ git checkout develop
+cd ~/innovation-labs
 ```
-Followed by;
+```bash
+git clone https://github.com/rht-labs/todolist-api.git
 ```
-$ for branch in `git branch -a | grep remotes | grep -v HEAD | grep -v master`; do
-   git branch --track ${branch#remotes/origin/} $branch
-done
+```bash
+cd todolist-api
+```
+```bash
+./git-pull-all.sh
+```
+```bash
+git checkout develop
 ```
 
 2. On GitLab; create a new project (internal) called `todolist-api` to host your clone of the project and copy it's remote address as you did for the previous repositories.
 
 2. In your local clone of the `todolist-api`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab
 ```bash
-$ git remote set-url origin <YOUR_GIT_LAB_PROJECT>
-$ git push -u origin --all
+git remote set-url origin <YOUR_GIT_LAB_PROJECT>
+```
+```bash
+git push -u origin --all
 ```
 
 2. Once pushed; explore the application. It is a NodeJS application with the Express.js framework and MongoDB for persistent storage. Same as before, the `package.json` defines most of the configuration etc. Install the dependencies
 ```bash
-# npm i === npm install
-$ npm i
+npm i
 ```
 
 2. While the dependencies are being installed; explore the project structure.
@@ -273,7 +282,7 @@ where the following are the important things:
 
 2. To run the application; start a new instance of the MongoDB by running the following. This will pull a mongodb image from Dockerhub and then start it for our API to connect to. 
 ```bash
-$ npm run mongo
+npm run mongo
 ```
 <p class="tip">
 NOTE - `npm run mongo:drop` is used to completely remove the running container. `npm run mongo:stop` & `npm run mongo:start` will preserve data in the container
@@ -281,13 +290,13 @@ NOTE - `npm run mongo:drop` is used to completely remove the running container. 
 
 2. Fire up the `todolist-api` by running.
 ```bash
-$ npm run start
+npm run start
 ```
 ![node-app-started](../images/exercise2/node-app-started.png)
 
 2. Check things are up and running by testing the API with a `curl`. The API should return some seeded data (stored in `server/config/seed.js`)
 ```bash
-$ curl localhost:9000/api/todos
+curl localhost:9000/api/todos
 ```
 ```json
 [{
@@ -313,7 +322,7 @@ $ curl localhost:9000/api/todos
 
 3. In order for Jenkins to be able to run `npm` builds and installs as we have done locally, we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. In your `enablement-ci-cd` repository, checkout the template and configuration. This will bring in the template, the params & the `Dockerfile`.
 ```bash
-$ git checkout exercise2/jenkins-slave docker/ templates/ params/jenkins-slave-npm
+git checkout exercise2/jenkins-slave docker/ templates/ params/jenkins-slave-npm
 ```
 
 3. Open the `params/jenkins-slave-npm` file and update `<GIT_URL>` accordingly. This set of parameters will clone from the enablement repo and run a docker build of the Dockerfile stored in `docker/jenkins-slave-npm`.
@@ -336,14 +345,18 @@ NAME=jenkins-slave-npm
 
 3. Commit your changes to the `enablement-ci-cd` repository!
 ```bash
-$ git add .
-$ git commit -m "ADD npm slave node for Jenkins"
-$ git push
+git add .
+```
+```bash
+git commit -m "ADD npm slave node for Jenkins"
+```
+```bash
+git push
 ```
 
 3. Run the OpenShift Applier to trigger a build of this jenkins slave image.
 ```bash
-$ ansible-playbook apply.yml -e target=tools \
+ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=jenkins-slave"
 ```
@@ -403,16 +416,22 @@ NAMESPACE=donal-dev
 
 4. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency and then run the playbook (from the `.openshift-applier` directory). This will populate the cluster with all the config needed for the front end app.
 ```bash
-$ ansible-galaxy install -r requirements.yml --roles-path=roles
-$ ansible-playbook apply.yml -i inventory/
+ansible-galaxy install -r requirements.yml --roles-path=roles
+```
+```bash
+ansible-playbook apply.yml -i inventory/
 ```
 ![ansible-success](../images/exercise2/ansible-success.png)
 
 4. Once successful, `commit` and `push` your changes to gitlab.
 ```bash
-$ git add .
-$ git commit -m "UPDATE - change namespace vars to donal"
-$ git push
+git add .
+```
+```bash
+git commit -m "UPDATE - change namespace vars to donal"
+```
+```bash
+git push
 ```
 
 4. Back on your terminal navigate to the root of the `todolist-api` application. Open the `.openshift-applier` directory. The same layout as seen in `todolist-fe` should be visible with one noticeable difference; the api requires `MongoDB` to connect to at runtime.
@@ -435,15 +454,21 @@ NAMESPACE=donal-dev
 
 4. Finally; run the Openshift Applier and install its dependencies to run the content into the cluster
 ```bash
-$ ansible-galaxy install -r requirements.yml --roles-path=roles
-$ ansible-playbook apply.yml -i inventory/
+ansible-galaxy install -r requirements.yml --roles-path=roles
+```
+```bash
+ansible-playbook apply.yml -i inventory/
 ```
 
 4. Once successful, `commit` and `push` your changes to gitlab.
 ```bash
-$ git add .
-$ git commit -m "UPDATE - change namespace vars to donal"
-$ git push
+git add .
+```
+```bash
+git commit -m "UPDATE - change namespace vars to donal"
+```
+```bash
+git push
 ```
 
 4. Validate the build and deploy configs have been created in Openshift by checking `<YOUR_NAME> CI-CD builds` for the `BuildConfigs`
@@ -614,9 +639,13 @@ oc rollout latest dc/${NAME}
 
 5. Repeat this for `src/config/test.js` file. If you copy the URL from the previous step; change `dev` to `test`. Once done; commit your chanages and push them to GitLab
 ```bash
-$ git add .
-$ git commit -m "ADD config for api"
-$ git push
+git add .
+```
+```bash
+git commit -m "ADD config for api"
+```
+```bash
+git push
 ```
 
 5. Back on Jenkins; We can tie all the jobs in the pipeline together into a nice single view using the Build Pipeline view. Back on the Jenkins home screen Click the + beside the all tab on the top.

@@ -66,18 +66,23 @@ If you're feeling confident and don't want to follow the step-by-step guide thes
 ### Part 1 - Create OpenShift Projects
 > _Using the OpenShift Applier, we will add new project namespaces to the cluster which will be used throughout the exercise._
 
-3. Clone the scaffold project to your local machine and pull all remote branches for use in later exercises. Open the repo in your favourite editor.
+3. In this course three different git projects will be used. To setup your local machine for each of these, create a new folder on the terminal in the root of your HOME directory. To do this, open a new Terminal session and create the new folder using the following command (new terminal sessions will start in your HOME dir).
 ```bash
-$ git clone https://github.com/rht-labs/enablement-ci-cd && cd enablement-ci-cd
+mkdir -p innovation-labs && cd innovation-labs
 ```
-Followed by;
+<p class="tip">
+NOTE - If you do not want to have this folder at the root of your home dir that's fine, just ensure any parent directories of this `innovation-labs` folder do NOT have any spaces in them as it breaks Ansible in later labs...
+</p>
+
+3. Clone the scaffold project to your local machine's `innovation-labs` folder and pull all remote branches for use in later exercises. Note - this may error saying `fatal: A branch named 'develop' already exists.` but it can be ignored
+```bash
+git clone https://github.com/rht-labs/enablement-ci-cd && cd enablement-ci-cd
 ```
-$ for branch in `git branch -a | grep remotes | grep -v HEAD | grep -v master`; do
-   git branch --track ${branch#remotes/origin/} $branch
-done
+```bash
+./git-pull-all.sh
 ```
 
-3. The project is laid out as follows
+3. Open the `innovation-labs` folder in VSCode (or your favourite editor). The project is laid out as follows
 ```
 .
 ├── README.md
@@ -123,16 +128,16 @@ NOTE - yaml is indentation sensitive so keep things lined up properly!
 ![new-item](../images/exercise1/ci-cd-project-namespace.png)
 
 3. Let's add two more param files to pass to our template to be able to create a `dev` and `test` project.
-  * Create another two params files `params/project-requests-dev` & `params/project-requests-test`. 
+  * Create another two params files `params/project-requests-dev` & `params/project-requests-test`. On the terminal run 
 ```bash
-$ touch params/project-requests-dev params/project-requests-test
+touch params/project-requests-dev params/project-requests-test
 ```
-  * Add to `params/project-requests-dev` the following; substituting `<YOUR_NAME>` accordingly
+  * In your editor; Open `params/project-requests-dev` and add the following by substituting `<YOUR_NAME>` accordingly
 ```
 NAMESPACE=<YOUR_NAME>-dev
 NAMESPACE_DISPLAY_NAME=<YOUR-NAME> Dev
 ```
-  * Add to `params/project-requests-test` the following; substituting `<YOUR_NAME>` accordingly
+  * In your editor; Open `params/project-requests-test` and add the following by substituting `<YOUR_NAME>` accordingly
 ```
 NAMESPACE=<YOUR_NAME>-test
 NAMESPACE_DISPLAY_NAME=<YOUR-NAME> Test
@@ -157,13 +162,15 @@ NAMESPACE_DISPLAY_NAME=<YOUR-NAME> Test
 
 3. With the configuration in place; install the OpenShift Applier dependency
 ```bash
-$ ansible-galaxy install -r requirements.yml --roles-path=roles
+ansible-galaxy install -r requirements.yml --roles-path=roles
 ```
 
-3. Apply the inventory by logging into OpenShift and running the following: 
+3. Apply the inventory by logging into OpenShift on the terminal and running the playbook as follows (<CLUSTER_URL> should be replaced with the one you've been sent): 
 ```bash
-$ oc login -p <password> -u <user> <cluster_url>
-$ ansible-playbook apply.yml -i inventory/ -e target=bootstrap
+oc login <CLUSTER_URL>
+```
+```bash
+ansible-playbook apply.yml -i inventory/ -e target=bootstrap
 ```
 where the `-e target=bootstrap` is passing an additional variable specifying that we run the `bootstrap` inventory
 
@@ -171,23 +178,22 @@ where the `-e target=bootstrap` is passing an additional variable specifying tha
 
 3. You can check to see the projects have been created successfully by running 
 ```bash
-$ oc projects
+oc projects
 ```
 ![project-success](../images/exercise1/project-success.png)
 
-### Part 2 - Nexus and GitLab
+### Part 2 - Nexus
 > _Now that we have our Projects setup; we can start to populate them with Apps to be used in our dev lifecycle_
 
-#### 2a - Nexus
 4. In the `enablement-ci-cd` repo, checkout the templates for Nexus by running
 ```bash
-$ git checkout exercise1/git-nexus templates/nexus.yml
+git checkout exercise1/git-nexus templates/nexus.yml
 ```
 The template contains all the things needed to setup a persistent nexus server, exposing a service and route while also creating the persistent volume needed. Have a read through the template; at the bottom you'll see a collection of parameters we will pass to the template.
 
 4. Add some parameters for running the template by creating a new file in the `params` directory. 
 ```bash
-$ touch params/nexus
+touch params/nexus
 ```
 
 4. The essential params to include in this file are:
@@ -215,21 +221,23 @@ openshift_cluster_content:
 
 4. Run the OpenShift applier, specifying the tag `nexus` to speed up it's execution (`-e target=tools` is to run the other inventory).
 ```bash
-$ ansible-playbook apply.yml -e target=tools \
+ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=nexus"
 ```
 
 4. Once successful; login to the cluster through the browser (using cluster URL) and navigate to the `<YOUR_NAME>-ci-cd`. You should see Nexus up and running. You can login with default credentials (admin / admin123) ![nexus-up-and-running](../images/exercise1/nexus-up-and-running.png)
 
-#### 2b - GitLab
+### Part 3 - GitLab
+
+#### 3a - GitLab install 
 <p class="tip">
-NOTE - This section may already have been completed for you, please check with your tutor. If this is the case, skip to section 6 to add your code to GitLab.
+NOTE - This section may already have been completed for you, please check with your tutor. If this is the case, skip to section 3b "Commit CI/CD" below to add your code to GitLab.
 </p>
 
 4. Now let's do the same thing for GitLab to get it up and running. Checkout the template and params provided by running
 ```bash
-$ git checkout exercise1/git-nexus templates/gitlab.yml params/gitlab
+git checkout exercise1/git-nexus templates/gitlab.yml params/gitlab
 ``` 
 Explore the template; it contains the PVC, buildConfig and services. The DeploymentConfig is made up of these apps
  - Redis (3.2.3)
@@ -274,12 +282,14 @@ where the following need to be replaced by actual values:
 
 4. Run the OpenShift applier, specifying the tag `gitlab` to speed up it's execution.
 ```bash
-$ ansible-playbook apply.yml -e target=tools \
+ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=gitlab"
 ```
 
 4. Once successful; login to the cluster and navigate to the `<YOUR_NAME>-ci-cd`. You should see GitLab up and running. ![gitlab-up-and-running](../images/exercise1/gitlab-up-and-running.png)
+
+#### 3b - Commit CI/CD
 
 4. Navigate to gitlab (if you have just skipped straight to this step; ask your tutor for the URL). You can login using your cluster credentials using the LDAP tab
 ![gitlab-ui](../images/exercise1/gitlab-ui.png)
@@ -290,21 +300,36 @@ $ ansible-playbook apply.yml -e target=tools \
 Note - we would not normally make the project under your name but create an group and add the project there on residency but for simplicity of the exercise we'll do that here
 </p>
 
-4. Commit your local project to this new origin by first removing the existing origin (github) where the the project was cloned from. Remember to substitute `<GIT_URL>` accordingly
+4. If you have not used Git before; you may need to tell Git who you are and what your email is before we commit. Run the following commands, substitution your email and "Your Name". If you've done this before move on to the next step.
 ```bash
-$ git remote set-url origin <GIT_URL>
-$ git add . 
-$ git commit -m "Adding git and nexus config"
-$ git push -u origin --all
+git config --global user.email "yourname@mail.com"
 ```
+```bash
+git config --global user.name "Your Name"
+```
+
+4. Commit your local project to this new remote by first removing the existing origin (github) where the the project was cloned from. Remember to substitute `<GIT_URL>` accordingly
+```bash
+git remote set-url origin <GIT_URL>
+```
+```bash
+git add .
+```
+```bash
+git commit -m "Adding git and nexus config"
+```
+```bash
+git push -u origin --all
+```
+
 **Note - When making changes to enablement-ci-cd you should frequently commit the changes to git.**
 
-### Part 3 - Jenkins & s2i
+### Part 4 - Jenkins & s2i
 > _Create a build and deployment config for Jenkins. Add new configuration and plugins to the OCP Stock Jenkins using s2i_
 
 5. Add the Jenkins Build & Deployment configs to the `enablement-ci-cd` repo by merging the contents `exercise1/jenkins` in
 ```bash
-$ git checkout exercise1/jenkins templates/jenkins.yml
+git checkout exercise1/jenkins templates/jenkins.yml
 ```
 The Jenkins template is essentially the standard persistent jenkins one with OpenShift.
 
@@ -330,7 +355,7 @@ This configuration, if applied now, will create the deployment configuration nee
 
 5. To create this image we will take the supported OpenShift Jenkins Image and bake into it some extra configuration using an [s2i](https://github.com/openshift/source-to-image) builder image. More information on Jenkins s2i is found on the [openshift/jenkins](https://github.com/openshift/jenkins#installing-using-s2i-build) github page. To create an s2i configuration for jenkins, check out the pre-canned configuration source in the `enablement-ci-cd` repo
 ```bash
-$ git checkout exercise1/jenkins-s2i jenkins-s2i
+git checkout exercise1/jenkins-s2i jenkins-s2i
 ```
 The structure of the jenkins s2i config is
 ```
@@ -371,7 +396,7 @@ Note in a residency we would not use your GitCredentials for pushing and pulling
 
 5. Checkout the params and the templates for the `jenkins-s2i`
 ```bash
-$ git checkout exercise1/jenkins-s2i params/jenkins-s2i templates/jenkins-s2i.yml
+git checkout exercise1/jenkins-s2i params/jenkins-s2i templates/jenkins-s2i.yml
 ```
 
 5. Open `params/jenkins-s2i` and add the following content; replacing variables as appropriate. 
@@ -407,14 +432,18 @@ Note in a residency we would not use your GitCredentials for pushing and pulling
 
 5. Commit your code to your GitLab instance
 ```bash
-$ git add .
-$ git commit -m "Adding Jenkins and Jenkins s2i"
-$ git push
+git add .
+```
+```bash
+git commit -m "Adding Jenkins and Jenkins s2i"
+```
+```bash
+git push
 ```
 
 5. When your code is commited; run the OpenShift Applier to add the config to the cluster
 ```bash
-$ ansible-playbook apply.yml -e target=tools \
+ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=jenkins"
 ```
@@ -424,7 +453,7 @@ $ ansible-playbook apply.yml -e target=tools \
 
 5. When the Jenkins deployment has completed; login (using your openshift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
 
-### Part 4 - Jenkins Hello World 
+### Part 5 - Jenkins Hello World 
 > _To test things are working end-to-end; create a hello world job that doesn't do much but proves we can pull code from git and that our balls are green._
 
 6. Log in to Jenkins and hit `New Item` ![new-item](../images/exercise1/new-item.png).
@@ -437,33 +466,45 @@ $ ansible-playbook apply.yml -e target=tools \
 
 6. Run the build and we should see if pass succesfully and with Green Balls! ![jenkins-green-balls](../images/exercise1/jenkins-green-balls.png)
 
-### Part 5 - Live, Die, Repeat
+### Part 6 - Live, Die, Repeat
 > _In this section you will proove the infra as code is working by deleting your Cluster Content and recreating it all_
 
 7. Commit your code to the new repo in GitLab
 ```bash
-$ git add .
-$ git commit -m "ADD - all ci/cd contents"
-$ git push
+git add .
+```
+```bash
+git commit -m "ADD - all ci/cd contents"
+```
+```bash
+git push
 ```
 
 7. Burn your OCP content to the ground
 ```bash
-$ oc delete project <YOUR_NAME>-ci-cd
-$ oc delete project <YOUR_NAME>-dev
-$ oc delete project <YOUR_NAME>-test
+oc delete project <YOUR_NAME>-ci-cd
+```
+```bash
+oc delete project <YOUR_NAME>-dev
+```
+```bash
+oc delete project <YOUR_NAME>-test
 ```
 
 7. Check to see the projects that were marked for deletion are removed.
 ```bash
-$ oc get projects | egrep '<YOUR_NAME>-ci-cd|<YOUR_NAME>-dev|<YOUR_NAME>-test'
+oc get projects | egrep '<YOUR_NAME>-ci-cd|<YOUR_NAME>-dev|<YOUR_NAME>-test'
 ```
 
 7. Re-apply the inventory to re-create it all!
 ```bash
-$ oc login -p <password> -u <user> <cluster_url>
-$ ansible-playbook apply.yml -i inventory/ -e target=bootstrap
-$ ansible-playbook apply.yml -i inventory/ -e target=tools
+oc login -p <password> -u <user> <cluster_url>
+```
+```bash
+ansible-playbook apply.yml -i inventory/ -e target=bootstrap
+```
+```bash
+ansible-playbook apply.yml -i inventory/ -e target=tools
 ```
 
 _____
