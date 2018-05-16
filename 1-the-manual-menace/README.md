@@ -306,7 +306,7 @@ git config --global user.email "yourname@mail.com"
 git config --global user.name "Your Name"
 ```
 
-4. Commit your local project to this new remote by first removing the existing origin (github) where the the project was cloned from. Remember to substitute `<GIT_URL>` accordingly with the one created for your `enablement-ci-cd` repository a moment ago.
+4. Commit your local project to this new remote by first removing the existing origin (github) where the ansible project was cloned from in the first steps. Remember to substitute `<GIT_URL>` accordingly with the one created for your `enablement-ci-cd` repository a moment ago.
 ```bash
 git remote set-url origin <GIT_URL>
 ```
