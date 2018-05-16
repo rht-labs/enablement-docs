@@ -292,9 +292,9 @@ An arbitrary value for the API's to respond in has been chosen. It is set in the
 
 4. Set the `Color ANSI Console Output` on the Build Environment section.
 
-4. Click `add build step` and select `execute shell` and add the following to it, replacing `<YOUR_NAME>` and `somedomain` as expected. We will just test the `create` and `show` API for the moment. We are grabbing the response code of the perf-test to keep Jenkins running both shells steps and then exiting with whichever fails:
+4. Click `add build step` and select `execute shell` and add the following to it, replacing `<YOUR_NAME>` as expected. We will just test the `create` and `show` API for the moment. We are grabbing the response code of the perf-test to keep Jenkins running both shells steps and then exiting with whichever fails:
 ```bash
-export E2E_TEST_ROUTE=todolist-api-<YOUR_NAME>-dev.apps.somedomain.com
+export E2E_TEST_ROUTE=todolist-api-<YOUR_NAME>-dev.apps.lader.rht-labs.com
 npm install
 set +e
 npm run perf-test:create
