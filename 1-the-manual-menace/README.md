@@ -197,7 +197,7 @@ touch params/nexus
 4. The essential params to include in this file are:
 ```bash
 VOLUME_CAPACITY=5Gi
-MEMORY_LIMIT=2Gi
+MEMORY_LIMIT=1Gi
 ```
 
 4. Create a new object in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `ci-cd-tooling` and populate it's `content` is as follows
@@ -371,7 +371,7 @@ The Jenkins template is essentially the standard persistent jenkins one with Ope
 
 5. As before; create a new set of params by creating a `params/jenkins` file and adding some overrides to the template and updating the `<YOUR_NAME>` value accordingly.
 ```
-MEMORY_LIMIT=8Gi
+MEMORY_LIMIT=3Gi
 VOLUME_CAPACITY=10Gi
 JVM_ARCH=x86_64
 NAMESPACE=<YOUR_NAME>-ci-cd
