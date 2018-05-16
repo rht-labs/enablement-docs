@@ -345,7 +345,7 @@ git checkout exercise4/zap-and-arachni params/jenkins-slave-arachni docker/jenki
 
 3. Update the `jenkins-slave-arachni` files `SOURCE_REPOSITORY_URL` to point to your gitlab's hosted version of the `enablement-ci-cd` repo.
 ```
-SOURCE_REPOSITORY_URL=https://gitlab.apps.<SOME_DOMAIN>.com/<GIT_USERNAME>/enablement-ci-cd.git
+SOURCE_REPOSITORY_URL=https://gitlab.apps.lader.rht-labs.com/<GIT_USERNAME>/enablement-ci-cd.git
 SOURCE_CONTEXT_DIR=docker/jenkins-slave-arachni
 BUILDER_IMAGE_NAME=registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:latest
 NAME=jenkins-slave-arachni
