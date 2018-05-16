@@ -187,7 +187,6 @@ export NEXUS_SERVICE_HOST=$(oc get route nexus --template='{{.spec.host}}' -n <Y
 export NEXUS_SERVICE_PORT=80
 ```
 ```bash
-```
 npm run prepare-nexus
 ```
 <p class="tip">
