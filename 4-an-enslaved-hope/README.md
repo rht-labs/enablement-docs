@@ -97,7 +97,7 @@ git push
 2. On the job's configure page; set the Branch Sources to `git`
 ![multibranch-select-git](../images/exercise4/multibranch-select-git.png)
 
-2. Fill in the Git settings with your `todolist-api` GitLab url and set the credentials as you've done before. `https://gitlab.apps.<SOMEDOMAIN>.com/<YOUR_NAME>/todolist-api.git`
+2. Fill in the Git settings with your `todolist-api` GitLab url and set the credentials as you've done before. `https://gitlab.apps.lader.rht-labs.com/<YOUR_NAME>/todolist-api.git`
 ![multibranch-git](../images/exercise4/multibranch-git.png)
 
 2. Set the `Scan Multibranch Pipeline Triggers` to be periodic and the interval to 1 minute. This will poll the gitlab instance for new branches or change sets to build.
@@ -322,7 +322,7 @@ ansible-playbook apply.yml -e target=tools \
      -e "filter_tags=zap"
 ```
 
-3. Head to (https://console.somedomain.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `jenkins-slave-zap`.
+3. Head to https://console.lader.rht-labs.com on Openshift and move to your ci-cd project > builds. You should see `jenkins-slave-zap` has been built.
 ![zap-build](../images/exercise4/zap-build.png)
 
 #### 3b - Arachni Scan
@@ -370,8 +370,8 @@ ansible-playbook apply.yml -e target=tools \
      -e "filter_tags=arachni"
 ```
 
-3. Head to (https://console.somedomain.com/console/project/<YOUR_NAME>-ci-cd/browse/builds) on Openshift and you should see `jenkins-slave-arachni`.
-![todolist-fe-multi](../images/exercise4/builds-zap-arachni.png)
+3. Head to https://console.lader.rht-labs.com on Openshift and move to your ci-cd project > builds. You should see  `jenkins-slave-arachni`.
+![builds-zap-arachni](../images/exercise4/builds-zap-arachni.png)
 
 _____
 

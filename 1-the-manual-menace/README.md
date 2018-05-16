@@ -31,10 +31,8 @@ As a learner you will be able to
 * [OpenShift Applier](https://github.com/redhat-cop/openshift-applier) - used to apply OpenShift objects to an OpenShift Cluster.
 
 
-
 ## Big Picture
-This exercise begins with an empty Cluster
-> TODO - add big picture here...
+> The Big Picture is our emerging architecture; starting with an empty cluser we populate it with projects and some ci/cd tooling.
 
 ![ds-messing-around.gif](../images/exercise1/ds-messing-around.gif)
 
@@ -66,9 +64,9 @@ If you're feeling confident and don't want to follow the step-by-step guide thes
 ### Part 1 - Create OpenShift Projects
 > _Using the OpenShift Applier, we will add new project namespaces to the cluster which will be used throughout the exercise._
 
-3. In this course three different git projects will be used. To setup your local machine for each of these, create a new folder on the terminal in the root of your HOME directory. To do this, open a new Terminal session and create the new folder using the following command (new terminal sessions will start in your HOME dir).
+3. In this course three different git projects will be created. To setup your local machine for each of these, create a new folder on the terminal in the root of your HOME directory for convenience. To do this, open a new Terminal session and create the new folder using the following command (new terminal sessions will start in your HOME dir).
 ```bash
-mkdir -p innovation-labs && cd innovation-labs
+mkdir -p ~/innovation-labs && cd ~/innovation-labs
 ```
 <p class="tip">
 NOTE - If you do not want to have this folder at the root of your home dir that's fine, just ensure any parent directories of this `innovation-labs` folder do NOT have any spaces in them as it breaks Ansible in later labs...
@@ -308,7 +306,7 @@ git config --global user.email "yourname@mail.com"
 git config --global user.name "Your Name"
 ```
 
-4. Commit your local project to this new remote by first removing the existing origin (github) where the the project was cloned from. Remember to substitute `<GIT_URL>` accordingly
+4. Commit your local project to this new remote by first removing the existing origin (github) where the the project was cloned from. Remember to substitute `<GIT_URL>` accordingly with the one created for your `enablement-ci-cd` repository a moment ago.
 ```bash
 git remote set-url origin <GIT_URL>
 ```

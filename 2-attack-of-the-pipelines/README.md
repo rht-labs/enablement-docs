@@ -79,7 +79,7 @@ _____
 
 #### 1a Todolist-fe
 
-2. Git clone the `todolist-fe` project to somewhere sensible and checkout the `develop` branch.
+2. Git clone the `todolist-fe` project to somewhere sensible and checkout the `develop` branch using the following.
 ```bash
 cd ~/innovation-labs
 ```
@@ -179,10 +179,15 @@ where the following are the important things:
     * `./src/scss` contains custom  SCSS used in the application.
     * `./*.js` is mostly config files for running and managing the app and the tests
 
-2. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables change `<YOUR_NAME>` and `somedomain` accordingly.
+2. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables and change `<YOUR_NAME>` accordingly in the below commands.
 ```bash
 export NEXUS_SERVICE_HOST=$(oc get route nexus --template='{{.spec.host}}' -n <YOUR_NAME>-ci-cd)
+```
+```bash
 export NEXUS_SERVICE_PORT=80
+```
+```bash
+```
 npm run prepare-nexus
 ```
 <p class="tip">
@@ -325,7 +330,7 @@ curl localhost:9000/api/todos
 git checkout exercise2/jenkins-slave docker/ templates/ params/jenkins-slave-npm
 ```
 
-3. Open the `params/jenkins-slave-npm` file and update `<GIT_URL>` accordingly. This set of parameters will clone from the enablement repo and run a docker build of the Dockerfile stored in `docker/jenkins-slave-npm`.
+3. Open the `params/jenkins-slave-npm` file and update `<GIT_URL>` accordingly. The `<GIT_URL>` is the full path of the repository where this project is stored (including the https && .git) eg `https://gitlab.apps.lader.rht-labs.com/<YOUR_NAME>/enablement-ci-cd.git`. This set of parameters will clone from the enablement repo and run a docker build of the Dockerfile stored in `docker/jenkins-slave-npm`.
 ```bash
 SOURCE_REPOSITORY_URL=<GIT_URL>
 SOURCE_CONTEXT_DIR=docker/jenkins-slave-npm
@@ -434,7 +439,7 @@ git commit -m "UPDATE - change namespace vars to donal"
 git push
 ```
 
-4. Back on your terminal navigate to the root of the `todolist-api` application. Open the `.openshift-applier` directory. The same layout as seen in `todolist-fe` should be visible with one noticeable difference; the api requires `MongoDB` to connect to at runtime.
+4. Back on your terminal navigate to the root of the `todolist-api` application. Open the `.openshift-applier` directory in your editor. The same layout as seen in `todolist-fe` should be visible with one noticeable difference; the api requires `MongoDB` to connect to at runtime.
 
 4. In the `apply.yml` update the namespace `<YOUR_NAME>` variables accordingly. For example:
 ```yaml
@@ -634,10 +639,14 @@ oc rollout latest dc/${NAME}
 
 5. With our Jenkins setup in place; now move to our `todolist-fe` app's source code. We have to add our configuration to the frontend to tell it where the API layer will be hosted. Open the source in your favourite editor and navigate to `src/config/dev.js`.
 
-5. Update `<YOUR_NAME>` accordingly with the route where the Todo List API will live when it is deployed, update the `somedomain` to the clusters domain. The correct full URL can also be found on the OpenShift Console; if you copy it from there remember to append `/api/todos` to the URL. For example:
+5. Update `<YOUR_NAME>` accordingly with the route where the Todo List API will live when it is deployed. The correct full URL can also be found on the OpenShift Console; if you copy it from there remember to append `/api/todos` to the URL. For example:
 ![fe-dev-config](../images/exercise2/fe-dev-config.png)
 
-5. Repeat this for `src/config/test.js` file. If you copy the URL from the previous step; change `dev` to `test`. Once done; commit your chanages and push them to GitLab
+5. Repeat this for `src/config/test.js` file. If you copy the URL from the previous step; change `dev` to `test`. 
+For example:
+![fe-test-config](../images/exercise2/fe-test-config.png)
+
+5. With the config in place; commit your chanages and push them to GitLab:
 ```bash
 git add .
 ```
@@ -660,8 +669,8 @@ git push
 5. You should now see the pipeline view. Run the pipeline by hitting run (you can move onto the next part while it is running as it may take some time).
 ![dev-pipeline-view](../images/exercise2/dev-pipeline-view.jpeg)
 
-### Part 5 - Backend Pipeline
-> In this exercise we will use the Jobs created for the `todolist-fe` as a template to create a pipeline for the `todolist-api` app by copying the config.
+### Part 5 - (Optional) Backend Pipeline
+> In this exercise we will use the Jobs created for the `todolist-fe` as a template to create a pipeline for the `todolist-api` app by copying the config. The backend pipeline as code will be explored in the next lab
 
 6. On Jenkins home; create a new job for our backend build called `dev-todolist-api-build`. Use the `Copy from` section to copy all the configuration from the `dev-todolist-fe-build`.
 ![copy-fe-build](../images/exercise2/copy-fe-build.png)
@@ -708,7 +717,7 @@ npm run build:ci
 6.  When `dev-todolist-api-build` has completed we should see the sample data has changed on refresh.
 ![with-backend-app](../images/exercise2/with-backend-app.png)
 
-### Part 6 - GitLab Webhooks
+### Part 6 - (Optional) GitLab Webhooks
 > _In this exercise we will link GitLab to Jenkins so that new build jobs are triggered on each push to the `develop` branch._
 
 <p class="tip" >
