@@ -646,7 +646,7 @@ oc rollout latest dc/${NAME}
 For example:
 ![fe-test-config](../images/exercise2/fe-test-config.png)
 
-5. With the config in place; commit your chanages and push them to GitLab:
+5. With the config in place; commit your changes and push them to GitLab:
 ```bash
 git add .
 ```
