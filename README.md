@@ -19,7 +19,10 @@ This is a collection of practices and exercises to take a learner through a four
 
 ______
 
-## Day 1 Content
-<!-- links to slides here! -->
-
-______
+## Setup your IDE
+If you are using VSCode; some handy plugins that will make the lessons easier are:
+ - YAML Syntax Highlighter
+ - Autosave 
+ - JavaScript Syntax Highlighter
+ - Vue.js
+ - Eslint
