@@ -134,6 +134,9 @@ Click on `dev-todolist-fe-build` and then click the `configure` button on the le
 
 2. Click `save` or `apply` at the bottom to save the changes. Run the `dev-todolist-fe-build` job and verify that this passes and the `build` and `bake` jobs are both triggered.
 
+#### (Optional) Failing the tests
+> _If you're not very confident in your technical ability and want don't want to do the TDD lab; feel free to just do this next section. If you are confident jump on to the e2e testing section below_
+
 2. We're now going to deliberately fail a test to ensure that `bake` and `deploy` jobs aren't triggered if any tests fail. Open the `todolist-fe` source code in your favourite editor. Open `ListOfTodos.spec.js` in `/tests/unit/vue-components` and head to `line 39`. Add `not.` before `toHaveBeenCalled()` to fail the test.
 ![change-test-to-fail](../images/exercise3/change-test-to-fail.png)
 
@@ -156,75 +159,7 @@ git push
 
 2. Undo the changes you made to the `ListOfTodos.spec.js` file, commit your code and rerun the build. This should trigger a full `build --> bake --> deploy` of `todolist-fe`.
 
-#### 1b - BE Unit tests
-> In this exercise we will execute our test for the backend locally. Once verified we will add them to Jenkins and add a mongodb to Jenkins for running tests there.
-
-2. We're now going to do the same for the api. However, in order to run our API tests in CI; we need there to be a MongoDB available for testing. In our `enablement-ci-cd` repo; checkout the mongo branch as shown below to bring in the template and params. The mongodb template we're using is the same as the one for our `todolist-fe` created in previous exercise.
-```bash
-git checkout exercise3/mongodb params/mongodb templates/mongodb.yml
-```
-
-2. Open `enablement-ci-cd` in your favourite editor. Edit the `inventory/host_vars/ci-cd-tooling.yml` to include a new object for our mongodb  as shown below. This item can be added below the jenkins slave in the `ci-cd-builds` section.
-```yaml
-  - name: "jenkins-mongodb"
-    namespace: "{{ ci_cd_namespace }}"
-    template: "{{ playbook_dir }}/templates/mongodb.yml"
-    params: "{{ playbook_dir }}/params/mongodb"
-    tags:
-    - mongodb
-```
-![jenkins-mongo](../images/exercise3/jenkins-mongo.png)
-
-2. Git commit your updates to the inventory to git for traceability.
-```bash
-git add .
-```
-```bash
-git commit -m "ADD - mongodb for use in the pipeline"
-```
-```bash
-git push
-```
-
-2. Apply this change as done previously using ansible. The deployment can be validated by going to your `<YOUR_NAME>-ci-cd` namespace! 
-```bash
-ansible-playbook apply.yml -e target=tools \
-  -i inventory/ \
-  -e "filter_tags=mongodb"
-```
-![ocp-mongo](../images/exercise3/ocp-mongo.png)
-
-2. With the mongodb in place Open up Jenkins and head to the `configure` panel of the `dev-todolist-api-build` job. 
- 
-2. Add `npm run test:ci` above `npm run build:ci`.
-![api-build-step](../images/exercise3/api-build-step.png)
-
-2. Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report`.
-
-2. Click the `Add` button under `Publish xUnit test result report` and select `JUnit`. In the pattern field enter `reports/server/mocha/test-results.xml`. In the `Failed Tests Thresholds`  input box enter 0 under `Red Ball Total`. It should look a little something like this. Save your changes:
-![api-post-build](../images/exercise3/api-post-build.png)
-
-2. We're now going to deliberately fail a test again to ensure that `bake` and `deploy` jobs aren't triggered if any tests fail. Go to `todo.spec.js` in `/server/api/todo` and head to `line 35`. Replace `false` with `true`. 
-![api-fail-build](../images/exercise3/api-fail-build.png)
-
-2. Push this to Gitlab and run the build job.
-```bash
-git add .
-```
-```bash
-git commit -m "TEST - failing build with tests"
-```
-```bash
-git push
-```
-
-2. If successful this will fail the build and not run the `bake` or `deploy` jobs! Undo your changes and move on to the next section.
-
-<p class="tip">
-  NOTE - Don't forget to undo the changes that you made to your tests!
-</p>
-
-#### 1c - End to End tests (e2e)
+#### 1b - End to End tests (e2e)
 > _Unit tests are a great way to get immediate feedback as part of testing an application. End to end tests that drive user behaviour are another amazing way to ensure an application is behaving as expected._
 
 In this exercise we will add a new stage to our pipeline called `dev-todolist-fe-e2e` that will run after the deploy has been completed. End to end tests will use Nightwatchjs to orchestrate a selenium webdriver instance that controls the web browser; in this case Chrome!

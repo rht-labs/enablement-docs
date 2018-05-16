@@ -589,7 +589,9 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
 Remember to replace `<YOUR_NAME>` accordingly.
 ```bash
 #!/bin/bash
-curl -v -f http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${BUILD_TAG}/package-contents.zip -o package-contents.zip
+curl -v -f \
+    http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${BUILD_TAG}/package-contents.zip \
+    -o package-contents.zip
 unzip package-contents.zip
 oc project <YOUR_NAME>-ci-cd
 NAME=todolist-fe
@@ -669,55 +671,13 @@ git push
 5. You should now see the pipeline view. Run the pipeline by hitting run (you can move onto the next part while it is running as it may take some time).
 ![dev-pipeline-view](../images/exercise2/dev-pipeline-view.jpeg)
 
-### Part 5 - (Optional) Backend Pipeline
-> In this exercise we will use the Jobs created for the `todolist-fe` as a template to create a pipeline for the `todolist-api` app by copying the config. The backend pipeline as code will be explored in the next lab
-
-6. On Jenkins home; create a new job for our backend build called `dev-todolist-api-build`. Use the `Copy from` section to copy all the configuration from the `dev-todolist-fe-build`.
-![copy-fe-build](../images/exercise2/copy-fe-build.png)
-
-6. When this has loaded; find and replace both occurrences `-fe` with `-api` within the Job's configuration. Places to make sure you check are: 
-    * The GitLab project URL
-    * Projects to build on the Post Build Action
-
-6. On the Build tab; remove the `:dev` from the `npm run build:ci:dev` so the line reads.
- The rest of the instructions can be left as they are.
-```bash
-npm run build:ci
-```
-![api-build-step](../images/exercise2/api-build-step.png)
-
-6. Save the configuration for `dev-todolist-api-build`
-
-6. On Jenkins home; create a new job for our backend bake called `dev-todolist-api-bake`. Use the Copy from section to copy all the configuration from the `dev-todolist-fe-bake` as you've just done.
-
-6. When this has loaded; find and replace the occurrences `-fe` with `-api` within the Job's configuration. Places to make sure you check are:
-    * The BUILD_TAG default value and description
-    * NAME in the execute shell step
-    * Projects to build on the Post Build Action
-
-6. Save the configuration for `dev-todolist-api-build`
-
-6. On Jenkins home; create a new job for our backend build called `dev-todolist-api-deploy`. Use the Copy from section to copy all the configuration from the `dev-todolist-fe-deploy` as you've just done.
-
-6. When this has loaded; find and replace the occurrences `-fe` with `-api` within the Job's configuration. Places to make sure you check are:
-    * The BUILD_TAG default value and description
-    * NAME in the execute shell step
-    * The name of the DeploymentConfig to validate in the Verify OpenShift Deployment
-
-6. Save the configuration for `dev-todolist-api-deploy` and that's it for wiring together our `todolist-api` pipeline.
- 
-6. Run the `dev-todolist-api-build` to trigger the backend pipeline. While this is building, check our front end app and see if it has deployed successfully.
-
-6. To check the deployment in OpenShift; open the console and go to your `dev` namespace. You should see the deployment was successful; hit the URL to open the app (the screenshot below has both apps deployed).
+6. To check the deployment in OpenShift; open the web console and go to your `dev` namespace. You should see the deployment was successful; hit the URL to open the app (the screenshot below has both apps deployed).
 ![ocp-deployment](../images/exercise2/ocp-deployment.png)
 
-6. If it has been a success we should see our dummyData. This is because there is no backend deployed.
+6. If it has been a success we should see our dummyData. This is because there is no backend deployed, in later labs we will deploy the backend and the mongodb for persistence but to do this we will use Jenkins Pipeline as code.
 ![no-backend-app](../images/exercise2/no-backend-app.png)
 
-6.  When `dev-todolist-api-build` has completed we should see the sample data has changed on refresh.
-![with-backend-app](../images/exercise2/with-backend-app.png)
-
-### Part 6 - (Optional) GitLab Webhooks
+### Part 5 - (Optional) GitLab Webhooks
 > _In this exercise we will link GitLab to Jenkins so that new build jobs are triggered on each push to the `develop` branch._
 
 <p class="tip" >
@@ -743,14 +703,6 @@ NOTE - This section is optional! Git webhooks are useful but not needed for Enab
 ![gitlab-integrations-details](../images/exercise2/gitlab-webhook-test.png)
 
 7. We can now test this properly by heading into the `todolist-fe` repository through <YOUR_FAVOURITE_EDITOR>. Make a small change to your code, then commit and push it, ensuring you're on the develop branch. Then head over to Jenkins and wait until the `dev-todolist-fe-build` job has been triggered.
-
-7. All that's left to do is to repeat the same steps for `todolist-api` (Starting from step 3):
-Create Build Trigger: 
-`https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/job/dev-todolist-api-build/configure`
-Create GitLab Integration:
-`https://gitlab-<YOUR_NAME>-ci-cd.apps.some.domain.com/donal/todolist-api/settings/integrations`
-Check your build status and you should see something like this. With `Started by Gitlab push by <YOUR_NAME>`:
-![jenkins-gitlab-webhook-success](../images/exercise2/jenkins-gitlab-webhook-success.png)
 
 7. We now have a working GitLab webhook so any time we push code it will automatically build! Next up we'll show you how to add tests to your pipeline.
 

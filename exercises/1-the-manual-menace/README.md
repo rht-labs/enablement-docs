@@ -163,16 +163,16 @@ NAMESPACE_DISPLAY_NAME=<YOUR-NAME> Test
 ansible-galaxy install -r requirements.yml --roles-path=roles
 ```
 
-3. Apply the inventory by logging into OpenShift on the terminal and running the playbook as follows (<CLUSTER_URL> should be replaced with the one you've been sent): 
+3. Apply the inventory by logging into OpenShift on the terminal and running the playbook as follows (<CLUSTER_URL> should be replaced with the one you've been sent as shown below). Accept any insecure connection warning 👍: 
 ```bash
-oc login <CLUSTER_URL>
+oc login https://console.lader.rht-labs.com
 ```
 ```bash
 ansible-playbook apply.yml -i inventory/ -e target=bootstrap
 ```
 where the `-e target=bootstrap` is passing an additional variable specifying that we run the `bootstrap` inventory
 
-3. Once successful you should see an output similar to this: ![playbook-success](../images/exercise1/play-book-success.png)
+3. Once successful you should see an output similar to this (Cow's not included): ![playbook-success](../images/exercise1/play-book-success.png)
 
 3. You can check to see the projects have been created successfully by running 
 ```bash
@@ -197,7 +197,7 @@ touch params/nexus
 4. The essential params to include in this file are:
 ```bash
 VOLUME_CAPACITY=5Gi
-MEMORY_LIMIT=2Gi
+MEMORY_LIMIT=1Gi
 ```
 
 4. Create a new object in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `ci-cd-tooling` and populate it's `content` is as follows
@@ -320,9 +320,47 @@ git commit -m "Adding git and nexus config"
 git push -u origin --all
 ```
 
+### Part 5 MongoDB for CI tests
+> In order to run our API tests in CI in later labs; we need there to be a MongoDB available for executing our tests. As this is part of our CI/CD Lifecycle; we will add it now.
+
+4. In our `enablement-ci-cd` repo; checkout the mongo templates as shown below to bring in the template and params. The mongodb template we're using is the same as the one for our `todolist-fe` created in previous exercise.
+```bash
+git checkout exercise1/mongodb params/mongodb templates/mongodb.yml
+```
+
+4. Open `enablement-ci-cd` in your favourite editor. Edit the `inventory/host_vars/ci-cd-tooling.yml` to include a new object for our mongodb  as shown below. This item can be added below the jenkins slave in the `ci-cd-tooling` section.
+```yaml
+  - name: "jenkins-mongodb"
+    namespace: "{{ ci_cd_namespace }}"
+    template: "{{ playbook_dir }}/templates/mongodb.yml"
+    params: "{{ playbook_dir }}/params/mongodb"
+    tags:
+    - mongodb
+```
+![jenkins-mongo](../images/exercise1/jenkins-mongo.png)
+
+4. Git commit your updates to the inventory to git for traceability.
+```bash
+git add .
+```
+```bash
+git commit -m "ADD - mongodb for use in the pipeline"
+```
+```bash
+git push
+```
+
+4. Apply this change as done previously using ansible. The deployment can be validated by going to your `<YOUR_NAME>-ci-cd` namespace and checking if it is there! 
+```bash
+ansible-playbook apply.yml -e target=tools \
+  -i inventory/ \
+  -e "filter_tags=mongodb"
+```
+![ocp-mongo](../images/exercise3/ocp-mongo.png)
+
 **Note - When making changes to enablement-ci-cd you should frequently commit the changes to git.**
 
-### Part 4 - Jenkins & s2i
+### Part 6 - Jenkins & s2i
 > _Create a build and deployment config for Jenkins. Add new configuration and plugins to the OCP Stock Jenkins using s2i_
 
 5. Add the Jenkins Build & Deployment configs to the `enablement-ci-cd` repo by merging the contents `exercise1/jenkins` in
@@ -333,14 +371,14 @@ The Jenkins template is essentially the standard persistent jenkins one with Ope
 
 5. As before; create a new set of params by creating a `params/jenkins` file and adding some overrides to the template and updating the `<YOUR_NAME>` value accordingly.
 ```
-MEMORY_LIMIT=8Gi
+MEMORY_LIMIT=3Gi
 VOLUME_CAPACITY=10Gi
 JVM_ARCH=x86_64
 NAMESPACE=<YOUR_NAME>-ci-cd
 JENKINS_OPTS=--sessionTimeout=720
 ```
 
-5. Add a `jenkins` variable to the ansible inventory underneath the nexus (and git if you have it) in  `inventory/host_vars/ci-cd-tooling.yml`.
+5. Add a `jenkins` variable to the ansible inventory underneath the jenkins-mongo (and git if you have it) in  `inventory/host_vars/ci-cd-tooling.yml`.
 ```yaml
     - name: "jenkins"
       namespace: "{{ ci_cd_namespace }}"
@@ -451,7 +489,7 @@ ansible-playbook apply.yml -e target=tools \
 
 5. When the Jenkins deployment has completed; login (using your openshift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
 
-### Part 5 - Jenkins Hello World 
+### Part 7 - Jenkins Hello World 
 > _To test things are working end-to-end; create a hello world job that doesn't do much but proves we can pull code from git and that our balls are green._
 
 6. Log in to Jenkins and hit `New Item` ![new-item](../images/exercise1/new-item.png).
@@ -464,7 +502,7 @@ ansible-playbook apply.yml -e target=tools \
 
 6. Run the build and we should see if pass succesfully and with Green Balls! ![jenkins-green-balls](../images/exercise1/jenkins-green-balls.png)
 
-### Part 6 - Live, Die, Repeat
+### Part 8 - Live, Die, Repeat
 > _In this section you will proove the infra as code is working by deleting your Cluster Content and recreating it all_
 
 7. Commit your code to the new repo in GitLab
@@ -496,7 +534,7 @@ oc get projects | egrep '<YOUR_NAME>-ci-cd|<YOUR_NAME>-dev|<YOUR_NAME>-test'
 
 7. Re-apply the inventory to re-create it all!
 ```bash
-oc login -p <password> -u <user> <cluster_url>
+oc login https://console.lader.rht-labs.com
 ```
 ```bash
 ansible-playbook apply.yml -i inventory/ -e target=bootstrap
@@ -510,6 +548,7 @@ _____
 ## Extension Tasks
 > _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope._
 
+ - Install Cowsay for 100% more Ansible Fun!
  - Add more secure access for Nexus (ie not admin / admin123) using the automation to drive secret creation
  - Add a SonarQube persistent deployment to the `ci-cd-deployments` section.
  - Add `jenkins.plugins.slack.SlackNotifier.xml` to `jenkins-s2i/configuration` to include URL of Slack for team build notifications and rebuild Jenkins S2I
