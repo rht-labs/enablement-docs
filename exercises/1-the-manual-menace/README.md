@@ -320,7 +320,7 @@ git commit -m "Adding git and nexus config"
 git push -u origin --all
 ```
 
-### Part 5 MongoDB for CI tests
+### Part 4 MongoDB for CI tests
 > In order to run our API tests in CI in later labs; we need there to be a MongoDB available for executing our tests. As this is part of our CI/CD Lifecycle; we will add it now.
 
 4. In our `enablement-ci-cd` repo; checkout the mongo templates as shown below to bring in the template and params. The mongodb template we're using is the same as the one for our `todolist-fe` created in previous exercise.
@@ -360,7 +360,7 @@ ansible-playbook apply.yml -e target=tools \
 
 **Note - When making changes to enablement-ci-cd you should frequently commit the changes to git.**
 
-### Part 6 - Jenkins & s2i
+### Part 5 - Jenkins & s2i
 > _Create a build and deployment config for Jenkins. Add new configuration and plugins to the OCP Stock Jenkins using s2i_
 
 5. Add the Jenkins Build & Deployment configs to the `enablement-ci-cd` repo by merging the contents `exercise1/jenkins` in
@@ -489,7 +489,7 @@ ansible-playbook apply.yml -e target=tools \
 
 5. When the Jenkins deployment has completed; login (using your openshift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
 
-### Part 7 - Jenkins Hello World 
+### Part 6 - Jenkins Hello World 
 > _To test things are working end-to-end; create a hello world job that doesn't do much but proves we can pull code from git and that our balls are green._
 
 6. Log in to Jenkins and hit `New Item` ![new-item](../images/exercise1/new-item.png).
@@ -502,7 +502,7 @@ ansible-playbook apply.yml -e target=tools \
 
 6. Run the build and we should see if pass succesfully and with Green Balls! ![jenkins-green-balls](../images/exercise1/jenkins-green-balls.png)
 
-### Part 8 - Live, Die, Repeat
+### Part 7 - Live, Die, Repeat
 > _In this section you will proove the infra as code is working by deleting your Cluster Content and recreating it all_
 
 7. Commit your code to the new repo in GitLab
