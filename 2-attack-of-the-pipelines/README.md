@@ -677,7 +677,7 @@ git push
 6. If it has been a success we should see our dummyData. This is because there is no backend deployed, in later labs we will deploy the backend and the mongodb for persistence but to do this we will use Jenkins Pipeline as code.
 ![no-backend-app](../images/exercise2/no-backend-app.png)
 
-### Part 6 - (Optional) GitLab Webhooks
+### Part 5 - (Optional) GitLab Webhooks
 > _In this exercise we will link GitLab to Jenkins so that new build jobs are triggered on each push to the `develop` branch._
 
 <p class="tip" >
