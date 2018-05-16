@@ -135,7 +135,7 @@ Click on `dev-todolist-fe-build` and then click the `configure` button on the le
 2. Click `save` or `apply` at the bottom to save the changes. Run the `dev-todolist-fe-build` job and verify that this passes and the `build` and `bake` jobs are both triggered.
 
 #### (Optional) Failing the tests
-> If you're not very confident in your technical ability and want don't want to do the TDD lab; feel free to just do this next section. If you are confident jump on to the e2e testing section below
+> _If you're not very confident in your technical ability and want don't want to do the TDD lab; feel free to just do this next section. If you are confident jump on to the e2e testing section below_
 
 2. We're now going to deliberately fail a test to ensure that `bake` and `deploy` jobs aren't triggered if any tests fail. Open the `todolist-fe` source code in your favourite editor. Open `ListOfTodos.spec.js` in `/tests/unit/vue-components` and head to `line 39`. Add `not.` before `toHaveBeenCalled()` to fail the test.
 ![change-test-to-fail](../images/exercise3/change-test-to-fail.png)

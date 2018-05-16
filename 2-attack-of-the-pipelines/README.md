@@ -704,14 +704,6 @@ NOTE - This section is optional! Git webhooks are useful but not needed for Enab
 
 7. We can now test this properly by heading into the `todolist-fe` repository through <YOUR_FAVOURITE_EDITOR>. Make a small change to your code, then commit and push it, ensuring you're on the develop branch. Then head over to Jenkins and wait until the `dev-todolist-fe-build` job has been triggered.
 
-7. All that's left to do is to repeat the same steps for `todolist-api` (Starting from step 3):
-Create Build Trigger: 
-`https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/job/dev-todolist-api-build/configure`
-Create GitLab Integration:
-`https://gitlab-<YOUR_NAME>-ci-cd.apps.some.domain.com/donal/todolist-api/settings/integrations`
-Check your build status and you should see something like this. With `Started by Gitlab push by <YOUR_NAME>`:
-![jenkins-gitlab-webhook-success](../images/exercise2/jenkins-gitlab-webhook-success.png)
-
 7. We now have a working GitLab webhook so any time we push code it will automatically build! Next up we'll show you how to add tests to your pipeline.
 
 _____
