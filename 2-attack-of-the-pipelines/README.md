@@ -320,60 +320,7 @@ curl localhost:9000/api/todos
 2. Now let's check out `todolist-fe` app by reloading the browser. We should now see our dummy front end data is replaced by the backend seed data. Adding new todos will add them in the backend, these will persist when the page is refreshed.
 ![fullstack-app](../images/exercise2/fullstack-app.png)
 
-
-### Part 2 - Create a NodeJS Build slave
-> _In this exercise; we will create a build configuration to generate a slave for Jenkins to use in it's builds_
-
-3. In order for Jenkins to be able to run `npm` builds and installs as we have done locally, we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. In your `enablement-ci-cd` repository, checkout the template and configuration. This will bring in the template, the params & the `Dockerfile`.
-```bash
-git checkout exercise2/jenkins-slave docker/ templates/ params/jenkins-slave-npm
-```
-
-3. Open the `params/jenkins-slave-npm` file and update `<GIT_URL>` accordingly. The `<GIT_URL>` is the full path of the repository where this project is stored (including the https && .git) eg `https://gitlab.apps.lader.rht-labs.com/<YOUR_NAME>/enablement-ci-cd.git`. This set of parameters will clone from the enablement repo and run a docker build of the Dockerfile stored in `docker/jenkins-slave-npm`.
-```bash
-SOURCE_REPOSITORY_URL=<GIT_URL>
-SOURCE_CONTEXT_DIR=docker/jenkins-slave-npm
-NAME=jenkins-slave-npm
-```
-
-3. Create an item in the `inventory/host_vars/ci-cd-tooling.yml` under the `ci-cd-builds` object to run the template with.
-```yaml
-  - name: "jenkins-slave-npm"
-    namespace: "{{ ci_cd_namespace }}"
-    template: "{{ playbook_dir }}/templates/jenkins-slave-generic-template.yml"
-    params: "{{ playbook_dir }}/params/jenkins-slave-npm"
-    tags:
-    - jenkins-slave
-```
-![jenkins-slave-ansible](../images/exercise2/jenkins-slave-ansible.png)
-
-3. Commit your changes to the `enablement-ci-cd` repository!
-```bash
-git add .
-```
-```bash
-git commit -m "ADD npm slave node for Jenkins"
-```
-```bash
-git push
-```
-
-3. Run the OpenShift Applier to trigger a build of this jenkins slave image.
-```bash
-ansible-playbook apply.yml -e target=tools \
-     -i inventory/ \
-     -e "filter_tags=jenkins-slave"
-```
-
-3. Verify the build executed successfully by logging into the cluster and checking the `builds` tab of the `<YOUR_NAME>-ci-cd` project.
-![jenkins-slave-npm-build](../images/exercise2/jenkins-slave-npm-build.png)
-
-3. You should now be able to apply the label `jenkins-slave-npm` to a build job to run a build on this newly created slave as we will see in the rest of this exercise
-<p class="tip">
-NOTE - Jenkins may need to be restarted for the configuration to appear. To do this; navigate to your jenkins instance and add `/restart` to the url.
-</p>
-
-### Part 3 - Add configs to cluster 
+### Part 2 - Add configs to cluster 
 > _In this exercise; we will use the OpenShift Applier to drive the creation of cluster content required by the app such as MongoDB and the Apps Build / Deploy Config_
 
 4. On your terminal navigate to the root of the `todolist-fe` application. The app contains a hidden folder called `.openshift-applier`. Move into this `.openshift-applier` directory and you should see a familiar looking directory structure for an ansible playbook. 
@@ -481,7 +428,7 @@ git push
 4. Check `<YOUR_NAME>-dev` to see the deployment configs are in place
 ![ocp-app-dc](../images/exercise2/ocp-app-dc.png)
 
-### Part 4 - Build > Bake > Deploy 
+### Part 3 - Build > Bake > Deploy 
 > _In this exercise; we take what we have working locally and get it working in OpenShift_
 
 This exercise will involve creating three stages (or items) in our pipeline, each of these is detailed below at a very high level. Move on to the next step to begin implementation.
@@ -504,7 +451,7 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
     4. Verify the deployment
 * We will now go through these steps in detail.
 
-#### 4a - Build
+#### 3a - Build
 
 5. With the BuildConfig and DeployConfig in place for both our apps (`*-fe` & `*-api`) from previous steps; Log into Jenkins and create a `New Item`. This is just jenkins speak for a new job configuration. ![new-item](../images/exercise2/new-item.png)
 
@@ -513,7 +460,7 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
 5. The page that loads is the Job Configuration page and it can be returned to at anytime from Jenkins. Let's start configuring our job. To conserve space; we will make sure Jenkins only keeps the last builds artifacts. Tick the `Discard old builds` checkbox, then `Advanced` and set `Max # of builds to keep with artifacts` to 1 as indicated below 
 ![keep-artifacts](../images/exercise2/keep-artifacts.png)
 
-5. Our NodeJS build needs to be run on the `jenkins-slave-npm` we created earlier. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-slave](../images/exercise2/label-jenkins-slave.png)
+5. Our NodeJS build needs to be run on the `jenkins-slave-npm` we bought in in the previous chapter. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-slave](../images/exercise2/label-jenkins-slave.png)
 
 5. On the Source Code Management tab, select the Git radio button, specify the endpoint for our GitLab `todolist-fe` Project and specify your credentials from the dropdown box. Set the Branch Specifier to `develop`. ![git-scm](../images/exercise2/git-scm.png)
 
@@ -560,7 +507,7 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
 
 5. Hit `save` which will take you to the job overview page - and that's it; our *build* phase is complete!
 
-#### 4b - Bake
+#### 3b - Bake
 
 5. Next we will setup our *bake* phase; which is a little simpler. Go to Jenkins home and create another Freestyle Job (as before) called `dev-todolist-fe-bake`.
 
@@ -607,7 +554,7 @@ oc start-build ${NAME} --from-dir=package-contents/ --follow
 
 5. Hit save! That's our *bake* phase done! Finally; on to our *deploy*
 
-#### 4c - Deploy
+#### 3c - Deploy
 
 5. Next we will setup our *deploy* phase. This job is very similar in setup to the *bake* phase so this time go to Jenkins home and create `dev-todolist-fe-deploy` Job but scroll to the bottom and Copy from `dev-todolist-fe-bake`.
 ![copy-from](../images/exercise2/copy-from.png)
@@ -636,7 +583,7 @@ oc rollout latest dc/${NAME}
 
 5. Finally; delete the Post Build Action to trigger another job (by hitting the red X). Save the configuration. We're almost ready to run the pipeline!
 
-#### 4d - Pipeline
+#### 3d - Pipeline
 
 5. With our Jenkins setup in place; now move to our `todolist-fe` app's source code. We have to add our configuration to the frontend to tell it where the API layer will be hosted. Open the source in your favourite editor and navigate to `src/config/dev.js`.
 
@@ -676,7 +623,7 @@ git push
 6. If it has been a success we should see our dummyData. This is because there is no backend deployed, in later labs we will deploy the backend and the mongodb for persistence but to do this we will use Jenkins Pipeline as code.
 ![no-backend-app](../images/exercise2/no-backend-app.png)
 
-### Part 5 - (Optional) GitLab Webhooks
+### Part 4 - (Optional) GitLab Webhooks
 > _In this exercise we will link GitLab to Jenkins so that new build jobs are triggered on each push to the `develop` branch._
 
 <p class="tip" >
