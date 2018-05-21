@@ -301,7 +301,7 @@ git push
 git checkout exercise4/zap-and-arachni params/jenkins-slave-zap
 ```
 
-3. This should have created the following files which we will fill out. We will use a `ZAP` image hosted on the `rht-labs/ci-cd` repo so there will be no `Dockerfile` needed as we did with the `jenkins-slave-npm` in exercise 2:
+3. This should have created the following files which we will fill out. We will use a `ZAP` image hosted on the `rht-labs/ci-cd` repo so there will be no `Dockerfile` needed:
     - `params/jenkins-slave-zap`
 
 3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-zap` and add the following content:
