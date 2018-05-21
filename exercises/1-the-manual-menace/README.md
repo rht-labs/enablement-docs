@@ -477,16 +477,16 @@ git push
 ```
 
 5.  In order for Jenkins to be able to run `npm` builds and installs we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. These slaves can take a time to build themselves so to speed up we have placed the slave within openshift and you can use the following commands to be able to use them in your project.
-
+```bash
+oc project <YOUR_NAME>-ci-cd
+```
 ```bash
 oc tag openshift/jenkins-slave-npm:latest jenkins-slave-npm:latest
 ```
-
 ```bash
 oc label is jenkins-slave-npm role=jenkins-slave
 ```
-
-This is pulling the container image into your namespace and then adding a label which will allow Jenkins to take notice of it.
+This is pulling the container image into your namespace and then adding a label which will allow Jenkins to take notice of it. Don't worry if the label is already there and this last command fails!
 
 5. Now your code is commited, and you have bought in the Jenkins slave; run the OpenShift Applier to add the config to the cluster
 ```bash
