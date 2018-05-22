@@ -10,10 +10,10 @@ This exercise will be done as groups, facilitated by your tutor. The exercise is
 _____
 
 ## Learning Outcomes
-As a learner you will be able to identify what a an amazing Demo Day consists of!
-- Identify key success factors for a facilitating Demo Day
+As a learner you will be able to identify what an amazing Demo Day consists of!
+- Identify key success factors for facilitating a Demo Day
 - Run Demo Day as part of the class room activities
-- Identify the success factors and antipatterns in making Labs Engagements work wit our clients
+- Identify the success factors and antipatterns in making Labs Engagements work with our clients
 
 _____
 
