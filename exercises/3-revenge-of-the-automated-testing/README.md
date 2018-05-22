@@ -413,9 +413,9 @@ npm run test -- --watch
   });
 ```
 
-3. Finally, we want to make the flag clickable and for it to call a function to update the state. The final test in the `TodoItem.spec.js` we want to create should simulate this behaviour. Implement the `it("call makImportant when clicked", () ` test by first simulating the click of our important-flag and asserting the function `markImportant()` to write is executed.
+3. Finally, we want to make the flag clickable and for it to call a function to update the state. The final test in the `TodoItem.spec.js` we want to create should simulate this behaviour. Implement the `it("call markImportant when clicked", () ` test by first simulating the click of our important-flag and asserting the function `markImportant()` to write is executed.
 ```javascript
-  it("call makImportant when clicked", () => {
+  it("call markImportant when clicked", () => {
     const wrapper = mount(TodoItem, {
       methods,
       propsData: { todoItem: importantTodo }
