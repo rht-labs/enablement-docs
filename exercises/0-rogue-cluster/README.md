@@ -21,7 +21,7 @@ Learners will create 3 to 4 project namespaces running lightweight NodeJS app \*
 ## Cluster Access
 
 - Learners are in LDAP and can access cluster via `oc login`
-- Learners have access to LDAP bind credentials to be able to auth against gitlab
+- Learners have access to LDAP bind credentials to be able to auth against GitLab
 
 ## User privileges
 
@@ -29,7 +29,7 @@ Learners will create 3 to 4 project namespaces running lightweight NodeJS app \*
 
 ## Labs Cheat Sheet
 
-This cheat sheet will give you some of the most useful commands and tips which you will need to complete the exercises. This should be most helpful to non-techies who need to get up to speed with command line techniques. If you come across anything else which would be useful during the enablement, write it on a post-it and add it to the real time retro or raise a pull request yourself.
+This cheat sheet will give you some of the most useful commands and tips which you will need to complete the exercises. This should be most helpful to non-techies who need to get up to speed with command line techniques. If you come across anything else which would be useful during the enablement, write it on a post-it and add it to the real time retro or raise a pull request.
 
 - Changing Directory
 
@@ -71,7 +71,7 @@ This cheat sheet will give you some of the most useful commands and tips which y
 
   - `rm file_name` will delete the file
   - `rm -rf dir_name` will delete the directory and all of its contents
-  - Whatever you do, __do not__ run `sudo rm -rf /`
+  - Whatever you do, _do not_ run `sudo rm -rf /`
 
 - Search for a string within an input
 
@@ -82,23 +82,24 @@ This cheat sheet will give you some of the most useful commands and tips which y
   - `command1 | command2` will run command 1 then run command 2 with the input of the result of command 1. e.g. `ls | grep 'file'` will give you all files in the current directory which have 'file' in their name
 
 - Find out how to do things in the terminal
+
   - `man command1` will open the man pages (manual pages) for a particular command.
   - `man -k <search string>` will return a list of commands relevant to the search string you've entered.
   - If you want to know more about `man` try `man man` for more `man` on `man` information.
 
 - Run commands with root privileges
-  - `sudo command1` will run a command with escalated privileges. This is safer than logging on as
+  - `sudo command1` will run a command with escalated privileges. This is safer than logging on as root user.
 
 ## Openshift 101
 
-OpenShift, or OpenShift Container Platform (OCP) is Red Hat's container platform. It is used to run and manage containerised applications with the aim of accelerated application development and deployment. An OpenShift cluster is what we shall be deploying all of our applications for this enablement upon.
+OpenShift, or OpenShift Container Platform (OCP) is Red Hat's container platform. It is used to run and manage containerised applications with the aim of accelerated application development and deployment. We shall be deploying all of our applications for this enablement on an OpenShift cluster.
 
 - What is a container?
 
-  - A container is an iscolated space within the operating system which is made to look like its own computer. Things within the container can only see what is in itself and cannot see anything about the computer it is really running on. Additionally multiple containers can be deployed which have a complete seperation of concern from each other meaning they will not coflict.
+  - A container is an isolated space within the operating system which is made to look like its own computer. Things within the container can only see what is in itself and cannot see anything about the computer it is really running on. Additionally multiple containers can be deployed with no interaction between one another meaning they will not coflict.
 
-- How do you control OpenShift
-  - There are two main ways of controlling OpenShift and the containers which reside within it. The first way is using the web interface; from here is it possible to use clicks to deploy an application. The easiest way to do this is direct from the source code using a Source-to-image (S2I) which comes out of the box with OpenShift. It is also possible to use the command line interface, using the `oc` command, to control OCP. The other option is to use Ansible to set the cluster to a defined standard, as set out in an Ansible playbook
+- How do you control OpenShift?
+  - There are two main ways of controlling OpenShift and the containers which reside within it. The first way is using the web interface; from here is it possible to use clicks to deploy an application. The easiest way to do this is direct from the source code using a Source-to-image (S2I) which comes out of the box with OpenShift. It is also possible (and encouraged) to use the command line interface, using the `oc` command, to control OCP. The other option is to use Ansible to set the cluster to a defined standard, as set out in an Ansible playbook.
 
 ## Ansible 101
 
