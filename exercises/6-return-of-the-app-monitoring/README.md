@@ -137,7 +137,7 @@ Additional Alerting
  - Add `Slack` integration to the Pipeline by setting up a WebHook to call the slack endpoint with Build Stats
  - Add `Twillio` text integration to send you text messages when the build fails.
 Additional Monitoring
- - Explore the Application's FEK stack inside OpenShift
+ - Explore the Application's EFK stack inside OpenShift
 
 ## Additional Reading
 > List of links or other reading that might be of use / reference for the exercise
