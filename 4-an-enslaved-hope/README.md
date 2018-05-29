@@ -296,9 +296,9 @@ git push
 #### 3a - OWASP ZAP
 > _OWASP ZAP (Zed Attack Proxy) is a free open source security tool used for finding security vulnerabilities in web applications._
 
-3. On your  terminal; move to the `enablement-ci-cd` repo. We already have the `templates/jenkins-slave-generic-template.yml` template we're going to re-use from the previous lab so all we need is to check out the params file
+3. On your  terminal; move to the `enablement-ci-cd` repo.  We need to checkout a template for OpenShift to build our Jenkins Slave images and some parameters for the `zap` slave.
 ```bash
-git checkout exercise4/zap-and-arachni params/jenkins-slave-zap
+git checkout exercise4/zap-and-arachni params/jenkins-slave-zap templates/jenkins-slave-generic-template.yml
 ```
 
 3. This should have created the following files which we will fill out. We will use a `ZAP` image hosted on the `rht-labs/ci-cd` repo so there will be no `Dockerfile` needed:
