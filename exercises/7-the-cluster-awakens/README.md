@@ -1,6 +1,6 @@
 # The Cluster Awakens
 
-> In this exercise; we will monitor the core of the OpenShift Cluster. Watch for spikes in memory usage, harddisk space and other cluster stats.
+> In this exercise; we will monitor the core of the OpenShift Cluster. Watch for spikes in memory usage, hard disk space and other cluster stats.
 
 ![monitoring-mayhem](../images/exercise7/monitoring-mayhem.jpg)
 
@@ -8,7 +8,7 @@ _____
 
 ## Learning Outcomes
 As a learner you will be able to
-- View vital stats about the clusters health using Prometheus queries 
+- View vital stats about the clusters health using Prometheus queries
 - Visualise the data on Grafana dashboards
 - Overlay log messages to the Grafana dashboards creating a very short feedback loop for Ops and Dev teams.
 
