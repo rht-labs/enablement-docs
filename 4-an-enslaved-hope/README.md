@@ -1,20 +1,20 @@
 # An Enslaved Hope
 
-> In this exercise we'll break free from the chains of point'n'click Jenkins by introducing pipeline as code in the form of `Jenkinsfile`. Following this we will introduce some new Jenkins slaves that will be used in later exercises. 
+> In this exercise we'll break free from the chains of point'n'click Jenkins by introducing pipeline as code in the form of `Jenkinsfile`. Following this we will introduce some new Jenkins slaves that will be used in later exercises.
 
 ![jenkins-fail-meme](../images/exercise4/jenkins-fail-meme.jpeg)
 
 There are a number of ways pipeline as code can be achieved in Jenkins.
- * The Job DSL Plugin - this is a slightly older but very functional DSL mechanism to create reusable pipelines. Create a `groovy` file to run Jenkins Domain Specific Language to create jobs, functions and other items. In Jenkins; you then can execute this file which will build all of the config.xml files needed for each Job. 
- * The Scripted Pipeline - The scripted pipeline introduced the Jenkinsfile and the ability for developers to write their jenkins setup as groovy code. A repo with a Jenkinsfile in it's root can be pointed to by Jenkins and it will automatically build out each of the stages described within. The scripted pipeline is ultimately Groovy at it's core.
+ * The Job DSL Plugin - this is a slightly older but very functional DSL mechanism to create reusable pipelines. Create a `groovy` file to run Jenkins Domain Specific Language to create jobs, functions and other items. In Jenkins; you then can execute this file which will build all of the config.xml files needed for each Job.
+ * The Scripted Pipeline - The scripted pipeline introduced the Jenkinsfile and the ability for developers to write their Jenkins setup as groovy code. A repo with a Jenkinsfile in it's root can be pointed to by Jenkins and it will automatically build out each of the stages described within. The scripted pipeline is ultimately Groovy at it's core.
  * The Declarative Pipeline - This approach looks to simplify and opinionate what you can do and when you can do it in a pipeline. It does this by giving you top level `block` which define sections, directives and steps. The declarative syntax is not run as groovy but you can execute groovy inside script blocks. The advantage of it over scripted is validation of the config and lighter approach with requirement to understand all of the `groovy` syntax
 
 _____
 
 ## Learning Outcomes
 As a learner you will be able to
-- Use a Jenkinsfile to create a declarative pipeline to build, bake and deploy the Todolist App 
-- Identify the differences between scripted, declarative and DSL pipelines 
+- Use a Jenkinsfile to create a declarative pipeline to build, bake and deploy the Todolist App
+- Identify the differences between scripted, declarative and DSL pipelines
 - Create Jenkins slave nodes for use in builds in future exercises
 
 ## Tools and Frameworks
@@ -39,7 +39,7 @@ _____
 2. Create two new Jenkins slaves for the `OWASP ZAP` scanner and the `Arachni` WebCrawler
 
 ## Step by Step Instructions
-> This is a fairly structured guide with references to exact filenames and sections of text to be added. 
+> This is a fairly structured guide with references to exact filenames and sections of text to be added.
 
 ### Part 1 - The Jenkinsfile
 > _In this exercise we'll replace the Pipeline we created in Exercise 2 with a Jenkinsfile approach_
@@ -49,17 +49,17 @@ _____
 git checkout feature/jenkinsfile
 ```
 
-2. Open up your `todolist-api` application in your favourite editor and move to the `Jenkinsfile` in the root of the project. The highlevel structure of the file is shown collapsed below. 
+2. Open up your `todolist-api` application in your favourite editor and move to the `Jenkinsfile` in the root of the project. The high-level structure of the file is shown collapsed below.
 ![pipeline-overview](../images/exercise4/pipeline-overview.png)
 Some of the key things to note:
-    * `pipeline {}` is how all declarative jenkins pipelines begin.
+    * `pipeline {}` is how all declarative Jenkins pipelines begin.
     * `environment {}` defines environment variables to be used across all build stages
     * `options {}` contains specific Job specs you want to run globally across the jobs e.g. setting the terminal colour
     * `stage {}` all jobs must have one stage. This is the logical part of the build that will be executed e.g. `bake-image`
     * `steps {}` each `stage` has one or more steps involved. These could be execute shell or git checkout etc.
-    * `agent {}` specifies the node the build should be run on eg `jenkins-slave-npm`
+    * `agent {}` specifies the node the build should be run on e.g. `jenkins-slave-npm`
     * `post {}` hook is used to specify the post-build-actions. Jenkins declarative provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
-    * `when {}` is used for flow control. It can be used at stage level and be used to stop pipeline entering that stage. eg when branch is master; deploy to `test` environment.
+    * `when {}` is used for flow control. It can be used at stage level and be used to stop pipeline entering that stage. e.g. when branch is master; deploy to `test` environment.
 
 2. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous exercises. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
 ```groovy
@@ -100,10 +100,10 @@ git push
 2. Fill in the Git settings with your `todolist-api` GitLab url and set the credentials as you've done before. `https://gitlab.apps.lader.rht-labs.com/<YOUR_NAME>/todolist-api.git`
 ![multibranch-git](../images/exercise4/multibranch-git.png)
 
-2. Set the `Scan Multibranch Pipeline Triggers` to be periodic and the interval to 1 minute. This will poll the gitlab instance for new branches or change sets to build.
+2. Set the `Scan Multibranch Pipeline Triggers` to be periodic and the interval to 1 minute. This will poll the GitLab instance for new branches or change sets to build.
 ![multibranch-scan-time](../images/exercise4/multibranch-scan-time.png)
 
-2. Save the Job configuration to run the intial scan. The log will show scans for `master` and `develop` branch which have no `Jenkinsfile` so are skipped. The resulting view will show the `feature/jenkinsfile` job corresponding the only branch that currently has one. The build should run automatically. 
+2. Save the Job configuration to run the intial scan. The log will show scans for `master` and `develop` branch which have no `Jenkinsfile` so are skipped. The resulting view will show the `feature/jenkinsfile` job corresponding the only branch that currently has one. The build should run automatically.
 ![todolist-api-multi](../images/exercise4/todolist-api-multi.png)
 
 2. The pipeline file is setup to only run `bake` & `deploy` stages when on `master` or `develop` branch. This is to provide us with very fast feedback for team members working on feature or bug fix branches. Each time someone commits or creates a new branch a basic build with testing occurs to give very rapid feedback to the team. Let's now update our  `master` and `develop` branches to include the Jenkinsfile and delete the feature branch.
@@ -149,10 +149,10 @@ cd todolist-fe
 git checkout feature/jenkinsfile
 ```
 
-2. Open up your `todolist-fe` application in your favourite editor and move to the `Jenkinsfile` in the root of the project. Update all `<YOUR_NAME>` and `<GIT_USERNAME>` as you did before, including in the prepare environment steps. Check the  `GITLAB_DOMAIN` is set too. 
+2. Open up your `todolist-fe` application in your favourite editor and move to the `Jenkinsfile` in the root of the project. Update all `<YOUR_NAME>` and `<GIT_USERNAME>` as you did before, including in the prepare environment steps. Check the  `GITLAB_DOMAIN` is set too.
 ![jenkinsfile-prep](../images/exercise4/jenkinsfile-prep.png)
 
-2. Commit your changes to your feature branch as you did previously. 
+2. Commit your changes to your feature branch as you did previously.
 ```bash
 git add Jenkinsfile
 ```
@@ -193,7 +193,7 @@ git push -u origin --all
 
 2. On Jenkins; create a new `Multibranch Pipeline` job called `todolist-fe`.
 
-2. Add the `todolist-fe` git repository and set the credentials for git accordingly. 
+2. Add the `todolist-fe` git repository and set the credentials for git accordingly.
 
 2. Set the trigger to scan every minute as done previously. Save the configuration and we should see the collection of Jobs as shown below.
 ![todolist-fe-multi](../images/exercise4/todolist-fe-multi.png)
@@ -224,7 +224,7 @@ NAME=todolist-fe
 ```
 ![ocp-pipeline-applier](../images/exercise4/ocp-pipeline-applier.png)
 
-2. Use the OpenShift Applier to create the cluster content 
+2. Use the OpenShift Applier to create the cluster content
 ```bash
 cd .openshift-applier
 ```
@@ -267,7 +267,7 @@ PIPELINE_SOURCE_REPOSITORY_REF=develop
 NAME=todolist-api
 ```
 
-2. Use the OpenShift Applier to create the cluster content 
+2. Use the OpenShift Applier to create the cluster content
 ```bash
 cd todolist-api/.openshift-applier
 ```
@@ -322,15 +322,15 @@ ansible-playbook apply.yml -e target=tools \
      -e "filter_tags=zap"
 ```
 
-3. Head to https://console.lader.rht-labs.com on Openshift and move to your ci-cd project > builds. You should see `jenkins-slave-zap` has been built.
+3. Head to https://console.lader.rht-labs.com on OpenShift and move to your ci-cd project > builds. You should see `jenkins-slave-zap` has been built.
 ![zap-build](../images/exercise4/zap-build.png)
 
 #### 3b - Arachni Scan
 > _Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of web applications._
 
-3. On your terminal; checkout the params and Docker file. The Dockerfile for the `Arachni` scanner is included here and we will point the build to it. 
+3. On your terminal; checkout the params and Docker file. The Dockerfile for the `Arachni` scanner is included here and we will point the build to it.
 ```bash
-git checkout exercise4/zap-and-arachni params/jenkins-slave-arachni docker/jenkins-slave-arachni 
+git checkout exercise4/zap-and-arachni params/jenkins-slave-arachni docker/jenkins-slave-arachni
 ```
 
 3. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-arachni` with the following content:
@@ -343,7 +343,7 @@ git checkout exercise4/zap-and-arachni params/jenkins-slave-arachni docker/jenki
       - arachni
 ```
 
-3. Update the `jenkins-slave-arachni` files `SOURCE_REPOSITORY_URL` to point to your gitlab's hosted version of the `enablement-ci-cd` repo.
+3. Update the `jenkins-slave-arachni` files `SOURCE_REPOSITORY_URL` to point to your GitLab's hosted version of the `enablement-ci-cd` repo.
 ```
 SOURCE_REPOSITORY_URL=https://gitlab.apps.lader.rht-labs.com/<GIT_USERNAME>/enablement-ci-cd.git
 SOURCE_CONTEXT_DIR=docker/jenkins-slave-arachni
@@ -363,14 +363,14 @@ git commit -m "ADD - Arachni scanning image"
 git push
 ```
 
-3. Run the ansible playbook filtering with tag `arachni` so only the arachni build pods are run.
+3. Run the Ansible playbook filtering with tag `arachni` so only the arachni build pods are run.
 ```bash
 ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=arachni"
 ```
 
-3. Head to https://console.lader.rht-labs.com on Openshift and move to your ci-cd project > builds. You should see  `jenkins-slave-arachni`.
+3. Head to https://console.lader.rht-labs.com on OpenShift and move to your ci-cd project > builds. You should see  `jenkins-slave-arachni`.
 ![builds-zap-arachni](../images/exercise4/builds-zap-arachni.png)
 
 _____
@@ -382,8 +382,8 @@ Jenkins S2I
  - Add the multi-branch configuration to the S2I to have Jenkins come alive with the `todolist-api` and `-fe` configuration cooked into it for future uses.
 
 Jenkins Pipeline Extension
- - Add an extension to the pipeline that promotes code to UAT environment once the master job has been successful. 
- - Use a WAIT to allow for manual input to appove the promotion
+ - Add an extension to the pipeline that promotes code to UAT environment once the master job has been successful.
+ - Use a WAIT to allow for manual input to approve the promotion
 
 Jenkins e2e extension (blue/green)
  - Add a step in the pipeline to only deploy to the `test` environment if the e2e tests have run successfully against which ever environment (blue or green) is not deployed.
