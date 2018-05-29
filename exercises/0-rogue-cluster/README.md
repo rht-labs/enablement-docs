@@ -16,7 +16,7 @@ Learners will create 3 to 4 project namespaces running lightweight NodeJS app \*
 - GitLab requires 2Gi of storage and 2Gi of RAM
 - PostgreSQL requires 1Gi of Storage and 512Mi of RAM
 - Redis requires 512Mi of storage
-- Nexus requires <TODO>
+- Nexus requires 1Gi of storage.
 
 ## Cluster Access
 
@@ -71,7 +71,7 @@ This cheat sheet will give you some of the most useful commands and tips which y
 
   - `rm file_name` will delete the file
   - `rm -rf dir_name` will delete the directory and all of its contents
-  - Whatever you do, do not run `sudo rm -rf /`
+  - Whatever you do, __do not__ run `sudo rm -rf /`
 
 - Search for a string within an input
 
