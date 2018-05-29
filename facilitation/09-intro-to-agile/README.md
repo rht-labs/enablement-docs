@@ -9,6 +9,8 @@ _____
 
 The latest version of slides for the session are available [here](https://docs.google.com/presentation/d/1eYI04ChApbQd-a1b8GsBaRfGzuIm12AxYyi61fEE9G4/edit?usp=sharing)
 
+* If possible; bring in boards showing Burn down, feature & task level breakdown, estimation ladders etc
+* Download the Henrick Video for offline playing incase of WiFi issues.
 
 ## Facilitation Materials Needed
 

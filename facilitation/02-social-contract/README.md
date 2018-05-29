@@ -33,4 +33,5 @@ The latest version of slides for the session are available [here](https://docs.g
     * Encourage each table to use one of the recordable buttons to record their team noise (to help with the cultural and fun aspects we want to inject into the atmosphere throughout this enablement)
 * Overall group Social Contract
     * Have each group playback key points in their Social Contract and call out any that they would like applicable to the whole group. One of the the facilitators should capture these as a Group Social Contract
+    * Encourage a consensus on the times to take for breaks / lunches up front.
     * Again, encourage everyone to sign the big group Social Contract

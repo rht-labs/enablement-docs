@@ -16,6 +16,7 @@ Key requirements for the venue include:
 * Ability to play sound from laptop
 * Strong WiFi (all delegates will need to be connected throughout the Enablement)
 * At least one break out area - ideally a small room near the main room
+* Pair programming - Monitors for the tables. One between two attendees (or mobs up to three).
 
 
 ## Shopping / Bring List
@@ -27,6 +28,7 @@ Key requirements for the venue include:
     * Henrik Kniberg Skateboard Picture
     * The Agile Manifesto Values and Principles
     * What DevOps is Not
+    * The Agile Principles cartoon from Knowledge Train
 * Some spare adapters for overseas' participants to connect laptops to power    
 * Bluetac
 * A1 Sticky Chart Paper
@@ -40,6 +42,8 @@ Key requirements for the venue include:
 * Fun activities (e.g. a mini golf set and mini ping pong set)
 * Option to project build monitors (e.g. through Rasperry Pis) - organise extra monitors or bring projector
 * Think about capturing the Enablement by bringing, for example, GoPro Camera, 360 cameera, etc.
+* Monitors for pairing if not provided by the venue
+* Download all videos used in the training incase of WiFi connectivity issues 
 
 
 ## Setting up the Room
@@ -64,6 +68,8 @@ Think about the wall space that will be used for:
 * Metric Based Process Maps
 * Value Slicing
 * End of Day Retros
+* Pairing and mob faces
+* Andon Chord or Real Bell / Buzzer if available
 
 
 ## Facilitation Guidelines
