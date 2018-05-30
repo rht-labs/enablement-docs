@@ -199,7 +199,7 @@ VOLUME_CAPACITY=5Gi
 MEMORY_LIMIT=1Gi
 ```
 
-4. Create a new object in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `ci-cd-tooling` and populate it's `content` is as follows
+4. Create a new object in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `ci-cd-tooling` and populate its `content` is as follows
 
 ```yaml
 ---
@@ -216,7 +216,7 @@ openshift_cluster_content:
 ```
 ![ci-cd-deployments-yml](../images/exercise1/ci-cd-deployments-yml.png)
 
-4. Run the OpenShift applier, specifying the tag `nexus` to speed up it's execution (`-e target=tools` is to run the other inventory).
+4. Run the OpenShift applier, specifying the tag `nexus` to speed up its execution (`-e target=tools` is to run the other inventory).
 ```bash
 ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
@@ -277,7 +277,7 @@ where the following need to be replaced by actual values:
       - gitlab
 ```
 
-4. Run the OpenShift applier, specifying the tag `gitlab` to speed up it's execution.
+4. Run the OpenShift applier, specifying the tag `gitlab` to speed up its execution.
 ```bash
 ansible-playbook apply.yml -e target=tools \
      -i inventory/ \

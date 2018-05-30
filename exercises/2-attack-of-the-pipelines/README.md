@@ -58,8 +58,8 @@ _____
         5. Trigger the `bake` job with the `${BUILD_TAG}` param
     * a `Bake` job should take the package and put it in a Linux Container
         1. Take an input of the previous jobs `${BUILD_TAG}` ie `${JOB_NAME}.${BUILD_NUMBER}`.
-        2. Checkout the binary from Nexus and unzip it's contents
-        3. Run an oc start-build of the App's BuildConfig and tag it's imagestream with the provided `${BUILD_TAG}`
+        2. Checkout the binary from Nexus and unzip its contents
+        3. Run an oc start-build of the App's BuildConfig and tag its imagestream with the provided `${BUILD_TAG}`
         4. Trigger a deploy job using the parameter `${BUILD_TAG}`
     * a `deploy` job should roll out the changes by updating the image tag in the DC:
         1. Take an input of the `${BUILD_TAG}`
@@ -96,7 +96,7 @@ cd todolist-fe
 git checkout develop
 ```
 
-2. Open up Gitlab and login. Create a new project (internal) in GitLab called `todolist-fe` to host your clone of the project and copy it's remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
+2. Open up Gitlab and login. Create a new project (internal) in GitLab called `todolist-fe` to host your clone of the project and copy its remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
 
 2. In your local clone of the `todolist-fe`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab
 ```bash
@@ -116,7 +116,7 @@ NOTE - If you are missing these dependencies; install them with ease using the [
 </p>
 ![node-version](../images/exercise2/node-version.png)
 
-2. The `todolist-fe` has a package.json at the root of the project, this defines some configuration for the app including it's dependencies, dev dependencies, scripts and other configuration. Install the apps dependencies
+2. The `todolist-fe` has a package.json at the root of the project, this defines some configuration for the app including its dependencies, dev dependencies, scripts and other configuration. Install the apps dependencies
 ```bash
 npm install
 ```
@@ -212,7 +212,7 @@ cd todolist-api
 git checkout develop
 ```
 
-2. On GitLab; create a new project (internal) called `todolist-api` to host your clone of the project and copy it's remote address as you did for the previous repositories.
+2. On GitLab; create a new project (internal) called `todolist-api` to host your clone of the project and copy its remote address as you did for the previous repositories.
 
 2. In your local clone of the `todolist-api`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab
 ```bash
@@ -441,8 +441,8 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
     5. Trigger the `bake` job with the `${BUILD_TAG}` param
 * a *bake* job should take the package and put it in a Linux Container
     1. Take an input of the previous jobs `${BUILD_TAG}` ie `${JOB_NAME}.${BUILD_NUMBER}`.
-    2. Checkout the binary from Nexus and unzip it's contents
-    3. Run an oc start-build of the App's BuildConfig and tag it's imagestream with the provided `${BUILD_TAG}`
+    2. Checkout the binary from Nexus and unzip its contents
+    3. Run an oc start-build of the App's BuildConfig and tag its imagestream with the provided `${BUILD_TAG}`
     4. Trigger a deploy job using the parameter `${BUILD_TAG}`
 * a *deploy* job should roll out the changes by updating the image tag in the DC:
     1. Take an input of the `${BUILD_TAG}`
@@ -575,7 +575,7 @@ oc rollout latest dc/${NAME}
 ```
 ![deploy-step](../images/exercise2/deploy-step.png)
 
-5. When a deployment has completed; OpenShift can verify it's success. Add another step by clicking the `Add build Step` on the Build tab then `Verify OpenShift Deployment` including the following:
+5. When a deployment has completed; OpenShift can verify its success. Add another step by clicking the `Add build Step` on the Build tab then `Verify OpenShift Deployment` including the following:
     * Set the Project to your `<YOUR_NAME>-dev`
     * Set the DeploymentConfig to your app's name `todolist-fe`
     * Set the replica count to `1`
