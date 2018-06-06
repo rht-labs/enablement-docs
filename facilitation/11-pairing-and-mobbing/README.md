@@ -1,4 +1,4 @@
-# Impact Mapping
+# Pairing and Mobbing
 
 > Session to introduce the practices of Mob Learning and Pair Programming, how we use them and show some examples mobbing and pairing in action. This will also include facilitating a short exercise to practice pairing and mobbing in a fun way! We use this session to strongly position pairing as a mechanism for the group completing the technical exercises of this Enablement. This is very important in achieving the target outcome of the Enablement and the Definition of Done.
 
