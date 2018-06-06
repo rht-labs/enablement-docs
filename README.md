@@ -4,7 +4,10 @@ This repo will house all the slides and lab exercises for the Enablement. It wil
 [Course Content](https://rht-labs.github.io/enablement-docs/#/)
 
 ## Slides
-Use the [Open Innovation Labs reveal.js template](https://github.com/rht-labs/slides-template) to create new content. Add your slides and commit them to the `slides` dir
+Slides are currently only available on Red Hat's Google Drive (https://drive.google.com/open?id=1Rk0XAn2WjY-cVAhGbCNiL6EdiiS-hxbK). We are working on a solution to make this content more openly available.
+
+In the mean time, if you are unable to access the link above and would like to see some of the content, please contact the author.
+
 
 ## Exercises
 Exercises are created using [Docsify](https://docsify.js.org/#/). Write docs in Markdown and use [Docsify](https://github.com/QingWei-Li/docsify-cli) cli to serve them. Store your lab exercises in the `exercises/<lab-number>` dir.
