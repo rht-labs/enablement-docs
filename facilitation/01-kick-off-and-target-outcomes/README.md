@@ -24,4 +24,5 @@ The latest version of slides for the session are available [here](https://drive.
 * Play the [Collaborative Face Drawaing](http://www.funretrospectives.com/collaborative-face-drawing/) energizer
 * Present slides which sign posts to all the introductions to make
 * Showcase of the room to point to the visual artefacts to be used as a part of running the session (sign posted in slides)
+* When introducing the Backlog for the 4 days, it's important to note that we almost certainly will not do everything on the backlog. We will also embrace feedback and change and may well add, remove, update, re-order the items on it. This is an important lesson that Backlogs never get done completely!
 * Round the room for everyone to introduce themselve
