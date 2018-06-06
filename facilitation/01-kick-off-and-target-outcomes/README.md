@@ -12,14 +12,16 @@ The latest version of slides for the session are available [here](https://drive.
 
 ## Facilitation Materials Needed
 
-* Teams in table size of 4 to 6
-* Sticky Notes - rectangular size on each table
-* Sharpie Pens (1 per person) on each table
+* Start session with the whole group in a big circle
+* Group should be near the information radiators used during the session (Backlog, Big Picture, Realtime reto, etc.)
+* Sticky Notes - one large (A5) sticky note on each chair (for Faces) and one smaller rectangular sticky note (for Animals) on each chair. One small square Red sticky and one small square Green sticky (for mood marbles) on each chair
+* Sharpie Pens - one on each chair
 
 
 
 ## Facilitation Guidelines
 
-* Presentation of the slides
-* Early ice breaker activity (provided in slides)
+* Play the [Collaborative Face Drawaing](http://www.funretrospectives.com/collaborative-face-drawing/) energizer
+* Present slides which sign posts to all the introductions to make
 * Showcase of the room to point to the visual artefacts to be used as a part of running the session (sign posted in slides)
+* Round the room for everyone to introduce themselve
