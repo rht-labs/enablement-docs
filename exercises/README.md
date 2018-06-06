@@ -3,7 +3,7 @@
 
 ![jenkins-crio-ocp-star-wars-kubes](./images/jenkins-crio-ocp-star-wars-kubes.png)
 
-This is a collection of practices and exercises to take a learner through a four day simulated residency experience. Learners can expect to be exposed to labs practices such as [Event Storming](https://rht-labs.github.io/practice-library/practices/event-storming/), [Social Contract](https://rht-labs.github.io/practice-library/practices/social-contract/) and [Impact Mapping](https://rht-labs.github.io/practice-library/practices/impact-mapping/) amoung many more which can be found in our [Practice Library](https://rht-labs.github.io/practice-library/). Learners will also be exposed to `Labs CI/CD` - how we use OpenShift & Ansible in conjunction with Jenkins to automate build and deploy of a sample todolist application and its required infrastructure.
+This is a collection of practices and exercises to take a learner through a four day simulated residency experience. Learners can expect to be exposed to labs practices such as [Event Storming](https://rht-labs.github.io/practice-library/practices/event-storming/), [Social Contract](https://rht-labs.github.io/practice-library/practices/social-contract/) and [Impact Mapping](https://rht-labs.github.io/practice-library/practices/impact-mapping/) among many more which can be found in our [Practice Library](https://rht-labs.github.io/practice-library/). Learners will also be exposed to `Labs CI/CD` - how we use OpenShift & Ansible in conjunction with Jenkins to automate build and deploy of a sample todolist application and its required infrastructure.
 
 ## Learner pre-requisites
  - OCP CLI v3.9
@@ -14,7 +14,7 @@ This is a collection of practices and exercises to take a learner through a four
  - Docker latest
  - JDK v8
  - Access to an OpenShift cluster `oc login -u <username> -p <password> <cluster_url>`
- - Text editor such as Atom, IntelliJ or Visual Studio Code (The exercise were created using VSCode, so the screenshots will match its layout and colour schemes)
+ - Text editor such as Atom, IntelliJ or Visual Studio Code (The exercises were created using VSCode, so the screenshots will match its layout and colour schemes)
 
 > (TODO) Download the tools-container containing required Ansible and OpenShift tooling pre-installed
 
