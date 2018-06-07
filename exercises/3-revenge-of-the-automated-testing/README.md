@@ -566,7 +566,7 @@ git push --all
 
 #### 2c - Create todolist e2e tests
 
-> Using [Nightwatch.js](http://nightwatchjs.org/) We will write a reasonably simple e2e test to test the functionality of the feature we just implimented.
+> Using [Nightwatch.js](http://nightwatchjs.org/) We will write a reasonably simple e2e test to test the functionality of the feature we just implemented.
 
 3.  Firstly we need to create an e2e spec test file in the correct place.
 
