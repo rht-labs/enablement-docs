@@ -34,7 +34,7 @@ _____
 ## 10,000 Ft View
 > The goal of this exercise is to move to using the Jenkinsfile in the todolist-api and todolist-fe projects. Additionally we will create new slaves for use in the next exercise.
 
-2. On Jenkins; create a multibranch pipeline project to scan the GitLab endpoint for each app. Use the Jenkinsfile provided to run the stages. Replace the `<YOUR_NAME>` with appropriate variable.
+2. On Jenkins; create a multibranch pipeline project to scan the GitLab endpoint for each app. Use the Jenkinsfile provided to run the stages. Replace `<YOUR_NAME>` with the appropriate variable.
 
 2. Create two new Jenkins slaves for the `OWASP ZAP` scanner and the `Arachni` WebCrawler
 
@@ -58,8 +58,8 @@ Some of the key things to note:
     * `stage {}` all jobs must have one stage. This is the logical part of the build that will be executed e.g. `bake-image`
     * `steps {}` each `stage` has one or more steps involved. These could be execute shell or git checkout etc.
     * `agent {}` specifies the node the build should be run on e.g. `jenkins-slave-npm`
-    * `post {}` hook is used to specify the post-build-actions. Jenkins declarative provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
-    * `when {}` is used for flow control. It can be used at stage level and be used to stop pipeline entering that stage. e.g. when branch is master; deploy to `test` environment.
+    * `post {}` hook is used to specify the post-build-actions. Jenkins declarative pipeline syntax provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
+    * `when {}` is used for flow control. It can be used at the stage level and be used to stop pipeline entering that stage. e.g. when branch is master; deploy to `test` environment.
 
 2. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous exercises. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
 ```groovy
@@ -103,7 +103,7 @@ git push
 2. Set the `Scan Multibranch Pipeline Triggers` to be periodic and the interval to 1 minute. This will poll the GitLab instance for new branches or change sets to build.
 ![multibranch-scan-time](../images/exercise4/multibranch-scan-time.png)
 
-2. Save the Job configuration to run the intial scan. The log will show scans for `master` and `develop` branch which have no `Jenkinsfile` so are skipped. The resulting view will show the `feature/jenkinsfile` job corresponding the only branch that currently has one. The build should run automatically.
+2. Save the Job configuration to run the intial scan. The log will show scans for `master` and `develop` branches, which have no `Jenkinsfile` so are skipped. The resulting view will show the `feature/jenkinsfile` job corresponding the only branch that currently has one. The build should run automatically.
 ![todolist-api-multi](../images/exercise4/todolist-api-multi.png)
 
 2. The pipeline file is setup to only run `bake` & `deploy` stages when on `master` or `develop` branch. This is to provide us with very fast feedback for team members working on feature or bug fix branches. Each time someone commits or creates a new branch a basic build with testing occurs to give very rapid feedback to the team. Let's now update our  `master` and `develop` branches to include the Jenkinsfile and delete the feature branch.
@@ -382,7 +382,7 @@ Jenkins S2I
  - Add the multi-branch configuration to the S2I to have Jenkins come alive with the `todolist-api` and `-fe` configuration cooked into it for future uses.
 
 Jenkins Pipeline Extension
- - Add an extension to the pipeline that promotes code to UAT environment once the master job has been successful.
+ - Add an extension to the pipeline that promotes code to the UAT environment once the master job has been successful.
  - Use a WAIT to allow for manual input to approve the promotion
 
 Jenkins e2e extension (blue/green)
