@@ -5,7 +5,7 @@
 ![jenkins-time](../images/exercise2/jenkins-time.jpg)
 
 ## Exercise Intro
-This lesson is focused on creating a pipeline for our application. What is a pipeline? A pipeline is a series of steps or stages that takes our code from source to a deployed application. There can be many stages to a pipeline but a simple flow is to run a `build > bake > deploy`. Usually the first stage is trigger by something like a git commit. There could be many steps in each of these stages; such as compiling code, running tests and linting. All of these are done to try and drive up code quality and give more assurance that what is deployed is behaving as expected. In the exercise we will create Jenkins pipeline by configuring it through the UI, this will create an un-gated pathway to production
+This lesson is focused on creating a pipeline for our application. What is a pipeline? A pipeline is a series of steps or stages that takes our code from source to a deployed application. There can be many stages to a pipeline but a simple flow is to run a `build > bake > deploy`. Usually the first stage is triggered by something like a git commit. There could be many steps in each of these stages; such as compiling code, running tests and linting. All of these are done to try and drive up code quality and give more assurance that what is deployed is behaving as expected. In the exercise we will create Jenkins pipeline by configuring it through the UI, this will create an un-gated pathway to production
 
 First we will explore the sample application and get it running locally. The sample app is a `todolist` app - the `Hello World` app of the modern day.
 
@@ -44,7 +44,7 @@ _____
 ## 10,000 Ft View
 > _This lab requires users to take the sample TODO app and create a build pipeline in Jenkins by clicking your way to success ending up with an app deployed to each of the namespaces created previously_
 
-2. Import the projects into your gitlab instance. See README of each for build instructions
+2. Import the projects into your gitlab instance. See the README of each for build instructions
 
 2. Deploy a `MongoDB` using the provided template to all project namespace.
 
@@ -116,7 +116,7 @@ NOTE - If you are missing these dependencies; install them with ease using the [
 </p>
 ![node-version](../images/exercise2/node-version.png)
 
-2. The `todolist-fe` has a package.json at the root of the project, this defines some configuration for the app including its dependencies, dev dependencies, scripts and other configuration. Install the apps dependencies
+2. The `todolist-fe` has a package.json at the root of the project, this defines some configuration for the app including its dependencies, dev dependencies, scripts and other configuration. Install the app's dependencies
 ```bash
 npm install
 ```
@@ -284,7 +284,7 @@ where the following are the important things:
   },
 ```
 
-2. To run the application; start a new instance of the MongoDB by running the following. This will pull a mongodb image from Dockerhub and then start it for our API to connect to.
+2. To run the application; start a new instance of MongoDB by running the following. This will pull a mongodb image from Dockerhub and then start it for our API to connect to.
 ```bash
 npm run mongo
 ```
@@ -457,7 +457,7 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
 
 5. Name this job `dev-todolist-fe-build` and select `Freestyle Project`. All our jobs will take the form of `<ENV>-<APP_NAME>-<JOB_PURPOSE>`. ![freestyle-job](../images/exercise2/freestyle-job.png)
 
-5. The page that loads is the Job Configuration page and it can be returned to at anytime from Jenkins. Let's start configuring our job. To conserve space; we will make sure Jenkins only keeps the last builds artifacts. Tick the `Discard old builds` checkbox, then `Advanced` and set `Max # of builds to keep with artifacts` to 1 as indicated below
+5. The page that loads is the Job Configuration page and it can be returned to at anytime from Jenkins. Let's start configuring our job. To conserve space; we will make sure Jenkins only keeps the last build's artifacts. Tick the `Discard old builds` checkbox, then `Advanced` and set `Max # of builds to keep with artifacts` to 1 as indicated below
 ![keep-artifacts](../images/exercise2/keep-artifacts.png)
 
 5. Our NodeJS build needs to be run on the `jenkins-slave-npm` we bought in in the previous chapter. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-slave](../images/exercise2/label-jenkins-slave.png)
@@ -608,7 +608,7 @@ git push
 5. Back on Jenkins; We can tie all the jobs in the pipeline together into a nice single view using the Build Pipeline view. Back on the Jenkins home screen Click the + beside the all tab on the top.
 ![add-view](../images/exercise2/add-view.png)
 
-5. On the view that loads; Give the new view a sensible name like `dev-todolist-fe-pipeline` and select Build Pipeline
+5. On the view that loads; Give the new view a sensible name like `dev-todolist-fe-pipeline` and select Build Pipeline View
 ![new-pipeline](../images/exercise2/new-pipeline.png)
 
 5. Set the Pipeline Flow's Inital Job to `dev-todolist-fe-build` and save.
@@ -630,7 +630,7 @@ git push
 NOTE - This section is optional! Git webhooks are useful but not needed for Enablement completion.
 </p>
 
-7. In order to allow GitLab trigger Jenkins (because of the OpenShift Auth Plugin), we need to allow the `Anonymous` user trigger builds. Head to your Jenkins Dashboard and click on `Manage Jenkins` on the left hand side. Then scroll down and click `Configure Global Security`. Alternatively, type in `https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/configureSecurity/` . You should see a screen like so:
+7. In order to allow GitLab to trigger Jenkins (because of the OpenShift Auth Plugin), we need to allow the `Anonymous` user triggered builds. Head to your Jenkins Dashboard and click on `Manage Jenkins` on the left hand side. Then scroll down and click `Configure Global Security`. Alternatively, type in `https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/configureSecurity/` . You should see a screen like so:
 ![jenkins-global-security](../images/exercise2/jenkins-global-security.png)
 
 7. Scroll down to the `Authorization` section and allow `Anonymous` to create jobs. Do this by navigating through the matrix of checkboxes and check `Build` and `Cancel` under the Job heading. Leave all other user behaviour as is. Anonymous is the user that GitLab will act as so this allows the WebHook to trigger builds. (The screenshot has been cropped to bring Job further to the left.) Hit `Save` or `Apply`.

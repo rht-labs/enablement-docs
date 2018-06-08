@@ -4,9 +4,9 @@
 ![automation-xkcd](https://imgs.xkcd.com/comics/automation.png)
 
 ## Exercise Intro
-In this exercise we will use automation tooling to create Project namespaces for our `CI/CD` tooling along with the `dev` and `test` namespaces for our deployments to live. We do this to manually using the OpenShift CLI; but as we go from cluster to cluster or project to project Dev and Ops teams often find themselves having to redo these tasks again and again. Configuring our cluster using code; we can easily store this in Git and repeat the process again and again. By minimising the time taken to do these repetitive tasks we can accelerate our ability to deliver value to our customers; working on the hard problems they face.
+In this exercise we will use automation tooling to create Project namespaces for our `CI/CD` tooling along with the `dev` and `test` namespaces for our deployments to live. We do this manually using the OpenShift CLI; but as we go from cluster to cluster or project to project Dev and Ops teams often find themselves having to redo these tasks again and again. Configuring our cluster using code; we can easily store this in Git and repeat the process again and again. By minimising the time taken to do these repetitive tasks we can accelerate our ability to deliver value to our customers; working on the hard problems they face.
 
-This exercise uses Ansible to drive the creation of the cluster content. In particular; we'll use a play book called the `OpenShift Applier`. Once the project namespace have been created; we will add some tools to support CI/CD such as Jenkins, Git and Nexus. These tools will be needed by later lessons to automate the build and deploy of our apps. Again; we will use OpenShift Templates and drive their creation in the cluster using Ansible. To prove things are working, finally we'll delete all our content and re-apply the inventory to re-create our clusters content.
+This exercise uses Ansible to drive the creation of the cluster content. In particular; we'll use a play book called the `OpenShift Applier`. Once the project namespace have been created; we will add some tools to support CI/CD such as Jenkins, Git and Nexus. These tools will be needed by later lessons to automate the build and deploy of our apps. Again; we will use OpenShift Templates and drive their creation in the cluster using Ansible. To prove things are working, finally we'll delete all our content and re-apply the inventory to re-create our cluster's content.
 
 #### Why is config-as-code important?
 * Assurance - Prevents unwanted config changes from people making arbitrary changes to environments. No more Snowflake servers!
@@ -171,7 +171,7 @@ ansible-playbook apply.yml -i inventory/ -e target=bootstrap
 ```
 where the `-e target=bootstrap` is passing an additional variable specifying that we run the `bootstrap` inventory
 
-3. Once successful you should see an output similar to this (Cow's not included): ![playbook-success](../images/exercise1/play-book-success.png)
+3. Once successful you should see an output similar to this (Cows not included): ![playbook-success](../images/exercise1/play-book-success.png)
 
 3. You can check to see the projects have been created successfully by running
 ```bash
@@ -294,10 +294,10 @@ ansible-playbook apply.yml -e target=tools \
 4. Once logged in create a new project called `enablement-ci-cd` and mark it as internal. Once created; copy out the `git url` for use on the next step.
 ![gitlab-new-project](../images/exercise1/gitlab-new-project.png)
 <p class="tip">
-Note - we would not normally make the project under your name but create an group and add the project there on residency but for simplicity of the exercise we'll do that here
+Note - we would not normally make the project under your name but create a group and add the project there on residency but for simplicity of the exercise we'll do that here
 </p>
 
-4. If you have not used Git before; you may need to tell Git who you are and what your email is before we commit. Run the following commands, substitution your email and "Your Name". If you've done this before move on to the next step.
+4. If you have not used Git before; you may need to tell Git who you are and what your email is before we commit. Run the following commands, substituting your email and "Your Name". If you've done this before move on to the next step.
 ```bash
 git config --global user.email "yourname@mail.com"
 ```
@@ -444,7 +444,7 @@ SOURCE_REPOSITORY_USERNAME=<YOUR_LDAP_USERNAME>
 SOURCE_REPOSITORY_PASSWORD=<YOUR_LDAP_PASSWORD>
 ```
 where
-    * `<GIT_URL>` is the full path clone path of the repo where this project is stored (including the https && .git)
+    * `<GIT_URL>` is the full clone path of the repo where this project is stored (including the https && .git)
     * `<YOUR_NAME>` is the prefix for your `-ci-cd` project.
     * Explore some of the other parameters in `templates/jenkins-s2i.yml`
     * `<YOUR_LDAP_USERNAME>` is the username builder pod will use to login and clone the repo with
