@@ -24,3 +24,4 @@ The latest version of slides for the session are available [here](https://drive.
 * Early interactive acitivty to get each participant to think and write down what Labs is
 * Presentation of the slides
 * Show short Labs promotion video
+* This session may generate lots of questions and kick-start discussions. This is a great opportunity to use the car park / parking lot if you think the answers will naturally emerge during the 4 days.
