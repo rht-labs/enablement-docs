@@ -37,7 +37,7 @@ This exercise begins cluster containing blah blah
 _____
 
 ## 10,000 Ft View
-> The goal of this exercise is to introduce Build Monitors to radiate teams progress on Dashboards.
+> The goal of this exercise is to introduce Build Monitors to radiate team's progress on Dashboards.
 
 2. Create a new Dashboard for our Builds using the plugin above. Use Regex to add jobs to it. Use the BuildFail Analyser to add meaningful data to the reason for failures.
 
@@ -60,7 +60,7 @@ _____
 2. Check the box to use Regular Expression and set the value to be something that should scrape our apps such as `.*todolist.*` 
 ![config-regex](../images/exercise6/config-regex.png)
 
-2. Finally; select `Display committers` and set the Failure Analyser to `Description`. This allows us to write regex for when fails occur in Jenkins and have the reasons plotted on the graph. For example; number of test scores or common compilation errors. 
+2. Finally; select `Display committers` and set the Failure Analyser to `Description`. This allows us to write regexes for when failures occur in Jenkins and have the reasons plotted on the graph. For example; number of test scores or common compilation errors. 
 ![config-commiters](../images/exercise6/config-commiters.png)
 
 2. Save your configuration to see your Build Monitor! 
@@ -121,7 +121,7 @@ git push
 ```
 ![fail-dashboard](../images/exercise6/fail-dashboard.png)
 
-2. We can save up these regex and inject them into the `jenkins-s2i` so the configuration is there the next time we launch and we don't have to code them up again. In `enablement-ci-cd` repo; the `jenkins-s2i/configuration/build-failure-analyzer.xml` already contains ones we've collected on previous residencies.
+2. We can save up these regexes and inject them into the `jenkins-s2i` so the configuration is there the next time we launch and we don't have to code them up again. In `enablement-ci-cd` repo; the `jenkins-s2i/configuration/build-failure-analyzer.xml` already contains ones we've collected on previous residencies.
 
 ### Part 3 - Seed Jenkins Dashboards
 > _TODO - Add instructions for creating dashboards as part of s2i in Jenkins setup using DSL_

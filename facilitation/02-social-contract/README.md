@@ -12,7 +12,7 @@ The latest version of slides for the session are available [here](https://docs.g
 
 ## Facilitation Materials Needed
 
-* Teams in table size of 4 to 6
+* Start as one big group. During this sessio, teams will form into groups of 4 to 6
 * Sticky Notes - large (A5) sized of different colors
 * Sharpie Pens (1 per person) on each table
 * Flip-chart or Magic Whiteboard paper
@@ -26,6 +26,8 @@ The latest version of slides for the session are available [here](https://docs.g
 * Present the slides to introduce Social Contracting, what it is, why we use it and share some Labs stories
 * Present the residency examples provided in slides and encourage any Labs people present to talk about their experiences of using the practice
 * Kick off the interactive exercise:
+    * Get the whole group to self-organise into a straight line in order of technical experience.
+    * Divide the group as evenly as possible (no more than 6 per table) so there is a spread of technical experience in each table
     * In table groups, take the opportunity to (once again) say hello to each other
     * Talk about how they want to work with each other this week and capture key behaviours on large sticky notes to form the social contract
     * Encourage everyone to sign their social contract

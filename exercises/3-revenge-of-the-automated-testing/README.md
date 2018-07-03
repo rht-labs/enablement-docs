@@ -18,7 +18,7 @@ The TDD cycle can be illustrated with the following diagram;
 ### The TDD Cycle
 
 1. `Write a test` -
-In TDD a new feature begins by writing a test. Write a test that clearly defines a function or one that provides an improvement to an existing function. It's important the developer clearly understands the features specification and requirements, or the feature could be wrong from the get-go.
+In TDD a new feature begins by writing a test. Write a test that clearly defines a function or one that provides an improvement to an existing function. It's important the developer clearly understands the feature's specification and requirements, or the feature could be wrong from the get-go.
 
 2. `Test Fails` -
 When a test is first implemented it is expected to fail. This failure validates the test is working correctly as the feature is yet to be implemented.
@@ -342,11 +342,11 @@ npm run start
 #### 2b - Create todolist-fe tests
 > Using [Jest](https://facebook.github.io/jest/) as our test runner and the `vue-test-utils` library for managing our vue components; we will now write some tests for front end functionality to persist our important-flag. The changes required to the front end are quite large but we will use TDD to create our test first, then implement the functionality.
 
-Our TodoList App uses `vuex` to manage the state of the apps' todos and `axios` HTTP library to connect to the backend. `Vuex` is an opinionated framework for managing application state and has some key design features you will need to know to continue with the exercise.
+Our TodoList App uses `vuex` to manage the state of the app's todos and `axios` HTTP library to connect to the backend. `Vuex` is an opinionated framework for managing application state and has some key design features you will need to know to continue with the exercise.
 
 In `vuex` the application state is managed by a `store`. The `store` houses all the todos we have retrieved from the backend as well as the `getter` methods for our array of `todos`. In order to make changes to the store, we could call the store directly and update each todo item but as earlier said; vuex is an opinionated module with its own way of updating the store. It is bad practice to call the store directly.
 
-There are two parts of the lifecycle to updating the store, the `actions` & `mutations`. When the user clicks a todo to mark it as complete; the `actions` are called. An action could involve a call to the backend or some pre-processing of the data. Once this is done, the change is committed to the store by calling the `mutation` function. A store should only ever be manipulated through a mutation function. Calling the mutation will then update the todo object in the apps local store for rendering in the view.
+There are two parts of the lifecycle to updating the store, the `actions` & `mutations`. When the user clicks a todo to mark it as complete; the `actions` are called. An action could involve a call to the backend or some pre-processing of the data. Once this is done, the change is committed to the store by calling the `mutation` function. A store should only ever be manipulated through a mutation function. Calling the mutation will then update the todo object in the app's local store for rendering in the view.
 
 For example; when marking a todo as done in the UI, the following flow occurs
   * The `TodoItem.vue` calls the `markTodoDone()` function which dispatches an event to the store.
@@ -432,7 +432,7 @@ npm run test -- --watch
     * The `<script></script>` contains the JavaScript of our component and is essentially the logic for our component. It defines things like `properties`, `methods` and other `components`
     * The `<style></style>` contains the encapsulated CSS of our component
 
-3. Underneath the `</md-list-item>` tag, let's add a new md-button. Add a `.important-flag` class on the `md-button` and put the svg of the flag provided inside it.
+3. Underneath the `</md-list-item>` tag, let's add a new md-button. Add an `.important-flag` class on the `md-button` and put the svg of the flag provided inside it.
 ```html
     </md-list-item>
     <!-- TODO - SVG for use in Exercise3 -->
@@ -448,7 +448,7 @@ npm run test -- --watch
 </md-button>
 ```
 
-3. More tests should now be passing. Let's wire the click of the flag to an event in Javascript. In the methods section of the `<script></script>` tags in the Vue file, implement the `markImportant()`. We want to wire this to the action to updateTodo, just like we have in the `markCompleted()` call above it. We also need to pass and additional property to this method call `important`
+3. More tests should now be passing. Let's wire the click of the flag to an event in Javascript. In the methods section of the `<script></script>` tags in the Vue file, implement the `markImportant()`. We want to wire this to the action to updateTodo, just like we have in the `markCompleted()` call above it. We also need to pass an additional property to this method called `important`
 ```javascript
     markImportant() {
       // TODO - FILL THIS OUT IN THE EXERCISE
@@ -457,7 +457,7 @@ npm run test -- --watch
     },
 ```
 
-3. Let's connect the click button in the DOM to the Javascript function we've just created. In the template, add a click handler to the md-button to call the function `markImportant()` by adding ` @click="markImportant()"` to the `<md-button> tag
+3. Let's connect the click button in the DOM to the Javascript function we've just created. In the template, add a click handler to the md-button to call the function `markImportant()` by adding ` @click="markImportant()"` to the `<md-button>` tag
 ```html
     <!-- TODO - SVG for use in Exercise3 -->
     <md-button class="important-flag" @click="markImportant()">
@@ -507,7 +507,7 @@ updateTodo({ commit, state }, { id, important }) {
     }
 ```
 
-3. Finally, let's implement the `mutation` for our feature. Again, starting with the tests..... Open the `tests/unit/javascript/mutations.spec.js` to find our skeleton tests at the bottom of the file. Our mutation method is responsible for toggling the todo's `important` property between `true` and `false`. Let's implement the tests for this functionality by setting important to be true and calling the method expecting the inverse. Then let's set it to false and call the method expecting the inverse. Add the expectations below the `// TODO - test goes here!` comment as done previously.
+3. Finally, let's implement the `mutation` for our feature. Again, starting with the tests... Open the `tests/unit/javascript/mutations.spec.js` to find our skeleton tests at the bottom of the file. Our mutation method is responsible for toggling the todo's `important` property between `true` and `false`. Let's implement the tests for this functionality by setting important to be true and calling the method expecting the inverse. Then let's set it to false and call the method expecting the inverse. Add the expectations below the `// TODO - test goes here!` comment as done previously.
 ```javascript
   it("it should MARK_TODO_IMPORTANT as false", () => {
     state.todos = importantTodos;
@@ -566,7 +566,40 @@ git push --all
 
 #### 2c - Create todolist e2e tests
 
-3. TODO !!
+> Using [Nightwatch.js](http://nightwatchjs.org/) We will write a reasonably simple e2e test to test the functionality of the feature we just implemented.
+
+3.  Firstly we need to create an e2e spec test file in the correct place.
+
+```bash
+touch tests/e2e/specs/importantFlag.js
+```
+
+3.  Open this new file in your code editor and set out the initial blank template for an e2e test as below:
+    ![if-e2e-step1](../images/exercise3/if-e2e-step1.png)
+
+3.  Now get the test to access the todos page and wait for it to load. The url can be taken from `process.env.VUE_DEV_SERVER_URL`
+    ![if-e2e-step2](../images/exercise3/if-e2e-step2.png)
+
+3.  Now click the clear all button and then enter a value in the textbox to create a new item. We clear all first to ensure we start with a fresh list. We now do our first assertion: that a 'important flag' exists (the button to set important), and also that a red flag does not exist. You will quickly find there is no way to reference the clear all button. We will therefore have to go to `src/components/XofYItems.vue` and add `id="clear-all"` to the clear all button.
+    ![if-e2e-step3](../images/exercise3/if-e2e-step3.png)
+    ![if-e2e-step3a](../images/exercise3/if-e2e-step3a.png)
+
+3.  We should now get nightwatch to click the flag and check whether the flag has turned red.
+    ![if-e2e-step4](../images/exercise3/if-e2e-step4.png)
+
+3.  At this point we should have a working e2e test. We can run this by using `npm run e2e`. When satisfied we can push up these changes.
+
+```bash
+git add .
+```
+
+```bash
+git commit -m "Implementing e2e tests"
+```
+
+```bash
+git push
+```
 
 ---
 
