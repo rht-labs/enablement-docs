@@ -19,7 +19,9 @@ As a learner you will be able to
 1. [Grafana](https://grafana.com/) - The analytics platform for all your metrics Grafana allows you to query, visualize, alert on and understand your metrics no matter where they are stored. Create, explore, and share dashboards with your team and foster a data driven culture. Trusted and loved by the community.
 
 ## Big Picture
-This exercise adds no new components to the big picture
+> From the previous exercise; we introduced app and jenkins monitoring. This exercise focuses on radiation of cluster statistics using Prometheus to scrape metrics and Grafana to display them.
+
+![big-picture](../images/big-picture/big-picture-5.jpg)
 
 _____
 

@@ -64,8 +64,9 @@ Jest is used by Facebook to test all JavaScript code including React application
 Works with any unit testing framework.
 
 ## Big Picture
+> From the previous exercise; we created a simple pipeline. We will now flesh it out with some testing to add gates to our pathway to production.
 
-This exercise begins cluster containing blah blah
+![big-picture](../images/big-picture/big-picture-3.jpg)
 
 ---
 
@@ -94,7 +95,7 @@ _On page load:_
 #### 1a - FE Unit tests
 > In this exercise we will execute our test for the front end locally. Once verified we will add them to Jenkins.
 
-2. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist-fe` directory and run `test`.
+1. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist-fe` directory and run `test`.
 ```bash
 cd todolist-fe
 ```

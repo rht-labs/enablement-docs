@@ -32,7 +32,9 @@ As a learner you will be able to
 1. [Pipeline Aggregator View](https://wiki.jenkins.io/display/JENKINS/Pipeline+Aggregator+View) - Allows the users to view the history of their pipelines with stage information (failed/In Progress/Passed) and the changes monitored)
 
 ## Big Picture
-This exercise begins cluster containing blah blah
+> From the previous exercise; we introduced non-functional testing to our pipeline. This exercise focuses on radiation of useful information such as build stats and times from our pipeline. 
+
+![big-picture](../images/big-picture/big-picture-5.jpg)
 
 _____
 

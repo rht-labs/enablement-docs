@@ -45,7 +45,9 @@ As a learner you will be able to
 1. [stryker](http://stryker-mutator.io/) - Mutation testing! What is it? Bugs, or mutants, are automatically inserted into your production code. Your tests are run for each mutant. If your tests fail then the mutant is killed. If your tests passed, the mutant survived. The higher the percentage of mutants killed, the more effective your tests are. It's really that simple.
 
 ## Big Picture
-This exercise begins cluster containing blah blah
+> From the previous exercise; we introduced pipeline-as-code and new Jenkins Slave nodes. This exercise focuses on extending the pipeline with Non-functional testin and some automated security testing.
+
+![big-picture](../images/big-picture/big-picture-4.jpg)
 
 _____
 
