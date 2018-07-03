@@ -566,7 +566,40 @@ git push --all
 
 #### 2c - Create todolist e2e tests
 
-3. TODO !!
+> Using [Nightwatch.js](http://nightwatchjs.org/) We will write a reasonably simple e2e test to test the functionality of the feature we just implemented.
+
+3.  Firstly we need to create an e2e spec test file in the correct place.
+
+```bash
+touch tests/e2e/specs/importantFlag.js
+```
+
+3.  Open this new file in your code editor and set out the initial blank template for an e2e test as below:
+    ![if-e2e-step1](../images/exercise3/if-e2e-step1.png)
+
+3.  Now get the test to access the todos page and wait for it to load. The url can be taken from `process.env.VUE_DEV_SERVER_URL`
+    ![if-e2e-step2](../images/exercise3/if-e2e-step2.png)
+
+3.  Now click the clear all button and then enter a value in the textbox to create a new item. We clear all first to ensure we start with a fresh list. We now do our first assertion: that a 'important flag' exists (the button to set important), and also that a red flag does not exist. You will quickly find there is no way to reference the clear all button. We will therefore have to go to `src/components/XofYItems.vue` and add `id="clear-all"` to the clear all button.
+    ![if-e2e-step3](../images/exercise3/if-e2e-step3.png)
+    ![if-e2e-step3a](../images/exercise3/if-e2e-step3a.png)
+
+3.  We should now get nightwatch to click the flag and check whether the flag has turned red.
+    ![if-e2e-step4](../images/exercise3/if-e2e-step4.png)
+
+3.  At this point we should have a working e2e test. We can run this by using `npm run e2e`. When satisfied we can push up these changes.
+
+```bash
+git add .
+```
+
+```bash
+git commit -m "Implementing e2e tests"
+```
+
+```bash
+git push
+```
 
 ---
 
