@@ -30,11 +30,13 @@ As a learner you will be able to
 * [Ansible](https://www.ansible.com/) - IT Automation tool used to provision and manage state of cloud and physical infrastructure.
 * [OpenShift Applier](https://github.com/redhat-cop/openshift-applier) - used to apply OpenShift objects to an OpenShift Cluster.
 
-
 ## Big Picture
 > The Big Picture is our emerging architecture; starting with an empty cluster we populate it with projects and some ci/cd tooling.
 
 ![ds-messing-around.gif](../images/exercise1/ds-messing-around.gif)
+
+## The Practices
+[event-storming](https://rht-labs.github.io/practice-library/practices/impact-mapping/ ':include :type=iframe :')
 
 _____
 
@@ -43,20 +45,20 @@ _____
 
 If you're feeling confident and don't want to follow the step-by-step guide these high-level instructions should provide a challenge for you:
 
-2. Clone the repo `https://github.com/rht-labs/enablement-ci-cd` which contains the scaffold of the project. Ensure you get all remote branches.
+1. Clone the repo `https://github.com/rht-labs/enablement-ci-cd` which contains the scaffold of the project. Ensure you get all remote branches.
 
 2. Create `<your-name>-ci-cd`, `<your-name>-dev` and `<your-name>-test` project namespaces using the inventory and run them with the OpenShift Applier to populate the cluster
 
-2. Use the templates provided to create build of the jenkins-s2i. The templates are in `exercise1/jenkins-s2i`
+3. Use the templates provided to create build of the jenkins-s2i. The templates are in `exercise1/jenkins-s2i`
 
-2. Use the templates provided to create build and deployment configs in `<your-name>-ci-cd` for. Templates are on a branch called `exercise1/git-nexus` && `exercise1/jenkins`:
+4. Use the templates provided to create build and deployment configs in `<your-name>-ci-cd` for. Templates are on a branch called `exercise1/git-nexus` && `exercise1/jenkins`:
     * Nexus
     * GitLab
     * Jenkins (using an s2i to pre-configure Jenkins)
 
-2. Commit your `enablement-ci-cd` repository to the GitLab Instance you've created
+5. Commit your `enablement-ci-cd` repository to the GitLab Instance you've created
 
-2. Burn it all down and re-apply your inventory proving config-as-code works.
+6. Burn it all down and re-apply your inventory proving config-as-code works.
 
 ## Step by Step Instructions
 > This is a structured guide with references to exact filenames and explanations.
