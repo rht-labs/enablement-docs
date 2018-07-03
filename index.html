@@ -32,6 +32,13 @@
   <script src="//unpkg.com/prismjs/components/prism-groovy.min.js"></script>
   <script src="//unpkg.com/prismjs/components/prism-yaml.min.js"></script>
   <script src="//unpkg.com/prismjs/components/prism-json.min.js"></script>
+  <script>
+    // this didn't work cuz of CORS :(
+    function resizeIframeHack(iframe) {
+      // console.log(window.document.body.scrollHeight)
+      iframe.height = iframe.contentWindow.document.body.scrollHeight + "px";
+    }
+  </script>
 </body>
 
 </html>
