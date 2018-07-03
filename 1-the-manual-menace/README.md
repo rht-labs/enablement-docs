@@ -33,10 +33,7 @@ As a learner you will be able to
 ## Big Picture
 > The Big Picture is our emerging architecture; starting with an empty cluster we populate it with projects and some ci/cd tooling.
 
-![ds-messing-around.gif](../images/exercise1/ds-messing-around.gif)
-
-## The Practices
-[event-storming](https://rht-labs.github.io/practice-library/practices/impact-mapping/ ':include :type=iframe :')
+![big-picture](../images/big-picture/big-picture-1.jpg)
 
 _____
 

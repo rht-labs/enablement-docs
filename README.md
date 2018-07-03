@@ -1,9 +1,15 @@
-# Enablement Material
-> Red Hat Open Innovation Labs Enablement Material. 
+# DevOps Culture & Practice
+> Red Hat Open Innovation Labs Enablement Material. Preparing Engineers, consultants and TSMs with all the cultural and engineering practices for life in a Residency.
 
 ![jenkins-crio-ocp-star-wars-kubes](./images/jenkins-crio-ocp-star-wars-kubes.png)
 
 This is a collection of practices and exercises to take a learner through a four day simulated residency experience. Learners can expect to be exposed to labs practices such as [Event Storming](https://rht-labs.github.io/practice-library/practices/event-storming/), [Social Contract](https://rht-labs.github.io/practice-library/practices/social-contract/) and [Impact Mapping](https://rht-labs.github.io/practice-library/practices/impact-mapping/) among many more which can be found in our [Practice Library](https://rht-labs.github.io/practice-library/). Learners will also be exposed to `Labs CI/CD` - how we use OpenShift & Ansible in conjunction with Jenkins to automate build and deploy of a sample todolist application and its required infrastructure.
+
+## Learner Outcomes
+1. Prepare participants to *jointly* deliver on upcoming Labs Residencies - specifically: senior consultants, architects, and agile PMs
+2. Explore all principle practices used in a residency through a hands on real life experience
+3. Enable countries and regions to run the session independently
+
 
 ## Learner pre-requisites
  | Software | Version | Check |
@@ -18,13 +24,14 @@ This is a collection of practices and exercises to take a learner through a four
  | Access to an OpenShift cluster | | `oc login -u <username> -p <password> <cluster_url>` |
  | Text editor such as Atom, IntelliJ or Visual Studio Code <br><br> (The exercises were created using `VSCode`, so the screenshots will match its layout and colour schemes) | - | - |
 
-
-> (TODO) Download the tools-container containing required Ansible and OpenShift tooling pre-installed
+## Git and Containers 101
+ - Git tutorial covering the basics - https://try.github.io/
+ - Handy guide for those new to containers - https://developers.redhat.com/blog/2018/02/22/container-terminology-practical-introduction/
 
 ## Setup your IDE
-If you are using VSCode; some handy plugins that will make the lessons easier are:
+If you are using VSCode, Atom, Eclipse, IntelliJ or some other IDE that supports Plugins; some handy ones that will make the labs easier are:
  - YAML Syntax Highlighter
- - Autosave 
+ - Autosave
  - JavaScript Syntax Highlighter
  - Vue.js
  - Eslint
