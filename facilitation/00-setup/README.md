@@ -100,4 +100,5 @@ Think about the wall space that will be used for:
 * We like to play some fun games / energisers during the four days. It helps drive fun and team culture as well as keep enegery levels up (especially useful during the longer technical exercises). Activities we have used include:
     * [Human Rock Paper Scissors](http://www.funretrospectives.com/human-rock-paper-scissors/)
     * [Collaborative Face Drawing](http://www.funretrospectives.com/collaborative-face-drawing/)
+    * [Context Switching Game](http://personalkanban.com/pk/expert/context-switching-why-limit-your-wip-iv/)
 * Add a channel to the [Enablement Slack Group](labsenablement.slack.com) specifically for your session and add all participants and facilitators. This is great for promoting discussion before, during and after the workshop.
