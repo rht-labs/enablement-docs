@@ -5,9 +5,9 @@
 ![jenkins-time](../images/exercise2/jenkins-time.jpg)
 
 ## Exercise Intro
-This lesson is focused on creating a pipeline for our application. What is a pipeline? A pipeline is a series of steps or stages that takes our code from source to a deployed application. There can be many stages to a pipeline but a simple flow is to run a `build > bake > deploy`. Usually the first stage is trigger by something like a git commit. There could be many steps in each of these stages; such as compiling code, running tests and linting. All of these are done to try and drive up code quality and give more assurance that what is deployed is behaving as expected. In the exercise we will create Jenkins pipeline by configuring it through the UI, this will create an un-gated pathway to production
+This lesson is focused on creating a pipeline for our application. What is a pipeline? A pipeline is a series of steps or stages that takes our code from source to a deployed application. There can be many stages to a pipeline but a simple flow is to run a `build > bake > deploy`. Usually the first stage is triggered by something like a git commit. There could be many steps in each of these stages; such as compiling code, running tests and linting. All of these are done to try and drive up code quality and give more assurance that what is deployed is behaving as expected. In the exercise we will create Jenkins pipeline by configuring it through the UI, this will create an un-gated pathway to production
 
-First we will explore the sample application and get it running locally. The sample app is a `todolist` app - the `Hello World` app of the modern day. 
+First we will explore the sample application and get it running locally. The sample app is a `todolist` app - the `Hello World` app of the modern day.
 
 #### Why create pipelines
 * Assurance - drive up code quality and remove the need for dedicated deployment / release management teams
@@ -37,18 +37,20 @@ As a learner by the end of this lesson you will be able to
 1. [VueJS](https://vuejs.org/) - Vue (pronounced /vjuː/, like view) is a progressive framework for building user interfaces. It is designed from the ground up to be incrementally adoptable, and can easily scale between a library and a framework depending on different use cases. It consists of an approachable core library that focuses on the view layer only, and an ecosystem of supporting libraries that helps you tackle complexity in large Single-Page Applications.
 
 ## Big Picture
-> From the previous exercise; we created some supporting tooling needed by our app/
+> From the previous exercise; we created some supporting tooling needed by our app. Now we will introduce our Sample App and create a pipeline for it
+
+![big-picture](../images/big-picture/big-picture-2.jpg)
 
 _____
 
 ## 10,000 Ft View
 > _This lab requires users to take the sample TODO app and create a build pipeline in Jenkins by clicking your way to success ending up with an app deployed to each of the namespaces created previously_
 
-2. Import the projects into your gitlab instance. See README of each for build instructions
+2. Import the projects into your gitlab instance. See the README of each for build instructions
 
 2. Deploy a `MongoDB` using the provided template to all project namespace.
 
-2. Create 2 pipline with three stages (`build`, `bake`, `deploy`) in jenkins for `develop` & `master` branches on the `todolist-fe` such that:
+2. Create 2 pipelines with three stages (`build`, `bake`, `deploy`) in Jenkins for `develop` & `master` branches on the `todolist-fe` such that:
     * a `Build` job is responsible for compiling and packaging our code:
         1. Checkout from source code (`develop` for `<yourname>-dev` & `master` for `<yourname>-test`)
         2. Install node dependencies and run a build / package
@@ -58,8 +60,8 @@ _____
         5. Trigger the `bake` job with the `${BUILD_TAG}` param
     * a `Bake` job should take the package and put it in a Linux Container
         1. Take an input of the previous jobs `${BUILD_TAG}` ie `${JOB_NAME}.${BUILD_NUMBER}`.
-        2. Checkout the binary from Nexus and unzip it's contents
-        3. Run an oc start-build of the App's BuildConfig and tag it's imagestream with the provided `${BUILD_TAG}`
+        2. Checkout the binary from Nexus and unzip its contents
+        3. Run an oc start-build of the App's BuildConfig and tag its imagestream with the provided `${BUILD_TAG}`
         4. Trigger a deploy job using the parameter `${BUILD_TAG}`
     * a `deploy` job should roll out the changes by updating the image tag in the DC:
         1. Take an input of the `${BUILD_TAG}`
@@ -96,7 +98,7 @@ cd todolist-fe
 git checkout develop
 ```
 
-2. Open up Gitlab and login. Create a new project (internal) in GitLab called `todolist-fe` to host your clone of the project and copy it's remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
+2. Open up Gitlab and login. Create a new project (internal) in GitLab called `todolist-fe` to host your clone of the project and copy its remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
 
 2. In your local clone of the `todolist-fe`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab
 ```bash
@@ -111,12 +113,12 @@ git push -u origin --all
 node -v
 npm -v
 ```
-<p class="tip" > 
+<p class="tip" >
 NOTE - If you are missing these dependencies; install them with ease using the [Node Version Manager](https://github.com/creationix/nvm)
 </p>
 ![node-version](../images/exercise2/node-version.png)
 
-2. The `todolist-fe` has a package.json at the root of the project, this defines some configuration for the app including it's dependencies, dev dependencies, scripts and other configuration. Install the apps dependencies
+2. The `todolist-fe` has a package.json at the root of the project, this defines some configuration for the app including its dependencies, dev dependencies, scripts and other configuration. Install the app's dependencies
 ```bash
 npm install
 ```
@@ -176,7 +178,7 @@ where the following are the important things:
     * `./src/store` is the `vuex` files for managing application state and backend connectivity
     * `./src/views` is the view containers; which are responsible for loading components and managing their interactions.
     * the `./src/router.js` controls routing logic. In our case the app only has one real endpoint.
-    * `./src/scss` contains custom  SCSS used in the application.
+    * `./src/scss` contains custom SCSS used in the application.
     * `./*.js` is mostly config files for running and managing the app and the tests
 
 2. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables and change `<YOUR_NAME>` accordingly in the below commands.
@@ -212,7 +214,7 @@ cd todolist-api
 git checkout develop
 ```
 
-2. On GitLab; create a new project (internal) called `todolist-api` to host your clone of the project and copy it's remote address as you did for the previous repositories.
+2. On GitLab; create a new project (internal) called `todolist-api` to host your clone of the project and copy its remote address as you did for the previous repositories.
 
 2. In your local clone of the `todolist-api`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab
 ```bash
@@ -260,10 +262,10 @@ todolist-api
 where the following are the important things:
     * `./server` is the main collection of files needed by the app. The entrypoint is the `app.js`
     * `./node_modules` is where the dependencies are stored
-    * `./server/api` is where the api's controller, data model & unit test are stored. 
+    * `./server/api` is where the api's controller, data model & unit test are stored.
     * `./server/mocks` is a mock server used for when there is no DB access    
     * `./server/config` stores our Express JS config, header information and other middleware.
-    * `./server/config/environment` stores enviromnent specific config; such as connectivity to backend services like MongoDB.
+    * `./server/config/environment` stores environment specific config; such as connectivity to backend services like MongoDB.
     * `./tasks` is a collection of additional `Grunt` tasks which will be used in later exercises
     * `Grunt` is a taskrunner for use with Node.JS projects
     * `package.json` contains the dependency list and a lot of very helpful scripts for managing the app lifecycle
@@ -284,7 +286,7 @@ where the following are the important things:
   },
 ```
 
-2. To run the application; start a new instance of the MongoDB by running the following. This will pull a mongodb image from Dockerhub and then start it for our API to connect to. 
+2. To run the application; start a new instance of MongoDB by running the following. This will pull a mongodb image from Dockerhub and then start it for our API to connect to.
 ```bash
 npm run mongo
 ```
@@ -320,10 +322,10 @@ curl localhost:9000/api/todos
 2. Now let's check out `todolist-fe` app by reloading the browser. We should now see our dummy front end data is replaced by the backend seed data. Adding new todos will add them in the backend, these will persist when the page is refreshed.
 ![fullstack-app](../images/exercise2/fullstack-app.png)
 
-### Part 2 - Add configs to cluster 
+### Part 2 - Add configs to cluster
 > _In this exercise; we will use the OpenShift Applier to drive the creation of cluster content required by the app such as MongoDB and the Apps Build / Deploy Config_
 
-4. On your terminal navigate to the root of the `todolist-fe` application. The app contains a hidden folder called `.openshift-applier`. Move into this `.openshift-applier` directory and you should see a familiar looking directory structure for an ansible playbook. 
+4. On your terminal navigate to the root of the `todolist-fe` application. The app contains a hidden folder called `.openshift-applier`. Move into this `.openshift-applier` directory and you should see a familiar looking directory structure for an Ansible playbook.
 ```
 .openshift-applier
 ├── README.md
@@ -344,19 +346,19 @@ curl localhost:9000/api/todos
     └── todolist-fe-deploy.yml
 ```
 with the following
-    * the `apply.yml` file is the entrypoint. 
+    * the `apply.yml` file is the entrypoint.
     * the `inventory` contains the objects to populate the cluster with.
     * the `params` contains the variables we'll apply to the `templates`
     * the `templates` required by the app. These include the Build, Deploy configs as well as the services, health checks, and other app definitions.
 
-4. There are a few updates to these manifests we need to make before applying the cluster content. In the `apply.yml` update the namespace `<YOUR_NAME>` variables accordingly. 
+4. There are a few updates to these manifests we need to make before applying the cluster content. In the `apply.yml` update the namespace `<YOUR_NAME>` variables accordingly.
 ```yaml
     ci_cd_namespace: donal-ci-cd
     dev_namespace: donal-dev
     test_namespace: donal-test
 ```
 
-4. In the `params` folder update the `dev` and `test` files with the correct `<YOUR_NAME>` as you've done above. Example for the `dev` file: 
+4. In the `params` folder update the `dev` and `test` files with the correct `<YOUR_NAME>` as you've done above. Example for the `dev` file:
 ```bash
 PIPELINES_NAMESPACE=donal-ci-cd
 NAME=todolist-fe
@@ -428,7 +430,7 @@ git push
 4. Check `<YOUR_NAME>-dev` to see the deployment configs are in place
 ![ocp-app-dc](../images/exercise2/ocp-app-dc.png)
 
-### Part 3 - Build > Bake > Deploy 
+### Part 3 - Build > Bake > Deploy
 > _In this exercise; we take what we have working locally and get it working in OpenShift_
 
 This exercise will involve creating three stages (or items) in our pipeline, each of these is detailed below at a very high level. Move on to the next step to begin implementation.
@@ -441,8 +443,8 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
     5. Trigger the `bake` job with the `${BUILD_TAG}` param
 * a *bake* job should take the package and put it in a Linux Container
     1. Take an input of the previous jobs `${BUILD_TAG}` ie `${JOB_NAME}.${BUILD_NUMBER}`.
-    2. Checkout the binary from Nexus and unzip it's contents
-    3. Run an oc start-build of the App's BuildConfig and tag it's imagestream with the provided `${BUILD_TAG}`
+    2. Checkout the binary from Nexus and unzip its contents
+    3. Run an oc start-build of the App's BuildConfig and tag its imagestream with the provided `${BUILD_TAG}`
     4. Trigger a deploy job using the parameter `${BUILD_TAG}`
 * a *deploy* job should roll out the changes by updating the image tag in the DC:
     1. Take an input of the `${BUILD_TAG}`
@@ -455,9 +457,9 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
 
 5. With the BuildConfig and DeployConfig in place for both our apps (`*-fe` & `*-api`) from previous steps; Log into Jenkins and create a `New Item`. This is just jenkins speak for a new job configuration. ![new-item](../images/exercise2/new-item.png)
 
-5. Name this job `dev-todolist-fe-build` and select `Freestyle Job`. All our jobs will take the form of `<ENV>-<APP_NAME>-<JOB_PURPOSE>`. ![freestyle-job](../images/exercise2/freestyle-job.png)
+5. Name this job `dev-todolist-fe-build` and select `Freestyle Project`. All our jobs will take the form of `<ENV>-<APP_NAME>-<JOB_PURPOSE>`. ![freestyle-job](../images/exercise2/freestyle-job.png)
 
-5. The page that loads is the Job Configuration page and it can be returned to at anytime from Jenkins. Let's start configuring our job. To conserve space; we will make sure Jenkins only keeps the last builds artifacts. Tick the `Discard old builds` checkbox, then `Advanced` and set `Max # of builds to keep with artifacts` to 1 as indicated below 
+5. The page that loads is the Job Configuration page and it can be returned to at anytime from Jenkins. Let's start configuring our job. To conserve space; we will make sure Jenkins only keeps the last build's artifacts. Tick the `Discard old builds` checkbox, then `Advanced` and set `Max # of builds to keep with artifacts` to 1 as indicated below
 ![keep-artifacts](../images/exercise2/keep-artifacts.png)
 
 5. Our NodeJS build needs to be run on the `jenkins-slave-npm` we bought in in the previous chapter. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-slave](../images/exercise2/label-jenkins-slave.png)
@@ -480,7 +482,7 @@ npm run publish
 
 5. On the Post-build Actions; Add another post-build action from the dropdown called `Git Publisher`. This is useful for tying the git check-in to the feature in your tracking tool to the built product.
     * Tick the box `Push Only If Build Succeeds`
-    * Add the Tag to push of 
+    * Add the Tag to push of
 ```bash
 ${JOB_NAME}.${BUILD_NUMBER}
 ```
@@ -492,10 +494,10 @@ Automated commit by jenkins from ${JOB_NAME}.${BUILD_NUMBER}
     * Check `Create New Tag` and set `Target remote name` to `origin`
 ![git-publisher](../images/exercise2/git-publisher.png)
 
-5. Finally; add the trigger for the next job in the pipeline. This is to trigger the bake job with the current build tag. Add another post-build action from the dropdown called `Trigger parameterized build on other projects`. 
-    * Set the project to build to be `dev-todolist-fe-bake` 
-    * Set the condition to be `Stable or unstable but not failed`. 
-    * Click Add Parameters dropdown and select Predefined parameters. 
+5. Finally; add the trigger for the next job in the pipeline. This is to trigger the bake job with the current build tag. Add another post-build action from the dropdown called `Trigger parameterized build on other projects`.
+    * Set the project to build to be `dev-todolist-fe-bake`
+    * Set the condition to be `Stable or unstable but not failed`.
+    * Click Add Parameters dropdown and select Predefined parameters.
     * In the box, insert our BUILD_TAG as follows
 ```bash
 BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
@@ -515,7 +517,7 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
     * Add string parameter type
     * set the Name to `BUILD_TAG`. This will be available to the job as an Enviroment Variable.
     * You can set `dev-todolist-fe-build.` as the default value for ease when triggering manually.
-    * The description is not required but a handy one for reference would be `${JOB_NAME}.${BUILD_NUMBER} of previous build eg dev-todolist-fe-build.1232`
+    * The description is not required but a handy one for reference would be `${JOB_NAME}.${BUILD_NUMBER} of previous build e.g. dev-todolist-fe-build.1232`
 <p class="tip">
     NOTE - Don't forget to include the `.` after `dev-todolist-fe-build` in the Default Value box.
 </p>
@@ -575,7 +577,7 @@ oc rollout latest dc/${NAME}
 ```
 ![deploy-step](../images/exercise2/deploy-step.png)
 
-5. When a deployment has completed; OpenShift can verify it's success. Add another step by clicking the `Add build Step` on the Build tab then `Verify OpenShift Deployment` including the following:
+5. When a deployment has completed; OpenShift can verify its success. Add another step by clicking the `Add build Step` on the Build tab then `Verify OpenShift Deployment` including the following:
     * Set the Project to your `<YOUR_NAME>-dev`
     * Set the DeploymentConfig to your app's name `todolist-fe`
     * Set the replica count to `1`
@@ -590,7 +592,7 @@ oc rollout latest dc/${NAME}
 5. Update `<YOUR_NAME>` accordingly with the route where the Todo List API will live when it is deployed. The correct full URL can also be found on the OpenShift Console; if you copy it from there remember to append `/api/todos` to the URL. For example:
 ![fe-dev-config](../images/exercise2/fe-dev-config.png)
 
-5. Repeat this for `src/config/test.js` file. If you copy the URL from the previous step; change `dev` to `test`. 
+5. Repeat this for `src/config/test.js` file. If you copy the URL from the previous step; change `dev` to `test`.
 For example:
 ![fe-test-config](../images/exercise2/fe-test-config.png)
 
@@ -608,7 +610,7 @@ git push
 5. Back on Jenkins; We can tie all the jobs in the pipeline together into a nice single view using the Build Pipeline view. Back on the Jenkins home screen Click the + beside the all tab on the top.
 ![add-view](../images/exercise2/add-view.png)
 
-5. On the view that loads; Give the new view a sensible name like `dev-todolist-fe-pipeline` and select Build Pipeline
+5. On the view that loads; Give the new view a sensible name like `dev-todolist-fe-pipeline` and select Build Pipeline View
 ![new-pipeline](../images/exercise2/new-pipeline.png)
 
 5. Set the Pipeline Flow's Inital Job to `dev-todolist-fe-build` and save.
@@ -630,7 +632,7 @@ git push
 NOTE - This section is optional! Git webhooks are useful but not needed for Enablement completion.
 </p>
 
-7. In order to allow GitLab trigger Jenkins (because of the OpenShift Auth Plugin), we need to allow the `Anonymous` user trigger builds. Head to your Jenkins Dashboard and click on `Manage Jenkins` on the left hand side. Then scroll down and click `Configure Global Security`. Alternatively, type in `https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/configureSecurity/` . You should see a screen like so:
+7. In order to allow GitLab to trigger Jenkins (because of the OpenShift Auth Plugin), we need to allow the `Anonymous` user triggered builds. Head to your Jenkins Dashboard and click on `Manage Jenkins` on the left hand side. Then scroll down and click `Configure Global Security`. Alternatively, type in `https://jenkins-<YOUR_NAME>-ci-cd.apps.some.domain.com/configureSecurity/` . You should see a screen like so:
 ![jenkins-global-security](../images/exercise2/jenkins-global-security.png)
 
 7. Scroll down to the `Authorization` section and allow `Anonymous` to create jobs. Do this by navigating through the matrix of checkboxes and check `Build` and `Cancel` under the Job heading. Leave all other user behaviour as is. Anonymous is the user that GitLab will act as so this allows the WebHook to trigger builds. (The screenshot has been cropped to bring Job further to the left.) Hit `Save` or `Apply`.

@@ -4,15 +4,15 @@
 ![death-star-vent](../images/exercise5/death-star-vent.jpeg)
 
 ## Exercise Intro
-Non functional testing provides valuable insights into code quality and application performance. Often overlooked but usually one of the most essential types of testing, non functional testing types can include, but are not limited to
+Non-functional testing provides valuable insights into code quality and application performance. Often overlooked but usually one of the most essential types of testing, non-functional testing types can include, but are not limited to
 - Performance Testing
 - Security testing
 - Static Code analysis
 - Vulnerability scanning
 
-There are many tools out there for supporting these testing types but often they are left to the end of a delivery. Many traditional projects will leave Performance testing or security sign off to a few weeks before Go Live. This raises the question of what do we do if things do not pass these tests? Do we hold off the Go Live or accept the risk. In most cases we can learn earlier if things will be show stoppers and more importantly we can automate them.
+There are many tools out there for supporting these testing types but often they are left to the end of a delivery. Many traditional projects will leave Performance testing or security sign off to a few weeks before Go Live. This raises the question of what do we do if things do not pass these tests? Do we hold off the Go Live or accept the risk? In most cases we can learn earlier if things will be show stoppers and more importantly we can automate them.
 
-For example; imagine a developer called `Sam` has checked in some poor performing function into an API that spikes it's response time. Let's call this `Sam Code`. This `Sam Code` may not be caught by our Unit Tests but could have very big impact on application usability. Before building code on top this and it becoming more of an issue at the end of a project; we could code and capture metrics around API response time and track these over time and hopefully spot regressions earlier.
+For example; imagine a developer called `Sam` has checked in some poorly performing function into an API that spikes its response time. Let's call this `Sam Code`. This `Sam Code` may not be caught by our Unit Tests but could have very big impact on application usability. Before building code on top this and it becoming more of an issue at the end of a project; we could code and capture metrics around API response time and track these over time and hopefully spot regressions earlier.
 
 Another one of the age old questions is "How do we know we're testing enough?". Well the simple answer is you can never do enough testing! But how do we know we are testing the right things? Code coverage metrics can be run on our application while running the tests. They can identify what files are being tested and a line by line of how many times a test executes against a block of code. Reporting these metrics in our pipeline gives a greater handle on the quality of our testing.
 
@@ -45,7 +45,9 @@ As a learner you will be able to
 1. [stryker](http://stryker-mutator.io/) - Mutation testing! What is it? Bugs, or mutants, are automatically inserted into your production code. Your tests are run for each mutant. If your tests fail then the mutant is killed. If your tests passed, the mutant survived. The higher the percentage of mutants killed, the more effective your tests are. It's really that simple.
 
 ## Big Picture
-This exercise begins cluster containing blah blah
+> From the previous exercise; we introduced pipeline-as-code and new Jenkins Slave nodes. This exercise focuses on extending the pipeline with Non-functional testin and some automated security testing.
+
+![big-picture](../images/big-picture/big-picture-4.jpg)
 
 _____
 
@@ -63,15 +65,15 @@ _____
 ## Step by Step Instructions
 > This is a well structured guide with references to exact filenames and indications as to what should be done.
 
-### Part 1 - Add Security scanning to the pipeline 
+### Part 1 - Add Security scanning to the pipeline
 > _In this exercise the first of our non-functional testing is explored in the form of some security scanning. We will add the scans to our Jenkinsfile and have them run as new stages_
 
 2. Open the `todolist-fe` application's `Jenkinsfile` in your favourite editor. The file is stored in the root of the project.
 
-2. The file is layed out with a collection of stages that correspond to each part of our build as seen below. We will create a new stage to execute in parallel.
+2. The file is laid out with a collection of stages that correspond to each part of our build as seen below. We will create a new stage to execute in parallel.
 ![stages](../images/exercise5/stages.png)
 
-2. Create a new Parallel Stage called `security scanning` underneath the `stage("e2e test") { }` section as shown below. The contents of the `e2e test` have been removed for simplicity. 
+2. Create a new Parallel Stage called `security scanning` underneath the `stage("e2e test") { }` section as shown below. The contents of the `e2e test` have been removed for simplicity.
 ```groovy
         stage("e2e test") {
             // ... stuff in here ....
@@ -122,7 +124,7 @@ stage('OWASP Scan') {
 }
 ```
 
-2.  Finally add the reporting for Jenkins in `post` hook of our Declarative Pipeline. This is to report the findings of the scan in Jenkins as a HTML report.
+2.  Finally add the reporting for Jenkins in `post` hook of our Declarative Pipeline. This is to report the findings of the scan in Jenkins as an HTML report.
 ```groovy
 stage('OWASP Scan') {
     agent {
@@ -218,7 +220,7 @@ NOTE - your build may have failed because of the a security failure but the repo
 
 3. Coverage reports are already being generated as part of the tests. We can have Jenkins produce a HTML report showing in detail where our testing is lacking. Open the `todolist-fe` in your favourite editor.
 
-3. Open the `Jenkinsfile` in the root of the project; move to the `stage("node-build"){ ... }` section. In the `post` section add a block for producing a `HTML` report as part of our builds. This is all that is needed for Jenkins to repor the coverage stats.
+3. Open the `Jenkinsfile` in the root of the project; move to the `stage("node-build"){ ... }` section. In the `post` section add a block for producing a `HTML` report as part of our builds. This is all that is needed for Jenkins to report the coverage stats.
 ```groovy
     // Post can be used both on individual stages and for the entire build.
     post {
@@ -237,7 +239,7 @@ NOTE - your build may have failed because of the a security failure but the repo
         }
 ```
 
-3. To get the linting working; we will add a new step to our `stage("node-build"){ }` section to lint the Javascript code. Continuing in the `Jenkinsfile`, After the `npm install`; add a command to run the linting.
+3. To get the linting working; we will add a new step to our `stage("node-build"){ }` section to lint the JavaScript code. Continuing in the `Jenkinsfile`, After the `npm install`; add a command to run the linting.
 ```groovy
 echo '### Install deps ###'
 sh 'npm install'
@@ -259,24 +261,24 @@ git push
 3. When the build has completed; fix the linting errors if there are any and commit your changes. Look in Jenkins log for what the issue might be....
 ![linting-issue](../images/exercise5/linting-issue.png)
 
-3. To view the coverage graph; go to the job's build page and open the `Code Coverage` report from the nav bar on the side. 
+3. To view the coverage graph; go to the job's build page and open the `Code Coverage` report from the nav bar on the side.
 <p class="tip">
 NOTE - Sometimes this won't display on the `yourjenkins.com/job/todolist-fe/job/branch/` sidebar, click on an individual build in the build history and it should appear on the side navbar.
 </p>
 ![report-location](../images/exercise5/report-location.png)
 
-3. Open the report to drill down into detail of where testing coverage could be improved! 
+3. Open the report to drill down into detail of where testing coverage could be improved!
 ![report-coverage](../images/exercise5/report-coverage.png)
 <p class="tip">
-NOTE - a good practice for teams is to try and increase the code coverage metrics over the life of a project. Teams will often start low and use practices such as retrospective to increase the quality at specific times. 
+NOTE - a good practice for teams is to try and increase the code coverage metrics over the life of a project. Teams will often start low and use practices such as retrospective to increase the quality at specific times.
 </p>
 
 3. (Optional Step) - Install the Checkstyle plugin; and add `checkstyle pattern: 'eslint-report.xml'` below the `publishHTML` block to add reporting to Jenkins!
 
 ### Part 3 - Nightly light performance testing
-> _In this exercise, we will execute the light performance tasks in our API to collect data about throughtput time in hopes if the API ever has some `Sam` quality code checked in, we will spot it_
+> _In this exercise, we will execute the light performance tasks in our API to collect data about throughput time in hopes if the API ever has some `Sam` quality code checked in, we will spot it_
 
-An arbitrary value for the API's to respond in has been chosen. It is set in the `todolist-api/tasks/perf-test.js` file. In this exercise we will get Jenkins to execute the tests and fail based on the score set there!
+An arbitrary value for the APIs to respond in has been chosen. It is set in the `todolist-api/tasks/perf-test.js` file. In this exercise we will get Jenkins to execute the tests and fail based on the score set there!
 
 4. Create a new Item on Jenkins, `nightly-perf-test` and make it a freestyle job.
 ![new-job](../images/exercise5/new-job.png)
@@ -307,7 +309,7 @@ exit $(($rc1 | $rc2))
 
 4. On the Post Build actions section we will plot the data from the perf tests in Jenkins. Add a `Post-build Action > Plot Build Data`.
 
-4. On the new dialog, name the Plot group eg `benchmark-tests` and add `create­-api` as the Plot title. Set the `Number of Builds to Include` to a large number like `100`. Set the Data Series file to be `reports/server/perf/create-perf-score.csv` and mark the `Load data from CSV fiel` checkbox. Apply those changes
+4. On the new dialog, name the Plot group e.g. `benchmark-tests` and add `create­-api` as the Plot title. Set the `Number of Builds to Include` to a large number like `100`. Set the Data Series file to be `reports/server/perf/create-perf-score.csv` and mark the `Load data from CSV field` checkbox. Apply those changes
 ![jenkins-plot](../images/exercise5/jenkins-plot.png)
 
 4. Hit `Add Plot` to add another. Set Plot group to `benchmark-tests` again but this time setting the Plot title to `show­-api`. Set the Data Series file to be `reports/server/perf/show-perf-score.csv` and mark the `Load data from CSV` radio button. Save those changes and run the job (Job could take a while to execute!).

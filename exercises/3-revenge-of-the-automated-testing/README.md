@@ -15,13 +15,13 @@
 The TDD cycle can be illustrated with the following diagram;
 ![TDD-diagram](../images/exercise3/TDD-lifecycle.jpg)
 
-### The TDD Cycle 
+### The TDD Cycle
 
 1. `Write a test` -
-In TDD a new feature begins by writing a test. Write a test that clearly defines a function or one that provides an improvement to an existing function. It's important the developer clearly understands the features specification and requirements, or the feature could be wrong from the get-go. 
+In TDD a new feature begins by writing a test. Write a test that clearly defines a function or one that provides an improvement to an existing function. It's important the developer clearly understands the feature's specification and requirements, or the feature could be wrong from the get-go.
 
 2. `Test Fails` -
-When a test is first implemented it is expected to fail. This failure validates the test is working correctly as the feature is yet to be implemented. 
+When a test is first implemented it is expected to fail. This failure validates the test is working correctly as the feature is yet to be implemented.
 
 3. `Write code to make test pass` -
 This step involves implementing the feature to pass the failed test. Code written at this stage may be inelegant and still pass the test, however this is acceptable as TDD is a recursive cycle which includes code refactoring.
@@ -36,7 +36,7 @@ The refactoring step will allow the developer to clean up their code without cha
 Starting with another new test, the cycle is then repeated to push forward the functionality. The size of the steps should always be small, with as few as 1 to 10 edits between each test run. If new code does not rapidly satisfy a new test, or other tests fail unexpectedly, the programmer should undo or revert in preference to excessive debugging.
 
 ### Testing Bananalogy
-Explanation of Mocha and js test syntax through Bananalogy! Imagine for a moment; we're not building software but creating a bowl of fruit. To create a `Bunch of Bananas` component for our fruit bowl we could start with our tests as shown below.
+Explanation of Mocha and JS test syntax through Bananalogy! Imagine for a moment; we're not building software but creating a bowl of fruit. To create a `Bunch of Bananas` component for our fruit bowl we could start with our tests as shown below.
 ![bdd-bananas](../images/exercise3/bdd-bananas.png)
   * `describe` is used to group tests together. The string `"a bunch of ripe bananas"` is for human reading and allows you to identify tests.
   * `it` is a statement that contains a test. It should contain an assertion such as `expect` or `should`. It follows the syntax of `describe` where the string passed in identifies the statement.
@@ -60,20 +60,21 @@ Jest is used by Facebook to test all JavaScript code including React application
 1.  [Vue Test Utils](https://vue-test-utils.vuejs.org/en/) - Vue Test Utils is the official unit testing utility library for Vue.js.
 1.  [Nightwatch.js](http://nightwatchjs.org/) - Nightwatch.js is an easy to use Node.js based End-to-End (E2E) testing solution for browser based apps and websites. It uses the powerful W3C WebDriver API to perform commands and assertions on DOM elements.
 1.  [Mocha](https://mochajs.org/) - Mocha is a feature-rich JavaScript test framework running on Node.js and in the browser, making asynchronous testing simple and fun. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on GitHub.
-1.  [Sinon](http://sinonjs.org/) - Standalone test spies, stubs and mocks for JavaScript. 
+1.  [Sinon](http://sinonjs.org/) - Standalone test spies, stubs and mocks for JavaScript.
 Works with any unit testing framework.
 
 ## Big Picture
+> From the previous exercise; we created a simple pipeline. We will now flesh it out with some testing to add gates to our pathway to production.
 
-This exercise begins cluster containing blah blah
+![big-picture](../images/big-picture/big-picture-3.jpg)
 
 ---
 
 ## 10,000 Ft View
 
-> The goal of this exercise is to add a new component to the application using TDD to create and validate it's behaviour. The User story we have been given is as follows:
+> The goal of this exercise is to add a new component to the application using TDD to create and validate its behaviour. The User story we have been given is as follows:
 
-*As a doer I want to mark todos as important so that I can keep track of and complete high prirority todos first*
+*As a doer I want to mark todos as important so that I can keep track of and complete high priority todos first*
 
 _Acceptance Criteria_
 - [ ] should be doable with a single click
@@ -94,14 +95,14 @@ _On page load:_
 #### 1a - FE Unit tests
 > In this exercise we will execute our test for the front end locally. Once verified we will add them to Jenkins.
 
-2. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist-fe` directory and run `test`.
+1. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist-fe` directory and run `test`.
 ```bash
 cd todolist-fe
 ```
 ```bash
 npm run test
 ```
-<p class="tip" > 
+<p class="tip" >
 `test` is an alias used that runs `vue-cli-service test` from the scripts object in `package.json`
 </p>
 ![screenshot-scripts](../images/exercise3/screenshot-scripts.png)
@@ -111,7 +112,7 @@ npm run test
 2. You should see an output similar to the following. The above command has run a test suite for every `*.spec.js` file. The table generated in the terminal shows the code coverage. We're going to be focusing on the unit tests for now.
 ![test-run-locally](../images/exercise3/test-run-locally.png)
 
-2. Repeat the same process for `todolist-api` and verify that all the tests run. If you have an ExpressJS server already running from previous exercise; you should kill it before running the tests. The `mocha` test suite will launch a dev server for running the tests. There are 2 Api test files: `todolist-api/server/api/todo/todo.spec.js` & `todolist-api/server/mocks/mock-routes.spec.js` for our API and the Mocks server.
+2. Repeat the same process for `todolist-api` and verify that all the tests run. If you have an ExpressJS server already running from previous exercise; you should kill it before running the tests. The `mocha` test suite will launch a dev server for running the tests. There are 2 API test files: `todolist-api/server/api/todo/todo.spec.js` & `todolist-api/server/mocks/mock-routes.spec.js` for our API and the Mocks server.
 ```bash
 cd todolist-api
 ```
@@ -119,7 +120,7 @@ cd todolist-api
 npm run test
 ```
 
-2. Navigate to your instance of jenkins at `https://jenkins-<YOUR_NAME>-ci-cd.apps.lader.rht-labs.com/`. 
+2. Navigate to your instance of Jenkins at `https://jenkins-<YOUR_NAME>-ci-cd.apps.lader.rht-labs.com/`.
 Click on `dev-todolist-fe-build` and then click the `configure` button on the left-hand side.
 ![jenkins-configure-job](../images/exercise3/jenkins-configure-job.png)
 
@@ -151,7 +152,7 @@ git commit -m "TEST - failing build with tests"
 git push
 ```
 
-2. Rerun the `dev-todolist-fe-build` job. It should have failed and not run any other jobs. 
+2. Rerun the `dev-todolist-fe-build` job. It should have failed and not run any other jobs.
 ![jenkins-with-failing-build](../images/exercise3/jenkins-with-failing-build.png)
 
 2. You can examine the test results on the jobs home page. Drill down into the tests to see which failed and other useful stats
@@ -252,7 +253,7 @@ where:
   - `res.body.should.be.instanceof(Array);` is the actual test call
   - `done();` tells the test runner that `mocha` has finished execution. This is needed as the http calls are asynchronous.
 
-3.  With this knowledge; let's implement our test for the `important` flag. We expect the front end to introduce a new property on each `todo` that gets passed to the backend called `important`. The API will need to handle this new property and pass it into the mongodb. Let's begin implementing this functionality by writing our test case. Navigate to the `PUT /api/todos` section of the `server/api/todo/todo.spec.js` test file (which should be at the bottom) 
+3.  With this knowledge; let's implement our test for the `important` flag. We expect the front end to introduce a new property on each `todo` that gets passed to the backend called `important`. The API will need to handle this new property and pass it into the mongodb. Let's begin implementing this functionality by writing our test case. Navigate to the `PUT /api/todos` section of the `server/api/todo/todo.spec.js` test file (which should be at the bottom)
 ![todo-api-tests](../images/exercise3/todo-api-tests.png)
 
 3. Before writing our test; let's first make sure all the existing tests are passing.
@@ -303,7 +304,7 @@ const TodoSchema = new Schema({
 });
 ```
 
-3. Next we need to update the `server/config/seed.js` file so that the pre-generated todos have an important propety. Add `important: true` below `completed: *` for each object. Don't forget to add a comma at the end of the `completed: *` line. 
+3. Next we need to update the `server/config/seed.js` file so that the pre-generated todos have an important property. Add `important: true` below `completed: *` for each object. Don't forget to add a comma at the end of the `completed: *` line.
 ![api-add-seed-important](../images/exercise3/api-add-seed-important.png)
 
 3.  With your changes to the Database schema updated; re-run your tests.
@@ -340,13 +341,13 @@ npm run start
 ```
 
 #### 2b - Create todolist-fe tests
-> Using [Jest](https://facebook.github.io/jest/) as our test runner and the `vue-test-utils` library for managing our vue components; we will now write some tests for front end functionality to persist our important-flag. The changes required to the front end are quite large but we will use TDD to create our test first, then implement the functionality. 
+> Using [Jest](https://facebook.github.io/jest/) as our test runner and the `vue-test-utils` library for managing our vue components; we will now write some tests for front end functionality to persist our important-flag. The changes required to the front end are quite large but we will use TDD to create our test first, then implement the functionality.
 
-Our TodoList App uses `vuex` to manage the state of the apps' todos and `axios` HTTP library to connect to the backend. `Vuex` is an opinionated framework for managing application state and has some key design features you will need to know to continue with the exercise. 
+Our TodoList App uses `vuex` to manage the state of the app's todos and `axios` HTTP library to connect to the backend. `Vuex` is an opinionated framework for managing application state and has some key design features you will need to know to continue with the exercise.
 
-In `vuex` the application state is managed by a `store`. The `store` houses all the todos we have retrieved from the backend as well as the `getter` methods for our array of `todos`. In order to make changes to the store, we could call the store directly and update each todo item but as earlier said; vuex is an opinionated module with it's own way of updating the store. It is bad practice to call the store directly. 
+In `vuex` the application state is managed by a `store`. The `store` houses all the todos we have retrieved from the backend as well as the `getter` methods for our array of `todos`. In order to make changes to the store, we could call the store directly and update each todo item but as earlier said; vuex is an opinionated module with its own way of updating the store. It is bad practice to call the store directly.
 
-There are two parts of the lifecycle to updating the store, the `actions` & `mutations`. When the user clicks a todo to mark it as complete; the `actions` are called. An action could involve a call to the backend or some pre-processing of the data. Once this is done, the change is committed to the store by calling the `mutation` function. A store should only ever be manipulated through a mutation function. Calling the mutation will then update the todo object in the apps local store for rendering in the view.
+There are two parts of the lifecycle to updating the store, the `actions` & `mutations`. When the user clicks a todo to mark it as complete; the `actions` are called. An action could involve a call to the backend or some pre-processing of the data. Once this is done, the change is committed to the store by calling the `mutation` function. A store should only ever be manipulated through a mutation function. Calling the mutation will then update the todo object in the app's local store for rendering in the view.
 
 For example; when marking a todo as done in the UI, the following flow occurs
   * The `TodoItem.vue` calls the `markTodoDone()` function which dispatches an event to the store.
@@ -366,7 +367,7 @@ git checkout -b feature/important-flag
 git push -u origin feature/important-flag
 ```
 
-3. Let's get our tests running by executing a `--watch` on our tests. This will keep re-running our tests everytime there is a file change. It is hany to have this running in a new terminal session.
+3. Let's get our tests running by executing a `--watch` on our tests. This will keep re-running our tests everytime there is a file change. It is handy to have this running in a new terminal session.
 ```bash
 npm run test -- --watch
 ```
@@ -377,7 +378,7 @@ npm run test -- --watch
 3. There are three places we will add new tests to validate our function behaves as expected against the acceptance criteria from the Feature Story supplied to us. We will need to write tests for our `TodoItem.vue` to handle having a red flag and that it is clickable. Our app is going to need to persist the changes in the backend so we'll want to make changes to our `actions.js` and `mutations.js` to keep the api and local copy of the store in sync. Let's start with our `TodoItem.vue` component. Open the `tests/unit/vue-components/TodoItem.spec.js` file. This has been templated with some example test to correspond with our A/Cs for speed of doing the exercise. Find the describe block for our important flag tests. It is setup already with a `beforeEach()` hook for test setup.
 ![important-flag-before](../images/exercise3/important-flag-before.png)
 
-3. Each of our test cases has it's skeleton in place already for example the `TodoItem.vue` component takes a property of `todos` when rendering. This setup is already done for each of our tests so all we have to do is fill in our assertions.
+3. Each of our test cases has its skeleton in place already for example the `TodoItem.vue` component takes a property of `todos` when rendering. This setup is already done for each of our tests so all we have to do is fill in our assertions.
 ![todoitem-skeleton-tests](../images/exercise3/todoitem-skeleton-tests.png)
 
 3. Let's implement the first test `it("should render a button with important flag"`. This test will assert if the button is present on the page and it contains the `.important-flag` CSS class. To implement this; add the `expect` statement as follows below the `// TODO - test goes here!` comment.  
@@ -413,9 +414,9 @@ npm run test -- --watch
   });
 ```
 
-3. Finally, we want to make the flag clickable and for it to call a function to update the state. The final test in the `TodoItem.spec.js` we want to create should simulate this behaviour. Implement the `it("call makImportant when clicked", () ` test by first simulating the click of our important-flag and asserting the function `markImportant()` to write is executed.
+3. Finally, we want to make the flag clickable and for it to call a function to update the state. The final test in the `TodoItem.spec.js` we want to create should simulate this behaviour. Implement the `it("call markImportant when clicked", () ` test by first simulating the click of our important-flag and asserting the function `markImportant()` to write is executed.
 ```javascript
-  it("call makImportant when clicked", () => {
+  it("call markImportant when clicked", () => {
     const wrapper = mount(TodoItem, {
       methods,
       propsData: { todoItem: importantTodo }
@@ -432,7 +433,7 @@ npm run test -- --watch
     * The `<script></script>` contains the JavaScript of our component and is essentially the logic for our component. It defines things like `properties`, `methods` and other `components`
     * The `<style></style>` contains the encapsulated CSS of our component
 
-3. Underneath the `</md-list-item>` tag, let's add a new md-button. Add a `.important-flag` class on the `md-button` and put the svg of the flag provided inside it.
+3. Underneath the `</md-list-item>` tag, let's add a new md-button. Add an `.important-flag` class on the `md-button` and put the svg of the flag provided inside it.
 ```html
     </md-list-item>
     <!-- TODO - SVG for use in Exercise3 -->
@@ -448,7 +449,7 @@ npm run test -- --watch
 </md-button>
 ```
 
-3. More tests should now be passing. Let's wire the click of the flag to an event in Javascript. In the methods section of the `<script></script>` tags in the Vue file, implement the `markImportant()`. We want to wire this to the action to updateTodo, just like we have in the `markCompleted()` call above it. We also need to pass and additional property to this method call `important`
+3. More tests should now be passing. Let's wire the click of the flag to an event in Javascript. In the methods section of the `<script></script>` tags in the Vue file, implement the `markImportant()`. We want to wire this to the action to updateTodo, just like we have in the `markCompleted()` call above it. We also need to pass an additional property to this method called `important`
 ```javascript
     markImportant() {
       // TODO - FILL THIS OUT IN THE EXERCISE
@@ -457,7 +458,7 @@ npm run test -- --watch
     },
 ```
 
-3. Let's connect the click button in the DOM to the Javascript function we've just created. In the template, add a click handler to the md-button to call the function `markImportant()` by adding ` @click="markImportant()"` to the `<md-button> tag 
+3. Let's connect the click button in the DOM to the Javascript function we've just created. In the template, add a click handler to the md-button to call the function `markImportant()` by adding ` @click="markImportant()"` to the `<md-button>` tag
 ```html
     <!-- TODO - SVG for use in Exercise3 -->
     <md-button class="important-flag" @click="markImportant()">
@@ -469,7 +470,7 @@ npm run test -- --watch
 ![fe-add-actions-important](../images/exercise3/fe-add-actions-important.png)
 
 
-3. The previously failing tests should have started to pass now. With this work done, let's commit our code. On the terminal, run 
+3. The previously failing tests should have started to pass now. With this work done, let's commit our code. On the terminal, run
 ```bash
 git add .
 ```
@@ -507,7 +508,7 @@ updateTodo({ commit, state }, { id, important }) {
     }
 ```
 
-3. Finally, let's implement the `mutation` for our feature. Again, starting with the tests..... Open the `tests/unit/javascript/mutations.spec.js` to find our skeleton tests at the bottom of the file. Our mutation method is responsible for toggling the todo's `important` property between `true` and `false`. Let's implement the tests for this functionality by setting important to be true and calling the method expecting the inverse. Then let's set it to false and call the method expecting the inverse. Add the expectations below the `// TODO - test goes here!` comment as done previously.
+3. Finally, let's implement the `mutation` for our feature. Again, starting with the tests... Open the `tests/unit/javascript/mutations.spec.js` to find our skeleton tests at the bottom of the file. Our mutation method is responsible for toggling the todo's `important` property between `true` and `false`. Let's implement the tests for this functionality by setting important to be true and calling the method expecting the inverse. Then let's set it to false and call the method expecting the inverse. Add the expectations below the `// TODO - test goes here!` comment as done previously.
 ```javascript
   it("it should MARK_TODO_IMPORTANT as false", () => {
     state.todos = importantTodos;
@@ -566,7 +567,40 @@ git push --all
 
 #### 2c - Create todolist e2e tests
 
-3. TODO !!
+> Using [Nightwatch.js](http://nightwatchjs.org/) We will write a reasonably simple e2e test to test the functionality of the feature we just implemented.
+
+3.  Firstly we need to create an e2e spec test file in the correct place.
+
+```bash
+touch tests/e2e/specs/importantFlag.js
+```
+
+3.  Open this new file in your code editor and set out the initial blank template for an e2e test as below:
+    ![if-e2e-step1](../images/exercise3/if-e2e-step1.png)
+
+3.  Now get the test to access the todos page and wait for it to load. The url can be taken from `process.env.VUE_DEV_SERVER_URL`
+    ![if-e2e-step2](../images/exercise3/if-e2e-step2.png)
+
+3.  Now click the clear all button and then enter a value in the textbox to create a new item. We clear all first to ensure we start with a fresh list. We now do our first assertion: that a 'important flag' exists (the button to set important), and also that a red flag does not exist. You will quickly find there is no way to reference the clear all button. We will therefore have to go to `src/components/XofYItems.vue` and add `id="clear-all"` to the clear all button.
+    ![if-e2e-step3](../images/exercise3/if-e2e-step3.png)
+    ![if-e2e-step3a](../images/exercise3/if-e2e-step3a.png)
+
+3.  We should now get nightwatch to click the flag and check whether the flag has turned red.
+    ![if-e2e-step4](../images/exercise3/if-e2e-step4.png)
+
+3.  At this point we should have a working e2e test. We can run this by using `npm run e2e`. When satisfied we can push up these changes.
+
+```bash
+git add .
+```
+
+```bash
+git commit -m "Implementing e2e tests"
+```
+
+```bash
+git push
+```
 
 ---
 
