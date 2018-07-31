@@ -19,6 +19,8 @@ Learners will create 3 to 4 project namespaces running lightweight NodeJS app \*
 - Learners are in LDAP and can access cluster via `oc login`
 - Learners have access to LDAP bind credentials to be able to auth against GitLab
 
+Note: Throughout the scenarios, you will see reference to `<OpenShift console url>` or `<OpenShift domain>`. These will be provided by the instructors.
+
 ## User privileges
 
 - Learners deploying GitLab will require privileges to run SCC containers
