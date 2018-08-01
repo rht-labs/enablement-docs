@@ -9,3 +9,4 @@
 * [7. The Cluster Awakens](7-the-cluster-awakens/README.md)
 * [8. The Last Unicorn Dev](8-the-last-unicorn-dev/README.md)
 * [Rogue Cluster: A Setup Guide](0-rogue-cluster/README.md)
+* [Appendix](appendix/README.md)
