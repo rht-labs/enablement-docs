@@ -99,7 +99,7 @@ git push
 2. On the job's configure page; set the Branch Sources to `git`
 ![multibranch-select-git](../images/exercise4/multibranch-select-git.png)
 
-2. Fill in the Git settings with your `todolist-api` GitLab url and set the credentials as you've done before. `https://gitlab.apps.<OpenShift domain><YOUR_NAME>/todolist-api.git`
+2. Fill in the Git settings with your `todolist-api` GitLab url and set the credentials as you've done before. `https://gitlab.apps.<OpenShift domain>/<YOUR_NAME>/todolist-api.git`
 ![multibranch-git](../images/exercise4/multibranch-git.png)
 
 2. Set the `Scan Multibranch Pipeline Triggers` to be periodic and the interval to 1 minute. This will poll the GitLab instance for new branches or change sets to build.
@@ -324,7 +324,7 @@ ansible-playbook apply.yml -e target=tools \
      -e "filter_tags=zap"
 ```
 
-3. Head to <OpenShift domain> on OpenShift and move to your ci-cd project > builds. You should see `jenkins-slave-zap` has been built.
+3. Head to <OpenShift console url> on OpenShift and move to your ci-cd project > builds. You should see `jenkins-slave-zap` has been built.
 ![zap-build](../images/exercise4/zap-build.png)
 
 #### 3b - Arachni Scan
@@ -347,7 +347,7 @@ git checkout exercise4/zap-and-arachni params/jenkins-slave-arachni docker/jenki
 
 3. Update the `jenkins-slave-arachni` files `SOURCE_REPOSITORY_URL` to point to your GitLab's hosted version of the `enablement-ci-cd` repo.
 ```
-SOURCE_REPOSITORY_URL=https://gitlab.apps.<OpenShift domain><GIT_USERNAME>/enablement-ci-cd.git
+SOURCE_REPOSITORY_URL=https://gitlab.apps.<OpenShift domain>/<GIT_USERNAME>/enablement-ci-cd.git
 SOURCE_CONTEXT_DIR=docker/jenkins-slave-arachni
 BUILDER_IMAGE_NAME=registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:latest
 NAME=jenkins-slave-arachni
@@ -372,7 +372,7 @@ ansible-playbook apply.yml -e target=tools \
      -e "filter_tags=arachni"
 ```
 
-3. Head to <OpenShift domain> on OpenShift and move to your ci-cd project > builds. You should see  `jenkins-slave-arachni`.
+3. Head to <OpenShift console url> on OpenShift and move to your ci-cd project > builds. You should see  `jenkins-slave-arachni`.
 ![builds-zap-arachni](../images/exercise4/builds-zap-arachni.png)
 
 _____
