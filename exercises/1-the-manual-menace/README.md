@@ -318,6 +318,8 @@ git commit -m "Adding git and nexus config"
 git push -u origin --all
 ```
 
+If you get a "permission denied" error when running `git push -u origin --all`, try [setting an SSH key in GitLab](https://docs.gitlab.com/ee/ssh/) and then run the command again.
+
 ### Part 4 MongoDB for CI tests
 > In order to run our API tests in CI in later labs; we need there to be a MongoDB available for executing our tests. As this is part of our CI/CD Lifecycle; we will add it now.
 
