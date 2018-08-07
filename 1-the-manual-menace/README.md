@@ -79,7 +79,7 @@ git clone https://github.com/rht-labs/enablement-ci-cd && cd enablement-ci-cd
 ./git-pull-all.sh
 ```
 
-3. Open the `innovation-labs` folder in VSCode (or your favourite editor). The project is laid out as follows
+3. Open the `enablement-ci-cd` folder in VSCode (or your favourite editor). The project is laid out as follows
 ```
 .
 ├── README.md
