@@ -143,13 +143,13 @@ NAMESPACE_DISPLAY_NAME=<YOUR-NAME> Test
 ```yaml
     - name: "{{ dev_namespace }}"
       template: "{{ playbook_dir }}/templates/project-requests.yml"
-      template_action: create
+      action: create
       params: "{{ playbook_dir }}/params/project-requests-dev"
       tags:
       - projects
     - name: "{{ test_namespace }}"
       template: "{{ playbook_dir }}/templates/project-requests.yml"
-      template_action: create
+      action: create
       params: "{{ playbook_dir }}/params/project-requests-test"
       tags:
       - projects
