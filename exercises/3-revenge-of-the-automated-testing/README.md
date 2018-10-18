@@ -369,7 +369,7 @@ git push -u origin feature/important-flag
 
 3. Let's get our tests running by executing a `--watch` on our tests. This will keep re-running our tests everytime there is a file change. It is handy to have this running in a new terminal session.
 ```bash
-npm run test -- --watch
+npm run test --watch
 ```
 
 3. All the tests should be passing when we begin. If `No tests found related to files changed since last commit` is on show; hit `a` on the terminal to re-run `all` tests.
