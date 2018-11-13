@@ -361,7 +361,7 @@ ansible-playbook apply.yml -e target=tools \
 ### Part 5 - Jenkins & s2i
 > _Create a build and deployment config for Jenkins. Add new configuration and plugins to the OCP Stock Jenkins using s2i_
 
-5. Add the Jenkins Build & Deployment configs to the `enablement-ci-cd` repo by merging the contents `exercise1/jenkins` in
+5. Add the Jenkins Build & Deployment configs to the `enablement-ci-cd` repo by checking out the contents from `exercise1/jenkins` with 
 ```bash
 git checkout exercise1/jenkins templates/jenkins.yml
 ```
