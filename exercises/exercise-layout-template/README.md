@@ -1,6 +1,6 @@
 # Exercise Title
 
-> Short description of the exercise and it's outcomes
+> Short description of the exercise and its outcomes
 _____
 
 ## Learning Outcomes

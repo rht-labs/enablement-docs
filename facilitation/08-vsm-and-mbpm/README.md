@@ -12,6 +12,9 @@ The latest version of slides for the session are available [here](https://drive.
 
 ## Facilitation Materials Needed
 
+* Pennies or poker chips (20 for each table)
+* Flipchart paper - one piece for each table
+* Marker pens
 * Teams in table size of 4 to 6
 * Sticky Notes - set of the following on each table
     * Small Rectangular - lots of one color
@@ -22,8 +25,9 @@ The latest version of slides for the session are available [here](https://drive.
 
 ## Facilitation Guidelines
 
-* Present the slides to introduce Value Stream Mapping and Metrics Based Process Mapping, what they are and why we use them
-* Kick off the interactive exercise:
+* Play the [Penny Flow game](https://www.leanagiletraining.com/better-agile/agile-penny-game-rules/) to introduce the notion of capturing metrics around flow (and the impact batch size has).
+* Present the slides to introduce Value Stream Mapping and Metrics Based Process Mapping, what they are and why we use them. Show some real world examples and talk through the MBPM before and after as well as the roll-up of metric improvements.
+* Optiopnnaly, run a further interactive exercise (with the addition of the Penny Flow Game and the feedback before and after including this, this exercise is less valuable):
     * In pairs, capture all business processes between the trigger of the business requesting a feature and the outcome of that feature running in production and being used
     * In groups of 12, combine all processes onto a single map
     * Add some metrics based on traditional software development (with minimal automation) - Process Time, Lead TIme, CAC%
