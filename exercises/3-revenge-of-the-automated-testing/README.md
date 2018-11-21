@@ -119,7 +119,7 @@ cd todolist-api
 npm run test
 ```
 
-2. Navigate to your instance of jenkins at `https://jenkins-<YOUR_NAME>-ci-cd.apps.lader.rht-labs.com/`. 
+2. Navigate to your instance of jenkins at `https://jenkins-<YOUR_NAME>-ci-cd.apps.dcp-emea-1.rht-labs.com/`. 
 Click on `dev-todolist-fe-build` and then click the `configure` button on the left-hand side.
 ![jenkins-configure-job](../images/exercise3/jenkins-configure-job.png)
 
@@ -187,7 +187,7 @@ npm run e2e
 
 2. On the Build section; add a build step to execute shell and fill in the following substituting `<YOUR_NAME>` accordingly:
 ```bash
-export E2E_TEST_ROUTE=todolist-fe-<YOUR_NAME>-dev.apps.lader.rht-labs.com
+export E2E_TEST_ROUTE=todolist-fe-<YOUR_NAME>-dev.apps.ldcp-emea-1.rht-labs.com
 npm install
 npm run e2e:ci
 ```
