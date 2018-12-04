@@ -10,18 +10,23 @@ This is a collection of practices and exercises to take a learner through a four
 2. Explore all principle practices used in a residency through a hands on real life experience
 3. Enable countries and regions to run the session independently
 
+## Cluster Information
+
+An OpenShift Cluster is required to complete the Enablement exercises. Learners will receive by email (and by the instructors onsite) the following information regarding the OpenShift Platform:
+ - <CLUSTER_URL> -- Openshift Webconsole/API url
+ - <APPS_URL> -- Wildcard subdomain for the exposed applications deployed in the Cluster
 
 ## Learner pre-requisites
  | Software | Version | Check |
  | -------- | ------- | ----- |
- | OCP CLI | v3.9 | $ oc version &#124; grep -i --color oc  <br><span style="color:red">oc </span> v3.9.0+191fece |
- | Ansible | v2.5 | $ ansible --version &#124; grep -i --color ansible <br> <span style="color:red">ansible</span> 2.5.5 <br> .... <br>| 
+ | OCP CLI | v3.11 | $ oc version &#124; grep -i --color oc  <br><span style="color:red">oc </span> v3.11.0+0cbc58b |
+ | Ansible | => v2.6 | $ ansible --version &#124; grep -i --color ansible <br> <span style="color:red">ansible</span> 2.7.2 <br> .... <br>| 
  | NodeJS | v8.x | $ node -v <br> v8.11.3|
  | Git Installed | | $ git --version <br> git version 2.17.1|
  | Google Chrome Web Browser | (>59) | click [here](chrome://version/) if Google Chrome is your default browser else copy the link `chrome://version/` in your Chome |
  | Docker latest | Community Edition - Edge | $ docker --version <br> Docker version 18.05.0-ce, build f150324|
  | JDK | v8 | $ java -version <br>java version "1.8.0_131"<br>Java(TM) SE Runtime Environment (build 1.8.0_131-b11)<br>Java HotSpot(TM) 64-Bit Server VM (build 25.131-b11, mixed mode)|
- | Access to an OpenShift cluster | | `oc login -u <username> -p <password> <cluster_url>` |
+ | Access to an OpenShift cluster | | `oc login -u <username> -p <password> <CLUSTER_URL>` |
  | Text editor such as Atom, IntelliJ or Visual Studio Code <br><br> (The exercises were created using `VSCode`, so the screenshots will match its layout and colour schemes) | - | - |
 
 ## Git and Containers 101

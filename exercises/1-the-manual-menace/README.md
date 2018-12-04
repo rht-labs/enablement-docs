@@ -163,7 +163,7 @@ ansible-galaxy install -r requirements.yml --roles-path=roles
 
 3. Apply the inventory by logging into OpenShift on the terminal and running the playbook as follows (<CLUSTER_URL> should be replaced with the one you've been sent as shown below). Accept any insecure connection warning 👍:
 ```bash
-oc login https://console.lader.rht-labs.com
+oc login <CLUSTER_URL>
 ```
 ```bash
 ansible-playbook apply.yml -i inventory/ -e target=bootstrap
@@ -544,7 +544,7 @@ oc get projects | egrep '<YOUR_NAME>-ci-cd|<YOUR_NAME>-dev|<YOUR_NAME>-test'
 
 7. Re-apply the inventory to re-create it all!
 ```bash
-oc login https://console.lader.rht-labs.com
+oc login <CLUSTER_URL>
 ```
 ```bash
 ansible-playbook apply.yml -i inventory/ -e target=bootstrap

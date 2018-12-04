@@ -75,7 +75,7 @@ Some of the key things to note:
 
         GIT_SSL_NO_VERIFY = true
         GIT_CREDENTIALS = credentials('jenkins-git-creds')
-        GITLAB_DOMAIN = "gitlab.apps.<SOME_DOMAIN>.com"
+        GITLAB_DOMAIN = "gitlab.<APPS_URL>"
         GITLAB_PROJECT = "<GIT_USERNAME>"
     }
 ```
@@ -99,7 +99,7 @@ git push
 2. On the job's configure page; set the Branch Sources to `git`
 ![multibranch-select-git](../images/exercise4/multibranch-select-git.png)
 
-2. Fill in the Git settings with your `todolist-api` GitLab url and set the credentials as you've done before. `https://gitlab.apps.lader.rht-labs.com/<YOUR_NAME>/todolist-api.git`
+2. Fill in the Git settings with your `todolist-api` GitLab url and set the credentials as you've done before. `https://gitlab.<APPS_URL>/<YOUR_NAME>/todolist-api.git`
 ![multibranch-git](../images/exercise4/multibranch-git.png)
 
 2. Set the `Scan Multibranch Pipeline Triggers` to be periodic and the interval to 1 minute. This will poll the GitLab instance for new branches or change sets to build.
@@ -210,7 +210,7 @@ git push -u origin --all
 
 2. Open the `params/ocp-pipeline` file and update `PIPELINE_SOURCE_REPOSITORY_URL` with the git url of your project (Don't forget to add the `.git` at the end). For example:
 ```
-PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab.apps.<SOME_DOMAIN>.com/<GIT_USERNAME>/todolist-fe.git
+PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab.<APPS_URL>/<GIT_USERNAME>/todolist-fe.git
 PIPELINE_SOURCE_REPOSITORY_REF=develop
 NAME=todolist-fe
 ```
@@ -264,7 +264,7 @@ git push
 
 2. Update the `todolist-api/.openshift-applier/params/ocp-pipeline`
 ```
-PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab.apps.<SOME_DOMAIN>.com/<GIT_USERNAME>/todolist-api.git
+PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab.<APPS_URL>/<GIT_USERNAME>/todolist-api.git
 PIPELINE_SOURCE_REPOSITORY_REF=develop
 NAME=todolist-api
 ```
@@ -324,7 +324,7 @@ ansible-playbook apply.yml -e target=tools \
      -e "filter_tags=zap"
 ```
 
-3. Head to https://console.lader.rht-labs.com on OpenShift and move to your ci-cd project > builds. You should see `jenkins-slave-zap` has been built.
+3. Head to <CLUSTER_URL> on OpenShift and move to your ci-cd project > builds. You should see `jenkins-slave-zap` has been built.
 ![zap-build](../images/exercise4/zap-build.png)
 
 #### 3b - Arachni Scan
@@ -347,7 +347,7 @@ git checkout exercise4/zap-and-arachni params/jenkins-slave-arachni docker/jenki
 
 3. Update the `jenkins-slave-arachni` files `SOURCE_REPOSITORY_URL` to point to your GitLab's hosted version of the `enablement-ci-cd` repo.
 ```
-SOURCE_REPOSITORY_URL=https://gitlab.apps.lader.rht-labs.com/<GIT_USERNAME>/enablement-ci-cd.git
+SOURCE_REPOSITORY_URL=https://gitlab.<APPS_URL>/<GIT_USERNAME>/enablement-ci-cd.git
 SOURCE_CONTEXT_DIR=docker/jenkins-slave-arachni
 BUILDER_IMAGE_NAME=registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:latest
 NAME=jenkins-slave-arachni
@@ -372,7 +372,7 @@ ansible-playbook apply.yml -e target=tools \
      -e "filter_tags=arachni"
 ```
 
-3. Head to https://console.lader.rht-labs.com on OpenShift and move to your ci-cd project > builds. You should see  `jenkins-slave-arachni`.
+3. Head to <CLUSTER_URL> on OpenShift and move to your ci-cd project > builds. You should see  `jenkins-slave-arachni`.
 ![builds-zap-arachni](../images/exercise4/builds-zap-arachni.png)
 
 _____
