@@ -19,8 +19,8 @@ An OpenShift Cluster is required to complete the Enablement exercises. Learners 
 ## Learner pre-requisites
  | Software | Version | Check |
  | -------- | ------- | ----- |
- | OCP CLI | v3.9 | $ oc version &#124; grep -i --color oc  <br><span style="color:red">oc </span> v3.9.0+191fece |
- | Ansible | v2.5 | $ ansible --version &#124; grep -i --color ansible <br> <span style="color:red">ansible</span> 2.5.5 <br> .... <br>| 
+ | OCP CLI | v3.11 | $ oc version &#124; grep -i --color oc  <br><span style="color:red">oc </span> v3.11.0+0cbc58b |
+ | Ansible | => v2.6 | $ ansible --version &#124; grep -i --color ansible <br> <span style="color:red">ansible</span> 2.7.2 <br> .... <br>| 
  | NodeJS | v8.x | $ node -v <br> v8.11.3|
  | Git Installed | | $ git --version <br> git version 2.17.1|
  | Google Chrome Web Browser | (>59) | click [here](chrome://version/) if Google Chrome is your default browser else copy the link `chrome://version/` in your Chome |
