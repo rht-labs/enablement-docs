@@ -197,7 +197,7 @@ npm run e2e:ci
 2. Add a Post Build action to `Publish Junit test result report`. Add `reports/e2e/specs/*.xml` to the report location and save the configuration to be brought back to the Job's homepage.
 ![e2e-post-build](../images/exercise3/e2e-post-build.png)
 
-2. We want to connect the e2e job we just created to our dev pipleline by editing the post build actions on `dev-todolist-fe-deploy` job. Open the `dev-todolist-fe-deploy` job and hit `configure`. In the `Post-build actions` section of this job add a `Trigger parameterised build` on other jobs. Set the `Projects to build` to be `dev-todolist-fe-e2e`. Add a Parameter and set the it to the `Current build parameters`. Save the settings.
+2. We want to connect the e2e job we just created to our dev pipleline by editing the post build actions on `dev-todolist-fe-deploy` job. Open the `dev-todolist-fe-deploy` job and hit `configure`. In the `Post-build actions` section of this job add a `Trigger parameterised build on other projects`. Set the `Projects to build` to be `dev-todolist-fe-e2e`. Add a Parameter and set the it to the `Current build parameters`. Save the settings.
 ![e2e-trigger](../images/exercise3/e2e-trigger.png)
 
 2. Run the pipeline from the beginning to see the tests executed (two executions will show tests scores on the graph!).
