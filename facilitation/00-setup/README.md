@@ -35,9 +35,16 @@ Key requirements for the venue include:
 * A1 Sticky Chart Paper
 * Boards (especially if wall space is lacking)
 * Post-it / sticky notes (variety of colors and sizes as described in the Facilitation Guides)
+    * Per Team with some extra
+    * 1x2 Post-its (off-yellow)
+    * 3x3 Post-its (Orange, Blue, Green, Pink)
+    * 3x5 Post-its (Pink, Yellow)
+    * 4x6 Post-its (Green)
+    * 6x8 (A5) Post-its (various colors)
 * Sharpies (enough for one per participant + a few extra)
 * Whiteboard Pens - mixture of colors
 * Magic Whiteboard (especially if there is a lack of whiteboard space in the venue)
+* 8 Recordable Buttons
 * Painters' Tape - mixture of colors
 * Bluetooth Speaker
 * Fun activities (e.g. a mini golf set and mini ping pong set)
@@ -58,20 +65,34 @@ The day before the Enablement begins, get access to the room and lay out all mat
 * Definition of Done
 * Target Outcomes
 * Realtime Retrospective
+* Team Sentiment
+* Parking Lot (Car Park)
 * Big Picture Area
+    * batch content into stacks that correlate to the labs excercises
+    * tip: create sub-batches to align with conversation topics in the labs exercises
 * Practice Corner Area
-* Ping Pong and Golf
+    * batch content into stacks taht correlate to the areas of the Loops
+* Continuous space for the following:
+    * The example linkage for ToDoIst: Impact Map -> Event Storm -> Value Slices -> Initial Product Backlog -> Sprint 1 Board (done) -> Updated Product Backlog -> Sprint 2 Board (which is the focus on Exercise 3)
 * Labs is….
-* Andon Chord (Stop the World)
 * Wider Group Social Contract
 * Space for Faces
-* Space for Animals
-* End of Day 2 Retrospective canvas (one for each table group)
-* End of Day 3 Retrospective canvas (one for the whole group)
+* End of Day Retrospective canvas 1
+* End of Day Retrospective canvas 2
+* Posters
+    * Henrik Kniberg Product Ownership in a Nutshell
+    * Henrik Kniberg Skateboard Picture
+    * The Agile Manifesto Values and Principles
+    * What DevOps is Not
+    * The Agile Principles cartoon from Knowledge Train
 * A location for catering to be delivered to and consumed from
-* The example linkage for ToDoIst: Impact Map -> Event Storm -> Value Slices -> Initial Product Backlog -> Sprint 1 Board (done) -> Updated Product Backlog -> Sprint 2 Board (which is the focus on Exercise 3)
 We strongly recommend using the full day before the Enablement to set the room up as you expect it to be used during the 4 days (including putting up all the "Big Picture" and "Practice Corner" as you expect it to be on day 4). Not only does this help familiarise further with the material but it will also test the space considerations.
 We then "re-set" the space to start the Enablement with just a circle of chairs. This facilitates a great collaborative start and also provide the opportunities for the newly formed teams to configure their space themselves.
+
+# Room
+
+* Games (Ping Pong and Golf)
+* Andon Chord (Stop the World)
 
 # Team Space Setup (each team gets the following):
 
@@ -89,11 +110,12 @@ We then "re-set" the space to start the Enablement with just a circle of chairs.
 * Writeable Surface Area for team activities (Social Contract, Team Name)
 
 Think about additional team surface areas that will be used for:
+* Space for Animals
 * Event Storming
 * Metric Based Process Maps
-* End of Day Retros
 * Pairing and mob faces
 * Value Slicing
+* Retrospective space
 * Final Demo Day
 Thoughts on this include having things like Large easel post-its, foam-core boards, moveable standing whiteboards
 
@@ -112,7 +134,6 @@ Thoughts on this include having things like Large easel post-its, foam-core boar
 * We like to include a thought-inspiring YouTube video each day. They are nice to play first thing (before the Walk the Walls) as people come in and are having coffee. Equally, they are good to be used as time dividers, breaking up long exercises, just after lunch, etc.  Videos that have beeen used to date include:
     * [Henrik Kniberg's Product Ownership in a Nutshell](https://youtu.be/502ILHjX9EE)
     * [Drive: The surprising truth about what motivates us](https://youtu.be/u6XAPnuFjJc)
-    * [Django explaining DevOps in a Bath](https://youtu.be/Qj09XRhp0lA)
     * ["Greatness" by David Marquet](https://youtu.be/OqmdLcyES_Q)
 * We like to play some fun games / energisers during the four days. It helps drive fun and team culture as well as keep enegery levels up (especially useful during the longer technical exercises). Activities we have used include:
     * [Human Rock Paper Scissors](http://www.funretrospectives.com/human-rock-paper-scissors/)
