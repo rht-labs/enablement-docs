@@ -29,6 +29,7 @@ Key requirements for the venue include:
     * The Agile Manifesto Values and Principles
     * What DevOps is Not
     * The Agile Principles cartoon from Knowledge Train
+* Surge Protectors
 * Some spare adapters for overseas' participants to connect laptops to power    
 * Bluetac
 * A1 Sticky Chart Paper
@@ -46,10 +47,12 @@ Key requirements for the venue include:
 * Download all videos used in the training incase of WiFi connectivity issues 
 * Order some Swag from Marketing - great for everyone to take something away and it also provides an opportunity to boost Team Identity and get a great photo with everyone in, for example, their new t-shirt!
 
-
 ## Setting up the Room
 
 The day before the Enablement begins, get access to the room and lay out all materials. Specific things to set up include:
+
+# Walls
+
 * Backlog
 * Burndown
 * Definition of Done
@@ -59,26 +62,40 @@ The day before the Enablement begins, get access to the room and lay out all mat
 * Practice Corner Area
 * Ping Pong and Golf
 * Labs is….
+* Andon Chord (Stop the World)
+* Wider Group Social Contract
 * Space for Faces
 * Space for Animals
 * End of Day 2 Retrospective canvas (one for each table group)
 * End of Day 3 Retrospective canvas (one for the whole group)
 * A location for catering to be delivered to and consumed from
+* The example linkage for ToDoIst: Impact Map -> Event Storm -> Value Slices -> Initial Product Backlog -> Sprint 1 Board (done) -> Updated Product Backlog -> Sprint 2 Board (which is the focus on Exercise 3)
 We strongly recommend using the full day before the Enablement to set the room up as you expect it to be used during the 4 days (including putting up all the "Big Picture" and "Practice Corner" as you expect it to be on day 4). Not only does this help familiarise further with the material but it will also test the space considerations.
 We then "re-set" the space to start the Enablement with just a circle of chairs. This facilitates a great collaborative start and also provide the opportunities for the newly formed teams to configure their space themselves.
 
+# Team Space Setup (each team gets the following):
 
-Think about the wall space that will be used for:
-* Team's Social Contract
-* Wider Group Social Contract
+* Booklets (if printed)
+* 2 Recordable buttons
+* Sharpie Markers
+* White Board Markers (various colors)
+* 1x2 Post-its (off-yellow)
+* 3x3 Post-its (Orange, Blue, Green, Pink)
+* 3x5 Post-its (Pink, Yellow)
+* 4x6 Post-its (Green)
+* 6x8 (A5) Post-its (various colors)
+* additional post-its of various sizes and colors for notes, ideas
+* Roll of Masking Tape
+* Writeable Surface Area for team activities (Social Contract, Team Name)
+
+Think about additional team surface areas that will be used for:
 * Event Storming
 * Metric Based Process Maps
-* Value Slicing
 * End of Day Retros
 * Pairing and mob faces
-* Andon Chord or Real Bell / Buzzer if available
-* The example linkage for ToDoIst: Impact Map -> Event Storm -> Value Slices -> Initial Product Backlog -> Sprint 1 Board (done) -> Updated Product Backlog -> Sprint 2 Board (which is the focus on Exercise 3)
-
+* Value Slicing
+* Final Demo Day
+Thoughts on this include having things like Large easel post-its, foam-core boards, moveable standing whiteboards
 
 ## Facilitation Guidelines
 
