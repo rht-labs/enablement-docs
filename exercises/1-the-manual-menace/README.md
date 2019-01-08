@@ -326,7 +326,7 @@ git push -u origin --all
 git checkout exercise1/mongodb params/mongodb templates/mongodb.yml
 ```
 
-4. Open `enablement-ci-cd` in your favourite editor. Edit the `inventory/host_vars/ci-cd-tooling.yml` to include a new object for our mongodb as shown below. This item can be added below the Jenkins slave in the `ci-cd-tooling` section.
+4. Open `enablement-ci-cd` in your favourite editor. Edit the `inventory/host_vars/ci-cd-tooling.yml` to include a new object for our mongodb as shown below. This item can be added below Nexus in the `ci-cd-tooling` section.
 ```yaml
   - name: "jenkins-mongodb"
     namespace: "{{ ci_cd_namespace }}"
