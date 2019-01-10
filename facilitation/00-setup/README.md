@@ -29,9 +29,9 @@ Key requirements for the venue include:
 * Poster printouts of
     * [Henrik Kniberg Product Ownership in a Nutshell](https://github.com/rht-labs/enablement-docs/blob/master/facilitation/00-setup/Agile-Product-Ownership-in-a-Nutshell-drawing-by-Henrik-Kniberg.png)
     * [Henrik Kniberg Skateboard Picture](https://github.com/rht-labs/enablement-docs/blob/master/facilitation/00-setup/mvp.png)
-    * The Agile Manifesto Values and Principles
+    * [The Agile Manifesto Values and Principles](https://github.com/rht-labs/enablement-docs/blob/master/facilitation/00-setup/agile-manifesto.jpg)
     * What DevOps is Not
-    * The Agile Principles cartoon from Knowledge Train
+    * [The Agile Principles cartoon from Knowledge Train](https://github.com/rht-labs/enablement-docs/blob/master/facilitation/00-setup/12-principles-download.pdf)
 * Surge Protectors
 * Some spare adapters for overseas' participants to connect laptops to power    
 * Bluetac
