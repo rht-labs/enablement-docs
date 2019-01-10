@@ -23,9 +23,12 @@ Key requirements for the venue include:
 
 * Print Exercise Booklets - a PDF of all exercises. We have printed these in A4 color, double-sided with wire binding, a clear cover and black card back
 * Card printouts of "The Big Picture" components
+* [Connecting the practices diagram] (https://github.com/rht-labs/enablement-docs/blob/master/facilitation/00-setup/story%20linking%20of%20practices.jpg)
+* Templates
+* Storyboards - To Do List example
 * Poster printouts of
-    * Henrik Kniberg Product Ownership in a Nutshell
-    * Henrik Kniberg Skateboard Picture
+    * [Henrik Kniberg Product Ownership in a Nutshell] (https://github.com/rht-labs/enablement-docs/blob/master/facilitation/00-setup/Agile-Product-Ownership-in-a-Nutshell-drawing-by-Henrik-Kniberg.png)
+    * [Henrik Kniberg Skateboard Picture] (https://github.com/rht-labs/enablement-docs/blob/master/facilitation/00-setup/mvp.png)
     * The Agile Manifesto Values and Principles
     * What DevOps is Not
     * The Agile Principles cartoon from Knowledge Train
