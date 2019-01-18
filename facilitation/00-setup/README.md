@@ -138,6 +138,10 @@ Thoughts on this include having things like Large easel post-its, foam-core boar
     * [Henrik Kniberg's Product Ownership in a Nutshell](https://youtu.be/502ILHjX9EE)
     * [Drive: The surprising truth about what motivates us](https://youtu.be/u6XAPnuFjJc)
     * ["Greatness" by David Marquet](https://youtu.be/OqmdLcyES_Q)
+    * [Pentagon Wars - Bradley Fight Vehicle Evolution](https://www.youtube.com/watch?v=aXQ2lO3ieBA)
+    * [The Expert](https://www.youtube.com/watch?v=BKorP55Aqvg)
+    * [Scrum Master Movie - By Jeff Southerland](https://www.youtube.com/watch?v=oheekef7oJk&t=3s)
+    * [Agile Talk - from Silicon Valley](https://www.youtube.com/watch?v=oyVksFviJVE)
 * We like to play some fun games / energisers during the four days. It helps drive fun and team culture as well as keep enegery levels up (especially useful during the longer technical exercises). Activities we have used include:
     * [Human Rock Paper Scissors](http://www.funretrospectives.com/human-rock-paper-scissors/)
     * [Collaborative Face Drawing](http://www.funretrospectives.com/collaborative-face-drawing/)
