@@ -17,6 +17,7 @@ Timebox (5 min) <!-- {_class="small"} -->
 ## What is a Social Contract?
 
 
+
 ### A Social Contract codifies behavior and expectations of the team between its members
 ![Of the people](images/Social_Contract.jpg) <!-- {_class="fragment inline-image"} -->
 #### _Effective Social Contracts are:_
@@ -26,10 +27,12 @@ Timebox (5 min) <!-- {_class="small"} -->
 - Signatories hold each other accountable
 
 
+
 ### Why use a Social Contract?
 - Provide a quick means to clearly determine team dynamics and expectations
 - Promote autonomy and self governing of team behavior
 - Keep the team consciously aware of how they work together
+
 
 
 ### Social Contract examples:
@@ -58,7 +61,9 @@ Timebox (15 min) <!-- {_class="small"} -->
 ## What are Priority Sliders?
 
 
+
 ### Priority Sliders are a visual tool for getting teams to agree which work items are the most important by trading one item against another on a scale from _least_ to _most_ important
+
 
 
 ### Effective Priority Sliders
@@ -68,10 +73,12 @@ Timebox (15 min) <!-- {_class="small"} -->
 - A finite set of topics/dimensions/areas that can be relatively prioritized against each other
 
 
+
 ### Why use Priority Sliders?
 - Enables an alignment and consensus on areas of focus
 - Projects often involve trade offs, agreement is key
 - Provides clarifications across stakeholder groups of motivations and desires
+
 
 
 ### Exercise - Priority Sliders
