@@ -6,30 +6,8 @@ DO500 <!-- {_class="title-color"} -->
 
 
 
-## Demo Day
+## Delivery Showcase & Demo Day
 
-
-### Demo Day
-#### _What is Demo Day about?_
-* Demo Day is the culmination of a trip around the Practice Loop
-* It is an opportunity for the team to showcase their work from a particular
-time period
-* An opportunity for key stakeholders to see the results
-* An opportunity to talk about "what's next" and how do to adapt the culture for
-the next round
-* An opportunity to celebrate!
-
-
-### Demo Day
-#### _Tips_
-* "Show" NOT "tell"
-* Take the opportunity to drive excitement around the product **and** culture
-* The demo should include not just the product of a sprint or release but of
-the **culture** and **philosophy** used to produce it
-
-
-
-## The Showcase
 
 
 ### The Showcase
@@ -41,6 +19,7 @@ showcased.
 * Provides an opportunity to review culture and practices used by the team.
 * It is often performed at the end of an iteration but can be performed at key
 milestones in the life of the product.
+
 
 
 ### The Showcase
@@ -57,33 +36,35 @@ leadership so that prioritization and future work can be adapted accordingly
 
 
 
+### Demo Day
+#### _What is Demo Day about?_
+* Demo Day is the culmination of a trip around the Practice Loop
+* It is an opportunity for the team to showcase their work from a particular
+time period
+* An opportunity for key stakeholders to see the results
+* May have had many showcases or product increments completed feeding this
+* An opportunity to talk about "what's next" and how do to adapt the culture for
+the next round
+* An opportunity to celebrate!
+
+
+
+### Demo Day
+#### _Tips_
+* "Show" NOT "tell"
+* Take the opportunity to drive excitement around the product **and** culture
+* The demo should include not just the product of a sprint or release but of
+the **culture** and **philosophy** used to produce it
+
+
+
 ### Exercise: The Successful Demo Day
 In teams, take some time to brainstorm:
-* What are all the items/activities you would include in Demo Day? Consider:
+* What have you taken away from this week's set of sessions and activities:
   * People, processes **and** technology
-* What are the success factors in holding a showcase?
-* What patterns of behavior have changed positively?
-* What patterns of behavior need to be re-enforced?
+* What did you learn about your team, class, or instructors?
+* What did you enjoy?
 
-Timebox (30 min) <!-- {_class="small"} -->
-
-
-### Exercise: Team Approaches to Demo Day
-Each team takes turns presenting their ideas of a perfect demo day:
-* What activities and in what order would you include in Demo Day?
-* What would your showcase look like? (we won't actually demo anything)
-* Who would you invite?
-
-Timebox (10 mins per team) <!-- {_class="small"} -->
-
-
-
-## Parking Lot Review
-Timebox (20 min) <!-- {_class="small"} -->
-
-
-
-## Class Retrospective
 Timebox (30 min) <!-- {_class="small"} -->
 
 
