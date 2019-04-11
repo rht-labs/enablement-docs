@@ -36,3 +36,12 @@ port by using:
 - **js/** Like above but for JavaScript
 - **plugin/** Components that have been developed as extensions to reveal.js
 - **lib/** All other third party assets (JavaScript, CSS, fonts)
+
+### Printing to PDF
+
+1. Run the slides locally as described above.
+2. Open the slides in Chrome or Chromium.
+3. Add `?print-pdf` to the URL. For example: `http://localhost:8000/chapter17.html?print-pdf#/`
+4. Print the web page to PDF!
+
+In the future, it would be cool to automate this process using headless Chrome!
