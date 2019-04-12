@@ -131,12 +131,12 @@ touch params/project-requests-dev params/project-requests-test
   * In your editor; Open `params/project-requests-dev` and add the following by substituting `<YOUR_NAME>` accordingly
 ```
 NAMESPACE=<YOUR_NAME>-dev
-NAMESPACE_DISPLAY_NAME=<YOUR-NAME> Dev
+NAMESPACE_DISPLAY_NAME=<YOUR_NAME> Dev
 ```
   * In your editor; Open `params/project-requests-test` and add the following by substituting `<YOUR_NAME>` accordingly
 ```
 NAMESPACE=<YOUR_NAME>-test
-NAMESPACE_DISPLAY_NAME=<YOUR-NAME> Test
+NAMESPACE_DISPLAY_NAME=<YOUR_NAME> Test
 ```
 
 3. In the `inventory/host_vars/projects-and-policies.yml` file; add the new objects for the projects you want to create (dev & test) by adding another object to the content array for each. You can copy and paste them from the `ci-cd` example and update them accordingly. If you do this; remember to change the params file! e.g.
