@@ -11,7 +11,7 @@ the reveal.js source code.
 
 2. Clone the reveal.js repository
 [source, sh]
-[user@host path]$ git clone https://github.com/RedHatTraining/DO500
+[user@host path]$ git clone https://github.com/rht-labs/enablement-docs
 
 3. Navigate to the slides folder
 [source, sh]
