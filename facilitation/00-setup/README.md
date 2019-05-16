@@ -44,6 +44,7 @@ Key requirements for the venue include:
     * 3x5 Post-its (Pink, Yellow)
     * 4x6 Post-its (Green)
     * 6x8 (A5) Post-its (various colors)
+* Post-it Super Sticky Tabletop Easel Pads
 * Sharpies (enough for one per participant + a few extra)
 * Whiteboard Pens - mixture of colors
 * Magic Whiteboard (especially if there is a lack of whiteboard space in the venue)
