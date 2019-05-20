@@ -46,19 +46,14 @@ The following table lists the software requirements for running the lab exercise
  > You will need administrator or super user level access on your system to install the prerequisite software for all the three operating systems.
  Locked down systems with restricted accounts are not supported.
 
- > You can use any text editor to edit lab files. Using an editor that provides syntax highlighting and automatic indentation is helpful. We recommend ***Atom*** or ***Visual Studio Code***  for this course.
+ > You can use any text editor to edit lab files. Using an editor that provides syntax highlighting and automatic indentation is helpful. We recommend ***Visual Studio Code*** or ***Atom***  for this course.
 
-### Linux
+### Linux (Fedora Workstation 28+ / RHEL 8+)
 
-1. Download the Node.js 8.x LTS Linux 64-bit binary archive file from https://nodejs.org/dist/latest-v8.x/. The binary will be named as ***node-v8.x.y-linux-x64.tar.gz***, where 'x' and 'y' indicates the major and minor version of the latest Node.js 8 LTS release.
+1. Enable Application Stream and install NodeJS 8.x LTS
 ```bash
-tar -xvzf node-v8.x.y-linux-x64.tar.gz -C /usr/local/
-```
-Replace 'x' and 'y' with the version you downloaded in the above step.
-
-2. Edit your ***.bashrc*** file and add the ***node*** binary to your ***PATH*** environment variable
-```bash
-echo 'export PATH=/usr/local/node-v8.x.y/bin:$PATH' >> $HOME/.bashrc
+dnf module enable nodejs:8
+dnf install nodejs
 ```
 
 3. Install OpenJDK version 1.8
@@ -66,26 +61,44 @@ echo 'export PATH=/usr/local/node-v8.x.y/bin:$PATH' >> $HOME/.bashrc
 dnf install java-1.8.0-openjdk-devel
 ```
 
-4. Install Google Chrome version 70 or higher by downloading and running the the 64-bit RPM installer from https://google.com/chrome
+4. Enable the repository and install Google Chrome (stable)
 ```bash
-dnf install google-chrome-stable_current_x86_64.rpm
+rpm --import https://dl.google.com/linux/linux_signing_key.pub
+cat << EOF > /etc/yum.repos.d/google-chrome.repo
+[google-chrome]
+name=google-chrome
+baseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64
+enabled=1
+gpgcheck=1
+gpgkey=https://dl.google.com/linux/linux_signing_key.pub
+EOF
+dnf install google-chrome-stable
 ```
+
 5. Install Docker, Git and Ansible
 ```bash
 dnf install git ansible docker
 systemctl enable docker
 systemctl start docker
 ```
-6. Download and uncompress the OpenShift 3.11 client binary archive. Copy the ***oc*** binary to ***/usr/local/bin*** folder on your system
+
+6. Download and uncompress the OpenShift 3.11 client binary archive 
 ```bash
-wget https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz
-tar -xvzf openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz
-cp openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit/oc /usr/local/bin/
-chmod +x /usr/local/bin/oc
+curl https://mirror.openshift.com/pub/openshift-v3/clients/3.11.115/linux/oc.tar.gz | tar xz -C /usr/local/bin
 ```
-7. Download and install Atom text editor RPM installer from https://atom.io/download/rpm, or the Visual Studio Code RPM installer from https://code.visualstudio.com/docs/?dv=linux64_rpm
+
+7. Enable the repository and install the Microsoft Visual Studio Code (or other editor of choice)
 ```bash
-dnf install <rpm_name>
+rpm --import https://packages.microsoft.com/keys/microsoft.asc
+cat << EOF > /etc/yum.repos.d/vscode.repo
+[code]
+name=Visual Studio Code
+baseurl=https://packages.microsoft.com/yumrepos/vscode
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+EOF
+dnf install code
 ```
 
 ### macOS
