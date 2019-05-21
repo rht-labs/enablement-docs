@@ -21,7 +21,7 @@ As a learner you will be able to
 ## Big Picture
 > From the previous exercise; we introduced app and jenkins monitoring. This exercise focuses on radiation of cluster statistics using Prometheus to scrape metrics and Grafana to display them.
 
-![big-picture](../images/big-picture/big-picture-5.jpg)
+![big-picture](../images/big-picture/big-picture-6.jpg)
 
 _____
 
