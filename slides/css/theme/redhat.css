@@ -6,7 +6,7 @@ body {
   background: #222;
   background-color: #222;
   background:url("../../css/images/RH_Background.png");
-	background-size: 100% 100%;
+  background-size: 100% 100%;
 }
 
 .white-style {
@@ -44,7 +44,7 @@ body {
 }
 
 .course-title {
-  color: #FF0000 !important;
+  color: #FFF !important;
   text-align: left;
   font-size: 200% !important;
   /* text-shadow: 2px 2px 2px #000000 !important; */
@@ -76,7 +76,7 @@ body {
 .objective_list {
   font-size: 0.7em !important;
   display: block !important;
-  color: #FF0000 !important;
+  color: #FFF !important;
 }
 
 .objective_list p {
@@ -93,19 +93,19 @@ body {
   margin-top:15px !important;
   margin-bottom:15px !important;
   margin-left: 15px !important;
-  color: #FF0000 !important;
+  color: #FFF !important;
 }
 
 .objective_list_title{
   text-align: left !important;
   margin: 0px !important;
-  color: #FF0000 !important;
+  color: #FFF !important;
 }
 
 .goal_title{
   text-align: left !important;
   margin: 0px !important;
-  color: #FF0000 !important;
+  color: #FFF !important;
   font-style: italic !important;
 }
 
