@@ -1,5 +1,4 @@
 * [Home](/)
-* [The Practices](the-practices/README.md)
 * [1. The Manual Menace](1-the-manual-menace/README.md)
 * [2. Attack of the Pipelines](2-attack-of-the-pipelines/README.md)
 * [3. Revenge of the Automated Testing](3-revenge-of-the-automated-testing/README.md)
@@ -8,4 +7,4 @@
 * [6. Return of the Monitoring](6-return-of-the-app-monitoring/README.md)
 * [7. The Cluster Awakens](7-the-cluster-awakens/README.md)
 * [8. The Last Unicorn Dev](8-the-last-unicorn-dev/README.md)
-* [Rogue Cluster: A Setup Guide](0-rogue-cluster/README.md)
+<!-- * [Rogue Cluster: A Setup Guide](0-rogue-cluster/README.md) -->
