@@ -23,8 +23,10 @@ body {
 }
 
 .title-color {
-  color: #FFF !important;
+  color: #FF0000 !important;
   text-align: left;
+  position: relative;
+  left: 350px;
 }
 
 .subtitle-text {
@@ -42,7 +44,7 @@ body {
 }
 
 .course-title {
-  color: #FFF !important;
+  color: #FF0000 !important;
   text-align: left;
   font-size: 200% !important;
   /* text-shadow: 2px 2px 2px #000000 !important; */
@@ -74,7 +76,7 @@ body {
 .objective_list {
   font-size: 0.7em !important;
   display: block !important;
-  color: #FFF !important;
+  color: #FF0000 !important;
 }
 
 .objective_list p {
@@ -91,19 +93,19 @@ body {
   margin-top:15px !important;
   margin-bottom:15px !important;
   margin-left: 15px !important;
-  color: #FFF !important;
+  color: #FF0000 !important;
 }
 
 .objective_list_title{
   text-align: left !important;
   margin: 0px !important;
-  color: #FFF !important;
+  color: #FF0000 !important;
 }
 
 .goal_title{
   text-align: left !important;
   margin: 0px !important;
-  color: #FFF !important;
+  color: #FF0000 !important;
   font-style: italic !important;
 }
 
@@ -366,7 +368,7 @@ body {
   transition: color .15s ease; }
 
 .reveal a:hover {
-  color: #CC0000;
+  color: #888;
   text-shadow: none;
   border: none; }
 
