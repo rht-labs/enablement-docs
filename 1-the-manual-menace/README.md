@@ -359,7 +359,7 @@ git push -u origin --all
 ```
 
 ### Part 4 - MongoDB for CI tests
-> In order to run our API tests in CI in later labs; we need there to be a MongoDB available for executing our tests. As this is part of our CI/CD Lifecycle; we will add it now.
+> _In order to run our API tests in CI in later labs; we need there to be a MongoDB available for executing our tests. As this is part of our CI/CD Lifecycle; we will add it now._
 
 1. In our `enablement-ci-cd` repo; checkout the mongo templates as shown below to bring in the template and params.
 ```bash
