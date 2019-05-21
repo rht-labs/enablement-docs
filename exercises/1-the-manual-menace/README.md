@@ -359,7 +359,7 @@ git push -u origin --all
 ```
 
 ### Part 4 - MongoDB for CI tests
-> _In order to run our API tests in CI in later labs; we need there to be a MongoDB server instance available for executing our tests. As this is part of our CI/CD Lifecycle; we will add it now._
+> _In order to run our API tests in CI in later labs; we need there to be a MongoDB available for executing our tests. As this is part of our CI/CD Lifecycle; we will add it now._
 
 1. In our `enablement-ci-cd` repo; checkout the mongo templates as shown below to bring in the template and params.
 ```bash
@@ -403,7 +403,7 @@ Note - When making changes to the "enablement-ci-cd" repo, you should frequently
 ### Part 5 - Jenkins & S2I
 > _Create a build and deployment config for Jenkins. Add new configuration and plugins to the OpenShift default Jenkins image using s2i_
 
-1. Add the Jenkins Build & Deployment configs to the `enablement-ci-cd` repo by merging the contents from the `exercise1/jenkins` branch
+1. Add the Jenkins Build & Deployment configs to the `enablement-ci-cd` repo by checking out the contents from `exercise1/jenkins` with 
 ```bash
 git checkout exercise1/jenkins templates/jenkins.yml
 ```
