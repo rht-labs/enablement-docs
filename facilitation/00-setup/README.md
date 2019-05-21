@@ -23,12 +23,15 @@ Key requirements for the venue include:
 
 * Print Exercise Booklets - a PDF of all exercises. We have printed these in A4 color, double-sided with wire binding, a clear cover and black card back
 * Card printouts of "The Big Picture" components
+* [Connecting the practices diagram](https://github.com/rht-labs/enablement-docs/blob/master/facilitation/00-setup/story%20linking%20of%20practices.jpg)
+* Templates
+* Storyboards - To Do List example
 * Poster printouts of
-    * Henrik Kniberg Product Ownership in a Nutshell
-    * Henrik Kniberg Skateboard Picture
-    * The Agile Manifesto Values and Principles
+    * [Henrik Kniberg Product Ownership in a Nutshell](https://github.com/rht-labs/enablement-docs/blob/master/facilitation/00-setup/Agile-Product-Ownership-in-a-Nutshell-drawing-by-Henrik-Kniberg.png)
+    * [Henrik Kniberg Skateboard Picture](https://github.com/rht-labs/enablement-docs/blob/master/facilitation/00-setup/mvp.png)
+    * [The Agile Manifesto Values and Principles](https://github.com/rht-labs/enablement-docs/blob/master/facilitation/00-setup/agile-manifesto.jpg)
     * What DevOps is Not
-    * The Agile Principles cartoon from Knowledge Train
+    * [The Agile Principles cartoon from Knowledge Train](https://github.com/rht-labs/enablement-docs/blob/master/facilitation/00-setup/12-principles-download.pdf)
 * Surge Protectors
 * Some spare adapters for overseas' participants to connect laptops to power    
 * Bluetac
@@ -41,6 +44,7 @@ Key requirements for the venue include:
     * 3x5 Post-its (Pink, Yellow)
     * 4x6 Post-its (Green)
     * 6x8 (A5) Post-its (various colors)
+* Post-it Super Sticky Tabletop Easel Pads
 * Sharpies (enough for one per participant + a few extra)
 * Whiteboard Pens - mixture of colors
 * Magic Whiteboard (especially if there is a lack of whiteboard space in the venue)
@@ -135,6 +139,10 @@ Thoughts on this include having things like Large easel post-its, foam-core boar
     * [Henrik Kniberg's Product Ownership in a Nutshell](https://youtu.be/502ILHjX9EE)
     * [Drive: The surprising truth about what motivates us](https://youtu.be/u6XAPnuFjJc)
     * ["Greatness" by David Marquet](https://youtu.be/OqmdLcyES_Q)
+    * [Pentagon Wars - Bradley Fight Vehicle Evolution](https://www.youtube.com/watch?v=aXQ2lO3ieBA)
+    * [The Expert](https://www.youtube.com/watch?v=BKorP55Aqvg)
+    * [Scrum Master Movie - By Jeff Southerland](https://www.youtube.com/watch?v=oheekef7oJk&t=3s)
+    * [Agile Talk - from Silicon Valley](https://www.youtube.com/watch?v=oyVksFviJVE)
 * We like to play some fun games / energisers during the four days. It helps drive fun and team culture as well as keep enegery levels up (especially useful during the longer technical exercises). Activities we have used include:
     * [Human Rock Paper Scissors](http://www.funretrospectives.com/human-rock-paper-scissors/)
     * [Collaborative Face Drawing](http://www.funretrospectives.com/collaborative-face-drawing/)

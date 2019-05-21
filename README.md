@@ -4,9 +4,7 @@ This repo will house all the slides and lab exercises for the Enablement. It wil
 [Course Content](https://rht-labs.github.io/enablement-docs/#/)
 
 ## Slides
-Slides are currently only available on Red Hat's Google Drive (https://drive.google.com/open?id=1Rk0XAn2WjY-cVAhGbCNiL6EdiiS-hxbK). We are working on a solution to make this content more openly available.
-
-In the mean time, if you are unable to access the link above and would like to see some of the content, please contact the author.
+Please navigate to the "Slides" folder and follow the ReadMe instructions on how to render and view the slides.
 
 
 ## Exercises
