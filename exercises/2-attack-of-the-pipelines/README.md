@@ -222,7 +222,7 @@ NOTE: Microsoft Windows users, run the following commands in a `Git Bash` window
 cd ~/do500-workspace
 ```
 ```bash
-git clone https://github.com/RedHatTraining/rht-labs-todolist-api todolist-api
+git clone https://github.com/rht-labs/todolist-api todolist-api
 ```
 ```bash
 cd todolist-api
