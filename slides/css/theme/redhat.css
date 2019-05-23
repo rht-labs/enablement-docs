@@ -23,10 +23,8 @@ body {
 }
 
 .title-color {
-  color: #FF0000 !important;
+  color: #FFF !important;
   text-align: left;
-  position: relative;
-  left: 350px;
 }
 
 .subtitle-text {
