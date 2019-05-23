@@ -1,4 +1,5 @@
 <!-- .slide: data-background-image="images/RH_NewBrand_Background.png"  -->
+## DevOps Culture and Practice <!-- {_class="course-title"} -->
 ### Kick Off and Target Outcomes <!-- {_class="title-color"} -->
 DO500 <!-- {_class="title-color"} -->
 
