@@ -6,7 +6,7 @@ body {
   background: #222;
   background-color: #222;
   background:url("../../css/images/RH_Background.png");
-	background-size: 100% 100%;
+  background-size: 100% 100%;
 }
 
 .white-style {
@@ -366,7 +366,7 @@ body {
   transition: color .15s ease; }
 
 .reveal a:hover {
-  color: #CC0000;
+  color: #888;
   text-shadow: none;
   border: none; }
 
