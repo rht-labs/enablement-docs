@@ -24,7 +24,16 @@ the aforementioned impacts
 * Some sort of prioritization of scope and/or impacts
 
 
-![Goal](images/ImpactMapping/Goal.png)
+![Goal](images/ImpactMapping/impact-mapping-goal.png)
+
+
+![Goal](images/ImpactMapping/impact-mapping-actors.png)
+
+
+![Goal](images/ImpactMapping/impact-mapping-impacts.png)
+
+
+![Goal](images/ImpactMapping/impact-mapping-deliverables.png)
 
 
 ### Impact Mapping
