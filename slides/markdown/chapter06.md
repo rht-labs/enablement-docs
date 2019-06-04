@@ -56,15 +56,18 @@ the aforementioned impacts
 
 
 
-### Exercise - Impact Mapping
+### Exercise - Impact Mapping 1/2
 As a class:
+
+Our client has a To Do List app that is not doing great, and we have agreed to help them build a new one.
+
 1. Produce a simple impact map for the _To Do List Application_
-   * Goal: Create an easy to use tool to allow users to get tasks done
+   * Goal: Create an easy to use tool to allow 1 million users to get tasks done
 2. Discuss: Is this a good goal?
-3. Discuss: Who are the actors?
+3. Who are the actors that can get us to our goal?
 
 
-### Exercise - Impact Mapping
+### Exercise - Impact Mapping 2/2
 As a team:
 1. Draw the impact map so far
 2. Determine impacts and deliverables
