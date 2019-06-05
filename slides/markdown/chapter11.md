@@ -34,10 +34,6 @@ DO500 <!-- {_class="title-color"} -->
 ![Example1](images/value-slicing/glad-we-all-agree-1.png)
 
 
-#### PRODUCT SLICING GONE BAD!
-![Example1](images/value-slicing/slicing-gone-wrong.jpg )
-
-
 ![USMBook](images/usm/book.png)
 
 
@@ -55,6 +51,9 @@ DO500 <!-- {_class="title-color"} -->
 * Tell the story of the product from left to right (user steps).
 * Go back and talk about and capture the details of each step.
 
+
+#### PRODUCT SLICING GONE BAD!
+![Example1](images/value-slicing/slicing-gone-wrong.jpg )
 
 
 ### Exercise - Mapping Stories for "getting to work"
