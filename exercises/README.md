@@ -72,12 +72,20 @@ dnf install git ansible docker
 systemctl enable docker
 systemctl start docker
 ```
-5. Install the OpenShift 3.11 client binary.
+
+5. enable non-root user access to docker
+```bash
+groupadd docker
+systemctl restart docker
+usermod -aG docker $USER 
+```
+
+6. Install the OpenShift 3.11 client binary.
 ```bash
 dnf install origin-clients
 ```
 
-6. Download and install Atom text editor RPM installer from https://atom.io/download/rpm, or the Visual Studio Code RPM installer from https://code.visualstudio.com/docs/?dv=linux64_rpm
+7. Download and install Atom text editor RPM installer from https://atom.io/download/rpm, or the Visual Studio Code RPM installer from https://code.visualstudio.com/docs/?dv=linux64_rpm
 ```bash
 dnf install <rpm_name>
 ```
