@@ -75,9 +75,9 @@ For Microsoft Windows systems, navigate to the `C:\do500-workspace` directory
 ```bash
 cd C:\do500-workspace
 ```
-
-:exclamation: NOTE - If you do not want to have this folder at the root of your home directory, that's fine, just ensure any parent directories of this `do500-workspace` folder do <b>NOT</b> have any spaces in them as it breaks Ansible in later labs...
-
+<p class="tip">
+<b>NOTE</b> - If you do not want to have this folder at the root of your home directory, that's fine, just ensure any parent directories of this `do500-workspace` folder do <b>NOT</b> have any spaces in them as it breaks Ansible in later labs...
+</p>
 
 2. Clone the scaffold project to your local machine's `do500-workspace` folder and pull all remote branches for use in later exercises. You may see an error saying `fatal: A branch named 'develop' already exists.` This error can be safely ignored.
 
@@ -135,8 +135,9 @@ exit
   tasks:
 ```
 
-:exclamation: NOTE - YAML is indentation sensitive so keep things lined up properly!
-
+<p class="tip">
+<b>NOTE</b> - YAML is indentation sensitive so keep things lined up properly!
+</p>
 
 5. Open the `inventory/host_vars/projects-and-policies.yml` file; you should see some variables setup already to create the `<YOUR_NAME>-ci-cd` namespace. This object is passed to the OpenShift Applier to call the `templates/project-requests.yml` template with the `params/project-requests-ci-cd` parameters. We will add some additional content here but first let's explore the parameters and the template
 
@@ -178,9 +179,9 @@ NAMESPACE_DISPLAY_NAME=<YOUR_NAME> Test
 
 For Microsoft Windows systems, you need to run Ansible and OpenShift client commands from inside the `do500-toolbox` container. Linux and MacOS users should skip this step and jump directly to Step 10.
 
-
-:exclamation: NOTE - On Microsoft Windows systems, we recommend you keep the container running for the duration of the lab. Run all Ansible and OpenShift client ("oc") CLI commands from inside the container. Do NOT launch the container on Linux and MacOS systems, since you should already have Ansible and the OpenShift client natively installed on your system by following the pre-requisites setup guide.
-
+<p class="tip">
+<b>NOTE</b> - On Microsoft Windows systems, we recommend you keep the container running for the duration of the lab. Run all Ansible and OpenShift client ("oc") CLI commands from inside the container. Do NOT launch the container on Linux and MacOS systems, since you should already have Ansible and the OpenShift client natively installed on your system by following the pre-requisites setup guide.
+</p>
 
 9. Launch the toolbox container using the Windows command line terminal, and navigate to the `enablement-ci-cd` directory inside the container
 ```bash
@@ -260,8 +261,9 @@ ansible-playbook apply.yml -e target=tools \
 
 <!-- #### 3a - GitLab install -->
 
-:exclamation: NOTE - A Gitlab instance in the cloud has already been set up for you, please check with your instructor for the Gitlab instance URL.
-
+<p class="tip">
+<b>NOTE</b> - A Gitlab instance in the cloud has already been set up for you, please check with your instructor for the Gitlab instance URL.
+</p>
 
 <!-- 4. Now let's do the same thing for GitLab to get it up and running. Checkout the template and params provided by running
 ```bash
@@ -274,8 +276,9 @@ Explore the template; it contains the PVC, buildConfig and services. The Deploym
 
 4. Open the `params/gitlab` file and complete the following params
 
-:exclamation: NOTE - The values here for the LDAP and BIND credentials will be provided by your tutor.
-
+<p class="tip">
+<b>NOTE</p> - The values here for the LDAP and BIND credentials will be provided by your tutor.
+</p>
 ```
 LDAP_BIND_DN=uid=<BIND_USER>,ou=People,dc=<YOUR_DOMAIN>,dc=com
 LDAP_USER_FILTER=(memberof=CN=YourGroup,OU=Users,DC=<YOUR_DOMAIN>,DC=com)
@@ -325,7 +328,9 @@ ansible-playbook apply.yml -e target=tools \
 2. Once logged in create a new project called `enablement-ci-cd` and mark it as internal. Once created; copy out the `git url` for use on the next step.
 ![gitlab-new-project](../images/exercise1/gitlab-new-project.png)
 <!-- 
-:exclamation: NOTE - we would not normally make the project under your name but create a group and add the project there on residency but for simplicity of the exercise we'll do that here
+<p class="tip">
+<b>NOTE</b> - we would not normally make the project under your name but create a group and add the project there on residency but for simplicity of the exercise we'll do that here
+</p>
 -->
 
 3. If you have not used Git before; you may need to tell Git who you are and what your email is before we commit. Run the following commands, substituting your email and "Your Name". If you've done this before move on to the next step. The last git config command is used to bypass SSL key verification in this repo since we are using self-signed certificates on the GitLab sever.
@@ -393,9 +398,9 @@ ansible-playbook apply.yml -e target=tools \
 ```
 ![ocp-mongo](../images/exercise3/ocp-mongo.png)
 
-
-:exclamation: NOTE - When making changes to the "enablement-ci-cd" repo, you should frequently commit the changes to git.
-
+<p class="tip">
+<b>NOTE</b> - When making changes to the "enablement-ci-cd" repo, you should frequently commit the changes to git.
+</p>
 
 ### Part 5 - Jenkins & S2I
 > _Create a build and deployment config for Jenkins. Add new configuration and plugins to the OpenShift default Jenkins image using s2i_
