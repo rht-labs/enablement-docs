@@ -538,6 +538,7 @@ ansible-playbook apply.yml -e target=tools \
 ```
 
 13. This will trigger a build of the s2i and when it's complete it will add an imagestream of `<YOUR_NAME>-ci-cd/jenkins:latest` to the project. The Deployment config should kick in and deploy the image once it arrives. You can follow the build of the s2i by going to the OpenShift console's project
+
 ![jenkins-s2i-log](../images/exercise1/jenkins-s2i-log.png)
 
 14. When the Jenkins deployment has completed; login (using your OpenShift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
