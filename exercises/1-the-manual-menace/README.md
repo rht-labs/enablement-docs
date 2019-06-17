@@ -416,9 +416,7 @@ git checkout exercise1/jenkins templates/jenkins.yml
 ```
 MEMORY_LIMIT=3Gi
 VOLUME_CAPACITY=10Gi
-JVM_ARCH=x86_64
 NAMESPACE=<YOUR_NAME>-ci-cd
-JENKINS_OPTS=--sessionTimeout=720
 ```
 
 3. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo (and git if you have it) in  `inventory/host_vars/ci-cd-tooling.yml`.
