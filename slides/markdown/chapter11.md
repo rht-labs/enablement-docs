@@ -29,12 +29,19 @@ DO500 <!-- {_class="title-color"} -->
 * **T**estable
 
 
+#### SHARED DOCUMENTATION &#8800; SHARED UNDERSTANDING
+![Example1](images/value-slicing/glad-we-all-agree-1.png)
+
+
 ![USMBook](images/usm/book.png)
 
 
 ### User Story Mapping
 > **User Story Mapping is about having a good old-fashioned conversation and then organizing it in the form of a map.**
 > > -Jeff Patton
+
+> **User Story Mapping is a visualisation tool that drives groups towards a shared understanding.**
+> > -Tim Beattie
 
 
 ### User Story Mapping
@@ -43,6 +50,9 @@ DO500 <!-- {_class="title-color"} -->
 * Tell the story of the product from left to right (user steps).
 * Go back and talk about and capture the details of each step.
 
+
+#### PRODUCT SLICING GONE BAD!
+![Example1](images/value-slicing/slicing-gone-wrong.jpg )
 
 
 ### Exercise - Mapping Stories for "getting to work"
@@ -55,7 +65,7 @@ Timebox (3m) <!-- {_class="small"} -->
 ### Exercise - Mapping Stories for "getting to work"
 1. As an individual, capture on stickies things you do from the moment you wake up
 until you arrive at work.
-2. As a team, add all activities to the story map and remove duplicates.
+2. As a team, add all activities to the story map and remove duplicates. If some are similar but slightly different, do not remove as duplicates
 
 Timebox (5m) <!-- {_class="small"} -->
 

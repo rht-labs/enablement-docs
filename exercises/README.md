@@ -30,7 +30,7 @@ The following table lists the software requirements for running the lab exercise
  | Software | Version | Check |
  | -------- | ------- | ----- |
  | OCP CLI | v3.11 | $ oc version &#124; grep -i --color oc |
- | Ansible | => v2.5 | $ ansible --version &#124; grep -i --color ansible |
+ | Ansible | => v2.8 | $ ansible --version &#124; grep -i --color ansible |
  | NodeJS | v8.x LTS | $ node -v |
  | Git Installed | | $ git --version |
  | Google Chrome Web Browser | (>60) | click [here](chrome://version/) if Google Chrome is your default browser else copy the link `chrome://version/` in your Chome |
@@ -55,6 +55,8 @@ The following table lists the software requirements for running the lab exercise
 dnf module enable nodejs:8
 dnf module install -y nodejs:8
 ```
+or use the [node-version-manager](https://github.com/nvm-sh/nvm#install--update-script) to control your node versions across multiple projects.
+
 
 2. Install OpenJDK version 1.8.
 ```bash
@@ -77,7 +79,7 @@ systemctl start docker
 ```bash
 groupadd docker
 systemctl restart docker
-usermod -aG docker $USER 
+usermod -aG docker $USER
 ```
 
 6. Install the OpenShift 3.11 client binary.
@@ -97,6 +99,8 @@ dnf install <rpm_name>
 ```bash
 brew install node@8
 ```
+or use the [node-version-manager](https://github.com/nvm-sh/nvm#install--update-script) to control your node versions across multiple projects.
+
 3. Install JDK version 1.8 for MacOS by using the installer from the Oracle website at https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
 4. Install Google Chrome version 70 or higher by downloading it from https://google.com/chrome
@@ -108,7 +112,7 @@ brew install node@8
 brew install git
 ```
 
-7. You need Ansible version 2.5 or greater to run the exercise playbooks. If you have not installed Ansible, or have an older version, install or upgrade it using brew
+7. You need Ansible version 2.8 or greater to run the exercise playbooks. If you have not installed Ansible, or have an older version, install or upgrade it using brew
 ```bash
 brew install ansible
 ```
