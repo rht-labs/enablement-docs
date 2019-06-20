@@ -257,7 +257,11 @@ ansible-playbook apply.yml -e target=tools \
      -e "filter_tags=nexus"
 ```
 
-6. Once successful; login to the cluster through the browser (using cluster URL) and navigate to the `<YOUR_NAME>-ci-cd`. You should see Nexus up and running. You can login with default credentials (admin / admin123) ![nexus-up-and-running](../images/exercise1/nexus-up-and-running.png)
+6. Once successful; login to the cluster through the browser (using cluster URL) and navigate to the `<YOUR_NAME>-ci-cd`. You should see Nexus up and running. You can login with default credentials (admin / admin123) 
+
+![nexus-up-and-running-pod](../images/exercise1/nexus-up-and-running-pod.png)
+![nexus-up-and-running-route](../images/exercise1/nexus-up-and-running-route.png)
+
 
 ### Part 3 - GitLab
 
@@ -394,7 +398,7 @@ ansible-playbook apply.yml -e target=tools \
   -i inventory/ \
   -e "filter_tags=mongodb"
 ```
-![ocp-mongo](../images/exercise3/ocp-mongo.png)
+![ocp-mongo](../images/exercise1/mongodb-pod.png)
 
 <p class="tip">
 Note - When making changes to the "enablement-ci-cd" repo, you should frequently commit the changes to git.
@@ -412,9 +416,7 @@ git checkout exercise1/jenkins templates/jenkins.yml
 ```
 MEMORY_LIMIT=3Gi
 VOLUME_CAPACITY=10Gi
-JVM_ARCH=x86_64
 NAMESPACE=<YOUR_NAME>-ci-cd
-JENKINS_OPTS=--sessionTimeout=720
 ```
 
 3. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo (and git if you have it) in  `inventory/host_vars/ci-cd-tooling.yml`.
@@ -534,6 +536,7 @@ ansible-playbook apply.yml -e target=tools \
 ```
 
 13. This will trigger a build of the s2i and when it's complete it will add an imagestream of `<YOUR_NAME>-ci-cd/jenkins:latest` to the project. The Deployment config should kick in and deploy the image once it arrives. You can follow the build of the s2i by going to the OpenShift console's project
+
 ![jenkins-s2i-log](../images/exercise1/jenkins-s2i-log.png)
 
 14. When the Jenkins deployment has completed; login (using your OpenShift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
