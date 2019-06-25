@@ -46,11 +46,11 @@ port by using:
 [source, sh]
 for i in `seq 1 9`;
 do
-    $GOOGLE_CRHOME_PATH --headless --disable-gpu --print-to-pdf=./chapter0$i.pdf http://localhost:8001/chapter0$i.html\?print-pdf\#/
+    $GOOGLE_CRHOME_PATH --headless --disable-gpu --print-to-pdf=./chapter0$i.pdf http://localhost:8000/chapter0$i.html\?print-pdf\#/
 done
 for i in `seq 10 17`;
 do
-    $GOOGLE_CHROME_PATH --headless --disable-gpu --print-to-pdf=./chapter$i.pdf http://localhost:8001/chapter$i.html\?print-pdf\#/
+    $GOOGLE_CHROME_PATH --headless --disable-gpu --print-to-pdf=./chapter$i.pdf http://localhost:8000/chapter$i.html\?print-pdf\#/
 done
 
 if you are using macOS the Google Chrome path is in 
