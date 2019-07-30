@@ -493,6 +493,73 @@ echo "### END DEPLOY IMAGE ###"
 9. To check the deployment in OpenShift; open the web console and go to your `dev` namespace. You should see the deployment was successful; hit the URL to open the app and play with the deployed.
 ![ocp-deployment](../images/exercise2/ocp-deployment.png)
 
+### Part 4 - The Jenkinsfile
+> _In this exercise we'll use pipeline-as-code to create a pipeline in Jenkins_
+
+1. Open up your `todolist` application in your favourite editor and move to the `Jenkinsfile` in the root of the project. The high-level structure of the file is shown collapsed below.
+![pipeline-overview](../images/exercise4/pipeline-overview.png)
+Some of the key things to note:
+    * `pipeline {}` is how all declarative Jenkins pipelines begin.
+    * `environment {}` defines environment variables to be used across all build stages
+    * `options {}` contains specific Job specs you want to run globally across the jobs e.g. setting the terminal colour
+    * `stage {}` all jobs must have one stage. This is the logical part of the build that will be executed e.g. `bake-image`
+    * `steps {}` each `stage` has one or more steps involved. These could be execute shell or git checkout etc.
+    * `agent {}` specifies the node the build should be run on e.g. `jenkins-slave-npm`
+    * `post {}` hook is used to specify the post-build-actions. Jenkins declarative pipeline syntax provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
+    * `when {}` is used for flow control. It can be used at the stage level and be used to stop pipeline entering that stage. e.g. when branch is master; deploy to `test` environment.
+
+3. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous exercises. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
+```groovy
+    environment {
+        // GLobal Vars
+        NAMESPACE_PREFIX="<YOUR_NAME>"
+        GITLAB_DOMAIN = "gitlab.apps.change.me.com"
+        GITLAB_PROJECT = "<GIT_USERNAME>"
+
+        PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
+        APP_NAME = "todolist"
+
+        JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
+        JOB_NAME = "${JOB_NAME}".replace("/", "-")
+
+        GIT_SSL_NO_VERIFY = true
+        GIT_CREDENTIALS = credentials('jenkins-git-creds')
+    }
+```
+
+4. With these changes in place, push your changes to the `develop` branch.
+```bash
+git add Jenkinsfile
+```
+```bash
+git commit -m "ADD - namespace and git repo to pipeline"
+```
+```bash
+git push
+```
+
+5. When the changes have been successfully pushed; Open Jenkins.
+
+6. Create a `New Item` on Jenkins. Give it the name `todolist` and select `Multibranch Pipeline` from the bottom of the list as the job type.
+![multibranch-select](../images/exercise4/multibranch-select.png)
+
+7. On the job's configure page; set the Branch Sources to `git`
+![multibranch-select-git](../images/exercise4/multibranch-select-git.png)
+
+8. Fill in the Git settings with your `todolist-api` GitLab url and set the credentials as you've done before. `https://gitlab.<APPS_URL>/<YOUR_NAME>/todolist-api.git`
+![multibranch-git](../images/exercise4/multibranch-git.png)
+
+9. Set the `Scan Multibranch Pipeline Triggers` to be Scan by webhook and set the token to be `todolist` as we set at the beginning of the exercise. This will trigger the job to scan for changes in the repo when there are pushes. 
+![multibranch-webhook](../images/exercise2/multibranch-webhook.png)
+
+1.  Save the Job configuration to run the intial scan. The log will show scans for `master` and `develop` branches, which have `Jenkinsfile` so pipelines are dynamically created for them.
+![todolist-api-multi](../images/exercise2/todolist-api-multi.png)
+
+1.  The pipeline file is setup to only run `bake` & `deploy` stages when on `master` or `develop` branch. This is to provide us with very fast feedback for team members working on feature or bug fix branches. Each time someone commits or creates a new branch a basic build with testing occurs to give very rapid feedback to the team. 
+
+2.  With the builds running for  `develop` and `master` we can explore the Blue Ocean View for Jenkins. On the Job overview page, hit the `Open Blue Ocean` button on the side to see what modern Jenkins looks like.
+![blue-ocean-todolist](../images/exercise2/blue-ocean-todolis.png)
+
 _____
 
 ## Extension Tasks
