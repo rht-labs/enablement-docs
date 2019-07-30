@@ -514,29 +514,17 @@ git commit -m "Adding Jenkins and Jenkins s2i"
 git push
 ```
 
-11.  In order for Jenkins to be able to run `npm` builds and installs we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. These slaves can take a time to build themselves so to speed up we have placed the slave within OpenShift and you can use the following commands to be able to use them in your project.
-```bash
-oc project <YOUR_NAME>-ci-cd
-```
-```bash
-oc tag openshift/jenkins-slave-npm:latest jenkins-slave-npm:latest
-```
-```bash
-oc label is jenkins-slave-npm role=jenkins-slave
-```
-This is pulling the container image into your namespace and then adding a label which will allow Jenkins to take notice of it. Don't worry if the label is already there and this last command fails!
-
-12. Now your code is commited, and you have bought in the Jenkins slave; run the OpenShift Applier to add the config to the cluster
+11. Now your code is commited; run the OpenShift Applier to add the config to the cluster
 ```bash
 ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=jenkins"
 ```
 
-13. This will trigger a build of the s2i and when it's complete it will add an imagestream of `<YOUR_NAME>-ci-cd/jenkins:latest` to the project. The Deployment config should kick in and deploy the image once it arrives. You can follow the build of the s2i by going to the OpenShift console's project
+12. This will trigger a build of the s2i and when it's complete it will add two imagestreams to the project, one of `<YOUR_NAME>-ci-cd/jenkins:latest` and also a Jenkins agent imagestream. The Deployment config should kick in and deploy the image once it arrives. You can follow the build of the s2i by going to the OpenShift console's project
 ![jenkins-s2i-log](../images/exercise1/jenkins-s2i-log.png)
 
-14. When the Jenkins deployment has completed; login (using your OpenShift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
+13. When the Jenkins deployment has completed; login (using your OpenShift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
 
 ### Part 6 - Jenkins Hello World
 > _To test things are working end-to-end; create a hello world job that doesn't do much but proves we can pull code from git and that our builds are green._
