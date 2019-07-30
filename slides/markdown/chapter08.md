@@ -1,35 +1,21 @@
 <!-- .slide: data-background-image="images/RH_NewBrand_Background.png" -->
 ## DevOps Culture and Practice <!-- {_class="course-title"} -->
-### Value Stream and Process Mapping <!-- {_class="title-color"} -->
+### Metric-Based Process Mapping <!-- {_class="title-color"} -->
 DO500 <!-- {_class="title-color"} -->
 
 
 
-<!-- .slide: id="vsm-mbpm" -->
-## Value Stream Mapping
-## Metric-Based Process Mapping
-
-
-
-### Value Stream Mapping and Metric-Based Process Mapping
-#### _What are They?_
+### Metric-Based Process Mapping
+#### _What is It?_
 * Heavily influenced by Karen Martin's work in this area
-* Two practices that work in tandem:
-  * VSM
-
-    Designed to view the big, macro picture and make strategic decisions
-    with executives.
-  * MBPM
-
-    Designed to view the detailed, micro picture and make tactical improvements
-    with front line workers.
-* The first generation of these techniques comes from Toyota's "information and material flow"
+* Designed to view the detailed, micro picture and make tactical improvements with front line workers.
+* The first generation comes from Toyota's "information and material flow"
 as documented in [Lean Thinking](https://rht-labs.github.io/practice-library/practices/vsm-and-mbpm/#footnote-1)
 and the second generation from [Learning to See](https://rht-labs.github.io/practice-library/practices/vsm-and-mbpm/#footnote-2).
 
 
 
-### VSM and MBPM
+### MBPM
 #### _Why Use It?_
 * Holistically analyze and optimize "brownfield" delivery processes, including everything from requirements definition, infrastructure provisioning and application development.
 * Visually represent the way work flows through an organization
@@ -162,7 +148,7 @@ how the work is actually done.
 
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
 ### DevOps practices used in this section:
-- [Value Stream and Metric-Based Processing Mapping](https://openpracticelibrary.com/practice/vsm-and-mbpm/)
+- [Metric-Based Processing Mapping](https://openpracticelibrary.com/practice/vsm-and-mbpm/)
 
 
 

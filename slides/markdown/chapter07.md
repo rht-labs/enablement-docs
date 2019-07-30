@@ -190,4 +190,4 @@ In Your Teams
 
 
 <!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png", class="white-style" -->
-[Chapter 8, Value Stream and Process Mapping](chapter08.html)
+[Chapter 8, Metric-Based Process Mapping](chapter08.html)
