@@ -113,7 +113,6 @@ to a live application
   the backend and frontend of the application
   3. Add branching to the pipeline to target a specific OpenShift namespace
 
-Timebox (15m) <!-- {_class="small"} -->
 
 
 
@@ -149,17 +148,13 @@ applications.
 ### Let's Go!!!
 Lab Exercise 2: _The Attack of the Pipelines_
 
-Timebox (120 min) <!-- {_class="small"} -->
-
 
 
 ## Parking Lot Review
-Timebox (20 min) <!-- {_class="small"} -->
 
 
 
 ## Daily Retrospective
-Timebox (10 min) <!-- {_class="small"} -->
 
 
 
