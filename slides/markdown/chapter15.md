@@ -6,7 +6,6 @@ DO500 <!-- {_class="title-color"} -->
 
 
 ## Group Activity
-Timebox (15 min) <!-- {_class="small"} -->
 
 
 
@@ -60,17 +59,13 @@ project lifecycle
 ### Let's Go!!!
 Lab Exercise 5: _The Non-Functionals Strike Back_
 
-Timebox (120 min) <!-- {_class="small"} -->
-
 
 
 ## Parking Lot Review
-Timebox (20 min) <!-- {_class="small"} -->
 
 
 
 ## Daily Retrospective
-Timebox (15 min) <!-- {_class="small"} -->
 
 
 
