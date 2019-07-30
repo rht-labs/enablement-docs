@@ -64,8 +64,6 @@ In teams, take some time to brainstorm:
 * What did you learn about your team, class, or instructors?
 * What did you enjoy?
 
-Timebox (30 min) <!-- {_class="small"} -->
-
 
 
 ## Lab Catchup and Questions
