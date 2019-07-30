@@ -111,7 +111,7 @@ cd enablement-ci-cd
 ```yaml
   hosts: "{{ target }}"
   vars:
-    namespace_prefix: "Dónal"
+    namespace_prefix: "<YOUR_NAME>"
     ci_cd_namespace: "{{ namespace_prefix }}-ci-cd"
     dev_namespace: "{{ namespace_prefix }}-dev"
     test_namespace: "{{ namespace_prefix }}-test"
