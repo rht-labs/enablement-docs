@@ -14,11 +14,13 @@ Timebox (15 min) <!-- {_class="small"} -->
 ## Non-Functional Testing
 
 
+
 ### Non-Functional Testing
 #### _What Is It?_
 Non-Functional Testing provides valuable insights into code quality, security, and
 application performance. Non-functional tests can be automated and incorporated
 into **continuous integration**.
+
 
 
 ### Non-Functional Testing
@@ -36,6 +38,7 @@ project lifecycle
 ## The Non-Functionals Strike Back
 
 
+
 ### Lab Exercise 5: The Non-Functionals Strike Back
 * Add code coverage reporting
 * Add code style checking
@@ -43,12 +46,15 @@ project lifecycle
 * Run security tests to find vulnerabilities in the application
 
 
+
 ### What new Tools and Frameworks will we use?
 ![NFT](images/nft/lab5tech.png)
 
 
+
 ### The Big Picture
 ![BP5](images/nft/bp-5-non-functionals.jpg)
+
 
 
 ### Let's Go!!!
