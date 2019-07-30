@@ -203,8 +203,6 @@ Management application.
   * Any questions or ambiguities to add to the event storm?
   * Add aggregates as needed
 
-Timebox (45m) <!-- {_class="small"} -->
-
 
 
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
