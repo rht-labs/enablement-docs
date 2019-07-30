@@ -281,7 +281,7 @@ git push -u origin --all
 ```yaml
   - name: "jenkins-mongodb"
     namespace: "{{ ci_cd_namespace }}"
-    template: "https://raw.githubusercontent.com/rht-labs/enablement-templates/v1.0.0/enablement-templates/mongodb.yml"
+    template: "openshift//mongodb-ephemeral"
     params: "{{ playbook_dir }}/params/mongodb"
     tags:
     - mongodb
