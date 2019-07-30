@@ -367,7 +367,7 @@ git checkout exercise1/jenkins templates/jenkins.yml
 MEMORY_LIMIT=3Gi
 VOLUME_CAPACITY=10Gi
 JVM_ARCH=x86_64
-NAMESPACE="{{ namespace_prefix }}-ci-cd"
+NAMESPACE="<YOUR_NAME>-ci-cd"
 JENKINS_OPTS=--sessionTimeout=720
 ```
 
@@ -434,7 +434,7 @@ git checkout exercise1/jenkins-s2i params/jenkins-s2i templates/jenkins-s2i.yml
 SOURCE_REPOSITORY_URL=<GIT_URL>
 NAME=jenkins
 SOURCE_REPOSITORY_CONTEXT_DIR=jenkins-s2i
-IMAGE_STREAM_NAMESPACE="{{ namespace_prefix }}-ci-cd"
+IMAGE_STREAM_NAMESPACE="<YOUR_NAME>-ci-cd"
 SOURCE_REPOSITORY_USERNAME=<YOUR_LDAP_USERNAME>
 SOURCE_REPOSITORY_PASSWORD=<YOUR_LDAP_PASSWORD>
 ```
