@@ -80,8 +80,6 @@ As a team:
 1. Draw the impact map so far
 2. Determine impacts and deliverables
 
-Timebox (30 min) <!-- {_class="small"} -->
-
 
 
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->

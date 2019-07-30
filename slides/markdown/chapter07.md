@@ -16,8 +16,6 @@ _Answer the question "What is Agile?"_
 come to mind.
 3. Add your sticky to the wall.
 
-Timebox (15 min) <!-- {_class="small"} -->
-
 
 
 <!-- .slide: id="agile"-->
@@ -62,8 +60,6 @@ continuous delivery of valuable software.
 Working in teams:
 1. On a piece of paper make room for 12 boxes.
 2. For each box, write 2 to 3 words maximum that effectively capture each of the 12 principles.
-
-Timebox (15 min) <!-- {_class="small"} -->
 
 http://tastycupcakes.org/2010/01/pocket-sized-principles/ <!-- {_class="small"} -->
 
@@ -174,8 +170,6 @@ In Your Teams
 2. There must be "air time" between each pass.
 3. You cannot use any artificial containers.
 4. If you drop a ball, you lose a point.
-
-Timebox (15 min) <!-- {_class="small"} -->
 
 
 

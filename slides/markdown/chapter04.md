@@ -28,8 +28,6 @@ _Individual Drawing_
 2. Each person grab a different color pen.
 3. Draw Public Figure on your own sticky note.
 
-Timebox (1 min) <!-- {_class="small"} -->
-
 
 
 ### Exercise - Pairing and Mobbing
@@ -38,8 +36,6 @@ _Pair Drawing_
 2. Each pair grab a medium post-it
 3. Take turns drawing an element of Public Figure.
 
-Timebox (2 min) <!-- {_class="small"} -->
-
 
 
 ### Exercise - Pairing and Mobbing
@@ -47,8 +43,6 @@ _Mob Drawing_
 1. Assemble in table groups.
 2. Each table use an easel post-it
 3. Take turns drawing an element of Public Figure.
-
-Timebox (3 min) <!-- {_class="small"} -->
 
 
 
@@ -148,8 +142,6 @@ objects to an OpenShift cluster
 
 ### Let's Go!!!
 Lab Exercise 1: _The Manual Menace_
-
-Timebox (90 min) <!-- {_class="small"} -->
 
 
 

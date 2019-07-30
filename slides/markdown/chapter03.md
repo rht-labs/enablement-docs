@@ -12,8 +12,6 @@ _Complete the sentence "DevOps is..."_
 come to mind.
 3. Add your sticky to the wall.
 
-Timebox (15 min) <!-- {_class="small"} -->
-
 
 
 <!--.slide: id="dev-ops" -->

@@ -8,8 +8,6 @@ DO500 <!-- {_class="title-color"} -->
 ### Exercise - Team Formation
 Form a straight line across the room in order of relative technical experience in development engineering practices.
 
-Timebox (5 min) <!-- {_class="small"} -->
-
 
 
 <!--.slide: id="social-contract" -->
@@ -52,8 +50,6 @@ Timebox (5 min) <!-- {_class="small"} -->
   - Record your team button
 2. Think about any aspects of your Social Contract that are appropriate for the entire class so we can write the class Social Contract
 
-Timebox (15 min) <!-- {_class="small"} -->
-
 
 
 <!--.slide: id="priority-sliders" -->
@@ -87,8 +83,6 @@ Timebox (15 min) <!-- {_class="small"} -->
   2. Consider the  areas identified from Target Outcomes practice
   3. Discuss where you agree as a team the priorities, 1 to 5
   4. Note no priority can be the same level and trade-offs must occur.
-
-Timebox (20 min) <!-- {_class="small"} -->
 
 
 

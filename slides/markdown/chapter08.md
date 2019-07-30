@@ -158,8 +158,6 @@ how the work is actually done.
 
 [The Penny Game](https://www.leanagiletraining.com/better-agile/agile-penny-game-rules/)
 
-Timebox (30 min) <!-- {_class="small"} -->
-
 
 
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->

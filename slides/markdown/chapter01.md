@@ -13,15 +13,11 @@ DO500 <!-- {_class="title-color"} -->
 ## Exercise - Faces
 Meet your classmates by collaboratively drawing each others faces.
 
-Timebox (20 min) <!-- {_class="small"} -->
-
 
 
 ## Exercise - Animals
 ![Draw an animal](images/animals.png)<!-- {_class="inline-image"} -->
 Draw a simple representation of an animal that you feel represents your current mood. Hang on to these.
-
-Timebox (20 min) <!-- {_class="small"} -->
 
 
 
@@ -90,8 +86,6 @@ _What are Target Outcomes?_
 #### _What are **your** Target Outcomes?_
 - Write down your own thoughts
 - Add them to the wall
-
-Timebox (15 min) <!-- {_class="small"} -->
 
 
 
