@@ -67,16 +67,12 @@ DO500 <!-- {_class="title-color"} -->
 1. As an individual, capture on stickies things you do from the moment you wake up
 until you arrive at work.
 
-Timebox (3m) <!-- {_class="small"} -->
-
 
 
 ### Exercise - Mapping Stories for "getting to work"
 1. As an individual, capture on stickies things you do from the moment you wake up
 until you arrive at work.
 2. As a team, add all activities to the story map and remove duplicates. If some are similar but slightly different, do not remove as duplicates
-
-Timebox (5m) <!-- {_class="small"} -->
 
 
 
@@ -85,8 +81,6 @@ Timebox (5m) <!-- {_class="small"} -->
 until you arrive at work.
 2. As a team, add all activities to the story map.
 3. Cluster similar activities and capture themes above them
-
-Timebox (10m) <!-- {_class="small"} -->
 
 
 
@@ -116,8 +110,6 @@ must be done.
 2. Discuss which stories are absolutely necessary given the scenario.
 3. Move stories below the line that are not absolutely necessary based on
 consensus of the team.
-
-Timebox (10m) <!-- {_class="small"} -->
 
 
 
