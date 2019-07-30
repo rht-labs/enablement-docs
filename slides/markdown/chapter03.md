@@ -20,6 +20,7 @@ Timebox (15 min) <!-- {_class="small"} -->
 ## DevOps Culture and Practice
 
 
+
 <!-- .slide: data-transition="slide-in fade-out" -->
 ## What is DevOps?
 
@@ -34,6 +35,7 @@ Timebox (15 min) <!-- {_class="small"} -->
                                             Way of Working?
 
 
+
 <!-- .slide: data-transition="fade-in slide-out" -->
 ## DevOps is...
 
@@ -42,6 +44,7 @@ Timebox (15 min) <!-- {_class="small"} -->
                                                                            Mindset
 
                                             Way of Working
+
 
 
 ### The Three Ways of DevOps
@@ -58,6 +61,7 @@ The First Way emphasizes the performance of the entire system, as opposed to the
 _The DevOps Handbook_ <!-- {_class="small" style="text-align: right;"} -->
 
 
+
 ### The Three Ways of DevOps
 #### _The Second Way: Amplify Feedback Loops_
 * The Second Way is about creating more frequent feedback loops.
@@ -70,6 +74,7 @@ _The DevOps Handbook_ <!-- {_class="small" style="text-align: right;"} -->
   * Embedding knowledge where we need it
 
 _The DevOps Handbook_ <!-- {_class="small" style="text-align: right;"} -->
+
 
 
 ### The Three Ways of DevOps
@@ -110,10 +115,12 @@ _The DevOps Handbook_ <!-- {_class="small" style="text-align: right;"} -->
 https://web.devopstopologies.com/ <!-- {_class="small"} -->
 
 
+
 ### DevOps Anti-Patterns
 #### _DevOps Team Silo_
 ![DevOpsTeamSilo](images/DevOps/antiB.png)
 https://web.devopstopologies.com/ <!-- {_class="small"} -->
+
 
 
 ### DevOps Anti-Patterns
@@ -122,10 +129,12 @@ https://web.devopstopologies.com/ <!-- {_class="small"} -->
 https://web.devopstopologies.com/ <!-- {_class="small"} -->
 
 
+
 ### DevOps Anti-Patterns
 #### _DevOps as Tool Team_
 ![DevOpsToolTeam](images/DevOps/antiD.png)
 https://web.devopstopologies.com/ <!-- {_class="small"} -->
+
 
 
 ### DevOps Anti-Patterns
@@ -134,10 +143,12 @@ https://web.devopstopologies.com/ <!-- {_class="small"} -->
 https://web.devopstopologies.com/ <!-- {_class="small"} -->
 
 
+
 ### DevOps Anti-Patterns
 #### _Ops Embedded in Dev Team_
 ![EmbeddedOps](images/DevOps/antiF.png)
 https://web.devopstopologies.com/ <!-- {_class="small"} -->
+
 
 
 ### DevOps Anti-Patterns
