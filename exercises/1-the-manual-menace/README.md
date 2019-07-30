@@ -127,7 +127,7 @@ NOTE - YAML is indentation sensitive so keep things lined up properly!
 ```yaml
 ci_cd:
   NAMESPACE: "{{ namespace_prefix }}-ci-cd"
-  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title}}s CI/CD"
+  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }}s CI/CD"
 ```
 * This will define the variables that we'll soon be using to deploy our CI/CD project. It relies on the `namespace_prefix` that we updated earlier. Pulling these two sets of variables together will now allow us to pass the newly created variables to our template that will create our project appropriately. You'll notice that the name of the variable above (`ci_cd`) is then assigned to `params_from_vars` in our inventory.
 ```yaml
