@@ -132,9 +132,10 @@ exit
 ```yaml
   hosts: "{{ target }}"
   vars:
-    ci_cd_namespace: donal-ci-cd
-    dev_namespace: donal-dev
-    test_namespace: donal-test
+    namespace_prefix: "Dónal"
+    ci_cd_namespace: "{{ namespace_prefix }}-ci-cd"
+    dev_namespace: "{{ namespace_prefix }}-dev"
+    test_namespace: "{{ namespace_prefix }}-test"
   tasks:
 ```
 <p class="tip">
@@ -143,41 +144,53 @@ NOTE - YAML is indentation sensitive so keep things lined up properly!
 
 5. Open the `inventory/host_vars/projects-and-policies.yml` file; you should see some variables setup already to create the `<YOUR_NAME>-ci-cd` namespace. This object is passed to the OpenShift Applier to call the `templates/project-requests.yml` template with the `params/project-requests-ci-cd` parameters. We will add some additional content here but first let's explore the parameters and the template
 
-6. Open the `params/project-requests-ci-cd` and replace the `<YOUR_NAME>` with your name to create the corresponding projects in the cluster.
-![new-item](../images/exercise1/ci-cd-project-namespace.png)
+6a. Inside of the `inventory/host_vars/projects-and-policies.yml` you'll see the following
+```yaml
+ci_cd:
+  NAMESPACE: "{{ namespace_prefix }}-ci-cd"
+  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix}}s CI/CD"
+```
+* This will define the variables that we'll soon be using to deploy our CI/CD project. It relies on the `namespace_prefix` that we updated earlier. Pulling these two sets of variables together will now allow us to pass the newly created variables to our template that will create our project appropriately. You'll notice that the name of the variable above (`ci_cd`) is then assigned to `params_from_vars` in our inventory.
+```yaml
+ansible_connection: local
+openshift_cluster_content:
+- object: projectrequest
+  content:
+  - name: "{{ ci_cd_namespace }}"
+    template: "{{ playbook_dir }}/templates/project-requests.yml"
+    action: create
+    params_from_vars: "{{ ci_cd }}"
+    tags:
+    - projects
+```
 
-7. Let's add two more params files to pass to our template to be able to create a `dev` and `test` project.
-  * Create another two params files `params/project-requests-dev` & `params/project-requests-test`. On the terminal run
-```bash
-touch params/project-requests-dev params/project-requests-test
-```
-  * In your editor; Open `params/project-requests-dev` and add the following by substituting `<YOUR_NAME>` accordingly
-```
-NAMESPACE=<YOUR_NAME>-dev
-NAMESPACE_DISPLAY_NAME=<YOUR_NAME> Dev
-```
-  * In your editor; Open `params/project-requests-test` and add the following by substituting `<YOUR_NAME>` accordingly
-```
-NAMESPACE=<YOUR_NAME>-test
-NAMESPACE_DISPLAY_NAME=<YOUR_NAME> Test
+7. Let's add two more params dicts to pass to our template to be able to create a `dev` and `test` project.At the top of `inventory/host_vars/projects-and-policies.yml` create a dictionary called `dev` and `test` similar to how you see `ci_cd` defined.
+  * In your editor; Open `inventory/host_vars/projects-and-policies.yml` and add the following:
+```yaml
+dev:
+  NAMESPACE: "{{ namespace_prefix }}-dev"
+  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix }} Dev"
+
+test:
+  NAMESPACE: "{{ namespace_prefix }}-test"
+  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix }} Test"
 ```
 
-8. In the `inventory/host_vars/projects-and-policies.yml` file; add the new objects for the projects you want to create (dev & test) by adding another object to the content array for each. You can copy and paste them from the `ci-cd` example and update them accordingly. If you do this; remember to change the params file! e.g.
+8. In the `inventory/host_vars/projects-and-policies.yml` file; add the new objects for the projects you want to create (dev & test) by adding another object to the content array for each. You can copy and paste them from the `ci-cd` example and update them accordingly. If you do this; remember to change the params_from_vars variable! e.g.
 ```yaml
     - name: "{{ dev_namespace }}"
       template: "{{ playbook_dir }}/templates/project-requests.yml"
       action: create
-      params: "{{ playbook_dir }}/params/project-requests-dev"
+      params_from_vars: "{{ dev }}"
       tags:
       - projects
     - name: "{{ test_namespace }}"
       template: "{{ playbook_dir }}/templates/project-requests.yml"
       action: create
-      params: "{{ playbook_dir }}/params/project-requests-test"
+      params_from_vars: "{{ test }}"
       tags:
       - projects
 ```
-![project-request-yaml](../images/exercise1/project-request-yml.png)
 
 For Microsoft Windows systems, you need to run Ansible and OpenShift client commands from inside the `do500-toolbox` container. Linux and MacOS users should skip this step and jump directly to Step 10.
 
@@ -233,6 +246,8 @@ VOLUME_CAPACITY=5Gi
 MEMORY_LIMIT=1Gi
 ```
 
+* You'll notice that this is different from how we defined our params for our projects. This is because there are multiple ways to do this. In cases like this, there may be a need to change some of these variables more frequently than others (i.e. giving the app more memory,etc.). In this case, it's easier to maintain them within their own seperate params files.
+
 4. Create a new object in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `ci-cd-tooling` and populate its `content` is as follows
 
 ```yaml
@@ -259,67 +274,6 @@ ansible-playbook apply.yml -e target=tools \
 
 6. Once successful; login to the cluster through the browser (using cluster URL) and navigate to the `<YOUR_NAME>-ci-cd`. You should see Nexus up and running. You can login with default credentials (admin / admin123) ![nexus-up-and-running](../images/exercise1/nexus-up-and-running.png)
 
-### Part 3 - GitLab
-
-<!-- #### 3a - GitLab install -->
-<p class="tip">
-NOTE - A Gitlab instance in the cloud has already been set up for you, please check with your instructor for the Gitlab instance URL.
-</p>
-
-<!-- 4. Now let's do the same thing for GitLab to get it up and running. Checkout the template and params provided by running
-```bash
-git checkout exercise1/git-nexus templates/gitlab.yml params/gitlab
-```
-Explore the template; it contains the PVC, buildConfig and services. The DeploymentConfig is made up of these apps
- - Redis (3.2.3)
- - PostgreSQL (9.4)
- - GitLab CE (v10.2.3)
-
-4. Open the `params/gitlab` file and complete the following params
-<p class="tip">
-Note - The values here for the LDAP and BIND credentials will be provided by your tutor.
-</p>
-```
-LDAP_BIND_DN=uid=<BIND_USER>,ou=People,dc=<YOUR_DOMAIN>,dc=com
-LDAP_USER_FILTER=(memberof=CN=YourGroup,OU=Users,DC=<YOUR_DOMAIN>,DC=com)
-LDAP_PASSWORD=<BIND_USER_PASSWORD>
-LDAP_HOST=<LDAP_HOST>
-LDAP_BASE=ou=People,dc=<YOUR_DOMAIN>,dc=com
-LDAP_LABEL="<LDAP_DESCRIPTION>"
-GITLAB_ROOT_PASSWORD=<GITLAB_ROOT_USER_PASSWORD>
-GITLAB_DATA_VOL_SIZE=2Gi
-POSTGRESQL_VOL_SIZE=1Gi
-APPLICATION_HOSTNAME=<GITLAB_URL>
-NAMESPACE=<YOUR_NAME>-ci-cd
-```
-where the following need to be replaced by actual values:
-    * `<BIND_USER>` is the user used to query the LDAP
-    * `<BIND_USER_PASSWORD>` is the password used when querying the LDAP
-    * `<YOUR_DOMAIN>` is the domain the LDAP is hosted on
-    * `<LDAP_HOST>` is fqdn of the LDAP server
-    * `<LDAP_DESCRIPTION>` is the description to be used on the sign-in header for GitLab e.g. "Name LDAP Login"
-    * `<GITLAB_ROOT_USER_PASSWORD>` is the root user for GOD access on the GitLab instance e.g. password123
-    * `<GITLAB_URL>` is the endpoint for gitlab. It will take the form `gitlab-<YOUR_NAME>-ci-cd.apps.<ENV_ID>.<YOUR_DOMAIN>.com`
-
-4. Create another object in the inventory `inventory/host_vars/ci-cd-tooling.yml` file to run the build & deploy of this template. Add the following and update the `namespace:` accordingly
-```yaml
-    - name: "gitlab"
-      namespace: "{{ ci_cd_namespace }}"
-      template: "{{ playbook_dir }}/templates/gitlab.yml"
-      params: "{{ playbook_dir }}/params/gitlab"
-      tags:
-      - gitlab
-```
-
-4. Run the OpenShift applier, specifying the tag `gitlab` to speed up its execution.
-```bash
-ansible-playbook apply.yml -e target=tools \
-     -i inventory/ \
-     -e "filter_tags=gitlab"
-```
-
-4. Once successful; login to the cluster and navigate to the `<YOUR_NAME>-ci-cd`. You should see GitLab up and running. ![gitlab-up-and-running](../images/exercise1/gitlab-up-and-running.png) -->
-
 <!-- #### 3b - Commit CI/CD -->
 
 1. Navigate to GitLab login page. You can login using your cluster credentials using the LDAP tab
@@ -331,7 +285,7 @@ ansible-playbook apply.yml -e target=tools \
 Note - we would not normally make the project under your name but create a group and add the project there on residency but for simplicity of the exercise we'll do that here
 </p> -->
 
-3. If you have not used Git before; you may need to tell Git who you are and what your email is before we commit. Run the following commands, substituting your email and "Your Name". If you've done this before move on to the next step. The last git config command is used to bypass SSL key verification in this repo since we are using self-signed certificates on the GitLab sever.
+3. If you have not used Git before; you may need to tell Git who you are and what your email is before we commit. Run the following commands, substituting your email and "Your Name". If you've done this before move on to the next step. <!-- The last git config command is used to bypass SSL key verification in this repo since we are using self-signed certificates on the GitLab sever. -->
 
 ```bash
 git config --global user.email "yourname@mail.com"
@@ -340,9 +294,9 @@ git config --global user.email "yourname@mail.com"
 git config --global user.name "Your Name"
 ```
 
-```bash
+<!-- ```bash
 git config http.sslVerify false
-```
+``` -->
 
 4. Commit your local project to this new remote by first removing the existing origin (github) where the Ansible project was cloned from in the first steps. Remember to substitute `<GIT_URL>` accordingly with the one created for your `enablement-ci-cd` repository a moment ago.
 ```bash
@@ -413,11 +367,11 @@ git checkout exercise1/jenkins templates/jenkins.yml
 MEMORY_LIMIT=3Gi
 VOLUME_CAPACITY=10Gi
 JVM_ARCH=x86_64
-NAMESPACE=<YOUR_NAME>-ci-cd
+NAMESPACE="{{ namespace_prefix }}-ci-cd"
 JENKINS_OPTS=--sessionTimeout=720
 ```
 
-3. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo (and git if you have it) in  `inventory/host_vars/ci-cd-tooling.yml`.
+3. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo in  `inventory/host_vars/ci-cd-tooling.yml`.
 ```yaml
     - name: "jenkins"
       namespace: "{{ ci_cd_namespace }}"
@@ -480,13 +434,12 @@ git checkout exercise1/jenkins-s2i params/jenkins-s2i templates/jenkins-s2i.yml
 SOURCE_REPOSITORY_URL=<GIT_URL>
 NAME=jenkins
 SOURCE_REPOSITORY_CONTEXT_DIR=jenkins-s2i
-IMAGE_STREAM_NAMESPACE=<YOUR_NAME>-ci-cd
+IMAGE_STREAM_NAMESPACE="{{ namespace_prefix }}-ci-cd"
 SOURCE_REPOSITORY_USERNAME=<YOUR_LDAP_USERNAME>
 SOURCE_REPOSITORY_PASSWORD=<YOUR_LDAP_PASSWORD>
 ```
 where
     * `<GIT_URL>` is the full clone path of the repo where this project is stored (including the https && .git)
-    * `<YOUR_NAME>` is the prefix for your `-ci-cd` project.
     * Explore some of the other parameters in `templates/jenkins-s2i.yml`
     * `<YOUR_LDAP_USERNAME>` is the username builder pod will use to login and clone the repo with
     * `<YOUR_LDAP_PASSWORD>` is the password the builder pod will use to authenticate and clone the repo using
