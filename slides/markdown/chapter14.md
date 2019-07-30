@@ -8,6 +8,7 @@ DO500 <!-- {_class="title-color"} -->
 ## Pipelines As Code
 
 
+
 ### Pipelines As Code
 #### _What Is It?_
 A Jenkins pipeline can be defined with code in a **Jenkinsfile**.
@@ -22,10 +23,12 @@ automation around common tasks (no more point and click in Jenkins)
 ## An Enslaved Hope
 
 
+
 ### Lab Exercise 4: An Enslaved Hope
 The purpose of this lab is to replace the manually created Jenkins jobs from
 Lab Exercise 2 with a source-controlled Jenkinsfile to automate pipeline
 creation.
+
 
 
 ### What new tools and frameworks will we use?
@@ -34,8 +37,10 @@ creation.
 specific configurations to a Jenkins instance
 
 
+
 ### The Big Picture
 ![BP4](images/bp-4-enslaved-hope.jpg)
+
 
 
 ### Let's Go!!!
