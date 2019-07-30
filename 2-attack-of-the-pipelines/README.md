@@ -558,7 +558,7 @@ git push
 1.  The pipeline file is setup to only run `bake` & `deploy` stages when on `master` or `develop` branch. This is to provide us with very fast feedback for team members working on feature or bug fix branches. Each time someone commits or creates a new branch a basic build with testing occurs to give very rapid feedback to the team. 
 
 2.  With the builds running for  `develop` and `master` we can explore the Blue Ocean View for Jenkins. On the Job overview page, hit the `Open Blue Ocean` button on the side to see what modern Jenkins looks like.
-![blue-ocean-todolist](../images/exercise2/blue-ocean-todolis.png)
+![blue-ocean-todolist](../images/exercise2/blue-ocean-todolist.png)
 
 _____
 
