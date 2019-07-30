@@ -17,6 +17,7 @@ DO500 <!-- {_class="title-color"} -->
 ## Event Storming
 
 
+
 ### Event Storming
 #### _What is It?_
 * Provides a repeatable, teachable technique for modeling:
@@ -26,6 +27,7 @@ DO500 <!-- {_class="title-color"} -->
 * Requires lots of stickies in a rainbow of colors with a legend to their usage
 
 
+
 ### Event Storming
 #### _What is It?_
 * Who: key business stakeholders and techies
@@ -33,6 +35,7 @@ DO500 <!-- {_class="title-color"} -->
 some **very** heated debate
 * No chairs!
 * Expect a tiring but fun day that achieves a great deal from the most basic of tools
+
 
 
 ### Event Storming
@@ -45,6 +48,7 @@ Event Storming was developed by Alberto Brandolini
 * First blog post about event storming was in 2013
 
 
+
 ### Event Storming
 #### _Why Do We Use It?_
 * Very simple modeling that is accessible to all business people
@@ -55,6 +59,7 @@ Event Storming was developed by Alberto Brandolini
   * Deliver really useful design artifacts
 
 
+
 ### Event Storming
 #### _Artifacts_
 * **Big Picture**: quickly build a shared understanding of a problem space
@@ -62,6 +67,7 @@ Event Storming was developed by Alberto Brandolini
 * **Aggregate Modeling**: find the key microservices, operations, and a retrospective
 event model
 * **UI Modeling**: model the flow of pages in an application
+
 
 
 ### Event Storming
@@ -76,7 +82,9 @@ event model
 ## Event Storming Diagram
 
 
+
 ![System](images/eventstorming/system.jpg)
+
 
 
 ### Event Storming: Events
@@ -87,12 +95,14 @@ Something that happened that people care about
 * A meaningful result of another thing, e.g. **Account Locked**
 
 
+
 ### Event Storming: Events
 ![Event](images/eventstorming/eventsticky.png) <!-- {_class="inline-image"} -->
 Where do events come from?
 * A system
 * Passing of time
 * Consequence of another event
+
 
 
 ### Event Storming: Commands
@@ -104,11 +114,13 @@ Where do events come from?
   * Cancel Reservation
 
 
+
 ### Event Storming: Actors
 ![Actor](images/eventstorming/actorsticky.png) <!-- {_class="inline-image"} -->
 An actor is the user of the system
 * Keep it fuzzy, e.g. **Joe**
 * The actor makes the decision
+
 
 
 ### Event Storming: Questions
@@ -119,10 +131,12 @@ An actor is the user of the system
 * Assumptions
 
 
+
 ### Event Storming: External Systems
 ![System](images/eventstorming/systemsticky.png) <!-- {_class="inline-image"} -->
 * Third party services
 * Existing systems
+
 
 
 ### Event Storming: Read Model
@@ -133,6 +147,7 @@ The **information** needed in order to make a **decision**
   * Query
   * Projection
 * Ties to the page layout
+
 
 
 ### Event Storming: Policies and Procedures
@@ -151,6 +166,7 @@ The **information** needed in order to make a **decision**
   Refund Requested > Refund Policy > Issue Receipt
 
 
+
 ### Event Storming: Aggregate
 ![Aggregate](images/eventstorming/aggsticky.png) <!-- {_class="inline-image"} -->
 Part of the system that **receives** the **command** and decides to **execute**
@@ -160,7 +176,9 @@ the **event**
 * Serve as a place to logically group commands once all event sources are identified
 
 
+
 ![System](images/eventstorming/system.jpg)
+
 
 
 ### Event Storming: Key Takeaways
@@ -186,6 +204,7 @@ Management application.
   * Add aggregates as needed
 
 Timebox (45m) <!-- {_class="small"} -->
+
 
 
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->

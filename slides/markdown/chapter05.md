@@ -10,6 +10,7 @@ DO500 <!-- {_class="title-color"} -->
 #### _What are Retrospectives?_
 
 
+
 ### Retrospectives
 
 Retrospectives are practice used by their teams to **reflect** on their way of working, and **continuously become better** in what they do. They are meant to help teams **keep improving.**
@@ -19,6 +20,7 @@ Retrospectives are practice used by their teams to **reflect** on their way of w
 <!-- {_class="fragment" data-fragment-index="1"} --> **- 12th Principle of the Agile Manifesto**
 
 
+
 ### Retrospectives
 #### _Why use a Retrospective?_
 - Improved productivity - *Helps teams to assess their situation and reduce waste*
@@ -26,6 +28,7 @@ Retrospectives are practice used by their teams to **reflect** on their way of w
 - Improved quality - *Writing better code means less rework and less bugs*
 - Improved capacity - *Determine optimal solution for choosing features that add value. Being more productive, improving capability, and improving quality increases capacity*
 - Improved camaraderie - *Provide a constructive environment for a good team dynamic*
+
 
 
 ### Retrospectives
@@ -43,6 +46,7 @@ OR
 _But they are done poorly and teams do not follow up on identified items_
 
 
+
 ### Retrospectives
 #### _Guidelines_
 - Shorten the time between each one.
@@ -50,6 +54,7 @@ _But they are done poorly and teams do not follow up on identified items_
 - Start with an update on the previous retrospective items.
 - Focus discussions on what you are able to change.
 - Always end on a high note.
+
 
 
 ### Retrospectives
@@ -63,6 +68,7 @@ _But they are done poorly and teams do not follow up on identified items_
   - 5 Whys
 
 
+
 ### Retrospectives
 _The Retrospective Prime Directive_
 
@@ -71,6 +77,7 @@ did the best job they could, given what they knew at the time, their skills and
 abilities, the resources available, and the situation at hand."**
 
 -Norm Kerth, Project Retrospectives: A Handbook for Team Review
+
 
 
 ### Retrospectives
@@ -90,11 +97,13 @@ abilities, the resources available, and the situation at hand."**
 #### _What is an Information Radiator?_
 
 
+
 ### Information Radiators
 #### _An Information Radiator..._
 - Involves radiating and visually representing all aspects of work.
 - Typically means information that is useful to team members, stakeholders and users is physically presented on walls, windows, doors and other flat surfaces and positioned in the line of sight of those people who will get value from consuming the information.
 - Enables the ability to "Walk the Walls", where someone interested in the work can walk around the physical space the associated team(s) are working from and get all the information they need from inspecting artefacts on the wall and from the resulting conversations.
+
 
 
 ### Information Radiators

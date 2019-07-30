@@ -9,6 +9,7 @@ DO500 <!-- {_class="title-color"} -->
 ## Impact Mapping
 
 
+
 ### Impact Mapping
 #### _What is It?_
 Impact Mapping is an engaging, graphical, and strategic planning technique. It
@@ -23,16 +24,21 @@ the aforementioned impacts
 * Some sort of prioritization of scope and/or impacts
 
 
+
 ![Goal](images/ImpactMapping/impact-mapping-goal.png)
+
 
 
 ![Goal](images/ImpactMapping/impact-mapping-actors.png)
 
 
+
 ![Goal](images/ImpactMapping/impact-mapping-impacts.png)
 
 
+
 ![Goal](images/ImpactMapping/impact-mapping-deliverables.png)
+
 
 
 ### Impact Mapping
@@ -46,8 +52,10 @@ the aforementioned impacts
 * Helps identify which hypotheses are the most valuable to test
 
 
+
 ### Example Impact Map
 ![Example](images/ImpactMapping/ImpactMap.png)
+
 
 
 ### Example Impact Map with Deliverables
@@ -64,6 +72,7 @@ Our client has a To Do List app that is not doing great, and we have agreed to h
    * Goal: Create an easy to use tool to allow 1 million users to get tasks done
 2. Discuss: Is this a good goal?
 3. Who are the actors that can get us to our goal?
+
 
 
 ### Exercise - Impact Mapping 2/2
