@@ -81,7 +81,6 @@ _____
 ### Part 1 - Explore the Todo List App
 > _In this part of the exercise we will explore the sample application, become familiar with it locally before building and deploying in OCP Land_
 
-#### Todo List Application
 The Todolist application is a monorepo which has both front end and server layers in a single repo.
 
 1. Git clone the `todolist` project to the `do500-workspace` folder and checkout the `develop` branch using the following commands.
@@ -104,12 +103,14 @@ git checkout develop
 
 1. Open up Gitlab and login. Create a new project (internal) in GitLab called `todolist` to host your clone of the project and copy its remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
 
-2. Later in the exercise we'll automatically trigger Jenkins builds on commit, but we'll add the WebHook now. Add a WebHook to the newly created project by going to settings > integrations. ![gitlab-integrations](../images/exercise2/gitlab-integrations.png). In the field add the URL for Jenkins and the route for the webhook and token. Disable SSL Verification if the cluster has unsigned certs and Add the webhook. 
+2. Later in the exercise we'll automatically trigger Jenkins builds on commit, but we'll add the WebHook now. Add a WebHook to the newly created project by going to settings > integrations. ![gitlab-integrations](../images/exercise2/gitlab-integrations.png) 
+
+3. In the field add the URL for Jenkins and the route for the webhook and token. Disable SSL Verification if the cluster has unsigned certs and Add the webhook. 
 ```bash
 https://<YOUR_JENKINS_URL>/multibranch-webhook-trigger/invoke?token=todolist
 ```
 
-4. In your local clone of the `todolist`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab. 
+1. In your local clone of the `todolist`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab. 
 ```bash
 git remote set-url origin <YOUR_GIT_LAB_PROJECT>
 # verify the origin has been updated
@@ -152,7 +153,7 @@ curl localhost:9000/api/todos
 }]
 ```
 
-1. This will take sometime to execute; but once done it should open the browser for you displaying the homepage of the `todolist` app.
+1. Open the browser (http://localhost:8080) for you displaying the homepage of the `todolist` app.
  ![fullstack-app](../images/exercise2/fullstack-app.png)
     * Click 'Todo' at the top of the home page to get to the above page.
     * The server hosting it live reloads; so if you make changes to your code base the app will live update
@@ -214,7 +215,6 @@ todolist
 │   └── unit
 └── vue.config.js
 ```
-
 where the following are the important things:
     * `./src` is the collection of front end files. The entrypoint is the `main.js` which is used to load the root `App.vue` file.
     * `./node_modules` is where the dependencies are stored
@@ -359,7 +359,7 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
 ```bash
 set -o xtrace
 npm install
-npm run build:ci:dev
+npm run build:ci
 npm run package
 npm run publish
 ```
@@ -399,7 +399,7 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
 
 #### 3b - bake & deploy
 
-1. Next we will setup our *bake* phase; which is a little simpler. Go to Jenkins home and create another Freestyle Job (as before) called `dev-todolist-bake-deploy`.
+1. Next we will setup our *bake* and *deploy* phase; which is a little simpler. Go to Jenkins home and create another Freestyle Job (as before) called `dev-todolist-bake-deploy`.
 
 2. This job will take in the BUILD_TAG from the previous one so check the `This project is parameterized` box on the General tab.
     * Add string parameter type
@@ -419,9 +419,7 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
 
 4. There is no Git or SCM needed for this job so move down to the Build Environment and tick `Delete workspace before build starts`
 
-5. Scroll down to the Build Environment tab and select the `Color ANSI Console Output` checkbox ![delete-ansi](../images/exercise2/delete-ansi.png)
-
-6. Move on to the Build section and select `Add build step`. From the dropdown select `Execute Shell`. On the box the appears; insert the following, to pull the package from Nexus. We patch the BuildConfig with the Jenkins Tag to get traceablility from feature to source code to built item. Finally; the oc start-build command is run:
+5. Move on to the Build section and select `Add build step`. From the dropdown select `Execute Shell`. On the box the appears; insert the following, to pull the package from Nexus. We patch the BuildConfig with the Jenkins Tag to get traceablility from feature to source code to built item. Finally; the oc start-build command is run:
 Remember to replace `<YOUR_NAME>` accordingly.
 ```bash
 #!/bin/bash
@@ -431,7 +429,7 @@ curl -v -f \
     -o package-contents.zip
 unzip package-contents.zip
 oc project <YOUR_NAME>-ci-cd
-NAME=todolist-fe
+NAME=todolist
 oc patch bc ${NAME} -p "{\"spec\":{\"output\":{\"to\":{\"kind\":\"ImageStreamTag\",\"name\":\"${NAME}:${BUILD_TAG}\"}}}}"
 oc start-build ${NAME} --from-dir=package-contents/ --follow
 echo "### END BAKE IMAGE ###"
@@ -445,7 +443,7 @@ set -o xtrace
 echo "### START DEPLOY IMAGE ###"
 PIPELINES_NAMESPACE=<YOUR_NAME>-ci-cd
 NAMESPACE=<YOUR_NAME>-dev
-NAME=todolist-fe
+NAME=todolist
 oc project ${NAMESPACE}
 oc tag ${PIPELINES_NAMESPACE}/${NAME}:${BUILD_TAG} ${NAMESPACE}/${NAME}:${BUILD_TAG}
 oc set env dc ${NAME} NODE_ENV=dev
@@ -457,7 +455,7 @@ echo "### END DEPLOY IMAGE ###"
 
 3. When a deployment has completed; OpenShift can verify its success. Add another step by clicking the `Add build Step` on the Build tab then `Verify OpenShift Deployment` including the following:
     * Set the Project to your `<YOUR_NAME>-dev`
-    * Set the DeploymentConfig to your app's name `todolist-fe`
+    * Set the DeploymentConfig to your app's name `todolist`
     * Set the replica count to `1`
 ![verify-deployment](../images/exercise2/verify-deployment.png)
 
@@ -479,24 +477,21 @@ echo "### END DEPLOY IMAGE ###"
 1. Back on Jenkins; We can tie all the jobs in the pipeline together into a nice single view using the Build Pipeline view. Back on the Jenkins home screen Click the + beside the all tab on the top.
 ![add-view](../images/exercise2/add-view.png)
 
-6. On the view that loads; Give the new view a sensible name like `dev-todolist-fe-pipeline` and select Build Pipeline View
+6. On the view that loads; Give the new view a sensible name like `dev-todolist-pipeline` and select Build Pipeline View
 ![new-pipeline](../images/exercise2/new-pipeline.png)
 
-7. Set the Pipeline Flow's Inital Job to `dev-todolist-fe-build` and save.
+7. Set the Pipeline Flow's Inital Job to `dev-todolist-build` and save.
 ![pipeline-flow](../images/exercise2/pipeline-flow.png)
 
 8. You should now see the pipeline view. Run the pipeline by hitting run (you can move onto the next part while it is running as it may take some time).
-![dev-pipeline-view](../images/exercise2/dev-pipeline-view.jpeg)
+![dev-pipeline-view](../images/exercise2/dev-pipeline-view.png)
 
 <p class="tip">
     NOTE - The pipeline may fail on the first run. In such cases, re-run the pipeline once more and the three stages will run successfully and show three green cards.
 </p>
 
-9. To check the deployment in OpenShift; open the web console and go to your `dev` namespace. You should see the deployment was successful; hit the URL to open the app (the screenshot below has both apps deployed).
+9. To check the deployment in OpenShift; open the web console and go to your `dev` namespace. You should see the deployment was successful; hit the URL to open the app and play with the deployed.
 ![ocp-deployment](../images/exercise2/ocp-deployment.png)
-
-10. If it has been a success we should see our dummyData. This is because there is no backend deployed, in later labs we will deploy the backend and the mongodb for persistence but to do this we will use Jenkins Pipeline as code.
-![no-backend-app](../images/exercise2/no-backend-app.png)
 
 _____
 
