@@ -71,8 +71,6 @@ any unit testing framework
 Lab Exercise 3: _Revenge of the Automated Testing_
 Part 1
 
-Timebox (120 min) <!-- {_class="small"} -->
-
 
 
 <!-- .slide: id="revenge-automated-testing-part-2" -->
@@ -145,7 +143,6 @@ YAGNI - You Ain't Gonna Need It!  <!-- {_class="fragment"  data-fragment-index="
 
 
 ### The Game Begins!
-Timebox (10 min) <!-- {_class="small"} -->
 
  - The business requirement is to include the following in our program:
        1. a person
@@ -187,8 +184,6 @@ Many times people will have built cool things that they didn't have tests for. W
  - All tests at the table must continue to pass at all times, regardless of which pair wrote them.  <!-- {_class="fragment"  data-fragment-index="1"} -->
  - This time is that the implementation has to be integrated with the main project in the center of the table. <!-- {_class="fragment"  data-fragment-index="2"} -->
 
-Timebox (15 min) <!-- {_class="small"} -->
-
 
 
 ### Debrief
@@ -213,17 +208,14 @@ Was your final design different than you expected? Discuss.
 
 
 ## A Little Competition
-Timebox (15 min) <!-- {_class="small"} -->
 
 
 
 ## Parking Lot Review
-Timebox (20 min) <!-- {_class="small"} -->
 
 
 
 ## Daily Retrospective
-Timebox (15 min) <!-- {_class="small"} -->
 
 
 
