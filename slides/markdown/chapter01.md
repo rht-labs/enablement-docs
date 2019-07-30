@@ -103,4 +103,4 @@ _What are Target Outcomes?_
 
 
 <!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png" class="white-style" -->
-[Chapter 2, Social Contracts and Priority Sliders](chapter02.html)
+[Chapter 2, Team Identity, Social Contracts and Priority Sliders](chapter02.html)
