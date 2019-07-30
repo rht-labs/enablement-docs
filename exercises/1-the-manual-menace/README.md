@@ -19,7 +19,7 @@ _____
 ## Learning Outcomes
 As a learner you will be able to
 
-1. Run the OpenShift Applier to automate creating cluster content
+1. Run the [openshift-applier](https://github.com/redhat-cop/openshift-applier) to automate creating cluster content
 1. Create and admin project namespaces in OpenShift
 1. Deploy commonly used applications to support the development process
 
@@ -53,7 +53,7 @@ If you're feeling confident and don't want to follow the step-by-step guide thes
     * GitLab
     * Jenkins (using an s2i to pre-configure Jenkins)
 
-5. Commit your `enablement-ci-cd` repository to the GitLab Instance you've created
+5. Commit your `enablement-ci-cd` repository to your GitLab repository.
 
 6. Burn it all down and re-apply your inventory proving config-as-code works.
 -->
@@ -77,9 +77,6 @@ git clone https://github.com/rht-labs/enablement-ci-cd && cd enablement-ci-cd
 ```bash
 cd enablement-ci-cd
 ```
-```bash
-./git-pull-all.sh
-```
 
 3. Open the `enablement-ci-cd` folder in VSCode (or your favourite editor). The project is laid out as follows
 ```
@@ -102,7 +99,7 @@ cd enablement-ci-cd
  * `docker` folder contains sample Dockerfiles for our jenkins-slave images that will be used by the builds.
  * `jenkins-s2i` contains the configuration and plugins we want to bring jenkins to life with
  * `params` houses the variables we will load the templates with
- * `templates` is a collection of OpenShift templates
+ * `templates` is a collection of OpenShift Container Platform templates
  * `inventory/host_vars/*.yml` is the collection of objects we want to insert into the cluster.
  * `requirements.yml` is a manifest which contains the ansible modules needed to run the playbook
  * `apply.yml` is a playbook that sets up some variables and runs the OpenShift Applier role.
@@ -196,18 +193,16 @@ oc projects
 ### Part 2 - Nexus
 > _Now that we have our Projects setup; we can start to populate them with Apps to be used in our dev lifecycle_
 
-1. In the `enablement-ci-cd` repo, checkout the templates for Nexus by running
-```bash
-git checkout exercise1/git-nexus templates/nexus.yml
-```
-The template contains all the things needed to setup a persistent nexus server, exposing a service and route while also creating the persistent volume needed. Have a read through the template; at the bottom you'll see a collection of parameters we will pass to the template.
+For this part, we will use an OpenShift Container Platform **template** to install and configure Nexus. This template contains all the things needed to setup a persistent nexus server, exposing a service and route while also creating the persistent volume needed. Have a read through the template; at the bottom you'll see a collection of parameters we will pass to the template.
 
-2. Add some parameters for running the template by creating a new file in the `params` directory.
+> _Note below how we are utilizing an OpenShift Container Platform template from a different repository by utilizing its RAW GitHub URL (from the redhat-cop repo in this case)_
+
+1. Add some parameters for running the template by creating a new file in the `params` directory.
 ```bash
 touch params/nexus
 ```
 
-3. The essential params to include in this file are:
+2. The essential params to include in this file are:
 ```bash
 VOLUME_CAPACITY=5Gi
 MEMORY_LIMIT=1Gi
@@ -215,7 +210,7 @@ MEMORY_LIMIT=1Gi
 
 * You'll notice that this is different from how we defined our params for our projects. This is because there are multiple ways to do this. In cases like this, there may be a need to change some of these variables more frequently than others (i.e. giving the app more memory,etc.). In this case, it's easier to maintain them within their own separate params files.
 
-4. Create a new object in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `ci-cd-tooling` and populate its `content` is as follows
+3. Create a new object in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `ci-cd-tooling` and populate its `content` is as follows
 
 ```yaml
 ---
@@ -225,23 +220,26 @@ openshift_cluster_content:
   content:
   - name: "nexus"
     namespace: "{{ ci_cd_namespace }}"
-    template: "{{ playbook_dir }}/templates/nexus.yml"
+    template: "https://raw.githubusercontent.com/rht-labs/openshift-templates/v1.3/nexus/nexus-deployment-template.yml"
     params: "{{ playbook_dir }}/params/nexus"
     tags:
     - nexus
 ```
 ![ci-cd-deployments-yml](../images/exercise1/ci-cd-deployments-yml.png)
 
-5. Run the OpenShift applier, specifying the tag `nexus` to speed up its execution (`-e target=tools` is to run the other inventory).
+4. Run the OpenShift applier, specifying the tag `nexus` to speed up its execution (`-e target=tools` is to run the other inventory).
 ```bash
 ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=nexus"
 ```
 
-6. Once successful; login to the cluster through the browser (using cluster URL) and navigate to the `<YOUR_NAME>-ci-cd`. You should see Nexus up and running. You can login with default credentials (admin / admin123) ![nexus-up-and-running](../images/exercise1/nexus-up-and-running.png)
+5. Once successful; login to the cluster through the browser (using cluster URL) and navigate to the `<YOUR_NAME>-ci-cd`. You should see Nexus up and running. You can login with default credentials (admin / admin123) ![nexus-up-and-running](../images/exercise1/nexus-up-and-running.png)
 
-<!-- #### 3b - Commit CI/CD -->
+
+<!-- #### 3 - Commit CI/CD -->
+
+### Part 3 - Commit CI/CD
 
 1. Navigate to GitLab login page. You can login using your cluster credentials using the LDAP tab
 ![gitlab-ui](../images/exercise1/gitlab-ui.png)
@@ -278,23 +276,19 @@ git push -u origin --all
 ### Part 4 - MongoDB for CI tests
 > _In order to run our API tests in CI in later labs; we need there to be a MongoDB available for executing our tests. As this is part of our CI/CD Lifecycle; we will add it now._
 
-1. In our `enablement-ci-cd` repo; checkout the mongo templates as shown below to bring in the template and params.
-```bash
-git checkout exercise1/mongodb params/mongodb templates/mongodb.yml
-```
-
 1. Open `enablement-ci-cd` in your favourite editor. Edit the `inventory/host_vars/ci-cd-tooling.yml` to include a new object for our mongodb as shown below. This item can be added below Nexus in the `ci-cd-tooling` section.
+
 ```yaml
   - name: "jenkins-mongodb"
     namespace: "{{ ci_cd_namespace }}"
-    template: "{{ playbook_dir }}/templates/mongodb.yml"
+    template: "https://raw.githubusercontent.com/rht-labs/enablement-templates/v1.0.0/enablement-templates/mongodb.yml"
     params: "{{ playbook_dir }}/params/mongodb"
     tags:
     - mongodb
 ```
 ![jenkins-mongo](../images/exercise1/jenkins-mongo.png)
 
-3. Git commit your updates to the inventory to git for traceability.
+2. Git commit your updates to the inventory to git for traceability.
 ```bash
 git add .
 ```
@@ -305,7 +299,7 @@ git commit -m "ADD - mongodb for use in the pipeline"
 git push
 ```
 
-4. Apply this change as done previously using Ansible. The deployment can be validated by going to your `<YOUR_NAME>-ci-cd` namespace and checking if it is there!
+3. Apply this change as done previously using Ansible. The deployment can be validated by going to your `<YOUR_NAME>-ci-cd` namespace and checking if it is there!
 ```bash
 ansible-playbook apply.yml -e target=tools \
   -i inventory/ \
@@ -314,16 +308,11 @@ ansible-playbook apply.yml -e target=tools \
 ![ocp-mongo](../images/exercise3/ocp-mongo.png)
 
 <p class="tip">
-Note - When making changes to the "enablement-ci-cd" repo, you should frequently commit the changes to git.
+Note - When making changes to the "enablement-ci-cd" repo, you should frequently commit and push the changes to git.
 </p>
 
 ### Part 5 - Jenkins & S2I
 > _Create a build and deployment config for Jenkins. Add new configuration and plugins to the OpenShift default Jenkins image using s2i_
-
-1. Add the Jenkins Build & Deployment configs to the `enablement-ci-cd` repo by checking out the contents from `exercise1/jenkins` with 
-```bash
-git checkout exercise1/jenkins templates/jenkins.yml
-```
 
 1. As before; create a new set of params by creating a `params/jenkins` file and adding some overrides to the template and updating the `<YOUR_NAME>` value accordingly.
 ```
@@ -335,21 +324,20 @@ JENKINS_OPTS=--sessionTimeout=720
 ```
 * You might be wondering why we have to replace <YOUR_NAME> here and can't just rely on the `namespace_prefix` variable that we've been using previously. This is because the replacement is handled by two different engines (one being ansible -- which knows about `namespace_prefix` and the other being the oc client, which does not). Because the params files are processed by the oc client, we need to update this here.
 
-3. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo in  `inventory/host_vars/ci-cd-tooling.yml`.
+2. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo in  `inventory/host_vars/ci-cd-tooling.yml`.
+
 ```yaml
     - name: "jenkins"
       namespace: "{{ ci_cd_namespace }}"
-      template: "{{ playbook_dir }}/templates/jenkins.yml"
+      template: "https://raw.githubusercontent.com/redhat-cop/openshift-templates/v1.4.8/jenkins/jenkins-persistent-template.yml"
       params: "{{ playbook_dir }}/params/jenkins"
       tags:
       - jenkins
 ```
 This configuration, if applied now, will create the deployment configuration needed for Jenkins but the `${NAMESPACE}:${JENKINS_IMAGE_STREAM_TAG}` in the template won't exist yet.
 
-4. To create this image we will take the supported OpenShift Jenkins Image and bake into it some extra configuration using an [s2i](https://github.com/openshift/source-to-image) builder image. More information on Jenkins s2i is found on the [openshift/jenkins](https://github.com/openshift/jenkins#installing-using-s2i-build) GitHub page. To create an s2i configuration for Jenkins, check out the pre-canned configuration source in the `enablement-ci-cd` repo
-```bash
-git checkout exercise1/jenkins-s2i jenkins-s2i
-```
+3. To create this image we will take the supported OpenShift Container Platform Jenkins Image and bake in some extra configuration using an [s2i](https://github.com/openshift/source-to-image) builder image. More information on Jenkins s2i is found on the [openshift/jenkins](https://github.com/openshift/jenkins#installing-using-s2i-build) GitHub page. To create an s2i configuration for Jenkins, start with the pre-canned configuration source in the `enablement-ci-cd` repo (in the jenkins-s2i directory).
+
 The structure of the Jenkins s2i config is
 ```
 jenkins-s2i
@@ -370,7 +358,7 @@ jenkins-s2i
  * `build-failure-analyzer.xml` is config for the plugin to read the logs and look for key items based on a Regex. More on this in later lessons.
  * `init.groovy` contains a collection of settings jenkins configures itself with when launching
 
-5. Let's add a plugin for Jenkins to be started with, [green-balls](https://plugins.jenkins.io/greenballs). This simply changes the default `SUCCESS` status of Jenkins from Blue to Green. Append the `jenkins-s2i/plugins.txt` file with
+4. Let's add a plugin for Jenkins to be started with, [green-balls](https://plugins.jenkins.io/greenballs). This simply changes the default `SUCCESS` status of Jenkins from Blue to Green. Append the `jenkins-s2i/plugins.txt` file with
 ```txt
 greenballs:1.15
 ```
@@ -378,7 +366,7 @@ greenballs:1.15
 
 Why does Jenkins use blue to represent success? More can be found [on reddit](https://www.reddit.com/r/programming/comments/4lu6q8/why_does_jenkins_have_blue_balls/) or the [Jenkins blog](https://jenkins.io/blog/2012/03/13/why-does-jenkins-have-blue-balls/).
 
-6. Before building and deploying the Jenkins s2i; add your git credentials to it. These will be used by Jenkins to access the Git Repositories where our apps will be stored. We want Jenkins to be able to push tags to it, so write access is required. 
+5. Before building and deploying the Jenkins s2i; add your git credentials to it. These will be used by Jenkins to access the Git Repositories where our apps will be stored. We want Jenkins to be able to push tags to it, so write access is required. 
 
 There are a few ways we can do this; either adding them to the `template/jenkins.yml` as environment variables and then including them in the `params/jenkins` file.  We could also create a token in GitLab and use it as the source secret in the Jenkins template.
 
@@ -388,33 +376,41 @@ gitUsername = System.getenv("GIT_USERNAME") ?: "<USERNAME>"
 gitPassword = System.getenv("GIT_PASSWORD") ?: "<PASSWORD>"
 ```
 
-7. Checkout the params and the templates for the `jenkins-s2i`
-```bash
-git checkout exercise1/jenkins-s2i params/jenkins-s2i templates/jenkins-s2i.yml
+6. Open `params/jenkins-s2i-secret` and add the following content; replacing variables as appropriate.
 ```
+SECRET_NAME=gitlab-auth
+USERNAME=<YOUR_LDAP_USERNAME>
+PASSWORD=<YOUR_LDAP_PASSWORD>
+```
+where
+    * `<YOUR_LDAP_USERNAME>` is the username builder pod will use to login and clone the repo with
+    * `<YOUR_LDAP_PASSWORD>` is the password the builder pod will use to authenticate and clone the repo using
 
-8. Open `params/jenkins-s2i` and add the following content; replacing variables as appropriate.
+7. Open `params/jenkins-s2i` and add the following content; replacing variables as appropriate.
 ```
 SOURCE_REPOSITORY_URL=<GIT_URL>
 NAME=jenkins
 SOURCE_REPOSITORY_CONTEXT_DIR=jenkins-s2i
 IMAGE_STREAM_NAMESPACE=<YOUR_NAME>-ci-cd
-SOURCE_REPOSITORY_USERNAME=<YOUR_LDAP_USERNAME>
-SOURCE_REPOSITORY_PASSWORD=<YOUR_LDAP_PASSWORD>
+SOURCE_REPOSITORY_SECRET=gitlab-auth
 ```
 where
     * `<GIT_URL>` is the full clone path of the repo where this project is stored (including the https && .git)
-    * Explore some of the other parameters in `templates/jenkins-s2i.yml`
-    * `<YOUR_LDAP_USERNAME>` is the username builder pod will use to login and clone the repo with
-    * `<YOUR_LDAP_PASSWORD>` is the password the builder pod will use to authenticate and clone the repo using
+    * `<YOUR_NAME>` is the prefix for your `-ci-cd` project.
 
-1. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
+8. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
 ```yaml
   - object: ci-cd-builds
     content:
+    - name: "jenkins-s2i-secret"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "https://raw.githubusercontent.com/redhat-cop/openshift-templates/v1.4.8/secrets/secret-user-pass-plaintext.yml"
+      params: "{{ playbook_dir }}/params/jenkins-s2i-secret"
+      tags:
+      - jenkins
     - name: "jenkins-s2i"
       namespace: "{{ ci_cd_namespace }}"
-      template: "{{ playbook_dir }}/templates/jenkins-s2i.yml"
+      template: "https://raw.githubusercontent.com/redhat-cop/openshift-templates/v1.4.8/jenkins-s2i-build/jenkins-s2i-build-template-with-secret.yml"
       params: "{{ playbook_dir }}/params/jenkins-s2i"
       tags:
       - jenkins
