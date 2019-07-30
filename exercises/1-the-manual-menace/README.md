@@ -195,7 +195,7 @@ oc projects
 
 For this part, we will use an OpenShift Container Platform **template** to install and configure Nexus. This template contains all the things needed to setup a persistent nexus server, exposing a service and route while also creating the persistent volume needed. Have a read through the template; at the bottom you'll see a collection of parameters we will pass to the template.
 
-> _Note below how we are utilizing an OpenShift Container Platform template from a different repository by utilizing its RAW GitHub URL (from the redhat-cop repo in this case)_
+> _Note below how we are utilizing an OpenShift Container Platform template from a different repository by accessing it by its RAW GitHub URL (from the redhat-cop repo in this case)_
 
 1. Add some parameters for running the template by creating a new file in the `params` directory.
 ```bash
