@@ -9,6 +9,7 @@ DO500 <!-- {_class="title-color"} -->
 ## Continuous Integration
 
 
+
 ### Continuous Integration
 #### _What is It?_
 * Developers submit small and frequent changes to the source code
@@ -20,6 +21,7 @@ These actions are repeated frequently ensuring that the code base can **continuo
 The tests and build steps are typically run in an automation server such as Jenkins or Travis.
 
 
+
 ### Continuous Integration
 #### _Why Use It?_
 * Automated testing reduces busy work and improves software quality.
@@ -27,6 +29,7 @@ The tests and build steps are typically run in an automation server such as Jenk
 * Rapid feedback loops make it easier for new contributors to get started.
 * Shipping of functional software in small increments is more enjoyable than
 waiting for someone to manually test a giant code change.
+
 
 
 ### Jenkins Pipeline
@@ -38,6 +41,7 @@ waiting for someone to manually test a giant code change.
 ## Continuous Delivery
 
 
+
 ### Continuous Delivery
 #### _What is It?_
 * A software engineering practice
@@ -45,6 +49,7 @@ waiting for someone to manually test a giant code change.
 * Builds upon the **continuous integration** practice
 * Consider automating release to a "demo" area
 * Typically implemented with an automation server such as Jenkins
+
 
 
 ### Continuous Delivery
@@ -60,6 +65,7 @@ waiting for someone to manually test a giant code change.
 ## Continuous Deployment
 
 
+
 ### Continuous Deployment
 #### _What is It?_
 * Software development practice
@@ -67,6 +73,7 @@ waiting for someone to manually test a giant code change.
 * Builds upon the practices of **continuous integration** and **continuous delivery**
 * Software configuration and deployment orchestration becomes part of the
 development team's duty to maintain the software
+
 
 
 ### Continuous Deployment
@@ -77,6 +84,7 @@ development team's duty to maintain the software
 * Enforces best practice of **eveything as code**
 * Configuration and deployment orchestration needs to be part of automation
 * Enables quick rollbacks and recovery from failures
+
 
 
 ### Continuous Deployment
@@ -93,6 +101,7 @@ to production.
 ## The Attack of the Pipelines
 
 
+
 ### Lab Exercise 2: The Attack of the Pipelines
 * This exercise is all about creating a pathway to production from source
 to a live application
@@ -107,6 +116,7 @@ to a live application
 Timebox (15m) <!-- {_class="small"} -->
 
 
+
 ### Why are pipelines important and how do they help?
 * A pathway to production:
   * Puts the product in the hands of the customer more quickly
@@ -119,6 +129,7 @@ and release management teams
 * Reliability: pipelines execute the same way each and every time they are run
 
 
+
 ### What new Tools and Frameworks will we use?
 * **Jenkins**: Open source build automation server that is highly customizable
 via plugins
@@ -129,8 +140,10 @@ engine. It uses an event-driven, non-blocking I/O model that makes it lightweigh
 applications.
 
 
+
 ### The Big Picture
 ![BP2](images/cicd/bp-2-attack-pipelines.jpg)
+
 
 
 ### Let's Go!!!
