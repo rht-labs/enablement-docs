@@ -14,9 +14,11 @@ Timebox (10 min) <!-- {_class="small"} -->
 ## Build Monitoring
 
 
+
 ### Build Monitoring
 #### _What Is It?_
 Build monitors allow the visualization of automated build processes.
+
 
 
 ### Build Monitoring
@@ -31,11 +33,13 @@ Build monitors allow the visualization of automated build processes.
 ## Return of the Monitoring
 
 
+
 ### Lab Exercise 6: Return of the Monitoring
 In this exercise we will be creating a build monitor to display all of our jobs
 in one visual display as well as pipeline views. We will then add the cause of
 build failures for each job to the monitors. This will allow you to rapidly
 see why a particular build is failing and fix it faster.
+
 
 
 ### What new Tools and Frameworks will we use?
@@ -47,8 +51,10 @@ the causes on the build page.
 pipelines with stage information
 
 
+
 ### The Big Picture
 ![BP6](images/bp-6-return-monitoring.jpg)
+
 
 
 ### Let's Go!!!
