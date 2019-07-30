@@ -367,9 +367,10 @@ git checkout exercise1/jenkins templates/jenkins.yml
 MEMORY_LIMIT=3Gi
 VOLUME_CAPACITY=10Gi
 JVM_ARCH=x86_64
-NAMESPACE="<YOUR_NAME>-ci-cd"
+NAMESPACE=<YOUR_NAME>-ci-cd
 JENKINS_OPTS=--sessionTimeout=720
 ```
+* You might be wondering why we have to replace <YOUR_NAME> here and can't just rely on the `namespace_prefix` variable that we've been using previously. This is because the replacement is handled by two different engines (one being ansible -- which knows about `namespace_prefix` and the other being the oc client, which does not). Because the params files are processed by the oc client, we need to update this here.
 
 3. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo in  `inventory/host_vars/ci-cd-tooling.yml`.
 ```yaml
@@ -434,7 +435,7 @@ git checkout exercise1/jenkins-s2i params/jenkins-s2i templates/jenkins-s2i.yml
 SOURCE_REPOSITORY_URL=<GIT_URL>
 NAME=jenkins
 SOURCE_REPOSITORY_CONTEXT_DIR=jenkins-s2i
-IMAGE_STREAM_NAMESPACE="<YOUR_NAME>-ci-cd"
+IMAGE_STREAM_NAMESPACE=<YOUR_NAME>-ci-cd
 SOURCE_REPOSITORY_USERNAME=<YOUR_LDAP_USERNAME>
 SOURCE_REPOSITORY_PASSWORD=<YOUR_LDAP_PASSWORD>
 ```
