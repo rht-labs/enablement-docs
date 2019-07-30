@@ -1,6 +1,6 @@
 <!-- .slide: data-background-image="images/RH_NewBrand_Background.png" -->
 ## DevOps Culture and Practice <!-- {_class="course-title"} -->
-### Social Contracts and Priority Sliders <!-- {_class="title-color"} -->
+### Team Identify, Social Contracts and Priority Sliders <!-- {_class="title-color"} -->
 DO500 <!-- {_class="title-color"} -->
 
 
@@ -9,6 +9,24 @@ DO500 <!-- {_class="title-color"} -->
 Form a straight line across the room in order of relative technical experience in development engineering practices.
 
 Timebox (5 min) <!-- {_class="small"} -->
+
+
+
+## What is Team Identity?
+- Shared bond and shared purpose
+- Critical for team's success
+- Creates culture
+- Enables psychological safety
+- Converts groups of individuals into high performing teams
+
+
+
+## Examples of strong Team Identity
+- Team name
+- Team logo
+- Common mission statement
+- Team swag!
+- A social contract
 
 
 
