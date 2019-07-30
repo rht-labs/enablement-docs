@@ -30,8 +30,10 @@ February 2001: Snowbird Resort, Utah, United States
 * Started a movement instead of defining a process
 
 
+
 ### Agile Manifesto
 ![Manifesto](images/Agile/manifesto.png)
+
 
 
 ### 12 Principles of the Agile Manifesto
@@ -43,6 +45,7 @@ continuous delivery of valuable software.
 
 * Build projects around motivated individuals. Give them the environment and support they need, and trust them to get the job done.
 * The most efficient and effective method of conveying information to and within a development team is face-to-face conversation.
+
 
 
 ### 12 Principles of the Agile Manifesto (cont.)
@@ -65,6 +68,7 @@ Timebox (15 min) <!-- {_class="small"} -->
 http://tastycupcakes.org/2010/01/pocket-sized-principles/ <!-- {_class="small"} -->
 
 
+
 ### Pocket Sized Principles Examples
 | | | | |
 |---|---|---|---|
@@ -78,16 +82,20 @@ http://tastycupcakes.org/2010/01/pocket-sized-principles/ <!-- {_class="small"} 
 ## What are the Benefits of Agile?
 
 
+
 ### Increased Visibility
 The agile approach can lead to increased visibility within projects as deliverables are typically built and tested by real users much sooner than with the traditional approach.
+
 
 
 ### Increased Adaptability
 Because the agile approach heavily relies on iterative processes and review, agile teams are better enabled to adapt to changes from the business.
 
 
+
 ### Increased Business Value
 With the agile approach, business value can increase much sooner than with the traditional approach. And because of continuous improvement and feedback cycles, the value is able to be sustained and maximized for the duration of the project.
+
 
 
 ### Minimized Risk
@@ -99,11 +107,13 @@ The agile approach can minimize risk by getting a working piece of software into
 ## Common Methodology: SCRUM
 
 
+
 ### Origins of Scrum
 ![Scrum](images/Agile/scrum.jpg) <!-- {_class="inline-image"} -->
 * Rugby term: used to restart play
 * 1986 Hirotaka Takeuchi and Ikujiro Nonaka published [The New New Product Development Game](https://hbr.org/1986/01/the-new-new-product-development-game)
 * 1990 Jeff Sutherland and Ken Schwaber used scrum for software development
+
 
 
 ### 3 Key Roles in Scrum
@@ -118,8 +128,10 @@ The agile approach can minimize risk by getting a working piece of software into
    Self-organize to transform backlog items into a potentially releasable product increment
 
 
+
 ### 5 Key Ceremonies
 ![ScrumIn5Minutes](images/Agile/nutshell.png)
+
 
 
 | Scrum Event | Purpose |
@@ -129,6 +141,7 @@ The agile approach can minimize risk by getting a working piece of software into
 | ** Sprint Review** | Review what was completed during the sprint with all relevant stakeholders to collect feedback. |
 | ** Sprint Retrospective** | Help teams reflect on their internal team process with the goal to continuously improve. |
 | ** Sprint ** | A time boxed event that brings the team towards the goal set for that iteration and ends with reviewing the product increment. |
+
 
 
 ### 3 Key Artifacts in Scrum
@@ -152,6 +165,7 @@ In Your Teams
 3. Pass the balls for one minute.
 4. Record the actual score.
 5. Reflect on your team strategy
+
 
 
 ### Exercise - The Ball Game (Rules)
