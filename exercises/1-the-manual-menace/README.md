@@ -65,19 +65,9 @@ If you're feeling confident and don't want to follow the step-by-step guide thes
 > _Using the OpenShift Applier, we will add new project namespaces to the cluster which will be used throughout the exercise._
 
 1. In this course three different git projects will be created. To setup your local machine for each of these, create a new folder on the terminal in the root of your HOME directory for convenience. To do this, open a new Terminal session and create the new folder using the following command (new terminal sessions will start in your HOME dir).
-
-For Linux and MacOS systems
 ```bash
 mkdir -p ~/do500-workspace && cd ~/do500-workspace
 ```
-
-For Microsoft Windows systems, navigate to the `C:\do500-workspace` directory
-```bash
-cd C:\do500-workspace
-```
-<p class="tip">
-<b>NOTE</b> - If you do not want to have this folder at the root of your home directory, that's fine, just ensure any parent directories of this `do500-workspace` folder do <b>NOT</b> have any spaces in them as it breaks Ansible in later labs...
-</p>
 
 2. Clone the scaffold project to your local machine's `do500-workspace` folder and pull all remote branches for use in later exercises. You may see an error saying `fatal: A branch named 'develop' already exists.` This error can be safely ignored.
 
@@ -89,17 +79,6 @@ cd enablement-ci-cd
 ```
 ```bash
 ./git-pull-all.sh
-```
-
-If you are using a Microsoft Windows system, run the above shell script using the `Git Bash` terminal instead of the default Windows command line. You need to navigate to the `C:\do500-workspace\enablement-ci-cd` directory by running
-```bash
-cd /c/do500-workspace/enablement-ci-cd
-```
-```bash
-./git-pull-all.sh
-```
-```bash
-exit
 ```
 
 3. Open the `enablement-ci-cd` folder in VSCode (or your favourite editor). The project is laid out as follows
@@ -190,18 +169,6 @@ test:
       params_from_vars: "{{ test }}"
       tags:
       - projects
-```
-
-For Microsoft Windows systems, you need to run Ansible and OpenShift client commands from inside the `do500-toolbox` container. Linux and MacOS users should skip this step and jump directly to Step 10.
-
-<p class="tip">
-NOTE - On Microsoft Windows systems, we recommend you keep the container running for the duration of the lab. Run all Ansible and OpenShift client ("oc") CLI commands from inside the container. Do NOT launch the container on Linux and MacOS systems, since you should already have Ansible and the OpenShift client natively installed on your system by following the pre-requisites setup guide.
-</p>
-
-9. Launch the toolbox container using the Windows command line terminal, and navigate to the `enablement-ci-cd` directory inside the container
-```bash
-docker run -it -v C:/do500-workspace:/home/tool-box/workarea:Z quay.io/redhat/do500-toolbox /bin/bash
-bash-4.4$ cd workarea/enablement-ci-cd
 ```
 
 10. With the configuration in place; install the OpenShift Applier dependency
