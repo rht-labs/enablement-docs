@@ -50,7 +50,7 @@ _But they are done poorly and teams do not follow up on identified items_
 ### Retrospectives
 #### _Guidelines_
 - Shorten the time between each one.
-- Have ground rules for the session visiblie.
+- Have ground rules for the session visible.
 - Start with an update on the previous retrospective items.
 - Focus discussions on what you are able to change.
 - Always end on a high note.
@@ -118,14 +118,10 @@ abilities, the resources available, and the situation at hand."**
 ### Exercise - Parking Lot Review
 Review and discuss some of the questions/topics currently in the parking lot
 
-Timebox (20 min) <!-- {_class="small"} -->
-
 
 
 ### Exercise - Daily Retrospective
 Reflect on the first day of class, and make adjustments to continuously improve
-
-Timebox (10 min) <!-- {_class="small"} -->
 
 
 

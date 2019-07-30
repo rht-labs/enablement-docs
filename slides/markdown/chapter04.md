@@ -28,8 +28,6 @@ _Individual Drawing_
 2. Each person grab a different color pen.
 3. Draw Public Figure on your own sticky note.
 
-Timebox (1 min) <!-- {_class="small"} -->
-
 
 
 ### Exercise - Pairing and Mobbing
@@ -38,8 +36,6 @@ _Pair Drawing_
 2. Each pair grab a medium post-it
 3. Take turns drawing an element of Public Figure.
 
-Timebox (2 min) <!-- {_class="small"} -->
-
 
 
 ### Exercise - Pairing and Mobbing
@@ -47,8 +43,6 @@ _Mob Drawing_
 1. Assemble in table groups.
 2. Each table use an easel post-it
 3. Take turns drawing an element of Public Figure.
-
-Timebox (3 min) <!-- {_class="small"} -->
 
 
 
@@ -73,6 +67,7 @@ Timebox (3 min) <!-- {_class="small"} -->
 3. Design configuration options as templates.
 4. Check source configuration code into a source control repository.
 5. Use the automated tools to apply your configs.
+
 
 
 ### Configuration As Code
@@ -148,8 +143,6 @@ objects to an OpenShift cluster
 
 ### Let's Go!!!
 Lab Exercise 1: _The Manual Menace_
-
-Timebox (90 min) <!-- {_class="small"} -->
 
 
 
