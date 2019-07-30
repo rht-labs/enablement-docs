@@ -513,7 +513,7 @@ git commit -m "Adding Jenkins and Jenkins s2i"
 ```bash
 git push
 ```
-11.  In order for Jenkins to be able to run `npm` builds and installs we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. These slaves can take a time to build themselves so to speed up we have placed the slave within OpenShift and added the tag to link to an imagestream in our templates/jenkins-s2i.yml.
+11.  In order for Jenkins to be able to run `npm` builds and installs we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. These slaves can take a time to build themselves so to speed up we have placed the slave within OpenShift and an ImageStream, with the "role=jenkins-slave" label, is added by the Configuration-as-Code run managed by the openshift-applier run below.
 
 12. Now your code is commited; run the OpenShift Applier to add the config to the cluster
 ```bash
@@ -523,6 +523,7 @@ ansible-playbook apply.yml -e target=tools \
 ```
 
 13. This will trigger a build of the s2i and when it's complete it will add an imagestream of `<YOUR_NAME>-ci-cd/jenkins:latest` to the project. The Deployment config should kick in and deploy the image once it arrives. You can follow the build of the s2i by going to the OpenShift console's project
+![jenkins-s2i-log](../images/exercise1/jenkins-s2i-log.png)
 
 14. When the Jenkins deployment has completed; login (using your OpenShift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
 
