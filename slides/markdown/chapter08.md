@@ -10,6 +10,7 @@ DO500 <!-- {_class="title-color"} -->
 ## Metric-Based Process Mapping
 
 
+
 ### Value Stream Mapping and Metric-Based Process Mapping
 #### _What are They?_
 * Heavily influenced by Karen Martin's work in this area
@@ -27,6 +28,7 @@ as documented in [Lean Thinking](https://rht-labs.github.io/practice-library/pra
 and the second generation from [Learning to See](https://rht-labs.github.io/practice-library/practices/vsm-and-mbpm/#footnote-2).
 
 
+
 ### VSM and MBPM
 #### _Why Use It?_
 * Holistically analyze and optimize "brownfield" delivery processes, including everything from requirements definition, infrastructure provisioning and application development.
@@ -36,14 +38,17 @@ how the work is actually done.
 * Formulating specific, data driven improvement plans.
 
 
+
 ### Metric-Based Process Mapping: How To
 #### Label the map
 ![Map Label](images/vsm/mbpmstep1.png)
 
 
+
 ### Metric-Based Process Mapping: How To
 #### List functions involved in the process
 ![Swimlanes](images/vsm/mbpmstep2.png)
+
 
 
 ### Metric-Based Process Mapping: How To
@@ -57,9 +62,11 @@ how the work is actually done.
 * Be clear and concise
 
 
+
 ### Metric-Based Process Mapping: How To
 #### Number the activities (steps)
 ![Number the Steps](images/vsm/mbpmstep4.png)
+
 
 
 ### Metric-Based Process Mapping: How To
@@ -67,9 +74,11 @@ how the work is actually done.
 ![Metrics](images/vsm/mbpmstep5.png)
 
 
+
 ### Metric-Based Process Mapping
 #### Step-Specific Lead Time vs. Process Time
 ![LeadTime](images/vsm/leadtime.png)
+
 
 
 ### Metric-Based Process Mapping
@@ -85,6 +94,7 @@ how the work is actually done.
   * Includes process
 
 
+
 ### Metric-Based Process Mapping
 #### Metrics: Quality
 * Percent complete and accurate
@@ -94,15 +104,18 @@ how the work is actually done.
   * **Clarify** information that should or could have been clearer
 
 
+
 ### Metric-Based Process Mapping: How To
 #### Define the _Timeline Critical Path_
 ![Critical Path](images/vsm/mbpmstep6.png)
+
 
 
 ### Metric-Based Process Mapping: What Else To Do?
 * Create the timeline
 * Create summary metrics
 * Identify improvement areas
+
 
 
 ### Suggested Metrics to Assess Before and After
@@ -121,11 +134,13 @@ how the work is actually done.
 * Manual handoff and jobs
 
 
+
 ### Exercise - TODO List MBPM (Setup)
 
 ![Swimlanes](images/vsm/mbpmstep2.png) <!-- {_class="inline-image"} -->
 * What will you call your MBPM diagram?
 * Who/What are your typical functions that do work in your process?
+
 
 
 ### Exercise - TODO List MBPM
