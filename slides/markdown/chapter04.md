@@ -12,6 +12,7 @@ DO500 <!-- {_class="title-color"} -->
 two programmers work together at one computer.
 
 
+
 ### Mob Programming
 ![Mob Programming](images/PairAndMob/chairs-developer-development-1181376.jpg) <!-- {_class="inline-image"} -->
 **Mob programming** is a software development approach where the whole team
@@ -30,6 +31,7 @@ _Individual Drawing_
 Timebox (1 min) <!-- {_class="small"} -->
 
 
+
 ### Exercise - Pairing and Mobbing
 _Pair Drawing_
 1. Assemble in pairs.
@@ -37,6 +39,7 @@ _Pair Drawing_
 3. Take turns drawing an element of Public Figure.
 
 Timebox (2 min) <!-- {_class="small"} -->
+
 
 
 ### Exercise - Pairing and Mobbing
@@ -53,11 +56,13 @@ Timebox (3 min) <!-- {_class="small"} -->
 ## Configuration As Code
 
 
+
 ### Traditional Software Configuration
 1. Manually install the operating system.
 2. Manually install the software packages needed.
 3. Modify the software configuration files by hand.
 4. ...
+
 
 
 ### Configuration As Code
@@ -83,6 +88,7 @@ Timebox (3 min) <!-- {_class="small"} -->
 way it was!
 
 
+
 ### Everything As Code
 The practice of **Everything as Code** goes even further than configuration as code. All
 manual steps should be scripted, automated, and checked into a source control
@@ -92,6 +98,7 @@ management system.
 
 <!--.slide: id="manual-menace" -->
 ## The Manual Menace
+
 
 
 ### Lab Exercise 1: The Manual Menace
@@ -107,10 +114,13 @@ populate them with Git, Jenkins, and Nexus using code.
   3. Deploy commonly used applications to support the development process.
 
 
+
 ![AnsibleEngine](images/PairAndMob/ansible.png)
 
 
+
 ![OpenShift](images/PairAndMob/openshift.png)
+
 
 
 ### What new Tools and Frameworks will we use?
