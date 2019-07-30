@@ -472,7 +472,7 @@ echo "### END DEPLOY IMAGE ###"
 
     * Click `Save` at the bottom of the page to save your global settings.
 
-#### 3d - Pipeline
+#### 3c - Pipeline
 
 1. Back on Jenkins; We can tie all the jobs in the pipeline together into a nice single view using the Build Pipeline view. Back on the Jenkins home screen Click the + beside the all tab on the top.
 ![add-view](../images/exercise2/add-view.png)
