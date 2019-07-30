@@ -41,6 +41,7 @@ Timebox (20 min) <!-- {_class="small"} -->
 - Pull Requests
 
 
+
 ### Introducing
 #### The room and the walls
 ![Chef Hands](images/chef-hands.png) <!-- {_class="inline-image"} -->
@@ -50,6 +51,7 @@ Timebox (20 min) <!-- {_class="small"} -->
 - Emerging Practice Corner
 - Accommodations
 - Mood Marbles
+
 
 
 ## Back to the Animals!
@@ -66,11 +68,13 @@ Introduce yourself to the group and share your animal.
 _What are Target Outcomes?_
 
 
+
 ### Learning Target Outcomes
 #### _Target Outcomes..._
 - Are a tool to capture and articulate the goals and outcomes a team are striving to deliver.
 - Can include customer (end user) based outcomes as well as business and capability based outcomes.
 - Often harnesses and summarizes the findings and learnings from other Discovery practices into a finite set of statements that can be publicly displayed for team and stakeholders to regularly reference.
+
 
 
 ### Learning Target Outcomes
@@ -79,6 +83,7 @@ _What are Target Outcomes?_
 - Explore all principle practices used in everyday discovery and delivery.
 - Have fun!
 - _More?_
+
 
 
 ### Learning Target Outcomes
