@@ -252,7 +252,7 @@ ansible-playbook apply.yml -e target=tools \
 Note - we would not normally make the project under your name but create a group and add the project there on residency but for simplicity of the exercise we'll do that here
 </p> -->
 
-3. If you have not used Git before; you may need to tell Git who you are and what your email is before we commit. Run the following commands, substituting your email and "Your Name". If you've done this before move on to the next step. <!-- The last git config command is used to bypass SSL key verification in this repo since we are using self-signed certificates on the GitLab sever. -->
+3. If you have not used Git before; you may need to tell Git who you are and what your email is before we commit. Run the following commands, substituting your email and "Your Name". If you've done this before move on to the next step.
 
 ```bash
 git config --global user.email "yourname@mail.com"
@@ -260,10 +260,6 @@ git config --global user.email "yourname@mail.com"
 ```bash
 git config --global user.name "Your Name"
 ```
-
-<!-- ```bash
-git config http.sslVerify false
-``` -->
 
 4. Commit your local project to this new remote by first removing the existing origin (github) where the Ansible project was cloned from in the first steps. Remember to substitute `<GIT_URL>` accordingly with the one created for your `enablement-ci-cd` repository a moment ago.
 ```bash
