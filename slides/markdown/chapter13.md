@@ -6,20 +6,16 @@ DO500 <!-- {_class="title-color"} -->
 
 
 ## Walk the Walls
-Timebox (10 min) <!-- {_class="small"} -->
 
 
 
 ## Practice Review
-Timebox (10 min) <!-- {_class="small"} -->
 
 
 
 ### Let's Go!!!
 Lab Exercise 3: _Revenge of the Automated Testing_
 Part 2
-
-Timebox (60 min) <!-- {_class="small"} -->
 
 
 
