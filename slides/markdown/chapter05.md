@@ -60,9 +60,10 @@ _But they are done poorly and teams do not follow up on identified items_
 ### Retrospectives
 #### _Popular Formats_
 - Round the circle reflection
-- Stop/Start/Continue/(More/Less)
+- Starfish (Stop/Start/Continue/More/Less)
 - Happy/Sad/Glad
 - Timeline
+- Sailboat (Island/Wind/Anchor/Rocks)
 - Deep dive on specific problem area
   - Fishbone
   - 5 Whys
