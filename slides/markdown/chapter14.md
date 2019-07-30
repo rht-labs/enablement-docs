@@ -46,8 +46,6 @@ specific configurations to a Jenkins instance
 ### Let's Go!!!
 Lab Exercise 4: _An Enslaved Hope_
 
-Timebox (140 min) <!-- {_class="small"} -->
-
 
 
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
