@@ -6,7 +6,6 @@ DO500 <!-- {_class="title-color"} -->
 
 
 ## Walk the Walls
-Timebox (10 min) <!-- {_class="small"} -->
 
 
 
@@ -59,8 +58,6 @@ pipelines with stage information
 
 ### Let's Go!!!
 Lab Exercise 6: _Return of the Monitoring_
-
-Timebox (60 min) <!-- {_class="small"} -->
 
 
 
