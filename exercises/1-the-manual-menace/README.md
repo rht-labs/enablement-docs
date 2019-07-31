@@ -120,13 +120,15 @@ NOTE - YAML is indentation sensitive so keep things lined up properly!
 
 5. Open the `inventory/host_vars/projects-and-policies.yml` file; you should see some variables setup already to create the `<YOUR_NAME>-ci-cd` namespace. This object is passed to the OpenShift Applier to call the `templates/project-requests.yml` template with the `params/project-requests-ci-cd` parameters. We will add some additional content here but first let's explore the parameters and the template
 
-6a. Inside of the `inventory/host_vars/projects-and-policies.yml` you'll see the following
+6. Inside of the `inventory/host_vars/projects-and-policies.yml` you'll see the following
+
 ```yaml
 ci_cd:
   NAMESPACE: "{{ namespace_prefix }}-ci-cd"
   NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }}s CI/CD"
 ```
 * This will define the variables that we'll soon be using to deploy our CI/CD project. It relies on the `namespace_prefix` that we updated earlier. Pulling these two sets of variables together will now allow us to pass the newly created variables to our template that will create our project appropriately. You'll notice that the name of the variable above (`ci_cd`) is then assigned to `params_from_vars` in our inventory.
+
 ```yaml
 ansible_connection: local
 openshift_cluster_content:
@@ -142,6 +144,7 @@ openshift_cluster_content:
 
 7. Let's add two more params dicts to pass to our template to be able to create a `dev` and `test` project.At the top of `inventory/host_vars/projects-and-policies.yml` create a dictionary called `dev` and `test` similar to how you see `ci_cd` defined.
   * In your editor; Open `inventory/host_vars/projects-and-policies.yml` and add the following:
+
 ```yaml
 dev:
   NAMESPACE: "{{ namespace_prefix }}-dev"
@@ -153,6 +156,7 @@ test:
 ```
 
 8. In the `inventory/host_vars/projects-and-policies.yml` file; add the new objects for the projects you want to create (dev & test) by adding another object to the content array for each. You can copy and paste them from the `ci-cd` example and update them accordingly. If you do this; remember to change the params_from_vars variable! e.g.
+
 ```yaml
     - name: "{{ dev_namespace }}"
       template: "{{ playbook_dir }}/templates/project-requests.yml"
@@ -169,25 +173,30 @@ test:
 ```
 
 10. With the configuration in place; install the OpenShift Applier dependency
+
 ```bash
 ansible-galaxy install -r requirements.yml --roles-path=roles
 ```
 
-11. Apply the inventory by logging into OpenShift on the terminal and running the playbook as follows (<CLUSTER_URL> should be replaced with the one you've been provided by the instructor). Accept any insecure connection warning 👍:
+11. Apply the inventory by logging into OpenShift on the terminal and running the playbook as follows (<CLUSTER_URL> should be replaced with the one you've been provided by the instructor). Accept any insecure connection warning(s) 👍:
+
 ```bash
 oc login <CLUSTER_URL>
 ```
 ```bash
 ansible-playbook apply.yml -i inventory/ -e target=bootstrap
 ```
+
 where the `-e target=bootstrap` is passing an additional variable specifying that we run the `bootstrap` inventory
 
 12. Once successful you should see an output similar to this (Cows not included): ![playbook-success](../images/exercise1/play-book-success.png)
 
 13. You can check to see the projects have been created successfully by running
+
 ```bash
 oc projects
 ```
+
 ![project-success](../images/exercise1/project-success.png)
 
 ### Part 2 - Nexus
