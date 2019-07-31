@@ -80,7 +80,7 @@ ansible-playbook apply.yml -e target=tools \
 3. Head to <CLUSTER_URL> on OpenShift and move to your ci-cd project > builds. You should see `jenkins-slave-zap` has been built.
 ![zap-build](../images/exercise4/zap-build.png) -->
 
-#### 3a - Arachni Scan
+#### 1a - Arachni Scan
 > _Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of web applications._
 
 1. To save time, a slave S2I image for Arachni scanner has already been built for you and pushed to the `openshift` namespace. Tag and label the image so that it is available for builds in the `<YOUR_NAME>-ci-cd` namespace.

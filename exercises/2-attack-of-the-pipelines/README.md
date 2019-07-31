@@ -258,7 +258,6 @@ NOTE - This step in a residency would be automated by a more complex nexus deplo
 1. On your terminal navigate to the root of the `todolist` application. The app contains a hidden folder called `.openshift-applier`. Move into this `.openshift-applier` directory and you should see a familiar looking directory structure for an Ansible playbook.
 ```
 ├── README.md
-├── apply.retry
 ├── inventory
 │   ├── group_vars
 │   │   └── all.yml
@@ -275,7 +274,7 @@ NOTE - This step in a residency would be automated by a more complex nexus deplo
     └── todolist-deploy.yml
 ```
 with the following
-    * the `apply.yml` file is the entrypoint.
+    * the `site.yml` file is the entrypoint.
     * the `inventory` contains the objects to populate the cluster with.
     * the `params` contains the variables we'll apply to the `templates`
     * the `templates` required by the app. These include the Build, Deploy configs as well as the services, health checks, and other app definitions.
@@ -289,7 +288,7 @@ with the following
     test_namespace: '{{ namespace_prefix }}-test'
 ```
 
-1. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency and then run the playbook (from the `.openshift-applier` directory). This will populate the cluster with all the config needed for the front end app.
+1. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency, using the `ansible-galaxy tool` as per exercise one and then run the playbook (from the `.openshift-applier` directory). This will populate the cluster with all the config needed for the front end app.
 
 ```bash
 # login if needed
@@ -508,12 +507,12 @@ Some of the key things to note:
     * `post {}` hook is used to specify the post-build-actions. Jenkins declarative pipeline syntax provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
     * `when {}` is used for flow control. It can be used at the stage level and be used to stop pipeline entering that stage. e.g. when branch is master; deploy to `test` environment.
 
-3. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous exercises. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
+3. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous exercises. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `<GITLAB_FQDN>` matches your git host too.
 ```groovy
     environment {
         // GLobal Vars
         NAMESPACE_PREFIX="<YOUR_NAME>"
-        GITLAB_DOMAIN = "gitlab.apps.change.me.com"
+        GITLAB_DOMAIN = "<GITLAB_FQDN>"
         GITLAB_PROJECT = "<GIT_USERNAME>"
 
         PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
