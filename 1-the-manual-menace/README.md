@@ -220,7 +220,7 @@ openshift_cluster_content:
   content:
   - name: "nexus"
     namespace: "{{ ci_cd_namespace }}"
-    template: "https://raw.githubusercontent.com/redhat-cop/openshift-templates/v1.4.8/nexus/nexus-deployment-template.yml"
+    template: "template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/nexus/nexus-deployment-template.yml"
     params: "{{ playbook_dir }}/params/nexus"
     tags:
     - nexus
@@ -329,7 +329,7 @@ JENKINS_OPTS=--sessionTimeout=720
 ```yaml
     - name: "jenkins"
       namespace: "{{ ci_cd_namespace }}"
-      template: "https://raw.githubusercontent.com/redhat-cop/openshift-templates/v1.4.8/jenkins/jenkins-persistent-template.yml"
+      template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins/jenkins-persistent-template.yml"
       params: "{{ playbook_dir }}/params/jenkins"
       tags:
       - jenkins
@@ -404,13 +404,13 @@ where
     content:
     - name: "jenkins-s2i-secret"
       namespace: "{{ ci_cd_namespace }}"
-      template: "https://raw.githubusercontent.com/redhat-cop/openshift-templates/v1.4.8/secrets/secret-user-pass-plaintext.yml"
+      template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/secrets/secret-user-pass-plaintext.yml"
       params: "{{ playbook_dir }}/params/jenkins-s2i-secret"
       tags:
       - jenkins
     - name: "jenkins-s2i"
       namespace: "{{ ci_cd_namespace }}"
-      template: "https://raw.githubusercontent.com/redhat-cop/openshift-templates/v1.4.8/jenkins-s2i-build/jenkins-s2i-build-template-with-secret.yml"
+      template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-s2i-build/jenkins-s2i-build-template-with-secret.yml"
       params: "{{ playbook_dir }}/params/jenkins-s2i"
       tags:
       - jenkins
