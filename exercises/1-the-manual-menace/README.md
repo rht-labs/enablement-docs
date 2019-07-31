@@ -85,13 +85,13 @@ cd enablement-ci-cd
 ├── apply.yml
 ├── docker
 ├── inventory
+│   ├── group_vars
+│   │   ├── all.yml
 │   ├── host_vars
 │   │   ├── ci-cd-tooling.yml
 │   │   └── projects-and-policies.yml
 │   └── hosts
 ├── jenkins-s2i
-├── params
-│   └── project-requests-ci-cd
 ├── requirements.yml
 └── templates
     └── project-requests.yml
@@ -100,25 +100,16 @@ cd enablement-ci-cd
  * `jenkins-s2i` contains the configuration and plugins we want to bring jenkins to life with
  * `params` houses the variables we will load the templates with
  * `templates` is a collection of OpenShift Container Platform templates
- * `inventory/host_vars/*.yml` is the collection of objects we want to insert into the cluster.
+ * `inventory/*.yml` is the ansible inventory used to manage the objects and content for the OpenShift cluster
  * `requirements.yml` is a manifest which contains the ansible modules needed to run the playbook
  * `apply.yml` is a playbook that sets up some variables and runs the OpenShift Applier role.
 
-4. Open the `apply.yml` file in the root of the project. Update the namespace variables by replacing the `<YOUR_NAME>` (including the `<` and `>`) with your name or initials. **Don't use uppercase or special characters**. For example; if your name is Tim Smith you would replace `<YOUR_NAME>` and set `namespace_prefix` to `tim` or `tsmith`.
+4. Open the `inventory/groups_vars/all.yml` file. Update the `namespace_prefix` variables by replacing the `<YOUR_NAME>` (including the `<` and `>`) with your name or initials. **Don't use uppercase or special characters**. For example; if your name is Tim Smith you would replace `<YOUR_NAME>` and set `namespace_prefix` to something like `tim` or `tsmith`.
 ```yaml
-  hosts: "{{ target }}"
-  vars:
-    namespace_prefix: "<YOUR_NAME>"
-    ci_cd_namespace: "{{ namespace_prefix }}-ci-cd"
-    dev_namespace: "{{ namespace_prefix }}-dev"
-    test_namespace: "{{ namespace_prefix }}-test"
-  tasks:
+  namespace_prefix: "<YOUR_NAME>"
 ```
-<p class="tip">
-NOTE - YAML is indentation sensitive so keep things lined up properly!
-</p>
 
-5. Open the `inventory/host_vars/projects-and-policies.yml` file; you should see some variables setup already to create the `<YOUR_NAME>-ci-cd` namespace. This object is passed to the OpenShift Applier to call the `templates/project-requests.yml` template with the `params/project-requests-ci-cd` parameters. We will add some additional content here but first let's explore the parameters and the template
+5. Open the `inventory/host_vars/projects-and-policies.yml` file; you should see some variables setup already to create the `<YOUR_NAME>-ci-cd` namespace. This object is passed to the OpenShift Applier to call the `templates/project-requests.yml` template with the parameters composed from the inventory and the `ci_cd` vars in the `apply.yml` playbook. We will add some additional content here but first let's explore the parameters and the template
 
 6. Inside of the `inventory/host_vars/projects-and-policies.yml` you'll see the following
 
@@ -478,13 +469,7 @@ git push
 
 2. Burn your OpenShift project resources to the ground
 ```bash
-oc delete project <YOUR_NAME>-ci-cd
-```
-```bash
-oc delete project <YOUR_NAME>-dev
-```
-```bash
-oc delete project <YOUR_NAME>-test
+oc delete project <YOUR_NAME>-ci-cd <YOUR_NAME>-dev <YOUR_NAME>-test
 ```
 
 3. Check to see the projects that were marked for deletion are removed.

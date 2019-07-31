@@ -279,15 +279,6 @@ with the following
     * the `params` contains the variables we'll apply to the `templates`
     * the `templates` required by the app. These include the Build, Deploy configs as well as the services, health checks, and other app definitions.
 
-2. There are a few updates to these manifests we need to make before applying the cluster content. In the `site.yml` update the namespace `<YOUR_NAME>` variable accordingly.
-```yaml
-  vars:
-    namespace_prefix: '<YOUR_NAME>'
-    ci_cd_namespace: '{{ namespace_prefix }}-ci-cd'
-    dev_namespace: '{{ namespace_prefix }}-dev'
-    test_namespace: '{{ namespace_prefix }}-test'
-```
-
 1. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency, using the `ansible-galaxy tool` as per exercise one and then run the playbook (from the `.openshift-applier` directory). This will populate the cluster with all the config needed for the front end app.
 
 ```bash
