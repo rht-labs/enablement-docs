@@ -267,7 +267,7 @@ npm run prepare-nexus
 │   └── ocp-pipeline
 ├── requirements.yml
 ├── roles
-├── site.yml
+├── apply.yml
 └── templates
     ├── mongodb.yml
     ├── ocp-pipeline.yml
@@ -280,9 +280,9 @@ with the following
     * the `params` contains the variables we'll apply to the `templates`
     * the `templates` required by the app. These include the Build, Deploy configs as well as the services, health checks, and other app definitions.
 
-2. There are a few updates to these manifests we need to make before applying the cluster content. In the `.openshift-applier/site.yml` update the namespace `<YOUR_NAME>` variable accordingly.
+2. There are a few updates to these manifests we need to make before applying the cluster content. In the `.openshift-applier/apply.yml` update the namespace `<YOUR_NAME>` variable accordingly.
 ```yaml
-  # .openshift-applier/site.yml
+  # .openshift-applier/apply.yml
 
   vars:
     namespace_prefix: '<YOUR_NAME>'
