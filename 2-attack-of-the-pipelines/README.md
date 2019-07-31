@@ -302,7 +302,7 @@ oc login -u <username> -p <password> <CLUSTER_URL>
 ansible-galaxy install -r requirements.yml --roles-path=roles
 ```
 ```bash
-ansible-playbook site.yml -i inventory/
+ansible-playbook apply.yml -i inventory/
 ```
 ![ansible-success](../images/exercise2/ansible-success.png)
 
