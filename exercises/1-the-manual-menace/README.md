@@ -7,7 +7,7 @@
 ## Exercise Intro
 In this exercise we will use automation tooling to create Project namespaces for our `CI/CD` tooling along with the `dev` and `test` namespaces for our deployments to live. We do this manually using the OpenShift CLI; but as we go from cluster to cluster or project to project Dev and Ops teams often find themselves having to redo these tasks again and again. Configuring our cluster using code; we can easily store this in Git and repeat the process again and again. By minimising the time taken to do these repetitive tasks we can accelerate our ability to deliver value to our customers; working on the hard problems they face.
 
-This exercise uses Ansible to drive the creation of the cluster content. In particular; we'll use a play book called the `OpenShift Applier`. Once the project namespace have been created; we will add some tools to support CI/CD such as Jenkins, Git and Nexus. These tools will be needed by later lessons to automate the build and deploy of our apps. Again; we will use OpenShift Templates and drive their creation in the cluster using Ansible. To prove things are working, finally we'll delete all our content and re-apply the inventory to re-create our cluster's content.
+This exercise uses Ansible to drive the creation of the cluster content. In particular; we'll use an implementation called the [OpenShift Applier](https://github.com/redhat-cop/openshift-applier). Once the project namespace have been created; we will add some tools to support CI/CD such as Jenkins, Git and Nexus. These tools will be needed by later lessons to automate the build and deploy of our apps. Again; we will use OpenShift Templates and drive their creation in the cluster using Ansible. To prove things are working, finally we'll delete all our content and re-apply the inventory to re-create our cluster's content.
 
 #### Why is config-as-code important?
 * Assurance - Prevents unwanted config changes from people making arbitrary changes to environments. No more Snowflake servers!
@@ -44,7 +44,7 @@ If you're feeling confident and don't want to follow the step-by-step guide thes
 
 1. Clone the repo `https://github.com/rht-labs/enablement-ci-cd` which contains the scaffold of the project. Ensure you get all remote branches.
 
-2. Create `<your-name>-ci-cd`, `<your-name>-dev` and `<your-name>-test` project namespaces using the inventory and run them with the OpenShift Applier to populate the cluster
+2. Create `<your-name>-ci-cd`, `<your-name>-dev` and `<your-name>-test` project namespaces using the inventory and run them with the [OpenShift Applier](https://github.com/redhat-cop/openshift-applier) to populate the cluster
 
 3. Use the templates provided to create build of the jenkins-s2i. The templates are in `exercise1/jenkins-s2i`
 
@@ -104,7 +104,7 @@ cd enablement-ci-cd
  * `requirements.yml` is a manifest which contains the ansible modules needed to run the playbook
  * `apply.yml` is a playbook that sets up some variables and runs the OpenShift Applier role.
 
-4. Open the `apply.yml` file in the root of the project. Update the namespace variables by replacing the `<YOUR_NAME>` with your name or initials. Don't use uppercase or special characters. For example; my name is Dónal so I've created:
+4. Open the `apply.yml` file in the root of the project. Update the namespace variables by replacing the `<YOUR_NAME>` (including the `<` and `>`) with your name or initials. **Don't use uppercase or special characters**. For example; if your name is Tim Smith you would replace `<YOUR_NAME>` and set `namespace_prefix` to `tim` or `tsmith`.
 ```yaml
   hosts: "{{ target }}"
   vars:
@@ -120,13 +120,15 @@ NOTE - YAML is indentation sensitive so keep things lined up properly!
 
 5. Open the `inventory/host_vars/projects-and-policies.yml` file; you should see some variables setup already to create the `<YOUR_NAME>-ci-cd` namespace. This object is passed to the OpenShift Applier to call the `templates/project-requests.yml` template with the `params/project-requests-ci-cd` parameters. We will add some additional content here but first let's explore the parameters and the template
 
-6a. Inside of the `inventory/host_vars/projects-and-policies.yml` you'll see the following
+6. Inside of the `inventory/host_vars/projects-and-policies.yml` you'll see the following
+
 ```yaml
 ci_cd:
   NAMESPACE: "{{ namespace_prefix }}-ci-cd"
   NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }}s CI/CD"
 ```
 * This will define the variables that we'll soon be using to deploy our CI/CD project. It relies on the `namespace_prefix` that we updated earlier. Pulling these two sets of variables together will now allow us to pass the newly created variables to our template that will create our project appropriately. You'll notice that the name of the variable above (`ci_cd`) is then assigned to `params_from_vars` in our inventory.
+
 ```yaml
 ansible_connection: local
 openshift_cluster_content:
@@ -142,6 +144,7 @@ openshift_cluster_content:
 
 7. Let's add two more params dicts to pass to our template to be able to create a `dev` and `test` project.At the top of `inventory/host_vars/projects-and-policies.yml` create a dictionary called `dev` and `test` similar to how you see `ci_cd` defined.
   * In your editor; Open `inventory/host_vars/projects-and-policies.yml` and add the following:
+
 ```yaml
 dev:
   NAMESPACE: "{{ namespace_prefix }}-dev"
@@ -153,6 +156,7 @@ test:
 ```
 
 8. In the `inventory/host_vars/projects-and-policies.yml` file; add the new objects for the projects you want to create (dev & test) by adding another object to the content array for each. You can copy and paste them from the `ci-cd` example and update them accordingly. If you do this; remember to change the params_from_vars variable! e.g.
+
 ```yaml
     - name: "{{ dev_namespace }}"
       template: "{{ playbook_dir }}/templates/project-requests.yml"
@@ -169,25 +173,30 @@ test:
 ```
 
 10. With the configuration in place; install the OpenShift Applier dependency
+
 ```bash
 ansible-galaxy install -r requirements.yml --roles-path=roles
 ```
 
-11. Apply the inventory by logging into OpenShift on the terminal and running the playbook as follows (<CLUSTER_URL> should be replaced with the one you've been provided by the instructor). Accept any insecure connection warning 👍:
+11. Apply the inventory by logging into OpenShift on the terminal and running the playbook as follows (<CLUSTER_URL> should be replaced with the one you've been provided by the instructor). Accept any insecure connection warning(s) 👍:
+
 ```bash
 oc login <CLUSTER_URL>
 ```
 ```bash
 ansible-playbook apply.yml -i inventory/ -e target=bootstrap
 ```
+
 where the `-e target=bootstrap` is passing an additional variable specifying that we run the `bootstrap` inventory
 
 12. Once successful you should see an output similar to this (Cows not included): ![playbook-success](../images/exercise1/play-book-success.png)
 
 13. You can check to see the projects have been created successfully by running
+
 ```bash
 oc projects
 ```
+
 ![project-success](../images/exercise1/project-success.png)
 
 ### Part 2 - Nexus
@@ -210,7 +219,7 @@ MEMORY_LIMIT=1Gi
 
 * You'll notice that this is different from how we defined our params for our projects. This is because there are multiple ways to do this. In cases like this, there may be a need to change some of these variables more frequently than others (i.e. giving the app more memory,etc.). In this case, it's easier to maintain them within their own separate params files.
 
-3. Create a new object in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `ci-cd-tooling` and populate its `content` is as follows
+3. Create a new object in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `ci-cd-tooling` and populate its `content` as follows
 
 ```yaml
 ---
