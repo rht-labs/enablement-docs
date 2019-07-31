@@ -101,7 +101,7 @@ cd todolist-fe
 npm run test
 ```
 <p class="tip" >
-`test` is an alias used that runs `vue-cli-service test` from the scripts object in `package.json`
+<b>NOTE</b> - `test` is an alias used that runs `vue-cli-service test` from the scripts object in `package.json`
 </p>
 
 ![screenshot-scripts](../images/exercise3/screenshot-scripts.png)
@@ -123,7 +123,9 @@ npm run mongo:start
 npm run test
 ```
 
-> NOTE: On Windows systems, tests will fail because Mocha is unable to find the `*.spec.js` files. Edit the `package.json` file, and remove the single quotes around `server/**/*.spec.js` in the `test` line as follows:
+<p class="tip" >
+<b>NOTE</b> - On Windows systems, tests will fail because Mocha is unable to find the `*.spec.js` files. Edit the `package.json` file, and remove the single quotes around `server/**/*.spec.js` in the `test` line as follows:
+</p>
 
 ```bash
 "test": "node_modules/.bin/nyc node_modules/.bin/mocha server/**/*.spec.js --exit"
@@ -166,8 +168,9 @@ npm run e2e
 
 ![local-e2e](../images/exercise3/local-e2e.png)
 
-> NOTE: On Windows systems, you will see the firewall pop-up and ask permission to allow access. Click allow access to continue.
-
+<p class="tip" >
+<b>NOTE</b> - On Windows systems, you will see the firewall pop-up and ask permission to allow access. Click allow access to continue.
+</p>
 
 3. With tests executing locally; let's add them to our Jenkins pipeline. To do this; we'll create a new job and connect it up to our `todolist-fe` jobs. Open Jenkins and create a `New Item` called `dev-todolist-fe-e2e`. Make this Job `Freestyle`.
 
@@ -231,6 +234,8 @@ git push -u origin feature/important-flag
 2.  Navigate to the `server/api/todo/todo.spec.js` file. This contains all of the existing todo list api tests. These are broken down into simple `describe("api definition", function(){})` blocks which is BDD speak for how the component being tested should behave. Inside of each `it("should do something ", function(){})` statements we use some snappy language to illustrate the expected behaviour of the test. For example a `GET` request of the api is described and tested for the return to be of type Array as follows.
 
 ```javascript
+// server/api/todo/todo.spec.js
+
 describe("GET /api/todos", function() {
     it("should respond with JSON array", function(done) {
         request(app)
@@ -271,6 +276,8 @@ npm run test
     * Add a new test assertion to check that `res.body.important` is `true` below the `// YOUR TEST GO HERE` line.
 
 ```javascript
+// server/api/todo/todo.spec.js
+
 // Exercise 3 test case!
 it("should mark todo as important and persist it", function(done) {
     request(app)
@@ -303,6 +310,8 @@ npm run test
 7.  With our test now failing; let's implement the feature. This is quite a simple change - we first need to update the `server/api/todo/todo.model.js`. Add an additional property on the schema called `important` and make its type Boolean.
 
 ```javascript
+// server/api/todo/todo.model.js
+
 const TodoSchema = new Schema({
   title: String,
   completed: Boolean,  
@@ -383,7 +392,10 @@ git push -u origin feature/important-flag
 npm run test -- --watch
 ```
 
-> NOTE: You may see an `ENOSPC` error on Linux systems like the following:
+<p class="tip" >
+<b>NOTE</b> - You may see an `ENOSPC` error on Linux systems like the following:
+</p>
+
 ```bash
 ERROR jest exited with code 1.
 npm ERR! code ELIFECYCLE
@@ -411,6 +423,8 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 6. Let's implement the first test `it("should render a button with important flag"`. This test will assert if the button is present on the page and it contains the `.important-flag` CSS class. To implement this; add the `expect` statement as follows below the `// TODO - test goes here!` comment.  
 
 ```javascript
+  //tests/unit/vue-components/TodoItem.spec.js
+
   it("should render a button with important flag", () => {
     const wrapper = mount(TodoItem, {
       propsData: { todoItem: importantTodo }
@@ -427,6 +441,8 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 8. With a basic assertion in place, let's continue on to the next few tests. We want the important flag to be red when an item in the todolist is marked accordingly. Conversely we want it to be not red when false. Let's create a check for `.red-flag` CSS property to be present when important is true and not when false. Complete the `expect` statements in your test file as shown below for both tests.
 
 ```javascript
+  // tests/unit/vue-components/TodoItem.spec.js
+
   it("should set the colour to red when true", () => {
     const wrapper = mount(TodoItem, {
       propsData: { todoItem: importantTodo }
@@ -447,6 +463,8 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 9. Finally, we want to make the flag clickable and for it to call a function to update the state. The final test in the `TodoItem.spec.js` we want to create should simulate this behaviour. Implement the `it("call markImportant when clicked", () ` test by first simulating the click of our important-flag and asserting the function `markImportant()` to write is executed.
 
 ```javascript
+  // tests/unit/vue-components/TodoItem.spec.js
+
   it("call markImportant when clicked", () => {
     const wrapper = mount(TodoItem, {
       methods,
@@ -468,6 +486,8 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 11. Underneath the `</md-list-item>` tag, let's add a new md-button. Add an `.important-flag` class on the `md-button` and put the svg of the flag provided inside it.
 
 ```html
+    <!--  src/components/TodoItem.vue -->
+
     </md-list-item>
     <!-- TODO - SVG for use in Exercise3 -->
     <md-button class="important-flag">
@@ -478,6 +498,8 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 12. We should now see the first of our failing tests has started to pass. Running the app locally (using `npm run serve`) should show the flag appear in the UI. It is clickable but won't fire any events and the colour is not red as per our requirement. Let's continue to implement the colour change for the flag. On our `<svg/>` tag, add some logic to bind the css to the property of a `todo.important` by adding ` :class="{'red-flag': todoItem.important}"  `. This logic will apply the CSS class when `todo.important`  is true.
 
 ```html
+<!--  src/components/TodoItem.vue -->
+
 <md-button class="important-flag">
     <svg :class="{'red-flag': todoItem.important}"  height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" ><path d="M0 0h24v24H0z" fill="none"/><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
 </md-button>
@@ -486,6 +508,8 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 13. More tests should now be passing. Let's wire the click of the flag to an event in Javascript. In the methods section of the `<script></script>` tags in the Vue file, implement the `markImportant()`. We want to wire this to the action to updateTodo, just like we have in the `markCompleted()` call above it. We also need to pass an additional property to this method called `important`
 
 ```javascript
+    // src/components/TodoItem.vue
+
     markImportant() {
       // TODO - FILL THIS OUT IN THE EXERCISE
       this.$store.dispatch("updateTodo", {id: this.todoItem._id, important: true});
@@ -496,6 +520,8 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 14. Let's connect the click button in the DOM to the Javascript function we've just created. In the template, add a click handler to the md-button to call the function `markImportant()` by adding ` @click="markImportant()"` to the `<md-button>` tag
 
 ```html
+    <!--  src/components/TodoItem.vue -->
+
     <!-- TODO - SVG for use in Exercise3 -->
     <md-button class="important-flag" @click="markImportant()">
         <svg :class="{'red-flag': todoItem.important}"  height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" ><path d="M0 0h24v24H0z" fill="none"/><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
@@ -528,6 +554,8 @@ npm run serve
 19. We need to implement the `actions` and `mutations` for our feature. Let's start with the tests. Open the `tests/unit/javascript/actions.spec.js` and navigate to the bottom of the file. Our action should should commit the `MARK_TODO_IMPORTANT` to the mutations. Scroll to the end of the test file and implement the skeleton test by adding `expect(commit.firstCall.args[0]).toBe("MARK_TODO_IMPORTANT");` as the assertion.
 
 ```javascript
+  // tests/unit/javascript/actions.spec.js
+
   it("should call MARK_TODO_IMPORTANT", done => {
     const commit = sinon.spy();
     state.todos = todos;
@@ -542,6 +570,8 @@ npm run serve
 20. We should now have more failing tests, let's fix this by adding the call from our action to the mutation method. Open the `src/store/actions.js` file and scroll to the bottom to the `updateTodo()` method. Complete the if block by adding `commit("MARK_TODO_IMPORTANT", i);` as shown below.
 
 ```javascript
+// src/store/actions.js
+
 updateTodo({ commit, state }, { id, important }) {
     let i = state.todos.findIndex(todo => todo._id === id);
     if (important) {
@@ -555,6 +585,8 @@ updateTodo({ commit, state }, { id, important }) {
 21. Finally, let's implement the `mutation` for our feature. Again, starting with the tests... Open the `tests/unit/javascript/mutations.spec.js` to find our skeleton tests at the bottom of the file. Our mutation method is responsible for toggling the todo's `important` property between `true` and `false`. Let's implement the tests for this functionality by setting important to be true and calling the method expecting the inverse. Then let's set it to false and call the method expecting the inverse. Add the expectations below the `// TODO - test goes here!` comment as done previously.
 
 ```javascript
+  // tests/unit/javascript/mutations.spec.js
+
   it("it should MARK_TODO_IMPORTANT as false", () => {
     state.todos = importantTodos;
     // TODO - test goes here!
@@ -574,6 +606,8 @@ updateTodo({ commit, state }, { id, important }) {
 22. With our tests running and failing, let's implement the feature to their spec. Open the `src/store/mutations.js` and add another function called `MARK_TODO_IMPORTANT` below the `MARK_TODO_COMPLETED` to toggle `todo.important` between true and false. NOTE - add a `,` at the end of the `MARK_TODO_COMPLETED(){}` function call.
 
 ```javascript
+  // src/store/mutations.js
+
   MARK_TODO_IMPORTANT(state, index) {
     console.log("INFO - MARK_TODO_IMPORTANT");
     state.todos[index].important = !state.todos[index].important;
@@ -622,11 +656,15 @@ git push --all
 touch tests/e2e/specs/importantFlag.js
 ```
 
-> NOTE: Windows users should create this new file using a text editor.
+<p class="tip">
+<b>NOTE</b> - Windows users should create this new file using a text editor.
+</p>
 
 2.  Open this new file in your code editor and set out the initial blank template for an e2e test as below:
 ```javascript
-module.exports = {
+// tests/e2e/specs/importantFlag.js
+
+  module.exports = {
     "Testing important flag setting": browser => {
 
     }
@@ -652,7 +690,9 @@ module.exports = {
 
 6.  Write the following test code. The pauses allow for the body of the page to render the todo list before exercising the test code:
 ```javascript
-module.exports = {
+// src/components/XofYItems.vue
+
+  module.exports = {
     "Testing important flag setting": browser => {
       browser
         .url(process.env.VUE_DEV_SERVER_URL + '/#/todo')
