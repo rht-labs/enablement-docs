@@ -104,7 +104,7 @@ cd enablement-ci-cd
  * `requirements.yml` is a manifest which contains the ansible modules needed to run the playbook
  * `apply.yml` is a playbook that sets up some variables and runs the OpenShift Applier role.
 
-4. Open the `apply.yml` file in the root of the project. Update the namespace variables by replacing the `<YOUR_NAME>` with your name or initials. Don't use uppercase or special characters. For example; if your name is Tim Smith you would replace `<YOUR_NAME>` and set `namespace_prefix` to `tim` or `tsmith`.
+4. Open the `apply.yml` file in the root of the project. Update the namespace variables by replacing the `<YOUR_NAME>` (including the `<` and `>`) with your name or initials. **Don't use uppercase or special characters**. For example; if your name is Tim Smith you would replace `<YOUR_NAME>` and set `namespace_prefix` to `tim` or `tsmith`.
 ```yaml
   hosts: "{{ target }}"
   vars:
