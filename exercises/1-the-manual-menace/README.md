@@ -246,8 +246,9 @@ touch params/nexus
 3. The essential params to include in this file are:
 ```bash
 # params/nexus
-VOLUME_CAPACITY=5Gi
-MEMORY_LIMIT=1Gi
+
+  VOLUME_CAPACITY=5Gi
+  MEMORY_LIMIT=1Gi
 ```
 
 4. Add a new content item in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `nexus` and populate it as follows
@@ -436,11 +437,12 @@ git checkout exercise1/jenkins templates/jenkins.yml
 1. As before; create a new set of params by creating a `params/jenkins` file and adding some overrides to the template and updating the `<YOUR_NAME>` value accordingly.
 ```yaml
 # params/jenkins
-MEMORY_LIMIT=3Gi
-VOLUME_CAPACITY=10Gi
-JVM_ARCH=x86_64
-NAMESPACE=<YOUR_NAME>-ci-cd
-JENKINS_OPTS=--sessionTimeout=720
+
+  MEMORY_LIMIT=3Gi
+  VOLUME_CAPACITY=10Gi
+  JVM_ARCH=x86_64
+  NAMESPACE=<YOUR_NAME>-ci-cd
+  JENKINS_OPTS=--sessionTimeout=720
 ```
 
 3. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo (and git if you have it) in  `inventory/host_vars/ci-cd-tooling.yml`.
@@ -506,12 +508,13 @@ git checkout exercise1/jenkins-s2i params/jenkins-s2i templates/jenkins-s2i.yml
 8. Open `params/jenkins-s2i` and add the following content; replacing variables as appropriate.
 ```yaml
 # params/jenkins-s2i
-SOURCE_REPOSITORY_URL=<GIT_URL>
-NAME=jenkins
-SOURCE_REPOSITORY_CONTEXT_DIR=jenkins-s2i
-IMAGE_STREAM_NAMESPACE=<YOUR_NAME>-ci-cd
-SOURCE_REPOSITORY_USERNAME=<YOUR_LDAP_USERNAME>
-SOURCE_REPOSITORY_PASSWORD=<YOUR_LDAP_PASSWORD>
+
+  SOURCE_REPOSITORY_URL=<GIT_URL>
+  NAME=jenkins
+  SOURCE_REPOSITORY_CONTEXT_DIR=jenkins-s2i
+  IMAGE_STREAM_NAMESPACE=<YOUR_NAME>-ci-cd
+  SOURCE_REPOSITORY_USERNAME=<YOUR_LDAP_USERNAME>
+  SOURCE_REPOSITORY_PASSWORD=<YOUR_LDAP_PASSWORD>
 ```
 where
     * `<GIT_URL>` is the full clone path of the repo where this project is stored (including the https && .git)

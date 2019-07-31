@@ -513,6 +513,7 @@ Some of the key things to note:
 3. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous exercises. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
 ```groovy
    // Jenkinsfile
+   
     environment {
         // Global Vars
         NAMESPACE_PREFIX="<YOUR_NAME>"
