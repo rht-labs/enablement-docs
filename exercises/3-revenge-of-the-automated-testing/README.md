@@ -93,9 +93,9 @@ _On page load:_
 #### 1a - Unit tests
 > In this exercise we will execute our test for the front end locally. Once verified we will add them to Jenkins.
 
-1. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist-fe` directory and run `test`.
+1. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist` directory and run `test`.
 ```bash
-cd todolist-fe
+cd todolist
 ```
 ```bash
 npm run test
@@ -106,59 +106,40 @@ npm run test
 
 ![screenshot-scripts](../images/exercise3/screenshot-scripts.png)
 
-2. This command will run all `*spec.js` files. Our test files are stored in the following places. There are 12 front end test files stored in these directories: `todolist-fe/tests/unit/vue-components/*` & `todolist-fe/tests/unit/javascript/*`
+2. This command will run all `*spec.js` files. Our test files are stored in the following places. There are 12 front end test files stored in these directories: `todolist/tests/unit/vue-components/*` & `todolist/tests/unit/javascript/*`
 
 3. You should see an output similar to the following. The above command has run a test suite for every `*.spec.js` file. The table generated in the terminal shows the code coverage. We're going to be focusing on the unit tests for now.
 
 ![test-run-locally](../images/exercise3/test-run-locally.png)
 
-4. Repeat the same process for `todolist-api` and verify that all the tests run. If you have an ExpressJS server already running from previous exercise; you should kill it before running the tests. The `mocha` test suite will launch a dev server for running the tests. There are 2 API test files: `todolist-api/server/api/todo/todo.spec.js` & `todolist-api/server/mocks/mock-routes.spec.js` for our API and the Mocks server. Remember to start the `mongo` container before running the tests
-```bash
-cd todolist-api
-```
-```bash
-npm run mongo:start
-```
-```bash
-npm run test
-```
-
-<p class="tip" >
-<b>NOTE</b> - On Windows systems, tests will fail because Mocha is unable to find the `*.spec.js` files. Edit the `package.json` file, and remove the single quotes around `server/**/*.spec.js` in the `test` line as follows:
-</p>
-
-```bash
-"test": "node_modules/.bin/nyc node_modules/.bin/mocha server/**/*.spec.js --exit"
-```
-
-5. Navigate to your instance of Jenkins at `https://jenkins-<YOUR_NAME>-ci-cd.<APPS_URL>`.
-Click on `dev-todolist-fe-build` and then click the `configure` button on the left-hand side.
+4. Navigate to your instance of Jenkins at `https://jenkins-<YOUR_NAME>-ci-cd.<APPS_URL>`.
+Click on `dev-todolist-build` and then click the `configure` button on the left-hand side.
 
 ![jenkins-configure-job](../images/exercise3/jenkins-configure-job.png)
 
-6. Scroll to the `Build` part of the configuration page and add `npm run test` below `npm install`.
+5. Scroll to the `Build` part of the configuration page and add `npm run test` below `npm install`.
 
 ![jenkins-build-step](../images/exercise3/jenkins-build-step.png)
 
-7. Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report` (Jenkins might place this at the top of the `Post-build Actions` list).
+6. Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report` (Jenkins might place this at the top of the `Post-build Actions` list).
 
 ![xunit-action](../images/exercise3/xunit-action.png)
 
-8. Click the `Add` button under `Publish xUnit test result report` and select `JUnit`. In the pattern field enter `test-report.xml`. In the `Failed Tests Thresholds`  input box enter 0 under `Red Ball Total`. It should look a little something like this:
+7. Click the `Add` button under `Publish xUnit test result report` and select `JUnit`. In the pattern field enter `test-report.xml`. In the `Failed Tests Thresholds`  input box enter 0 under `Red Ball Total`. It should look a little something like this:
 
 ![post-build-actions](../images/exercise3/post-build-actions.png)
 
-9. Click `Save` at the bottom to save the changes. Run the `dev-todolist-fe-build` job and verify that this passes and the `build` and `bake` jobs are both triggered.
+8. Click `Save` at the bottom to save the changes. Run the `dev-todolist-build` job and verify that this passes and the `build` and `bake` jobs are both triggered.
 
 
 #### 1b - End to End Tests (e2e)
 > _Unit tests are a great way to get immediate feedback as part of testing an application. End to end tests that drive user behaviour are another amazing way to ensure an application is behaving as expected._
 
-In this part of the exercise, we will add a new stage to our pipeline called `dev-todolist-fe-e2e` that will run after the deploy has been completed. End to end tests will use `Nightwatch.js` to orchestrate a selenium webdriver instance that controls the web browser; in this case Google Chrome!
+In this part of the exercise, we will add a new stage to our pipeline called `dev-todolist-e2e` that will run after the deploy has been completed. End to end tests will use `Nightwatch.js` to orchestrate a selenium webdriver instance that controls the web browser; in this case Google Chrome!
 
-1. Let's start by checking that our tests execute locally. On the terminal move to the `todolist-fe` folder. Our end to end tests are stored in `tests/e2e/specs/`. The vuejs cli uses Nightwatch.js and comes pre-configured to run tests against Google Chrome. We have created some additional configuration in the root of the project `nightwatch.config.js` to run headless in CI mode on Jenkins.
+1. Let's start by checking that our tests execute locally. On the terminal move to the `todolist` folder. Our end to end tests are stored in `tests/e2e/specs/`. The vuejs cli uses Nightwatch.js and comes pre-configured to run tests against Google Chrome. We have created some additional configuration in the root of the project `nightwatch.config.js` to run headless in CI mode on Jenkins.
 ```bash
-cd todolist-fe
+cd todolist
 ```
 
 2. Run the tests locally by executing the following. This should start the dev server and run the test. You may see the browser pop up and close while tests execute.
@@ -172,13 +153,13 @@ npm run e2e
 <b>NOTE</b> - On Windows systems, you will see the firewall pop-up and ask permission to allow access. Click allow access to continue.
 </p>
 
-3. With tests executing locally; let's add them to our Jenkins pipeline. To do this; we'll create a new job and connect it up to our `todolist-fe` jobs. Open Jenkins and create a `New Item` called `dev-todolist-fe-e2e`. Make this Job `Freestyle`.
+3. With tests executing locally; let's add them to our Jenkins pipeline. To do this; we'll create a new job and connect it up to our `todolist` jobs. Open Jenkins and create a `New Item` called `dev-todolist-e2e`. Make this Job `Freestyle`.
 
 4. On the configuration page (under the general tab); Set the Label for the job to run on as `jenkins-slave-npm`. Check the box marking the build parameterised and add a String parameter of `BUILD_TAG` as done before
 
 ![e2e-general](../images/exercise3/e2e-general.png)
 
-5. On the Source Code Management tab; set the source code to git and add the url to your `todolist-fe` app. Set the branch to `refs/tags/${BUILD_TAG}`
+5. On the Source Code Management tab; set the source code to git and add the url to your `todolist` app. Set the branch to `refs/tags/${BUILD_TAG}`
 
 ![e2e-git](../images/exercise3/e2e-git.png)
 
@@ -186,7 +167,7 @@ npm run e2e
 
 7. On the Build section; add a build step to execute shell and fill in the following substituting `<YOUR_NAME>` accordingly:
 ```bash
-export E2E_TEST_ROUTE=todolist-fe-<YOUR_NAME>-dev.<APPS_URL>
+export E2E_TEST_ROUTE=todolist-<YOUR_NAME>-dev.<APPS_URL>
 npm install
 npm run e2e:ci
 ```
@@ -196,7 +177,7 @@ npm run e2e:ci
 
 ![e2e-post-build](../images/exercise3/e2e-post-build.png)
 
-9. We want to connect the e2e job we just created to our dev pipleline by editing the post build actions on `dev-todolist-fe-deploy` job. Open the `dev-todolist-fe-deploy` job and hit `configure`. In the `Post-build actions` section of this job add a `Trigger parameterised build` on other jobs. Set the `Projects to build` to be `dev-todolist-fe-e2e`. Add a Parameter and set the it to the `Current build parameters`. Save the settings.
+9. We want to connect the e2e job we just created to our dev pipleline by editing the post build actions on `dev-todolist-deploy` job. Open the `dev-todolist-deploy` job and hit `configure`. In the `Post-build actions` section of this job add a `Trigger parameterised build` on other jobs. Set the `Projects to build` to be `dev-todolist-e2e`. Add a Parameter and set the it to the `Current build parameters`. Save the settings.
 
 ![e2e-trigger](../images/exercise3/e2e-trigger.png)
 
@@ -217,12 +198,12 @@ _On page load:_
 - [ ] should display existing todos that are not marked important
 - [ ] should display existing todos that are marked important with an red flag
 
-#### 2a - Create todolist-api tests
+#### 2a - Create todolist api tests
 > Using [Mocha](https://mochajs.org/) as our test runner; we will now write some tests for backend functionality to persist our important-flag. The changes required to the backend are minimal but we will use TDD to create our test first, then implement the functionality.
 
-1.  Create a new branch in your `todolist-api` app for our feature and push it to the remote
+1.  Create a new branch in your `todolist` app for our feature and push it to the remote
 ```bash
-cd todolist-api
+cd todolist
 ```
 ```bash
 git checkout -b feature/important-flag
@@ -351,12 +332,12 @@ git merge feature/important-flag
 git push
 ```
 
-3.  After pushing your changes; start back up the `todolist-api` app on a new terminal session
+11.  After pushing your changes; start back up the `todolist` app on a new terminal session
 ```bash
 npm run start
 ```
 
-#### 2b - Create todolist-fe tests
+#### 2b - Create todolist front-end tests
 > Using [Jest](https://facebook.github.io/jest/) as our test runner and the `vue-test-utils` library for managing our vue components; we will now write some tests for front end functionality to persist our important-flag. The changes required to the front end are quite large but we will use TDD to create our test first, then implement the functionality.
 
 Our TodoList App uses `vuex` to manage the state of the app's todos and `axios` HTTP library to connect to the backend. `Vuex` is an opinionated framework for managing application state and has some key design features you will need to know to continue with the exercise.
@@ -368,17 +349,17 @@ There are two parts of the lifecycle to updating the store, the `actions` & `mut
 For example; when marking a todo as done in the UI, the following flow occurs
   * The `TodoItem.vue` calls the `markTodoDone()` function which dispatches an event to the store.
   * This calls the `updateTodo()` function in the `actions.js` file
-  * The action will update the backend db (calling our `todolist-api`) with our updated todo object.
+  * The action will update the backend db (calling our `todolist api`) with our updated todo object.
   * The action will commit the change to the store by calling the mutation method `MARK_TODO_COMPLETED`
   * The `MARK_TODO_COMPLETED` will directly access the store object and update it with the new state value
   * The `ListOfTodos.vue` component is watching the store for changes and when something gets updated it re-renders the `TodoItem.vue`.
 
 The implementation of our `important` flag will follow this same flow.
 
-1. Let's implement our feature by first creating a branch. Our new feature, important flag will behave in the same way as the `MARK_TODO_COMPLETED`. Create a new branch in your `todolist-fe` app for our feature and push it to the remote
+1. Let's implement our feature by first creating a branch. Our new feature, important flag will behave in the same way as the `MARK_TODO_COMPLETED`. Create a new branch in your `todolist` app for our feature and push it to the remote
 
 ```bash
-cd todolist-fe
+cd todolist
 ```
 ```bash
 git checkout -b feature/important-flag
@@ -400,7 +381,7 @@ npm run test -- --watch
 ERROR jest exited with code 1.
 npm ERR! code ELIFECYCLE
 npm ERR! errno 1
-npm ERR! todolist-fe@1.0.0 test: `vue-cli-service test "--watch"`
+npm ERR! todolist@1.0.0 test: `vue-cli-service test "--watch"`
 npm ERR! Exit status 1
 ```
 To fix this error, run the following command:
