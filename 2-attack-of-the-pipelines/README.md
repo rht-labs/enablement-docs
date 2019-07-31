@@ -131,7 +131,7 @@ npm run mongo:start-ide
 npm run serve:all
 ```
 <p class="tip" >
-NOTE: If you're not using the cloud hosted environment, you can start mongo using `npm run mongo` which will pull the latest image from dockerhub
+<b>NOTE</b>: If you're not using the cloud hosted environment, you can start mongo using `npm run mongo` which will pull the latest image from dockerhub
 </p>
 
 6. Check things are up and running by testing the API with a `curl`. The API should return some seeded data (stored in `server/config/seed.js`)
@@ -249,7 +249,7 @@ export NEXUS_SERVICE_PORT=80
 npm run prepare-nexus
 ```
 <p class="tip">
-NOTE - This step in a residency would be automated by a more complex nexus deployment in the ci-cd project
+<b>NOTE</b> - This step in a residency would be automated by a more complex nexus deployment in the ci-cd project
 </p>
 
 ### Part 2 - Add configs to cluster
@@ -280,8 +280,10 @@ with the following
     * the `params` contains the variables we'll apply to the `templates`
     * the `templates` required by the app. These include the Build, Deploy configs as well as the services, health checks, and other app definitions.
 
-2. There are a few updates to these manifests we need to make before applying the cluster content. In the `site.yml` update the namespace `<YOUR_NAME>` variable accordingly.
+2. There are a few updates to these manifests we need to make before applying the cluster content. In the `.openshift-applier/site.yml` update the namespace `<YOUR_NAME>` variable accordingly.
 ```yaml
+  # .openshift-applier/site.yml
+
   vars:
     namespace_prefix: '<YOUR_NAME>'
     ci_cd_namespace: '{{ namespace_prefix }}-ci-cd'
@@ -342,7 +344,7 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
 
 #### 3a - Build
 
-1. With the BuildConfig and DeployConfig in place for both the app from previous steps; Log into Jenkins and create a `New Item`. This is just jenkins speak for a new job configuration. ![new-item](../images/exercise2/new-item.png)
+1. With the BuildConfig and DeployConfig in place for both the app from previous steps; Log into Jenkins and create a `New Item`. This is just jenkins speak for a new job configuration.<br><br> ![new-item](../images/exercise2/new-item.png)
 
 2. Name this job `dev-todolist-build` and select `Freestyle Project`. Our job will take the form of `<ENV>-<APP_NAME>-<JOB_FUNCTION>`. ![freestyle-job](../images/exercise2/freestyle-job.png)
 
@@ -392,7 +394,7 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
 ```
 ![param-trigger](../images/exercise2/param-trigger.png)
 <p class="tip">
-    NOTE - Jenkins might say "No such project ‘dev-todolist-bake-deploy’. Did you mean ...." at this point. Don't worry; it's because we have not created the next job yet.
+    <b>NOTE</b> - Jenkins might say "No such project ‘dev-todolist-bake-deploy’. Did you mean ...." at this point. Don't worry; it's because we have not created the next job yet.
 </p>
 
 12. Hit `save` which will take you to the job overview page - and that's it; our *build* phase is complete!
@@ -407,14 +409,14 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
     * You can set `dev-todolist-build.` as the default value for ease when triggering manually.
     * The description is not required but a handy one for reference would be `${JOB_NAME}.${BUILD_NUMBER} of previous build e.g. dev-todolist-build.1232`
 <p class="tip">
-    NOTE - Don't forget to include the `.` after `dev-todolist-build` in the Default Value box.
+    <b>NOTE</b> - Don't forget to include the `.` after `dev-todolist-build` in the Default Value box.
 </p>
 
 ![param-trigger-bake](../images/exercise2/param-trigger-bake.png)
 
 1. This time set the `Restrict where this project can be run` label to `master`.
 <p class="tip">
-    NOTE - `Master` is the default node that jobs run on. We don't want jenkins to execute the *bake* on any other nodes if the `master` is busy so it is always safer to specify it here.
+    <b>NOTE</b> - `Master` is the default node that jobs run on. We don't want jenkins to execute the *bake* on any other nodes if the `master` is busy so it is always safer to specify it here.
 </p>
 
 4. There is no Git or SCM needed for this job so move down to the Build Environment and tick `Delete workspace before build starts`
@@ -487,7 +489,7 @@ echo "### END DEPLOY IMAGE ###"
 ![dev-pipeline-view](../images/exercise2/dev-pipeline-view.png)
 
 <p class="tip">
-    NOTE - The pipeline may fail on the first run. In such cases, re-run the pipeline once more and the three stages will run successfully and show three green cards.
+    <b>NOTE</b> - The pipeline may fail on the first run. In such cases, re-run the pipeline once more and the three stages will run successfully and show three green cards.
 </p>
 
 9. To check the deployment in OpenShift; open the web console and go to your `dev` namespace. You should see the deployment was successful; hit the URL to open the app and play with the deployed.
@@ -510,8 +512,9 @@ Some of the key things to note:
 
 3. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous exercises. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
 ```groovy
+   // Jenkinsfile
     environment {
-        // GLobal Vars
+        // Global Vars
         NAMESPACE_PREFIX="<YOUR_NAME>"
         GITLAB_DOMAIN = "gitlab.apps.change.me.com"
         GITLAB_PROJECT = "<GIT_USERNAME>"
