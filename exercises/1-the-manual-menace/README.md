@@ -92,8 +92,6 @@ cd enablement-ci-cd
 │   │   └── projects-and-policies.yml
 │   └── hosts
 ├── jenkins-s2i
-├── params
-│   └── project-requests-ci-cd
 ├── requirements.yml
 └── templates
     └── project-requests.yml
@@ -111,7 +109,7 @@ cd enablement-ci-cd
   namespace_prefix: "<YOUR_NAME>"
 ```
 
-5. Open the `inventory/host_vars/projects-and-policies.yml` file; you should see some variables setup already to create the `<YOUR_NAME>-ci-cd` namespace. This object is passed to the OpenShift Applier to call the `templates/project-requests.yml` template with the `params/project-requests-ci-cd` parameters. We will add some additional content here but first let's explore the parameters and the template
+5. Open the `inventory/host_vars/projects-and-policies.yml` file; you should see some variables setup already to create the `<YOUR_NAME>-ci-cd` namespace. This object is passed to the OpenShift Applier to call the `templates/project-requests.yml` template with the parameters composed from the inventory and the `ci_cd` vars in the `apply.yml` playbook. We will add some additional content here but first let's explore the parameters and the template
 
 6. Inside of the `inventory/host_vars/projects-and-policies.yml` you'll see the following
 
