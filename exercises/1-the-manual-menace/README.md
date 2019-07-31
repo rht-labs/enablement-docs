@@ -85,9 +85,6 @@ cd C:\do500-workspace
 git clone https://github.com/rht-labs/enablement-ci-cd && cd enablement-ci-cd
 ```
 ```bash
-cd enablement-ci-cd
-```
-```bash
 ./git-pull-all.sh
 ```
 
@@ -128,8 +125,11 @@ exit
  * `requirements.yml` is a manifest which contains the ansible modules needed to run the playbook
  * `apply.yml` is a playbook that sets up some variables and runs the OpenShift Applier role.
 
-4. Open the `apply.yml` file in the root of the project. Update the namespace variables by replacing the `<YOUR_NAME>` with your name or initials. Don't use uppercase or special characters. For example; my name is Dónal so I've created:
+4. Open the `apply.yml` file in the root of the project. Update the namespace variables by replacing the `<YOUR_NAME>` with your name or initials. Don't use uppercase or special characters. For example; my name is Donal so I've created:
+
 ```yaml
+  # apply.yml
+
   hosts: "{{ target }}"
   vars:
     ci_cd_namespace: donal-ci-cd
@@ -138,13 +138,25 @@ exit
   tasks:
 ```
 <p class="tip">
-NOTE - YAML is indentation sensitive so keep things lined up properly!
+<b>NOTE</b> - YAML is indentation sensitive so keep things lined up properly!
 </p>
 
 5. Open the `inventory/host_vars/projects-and-policies.yml` file; you should see some variables setup already to create the `<YOUR_NAME>-ci-cd` namespace. This object is passed to the OpenShift Applier to call the `templates/project-requests.yml` template with the `params/project-requests-ci-cd` parameters. We will add some additional content here but first let's explore the parameters and the template
 
-6. Open the `params/project-requests-ci-cd` and replace the `<YOUR_NAME>` with your name to create the corresponding projects in the cluster.
-![new-item](../images/exercise1/ci-cd-project-namespace.png)
+6. Open the `params/project-requests-ci-cd` file:
+```yaml
+  # params/project-requests-ci-cd
+
+  NAMESPACE=<YOUR_NAME>-ci-cd
+  NAMESPACE_DISPLAY_NAME=<YOUR_NAME> Labs CI/CD
+```
+and replace the `<YOUR_NAME>` with your name to create the corresponding projects in the cluster.
+```yaml
+  # params/project-requests-ci-cd
+
+  NAMESPACE=donal-ci-cd
+  NAMESPACE_DISPLAY_NAME=Donal Labs CI/CD
+```
 
 7. Let's add two more params files to pass to our template to be able to create a `dev` and `test` project.
   * Create another two params files `params/project-requests-dev` & `params/project-requests-test`. On the terminal run
@@ -152,18 +164,22 @@ NOTE - YAML is indentation sensitive so keep things lined up properly!
 touch params/project-requests-dev params/project-requests-test
 ```
   * In your editor; Open `params/project-requests-dev` and add the following by substituting `<YOUR_NAME>` accordingly
-```
-NAMESPACE=<YOUR_NAME>-dev
-NAMESPACE_DISPLAY_NAME=<YOUR_NAME> Dev
-```
+  ```yaml
+  # params/project-requests-dev
+  NAMESPACE=<YOUR_NAME>-dev
+  NAMESPACE_DISPLAY_NAME=<YOUR_NAME> Dev
+  ```
   * In your editor; Open `params/project-requests-test` and add the following by substituting `<YOUR_NAME>` accordingly
-```
-NAMESPACE=<YOUR_NAME>-test
-NAMESPACE_DISPLAY_NAME=<YOUR_NAME> Test
-```
+  ```yaml
+  # params/project-requests-test
+  NAMESPACE=<YOUR_NAME>-test
+  NAMESPACE_DISPLAY_NAME=<YOUR_NAME> Test
+  ```
 
 8. In the `inventory/host_vars/projects-and-policies.yml` file; add the new objects for the projects you want to create (dev & test) by adding another object to the content array for each. You can copy and paste them from the `ci-cd` example and update them accordingly. If you do this; remember to change the params file! e.g.
 ```yaml
+   # inventory/host_vars/projects-and-policies.yml
+
     - name: "{{ dev_namespace }}"
       template: "{{ playbook_dir }}/templates/project-requests.yml"
       action: create
@@ -182,7 +198,7 @@ NAMESPACE_DISPLAY_NAME=<YOUR_NAME> Test
 For Microsoft Windows systems, you need to run Ansible and OpenShift client commands from inside the `do500-toolbox` container. Linux and MacOS users should skip this step and jump directly to Step 10.
 
 <p class="tip">
-NOTE - On Microsoft Windows systems, we recommend you keep the container running for the duration of the lab. Run all Ansible and OpenShift client ("oc") CLI commands from inside the container. Do NOT launch the container on Linux and MacOS systems, since you should already have Ansible and the OpenShift client natively installed on your system by following the pre-requisites setup guide.
+<b>NOTE</b> - On Microsoft Windows systems, we recommend you keep the container running for the duration of the lab. Run all Ansible and OpenShift client ("oc") CLI commands from inside the container. Do NOT launch the container on Linux and MacOS systems, since you should already have Ansible and the OpenShift client natively installed on your system by following the pre-requisites setup guide.
 </p>
 
 9. Launch the toolbox container using the Windows command line terminal, and navigate to the `enablement-ci-cd` directory inside the container
@@ -229,13 +245,16 @@ touch params/nexus
 
 3. The essential params to include in this file are:
 ```bash
+# params/nexus
 VOLUME_CAPACITY=5Gi
 MEMORY_LIMIT=1Gi
 ```
 
-4. Create a new object in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `ci-cd-tooling` and populate its `content` is as follows
+4. Add a new content item in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `nexus` and populate it as follows
 
 ```yaml
+# inventory/host_vars/ci-cd-tooling.yml
+
 ---
 ansible_connection: local
 openshift_cluster_content:
@@ -262,8 +281,9 @@ ansible-playbook apply.yml -e target=tools \
 ### Part 3 - GitLab
 
 <!-- #### 3a - GitLab install -->
+
 <p class="tip">
-NOTE - A Gitlab instance in the cloud has already been set up for you, please check with your instructor for the Gitlab instance URL.
+<b>NOTE</b> - A Gitlab instance in the cloud has already been set up for you, please check with your instructor for the Gitlab instance URL.
 </p>
 
 <!-- 4. Now let's do the same thing for GitLab to get it up and running. Checkout the template and params provided by running
@@ -276,8 +296,9 @@ Explore the template; it contains the PVC, buildConfig and services. The Deploym
  - GitLab CE (v10.2.3)
 
 4. Open the `params/gitlab` file and complete the following params
+
 <p class="tip">
-Note - The values here for the LDAP and BIND credentials will be provided by your tutor.
+<b>NOTE</p> - The values here for the LDAP and BIND credentials will be provided by your tutor.
 </p>
 ```
 LDAP_BIND_DN=uid=<BIND_USER>,ou=People,dc=<YOUR_DOMAIN>,dc=com
@@ -327,9 +348,11 @@ ansible-playbook apply.yml -e target=tools \
 
 2. Once logged in create a new project called `enablement-ci-cd` and mark it as internal. Once created; copy out the `git url` for use on the next step.
 ![gitlab-new-project](../images/exercise1/gitlab-new-project.png)
-<!-- <p class="tip">
-Note - we would not normally make the project under your name but create a group and add the project there on residency but for simplicity of the exercise we'll do that here
-</p> -->
+<!-- 
+<p class="tip">
+<b>NOTE</b> - we would not normally make the project under your name but create a group and add the project there on residency but for simplicity of the exercise we'll do that here
+</p>
+-->
 
 3. If you have not used Git before; you may need to tell Git who you are and what your email is before we commit. Run the following commands, substituting your email and "Your Name". If you've done this before move on to the next step. The last git config command is used to bypass SSL key verification in this repo since we are using self-signed certificates on the GitLab sever.
 
@@ -368,6 +391,8 @@ git checkout exercise1/mongodb params/mongodb templates/mongodb.yml
 
 1. Open `enablement-ci-cd` in your favourite editor. Edit the `inventory/host_vars/ci-cd-tooling.yml` to include a new object for our mongodb as shown below. This item can be added below Nexus in the `ci-cd-tooling` section.
 ```yaml
+# inventory/host_vars/ci-cd-tooling.yml
+
   - name: "jenkins-mongodb"
     namespace: "{{ ci_cd_namespace }}"
     template: "{{ playbook_dir }}/templates/mongodb.yml"
@@ -397,7 +422,7 @@ ansible-playbook apply.yml -e target=tools \
 ![ocp-mongo](../images/exercise3/ocp-mongo.png)
 
 <p class="tip">
-Note - When making changes to the "enablement-ci-cd" repo, you should frequently commit the changes to git.
+<b>NOTE</b> - When making changes to the "enablement-ci-cd" repo, you should frequently commit the changes to git.
 </p>
 
 ### Part 5 - Jenkins & S2I
@@ -409,7 +434,8 @@ git checkout exercise1/jenkins templates/jenkins.yml
 ```
 
 1. As before; create a new set of params by creating a `params/jenkins` file and adding some overrides to the template and updating the `<YOUR_NAME>` value accordingly.
-```
+```yaml
+# params/jenkins
 MEMORY_LIMIT=3Gi
 VOLUME_CAPACITY=10Gi
 JVM_ARCH=x86_64
@@ -419,6 +445,8 @@ JENKINS_OPTS=--sessionTimeout=720
 
 3. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo (and git if you have it) in  `inventory/host_vars/ci-cd-tooling.yml`.
 ```yaml
+   # inventory/host_vars/ci-cd-tooling.yml
+
     - name: "jenkins"
       namespace: "{{ ci_cd_namespace }}"
       template: "{{ playbook_dir }}/templates/jenkins.yml"
@@ -437,13 +465,13 @@ The structure of the Jenkins s2i config is
 jenkins-s2i
 ├── README.md
 ├── configuration
-│   ├── build-failure-analyzer.xml
-│   ├── init.groovy
-│   ├── jenkins.plugins.slack.SlackNotifier.xml
-│   ├── scriptApproval.xml
-│   └── jobs
-│       └── seed-multibranch-job
-│           └── config.xml
+│   ├── build-failure-analyzer.xml
+│   ├── init.groovy
+│   ├── jenkins.plugins.slack.SlackNotifier.xml
+│   ├── scriptApproval.xml
+│   └── jobs
+│       └── seed-multibranch-job
+│           └── config.xml
 └── plugins.txt
 ```
  * `plugins.txt` is a list of `pluginId:version` for Jenkins to pre-install when starting
@@ -476,7 +504,8 @@ git checkout exercise1/jenkins-s2i params/jenkins-s2i templates/jenkins-s2i.yml
 ```
 
 8. Open `params/jenkins-s2i` and add the following content; replacing variables as appropriate.
-```
+```yaml
+# params/jenkins-s2i
 SOURCE_REPOSITORY_URL=<GIT_URL>
 NAME=jenkins
 SOURCE_REPOSITORY_CONTEXT_DIR=jenkins-s2i
@@ -493,6 +522,8 @@ where
 
 1. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
 ```yaml
+  # inventory/host_vars/ci-cd-tooling.yml
+  
   - object: ci-cd-builds
     content:
     - name: "jenkins-s2i"
