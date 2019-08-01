@@ -126,9 +126,6 @@ The agile approach can minimize risk by getting a working piece of software into
 
 
 ### 5 Key Ceremonies
-![ScrumIn5Minutes](images/Agile/nutshell.png)
-
-
 
 | Scrum Event | Purpose |
 | --- | --- |

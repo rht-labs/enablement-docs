@@ -46,6 +46,18 @@ _Mob Drawing_
 
 
 
+### Exercise - Takeaway
+
+* Mobbing helps share expertise with entire teams
+* Pairing helps deliver efficiently as knowledge grows
+* Various situations demand different delivery approaches
+
+
+
+<iframe width="1200" height="900" src="https://www.youtube.com/embed/dVqUcNKVbYg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope" allowfullscreen></iframe>
+
+
+
 <!--.slide: id="config-as-code" -->
 ## Configuration As Code
 

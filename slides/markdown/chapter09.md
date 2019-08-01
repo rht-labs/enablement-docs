@@ -97,6 +97,19 @@ to production.
 
 
 
+<!-- .slide: id="pre-attack-pipelines-summary"-->
+## Summary
+
+
+<!-- .slide: id="pre-attack-pipelines-summary"-->
+## Summary
+#### Wrap-up
+* "Continuous Integration": Integrate several changes into a shared repo and rely heavily on testing to make sure that the changes and commits works and have passed all (unit testing / code quality / code conduct).
+* "Continuous Delivery": The goal is to have a working artifact that's ready to be deployed at any time. It relies on testing and automation to make sure that it has passed all functional tests and can be Manually deployed (push button)
+* "Continuous Deployment/Release": One step further now that we are sure that this is ready to deploy to production then we can rely on features toggle, dark launches or other deployment strategy to promote to other critical environments asap using these techniques for the new features/fixes won't risk the operation.
+
+
+
 <!-- .slide: id="attack-pipelines"-->
 ## The Attack of the Pipelines
 
