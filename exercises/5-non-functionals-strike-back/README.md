@@ -77,6 +77,8 @@ git checkout master
 ![stages](../images/exercise5/stages.png)
 
 3. Create a new stage called `Arachni Scan` underneath the `stage("e2e test") { }` section as shown below. The contents of the `e2e test` have been removed for simplicity.
+
+<kbd>*Jenkinsfile*</kbd>
 ```groovy
         stage("e2e test") {
             // ... stuff in here ....
@@ -243,6 +245,8 @@ NOTE - your build may have failed, or marked as unstable because of the a securi
 1. Coverage reports are already being generated as part of the tests. We can have Jenkins produce a HTML report showing in detail where our testing is lacking. Open the `todolist-fe` in your favourite editor.
 
 2. Open the `Jenkinsfile` in the root of the project; move to the `stage("node-build"){ ... }` section. In the `post` section add a block for producing a `HTML` report as part of our builds. This is all that is needed for Jenkins to report the coverage stats.
+
+<kbd>*Jenkinsfile*</kbd>
 ```groovy
     // Post can be used both on individual stages and for the entire build.
     post {
