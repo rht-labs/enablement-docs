@@ -126,26 +126,14 @@ ansible-playbook apply.yml -e target=tools \
 ```
 ![arachni-object](../images/exercise4/arachni-object.png)
 
-#### 3a - Arachni Scan
-> _Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of web applications._
-
-3. Update the `jenkins-slave-arachni` files `SOURCE_REPOSITORY_URL` to point to your GitLab's hosted version of the `enablement-ci-cd` repo.
-```
-SOURCE_REPOSITORY_URL=https://gitlab.<APPS_URL>/<GIT_USERNAME>/enablement-ci-cd.git
-SOURCE_CONTEXT_DIR=docker/jenkins-slave-arachni
-BUILDER_IMAGE_NAME=registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:latest
-NAME=jenkins-slave-arachni
-SOURCE_REPOSITORY_REF=master
-```
-
-4. Run the ansible playbook filtering with tag `arachni` so only the arachni build pods are run.
+3. Run the ansible playbook filtering with tag `arachni` so only the arachni build pods are run.
 ```bash
 ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=arachni-slave"
 ```
 
-5. With these changes in place, push your changes to the `master` branch.
+4. With these changes in place, push your changes to the `master` branch.
 ```bash
 git add .
 ```
@@ -156,7 +144,7 @@ git commit -m "ADD - Arachni and Zap scanning images"
 git push
 ```
 
-6. Your OpenShift cluster should now show both slaves have been built in your `ci-cd` namepsace
+5. Your OpenShift cluster should now show both slaves have been built in your `ci-cd` namepsace
 ![all-slaves](../images/exercise4/all-slaves.png)
 
 
