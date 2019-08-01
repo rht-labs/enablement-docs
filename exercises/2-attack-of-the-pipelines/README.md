@@ -82,27 +82,13 @@ As a learner by the end of this lesson you will be able to:
 
 The Todolist application is a monorepo which has both front end and server layers in a single repo.
 
-2. Run the `che: init-todolist` task in your `dev-pod/main` container to clone the `todolist` code into `/projects` directory
+1. Run the `che: init-todolist` task in your `dev-pod/main` container to clone the `todolist` code into `/projects` directory
 
 ![init-code1](../images/exercise1/init-code2.png)
 
-1. Git clone the `todolist` project to the `do500-workspace` folder and checkout the `develop` branch using the following commands.
-
-```bash
-cd /projects/do500-workspace
-```
-```bash
-git clone https://github.com/rht-labs/todolist.git todolist
-```
-```bash
-cd todolist
-```
-```bash
-./git-pull-all.sh
-```
-```bash
-git checkout develop
-```
+<p class="tip">
+<b>NOTE</b> - If you do not plan on using the cloud ide you can clone the repository locally from here https://github.com/rht-labs/todolist.git
+</p>
 
 2. Open up Gitlab and login. Create a new project (internal) in GitLab called `todolist` to host your clone of the project and copy its remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
 
@@ -153,7 +139,7 @@ npm run serve:all
 <b>NOTE</b> - In a local environment you may open the browser (http://localhost:8080) for displaying the homepage.
 </p>
 
-8. Check things are up and running by testing the API with a `curl`. The API should return some seeded data (stored in `server/config/seed.js`)
+10. Check things are up and running by testing the API with a `curl`. The API should return some seeded data (stored in `server/config/seed.js`)
 ```bash
 curl localhost:9000/api/todos
 ```
@@ -172,13 +158,13 @@ curl localhost:9000/api/todos
 }]
 ```
 
-9. Within the cloud ide a preview of `todolist` app homepage appears when you start the application
+11. Within the cloud ide a preview of `todolist` app homepage appears when you start the application
     * Click 'Todo' at the top of the home page to get to the above page.
     * The server hosting live reloads; so if you make changes to your code base the app will live update
 
-10. The app is a todolist manager built in Vue.js. with a NodeJS backend. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page your todos are persisted.
+12.  The app is a todolist manager built in Vue.js. with a NodeJS backend. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page your todos are persisted.
 
-11. The structure of the `todolist-fe` is as follows.
+13.  The structure of the `todolist-fe` is as follows.
 ```bash
 todolist
 ├── Dockerfile
@@ -252,7 +238,7 @@ where the following are the important things:
     * `Grunt` is a taskrunner for use with Node.JS projects
     * `package.json` contains the dependency list and a lot of very helpful scripts for managing the app lifecycle
 
-11. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables and change `<YOUR_NAME>` accordingly in the below commands. This is a one time activity and would be automated in a non-training environment.
+14. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables and change `<YOUR_NAME>` accordingly in the below commands. This is a one time activity and would be automated in a non-training environment.
 
 ```bash
 oc login -u <username> -p <password> <CLUSTER_URL>
@@ -312,7 +298,7 @@ ansible-playbook site.yml -i inventory/
 ```
 ![ansible-success](../images/exercise2/ansible-success.png)
 
-1. Once successful, `commit` and `push` your changes to gitlab.
+2. Once successful, `commit` and `push` your changes to gitlab.
 ```bash
 git add .
 ```
@@ -323,10 +309,10 @@ git commit -m "UPDATE - change namespace vars to the teams"
 git push
 ```
 
-1.  Validate the build and deploy configs have been created in Openshift by opening the console and checking `<YOUR_NAME> CI-CD builds` for the `BuildConfigs`
+3.  Validate the build and deploy configs have been created in Openshift by opening the console and checking `<YOUR_NAME> CI-CD builds` for the `BuildConfigs`
 ![ocp-app-bc](../images/exercise2/ocp-app-bc.png)
 
-12. Check `<YOUR_NAME>-dev` to see the deployment configs are in place
+4. Check `<YOUR_NAME>-dev` to see the deployment configs are in place
 ![ocp-app-dc](../images/exercise2/ocp-app-dc.png)
 
 ### Part 3 - Build > Bake > Deploy
@@ -357,13 +343,13 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
 3. The page that loads is the Job Configuration page and it can be returned to at anytime from Jenkins. Let's start configuring our job. To conserve space; we will make sure Jenkins only keeps the last build's artifacts. Tick the `Discard old builds` checkbox, then `Advanced` and set `Max # of builds to keep with artifacts` to 1 as indicated below
 ![keep-artifacts](../images/exercise2/keep-artifacts.png)
 
-5. Our NodeJS build needs to be run on the `jenkins-slave-npm` we bought in in the previous chapter. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-slave](../images/exercise2/label-jenkins-slave.png)
+4. Our NodeJS build needs to be run on the `jenkins-slave-npm` we bought in in the previous chapter. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-slave](../images/exercise2/label-jenkins-slave.png)
 
-6. On the Source Code Management tab, select the Git radio button, specify the endpoint for our GitLab `todolist` Project and specify your credentials from the dropdown box. Set the Branch Specifier to `develop`. ![git-scm](../images/exercise2/git-scm.png)
+5. On the Source Code Management tab, select the Git radio button, specify the endpoint for our GitLab `todolist` Project and specify your credentials from the dropdown box. Set the Branch Specifier to `develop`. ![git-scm](../images/exercise2/git-scm.png)
 
-7. Scroll down to the Build Environment tab and select the `Color ANSI Console Output` checkbox ![ansi](../images/exercise2/ansi.png)
+6. Scroll down to the Build Environment tab and select the `Color ANSI Console Output` checkbox ![ansi](../images/exercise2/ansi.png)
 
-8. Move on to the Build section and select `Add build step`. From the dropdown select `Execute Shell`. On the box that appears; insert the following, to build package and deploy our app to Nexus:
+7. Move on to the Build section and select `Add build step`. From the dropdown select `Execute Shell`. On the box that appears; insert the following, to build package and deploy our app to Nexus:
 ```bash
 set -o xtrace
 npm install
@@ -373,10 +359,9 @@ npm run publish
 ```
 ![build-step](../images/exercise2/build-step.png)
 
+8. Scroll to the final section; the Post-build Actions. Add a new post-build action from the dropdown called `Archive the artifacts` and specify `**` in the box. This will zip the entire workspace and copy it back to Jenkins for inspection if needed. ![archive-artifacts](../images/exercise2/archive-artifacts.png)
 
-9. Scroll to the final section; the Post-build Actions. Add a new post-build action from the dropdown called `Archive the artifacts` and specify `**` in the box. This will zip the entire workspace and copy it back to Jenkins for inspection if needed. ![archive-artifacts](../images/exercise2/archive-artifacts.png)
-
-10. On the Post-build Actions; Add another post-build action from the dropdown called `Git Publisher`. This is useful for tying the git check-in to the feature in your tracking tool to the built product.
+9. On the Post-build Actions; Add another post-build action from the dropdown called `Git Publisher`. This is useful for tying the git check-in to the feature in your tracking tool to the built product.
     * Tick the box `Push Only If Build Succeeds`
     * Add the Tag to push of
 ```bash
@@ -390,7 +375,7 @@ Automated commit by jenkins from ${JOB_NAME}.${BUILD_NUMBER}
     * Check `Create New Tag` and set `Target remote name` to `origin`
 ![git-publisher](../images/exercise2/git-publisher.png)
 
-11. Finally; add the trigger for the next job in the pipeline. This is to trigger the bake job with the current build tag. Add another post-build action from the dropdown called `Trigger parameterized build on other projects`.
+10. Finally; add the trigger for the next job in the pipeline. This is to trigger the bake job with the current build tag. Add another post-build action from the dropdown called `Trigger parameterized build on other projects`.
     * Set the project to build to be `dev-todolist-bake-deploy`
     * Set the condition to be `Stable or unstable but not failed`.
     * Click Add Parameters dropdown and select Predefined parameters.
@@ -403,7 +388,7 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
     <b>NOTE</b> - Jenkins might say "No such project ‘dev-todolist-bake-deploy’. Did you mean ...." at this point. Don't worry; it's because we have not created the next job yet.
 </p>
 
-12. Hit `save` which will take you to the job overview page - and that's it; our *build* phase is complete!
+11. Hit `save` which will take you to the job overview page - and that's it; our *build* phase is complete!
 
 #### 3b - bake & deploy
 
@@ -444,7 +429,7 @@ echo "### END BAKE IMAGE ###"
 ```
 ![bake-step](../images/exercise2/bake-step.png)
 
-1. Hit `Add build step` again and from the dropdown select `Execute Shell`. Enter the following text and remember to change `<YOUR_NAME>` accordingly.
+6. Hit `Add build step` again and from the dropdown select `Execute Shell`. Enter the following text and remember to change `<YOUR_NAME>` accordingly.
 ```bash
 #!/bin/bash
 set -o xtrace
@@ -461,15 +446,15 @@ echo "### END DEPLOY IMAGE ###"
 ```
 ![deploy-step](../images/exercise2/deploy-step.png)
 
-3. When a deployment has completed; OpenShift can verify its success. Add another step by clicking the `Add build Step` on the Build tab then `Verify OpenShift Deployment` including the following:
+7. When a deployment has completed; OpenShift can verify its success. Add another step by clicking the `Add build Step` on the Build tab then `Verify OpenShift Deployment` including the following:
     * Set the Project to your `<YOUR_NAME>-dev`
     * Set the DeploymentConfig to your app's name `todolist`
     * Set the replica count to `1`
 ![verify-deployment](../images/exercise2/verify-deployment.png)
 
-1.  Hit `save` which will take you to the job overview page.
+8.  Hit `save` which will take you to the job overview page.
 
-2. Since we are using self-signed certificates for the Git server instance in the lab, you need to set some global environment variables in the Jenkins configuration to bypass SSL certificate verification and git client configuration
+9. Since we are using self-signed certificates for the Git server instance in the lab, you need to set some global environment variables in the Jenkins configuration to bypass SSL certificate verification and git client configuration
     * From the Jenkins main page, navigate to `Manage Jenkins` > `Configure System` and then scroll down to the `Git plugin` section and add your username and email as follows:
 
     ![jenkins-git-client-config](../images/exercise2/jenkins-git-client-config.png)
@@ -485,20 +470,20 @@ echo "### END DEPLOY IMAGE ###"
 1. Back on Jenkins; We can tie all the jobs in the pipeline together into a nice single view using the Build Pipeline view. Back on the Jenkins home screen Click the + beside the all tab on the top.
 ![add-view](../images/exercise2/add-view.png)
 
-6. On the view that loads; Give the new view a sensible name like `dev-todolist-pipeline` and select Build Pipeline View
+2. On the view that loads; Give the new view a sensible name like `dev-todolist-pipeline` and select Build Pipeline View
 ![new-pipeline](../images/exercise2/new-pipeline.png)
 
-7. Set the Pipeline Flow's Inital Job to `dev-todolist-build` and save.
+3. Set the Pipeline Flow's Inital Job to `dev-todolist-build` and save.
 ![pipeline-flow](../images/exercise2/pipeline-flow.png)
 
-8. You should now see the pipeline view. Run the pipeline by hitting run (you can move onto the next part while it is running as it may take some time).
+4. You should now see the pipeline view. Run the pipeline by hitting run (you can move onto the next part while it is running as it may take some time).
 ![dev-pipeline-view](../images/exercise2/dev-pipeline-view.png)
 
 <p class="tip">
     <b>NOTE</b> - The pipeline may fail on the first run. In such cases, re-run the pipeline once more and the three stages will run successfully and show three green cards.
 </p>
 
-9. To check the deployment in OpenShift; open the web console and go to your `dev` namespace. You should see the deployment was successful; hit the URL to open the app and play with the deployed.
+5. To check the deployment in OpenShift; open the web console and go to your `dev` namespace. You should see the deployment was successful; hit the URL to open the app and play with the deployed.
 ![ocp-deployment](../images/exercise2/ocp-deployment.png)
 
 ### Part 4 - The Jenkinsfile
@@ -516,7 +501,7 @@ Some of the key things to note:
     * `post {}` hook is used to specify the post-build-actions. Jenkins declarative pipeline syntax provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
     * `when {}` is used for flow control. It can be used at the stage level and be used to stop pipeline entering that stage. e.g. when branch is master; deploy to `test` environment.
     
-3. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous exercises. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
+2. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous exercises. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
 ```groovy
    // Jenkinsfile
    
@@ -537,7 +522,7 @@ Some of the key things to note:
     }
 ```
 
-4. With these changes in place, push your changes to the `develop` branch.
+3. With these changes in place, push your changes to the `develop` branch.
 ```bash
 git add Jenkinsfile
 ```
@@ -548,26 +533,26 @@ git commit -m "ADD - namespace and git repo to pipeline"
 git push
 ```
 
-5. When the changes have been successfully pushed; Open Jenkins.
+4. When the changes have been successfully pushed; Open Jenkins.
 
-6. Create a `New Item` on Jenkins. Give it the name `todolist` and select `Multibranch Pipeline` from the bottom of the list as the job type.
+5. Create a `New Item` on Jenkins. Give it the name `todolist` and select `Multibranch Pipeline` from the bottom of the list as the job type.
 ![multibranch-select](../images/exercise4/multibranch-select.png)
 
-7. On the job's configure page; set the Branch Sources to `git`
+6. On the job's configure page; set the Branch Sources to `git`
 ![multibranch-select-git](../images/exercise4/multibranch-select-git.png)
 
-8. Fill in the Git settings with your `todolist-api` GitLab url and set the credentials as you've done before. `https://gitlab.<APPS_URL>/<YOUR_NAME>/todolist-api.git`
+7. Fill in the Git settings with your `todolist-api` GitLab url and set the credentials as you've done before. `https://gitlab.<APPS_URL>/<YOUR_NAME>/todolist-api.git`
 ![multibranch-git](../images/exercise4/multibranch-git.png)
 
-9. Set the `Scan Multibranch Pipeline Triggers` to be Scan by webhook and set the token to be `todolist` as we set at the beginning of the exercise. This will trigger the job to scan for changes in the repo when there are pushes. 
+8. Set the `Scan Multibranch Pipeline Triggers` to be Scan by webhook and set the token to be `todolist` as we set at the beginning of the exercise. This will trigger the job to scan for changes in the repo when there are pushes. 
 ![multibranch-webhook](../images/exercise2/multibranch-webhook.png)
 
-1.  Save the Job configuration to run the intial scan. The log will show scans for `master` and `develop` branches, which have `Jenkinsfile` so pipelines are dynamically created for them.
+9.  Save the Job configuration to run the intial scan. The log will show scans for `master` and `develop` branches, which have `Jenkinsfile` so pipelines are dynamically created for them.
 ![todolist-api-multi](../images/exercise2/todolist-api-multi.png)
 
-1.  The pipeline file is setup to only run `bake` & `deploy` stages when on `master` or `develop` branch. This is to provide us with very fast feedback for team members working on feature or bug fix branches. Each time someone commits or creates a new branch a basic build with testing occurs to give very rapid feedback to the team. 
+10.  The pipeline file is setup to only run `bake` & `deploy` stages when on `master` or `develop` branch. This is to provide us with very fast feedback for team members working on feature or bug fix branches. Each time someone commits or creates a new branch a basic build with testing occurs to give very rapid feedback to the team. 
 
-2.  With the builds running for  `develop` and `master` we can explore the Blue Ocean View for Jenkins. On the Job overview page, hit the `Open Blue Ocean` button on the side to see what modern Jenkins looks like.
+11.  With the builds running for  `develop` and `master` we can explore the Blue Ocean View for Jenkins. On the Job overview page, hit the `Open Blue Ocean` button on the side to see what modern Jenkins looks like.
 ![blue-ocean-todolist](../images/exercise2/blue-ocean-todolist.png)
 
 _____

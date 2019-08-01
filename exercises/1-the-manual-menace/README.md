@@ -30,7 +30,7 @@ As a learner you will be able to
 * [Jenkins](https://jenkins.io/) - OpenSource Build automation server. Highly customisable with plugins.
 * [Ansible](https://www.ansible.com/) - IT Automation tool used to provision and manage state of cloud and physical infrastructure.
 * [OpenShift Applier](https://github.com/redhat-cop/openshift-applier) - Used to apply OpenShift objects to an OpenShift Cluster.
-* [Eclipse Che](https://www.eclipse.org/che/) - A cloud ide accessible from your browser, we use a version called `Cloud Ready Workspaces`
+* [Eclipse Che](https://www.eclipse.org/che/) - A cloud ide accessible from your browser, we use a version called [`CodeReady Workspaces`](https://developers.redhat.com/products/codeready-workspaces/overview)
 
 ## Big Picture
 > The Big Picture is our emerging architecture; starting with an empty cluster we populate it with projects and some ci/cd tooling.
@@ -70,6 +70,7 @@ If you're feeling confident and don't want to follow the step-by-step guide thes
 ```
 https://codeready-do500-workspaces.apps.<DOMAIN_FOR_YOUR_CLASS>/dashboard/#/load-factory?name=DO500%20Template&user=admin
 ```
+Complete URL should be replaced with the one you've been provided by the instructor.
 
 2. Login using the `OpenShift 3` button and your credentials
 
