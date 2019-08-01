@@ -69,7 +69,8 @@ _____
 
 <kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
-- object: jenkins-slave-nodes
+
+  - object: jenkins-slave-nodes
     content:
       - name: jenkins-slave-zap
         template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
@@ -106,6 +107,7 @@ ansible-playbook apply.yml -e target=tools \
     NAME: jenkins-slave-arachni
     SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
     SLAVE_IMAGE_TAG: latest
+
 ```
 
 2. Add the definition below underneath the Zap config
