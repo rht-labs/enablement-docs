@@ -144,7 +144,7 @@ cd enablement-ci-cd
 
 ```yaml
   # inventory/groups_vars/all.yml
-  
+
   dev:
     NAMESPACE: "{{ namespace_prefix }}-dev"
     NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Dev"
@@ -466,7 +466,7 @@ ansible-playbook apply.yml -e target=tools \
 ### Part 6 - Jenkins Hello World
 > _To test things are working end-to-end; create a hello world job that doesn't do much but proves we can pull code from git and that our builds are green._
 
-1. Log in to Jenkins and hit `New Item` ![new-item](../images/exercise1/new-item.png).
+1. Log in to Jenkins and hit `New Item`<br>![new-item](../images/exercise1/new-item.png).
 
 2. Create a freestyle job called `hello-world` ![jenkins-new-hello-world](../images/exercise1/jenkins-new-hello-world.png).
 
