@@ -220,7 +220,7 @@ openshift_cluster_content:
   content:
   - name: "nexus"
     namespace: "{{ ci_cd_namespace }}"
-    template: "template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/nexus/nexus-deployment-template.yml"
+    template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/nexus/nexus-deployment-template.yml"
     params: "{{ playbook_dir }}/params/nexus"
     tags:
     - nexus
