@@ -67,9 +67,9 @@ _____
 ### Part 1 - Add Security scanning to the pipeline
 > _In this exercise, the first of our non-functional testing is explored in the form of some security scanning. We will add the scan to our Jenkinsfile and have them run as a new stage_
 
-1. Open the `todolist-fe` application's `Jenkinsfile` in your favourite editor. The file is stored in the root of the project. Ensure that you using the `master` branch of `todolist-fe`
+1. Open the `todolist` application's `Jenkinsfile` in your favourite editor. The file is stored in the root of the project. Ensure that you using the `master` branch of `todolist`
 ```bash
-cd todolist-fe
+cd todolist
 git checkout master
 ```
 
@@ -242,7 +242,7 @@ NOTE - your build may have failed, or marked as unstable because of the a securi
 ### Part 2 - Add Code Coverage & Linting to the pipeline
 > _Let's continue to enhance our pipeline with some non-functional testing. Static code analysis and testing coverage reports can provide a useful indicator on code quality and testing distribution_
 
-1. Coverage reports are already being generated as part of the tests. We can have Jenkins produce a HTML report showing in detail where our testing is lacking. Open the `todolist-fe` in your favourite editor.
+1. Coverage reports are already being generated as part of the tests. We can have Jenkins produce a HTML report showing in detail where our testing is lacking. Open the `todolist` in your favourite editor.
 
 2. Open the `Jenkinsfile` in the root of the project; move to the `stage("node-build"){ ... }` section. In the `post` section add a block for producing a `HTML` report as part of our builds. This is all that is needed for Jenkins to report the coverage stats.
 
@@ -289,7 +289,7 @@ git push
 
 6. Fix the error identified by the linter by commenting out the offending line. Commit and push your changes to trigger a new build.
 
-7. Once the build passes again, view the coverage graph; go to the job's build page and open the `Code Coverage` report from the nav bar on the side. Sometimes this won't display on the `yourjenkins.com/job/todolist-fe/job/branch/` sidebar, click on an individual build in the build history and it should appear on the side navbar.
+7. Once the build passes again, view the coverage graph; go to the job's build page and open the `Code Coverage` report from the nav bar on the side. Sometimes this won't display on the `yourjenkins.com/job/todolist/job/branch/` sidebar, click on an individual build in the build history and it should appear on the side navbar.
 ![report-location](../images/exercise5/report-location.png)
 
 8. Open the report to drill down into detail of where testing coverage could be improved!
@@ -302,7 +302,7 @@ NOTE - a good practice for teams is to try and increase the code coverage metric
 ### Part 3 - Nightly light performance testing
 > _In this part of the exercise, we will execute light performance tasks in our API to collect data about throughput time in hopes if the API ever has some `Sam` quality code checked in, we will spot it_
 
-An arbitrary value for the APIs to respond in has been chosen. It is set in the `todolist-api/tasks/perf-test.js` file. In this exercise we will get Jenkins to execute the tests and fail based on the score set there!
+An arbitrary value for the APIs to respond in has been chosen. It is set in the `todolist/tasks/perf-test.js` file. In this exercise we will get Jenkins to execute the tests and fail based on the score set there!
 
 1. Create a new Item on Jenkins, `nightly-perf-test` and make it a freestyle job.
 ![new-job](../images/exercise5/new-job.png)
@@ -310,7 +310,7 @@ An arbitrary value for the APIs to respond in has been chosen. It is set in the 
 2. Set the `label` on `Restrict where this project can be run` to `jenkins-slave-npm` one used by the build jobs previously.
 ![slave-label](../images/exercise5/slave-label.png)
 
-3. In the SCM section; set the project to use the `todolist-api` git project. Set the credentials accordingly.
+3. In the SCM section; set the project to use the `todolist` git project. Set the credentials accordingly.
 ![git-settings](../images/exercise5/git-settings.png)
 
 4. Set the build to execute each night; for example 0300 in the morning. Hit `Build periodically` on the Build Triggers section and set it to `H 3 * * *`.
@@ -320,7 +320,7 @@ An arbitrary value for the APIs to respond in has been chosen. It is set in the 
 
 6. Click `add build step` and select `execute shell` and add the following to it, replacing `<YOUR_NAME>` as expected. We will just test the `create` and `show` API for the moment. We are grabbing the response code of the perf-test to keep Jenkins running both shells steps and then exiting with whichever fails:
 ```bash
-export E2E_TEST_ROUTE=todolist-api-<YOUR_NAME>-dev.<APPS_URL>
+export E2E_TEST_ROUTE=todolist-<YOUR_NAME>-dev.<APPS_URL>
 npm install
 set +e
 npm run perf-test:create
@@ -346,8 +346,8 @@ _____
 ## Extension Tasks
 > _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope._
 
- - Enhance the `todolist-api` with the security scanning tools as you've done for the `todolist-api`
- - Enhance the `todolist-api` with the coverage reporting as you've done for `todolist-api`
+ - Enhance the `todolist` with the security scanning tools as you've done for the `todolist`
+ - Enhance the `todolist` with the coverage reporting as you've done for `todolist`
  - Add Black Duck or other package scanning tooling for our NodeJS app
  - Add Container Vulnerability scanning tooling to the pipeline
  - Add `Stryker` to create mutants and do additional non functional testing of the App
