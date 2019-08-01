@@ -508,7 +508,7 @@ Some of the key things to note:
     environment {
         // Global Vars
         NAMESPACE_PREFIX="<YOUR_NAME>"
-        GITLAB_DOMAIN = "gitlab.apps.change.me.com"
+        GITLAB_DOMAIN = "<GITLAB_FQDN>"
         GITLAB_PROJECT = "<GIT_USERNAME>"
 
         PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
