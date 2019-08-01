@@ -38,6 +38,9 @@ As a learner by the end of this lesson you will be able to:
 2. [NodeJS](https://nodejs.org/en/) - Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient. Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
 3. [MongoDB](https://www.mongodb.com/what-is-mongodb) - MongoDB stores data in flexible, JSON-like documents, meaning fields can vary from document to document and data structure can be changed over time
 4. [VueJS](https://vuejs.org/) - Vue (pronounced /vjuː/, like view) is a progressive framework for building user interfaces. It is designed from the ground up to be incrementally adoptable, and can easily scale between a library and a framework depending on different use cases. It consists of an approachable core library that focuses on the view layer only, and an ecosystem of supporting libraries that helps you tackle complexity in large Single-Page Applications.
+5. [Jenkins Pipeline](https://jenkins.io/doc/book/pipeline/) - Overview of the Jenkinsfile approach
+6. [Pipeline Syntax](https://jenkins.io/doc/book/pipeline/syntax/) - Documentation for the declarative pipeline
+7. [Groovy](http://groovy-lang.org/) - Groovy is a powerful, optionally typed and dynamic language, with static-typing and static compilation capabilities, for the Java platform aimed at improving developer productivity thanks to a concise, familiar and easy to learn syntax. It integrates smoothly with any Java program, and immediately delivers to your application powerful features, including scripting capabilities, Domain-Specific Language authoring, runtime and compile-time meta-programming and functional programming. Jenkinsfile are written in Groovy but minimal knowledge is required thanks to the Jenkins Pipeline DSL
 
 ## Big Picture
 > From the previous exercise; we created some supporting tooling needed by our app. Now we will introduce our Sample App and create a pipeline for it
@@ -131,7 +134,7 @@ npm run mongo:start-ide
 npm run serve:all
 ```
 <p class="tip" >
-<b>NOTE</b>: If you're not using the cloud hosted environment, you can start mongo using `npm run mongo` which will pull the latest image from dockerhub
+<b>NOTE</b> - If you're not using the cloud hosted environment, you can start mongo using `npm run mongo` which will pull the latest image from dockerhub
 </p>
 
 6. Check things are up and running by testing the API with a `curl`. The API should return some seeded data (stored in `server/config/seed.js`)
@@ -258,7 +261,6 @@ npm run prepare-nexus
 1. On your terminal navigate to the root of the `todolist` application. The app contains a hidden folder called `.openshift-applier`. Move into this `.openshift-applier` directory and you should see a familiar looking directory structure for an Ansible playbook.
 ```
 ├── README.md
-├── apply.retry
 ├── inventory
 │   ├── group_vars
 │   │   └── all.yml
@@ -275,23 +277,12 @@ npm run prepare-nexus
     └── todolist-deploy.yml
 ```
 with the following
-    * the `apply.yml` file is the entrypoint.
+    * the `site.yml` file is the entrypoint.
     * the `inventory` contains the objects to populate the cluster with.
     * the `params` contains the variables we'll apply to the `templates`
     * the `templates` required by the app. These include the Build, Deploy configs as well as the services, health checks, and other app definitions.
 
-2. There are a few updates to these manifests we need to make before applying the cluster content. In the `.openshift-applier/apply.yml` update the namespace `<YOUR_NAME>` variable accordingly.
-```yaml
-  # .openshift-applier/apply.yml
-
-  vars:
-    namespace_prefix: '<YOUR_NAME>'
-    ci_cd_namespace: '{{ namespace_prefix }}-ci-cd'
-    dev_namespace: '{{ namespace_prefix }}-dev'
-    test_namespace: '{{ namespace_prefix }}-test'
-```
-
-1. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency and then run the playbook (from the `.openshift-applier` directory). This will populate the cluster with all the config needed for the front end app.
+1. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency, using the `ansible-galaxy tool` as per exercise one and then run the playbook (from the `.openshift-applier` directory). This will populate the cluster with all the config needed for the front end app.
 
 ```bash
 # login if needed
@@ -302,7 +293,7 @@ oc login -u <username> -p <password> <CLUSTER_URL>
 ansible-galaxy install -r requirements.yml --roles-path=roles
 ```
 ```bash
-ansible-playbook apply.yml -i inventory/
+ansible-playbook site.yml -i inventory/
 ```
 ![ansible-success](../images/exercise2/ansible-success.png)
 
@@ -509,7 +500,7 @@ Some of the key things to note:
     * `agent {}` specifies the node the build should be run on e.g. `jenkins-slave-npm`
     * `post {}` hook is used to specify the post-build-actions. Jenkins declarative pipeline syntax provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
     * `when {}` is used for flow control. It can be used at the stage level and be used to stop pipeline entering that stage. e.g. when branch is master; deploy to `test` environment.
-
+    
 3. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous exercises. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
 ```groovy
    // Jenkinsfile
