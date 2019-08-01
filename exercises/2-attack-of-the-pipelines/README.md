@@ -137,7 +137,17 @@ npm run serve:all
 <b>NOTE</b> - If you're not using the cloud hosted environment, you can start mongo using `npm run mongo` which will pull the latest image from dockerhub
 </p>
 
-6. Check things are up and running by testing the API with a `curl`. The API should return some seeded data (stored in `server/config/seed.js`)
+1. When you are using the cloud hosted environment, you must login to OpenShift from the command line as your user.
+
+```bash
+oc login -u <username> -p <password> <CLUSTER_URL>
+```
+
+Because we are in a cloud IDE hosted environment, the client side config needs to be updated to use the route that is generated application API. Run the helper script `fixApiUrl`
+
+![fixApiUrl](../images/exercise2/fixApiUrl.png)
+
+1. Check things are up and running by testing the API with a `curl`. The API should return some seeded data (stored in `server/config/seed.js`)
 ```bash
 curl localhost:9000/api/todos
 ```
