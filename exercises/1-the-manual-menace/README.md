@@ -106,6 +106,8 @@ cd enablement-ci-cd
 
 4. Open the `inventory/groups_vars/all.yml` file. Update the `namespace_prefix` variables by replacing the `<YOUR_NAME>` (including the `<` and `>`) with your name or initials. **Don't use uppercase or special characters**. For example; if your name is Tim Smith you would replace `<YOUR_NAME>` and set `namespace_prefix` to something like `tim` or `tsmith`.
 ```yaml
+  # inventory/groups_vars/all.yml
+
   namespace_prefix: "<YOUR_NAME>"
 ```
 
@@ -114,36 +116,42 @@ cd enablement-ci-cd
 6. Inside of the `inventory/host_vars/projects-and-policies.yml` you'll see the following
 
 ```yaml
-ci_cd:
-  NAMESPACE: "{{ namespace_prefix }}-ci-cd"
-  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }}s CI/CD"
+  # inventory/groups_vars/all.yml
+
+  ci_cd:
+    NAMESPACE: "{{ namespace_prefix }}-ci-cd"
+    NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }}s CI/CD"
 ```
 * This will define the variables that we'll soon be using to deploy our CI/CD project. It relies on the `namespace_prefix` that we updated earlier. Pulling these two sets of variables together will now allow us to pass the newly created variables to our template that will create our project appropriately. You'll notice that the name of the variable above (`ci_cd`) is then assigned to `params_from_vars` in our inventory.
 
 ```yaml
-ansible_connection: local
-openshift_cluster_content:
-- object: projectrequest
-  content:
-  - name: "{{ ci_cd_namespace }}"
-    template: "{{ playbook_dir }}/templates/project-requests.yml"
-    action: create
-    params_from_vars: "{{ ci_cd }}"
-    tags:
-    - projects
+  # inventory/groups_vars/all.yml
+
+  ansible_connection: local
+  openshift_cluster_content:
+  - object: projectrequest
+    content:
+    - name: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/project-requests.yml"
+      action: create
+      params_from_vars: "{{ ci_cd }}"
+      tags:
+      - projects
 ```
 
 7. Let's add two more params dicts to pass to our template to be able to create a `dev` and `test` project.At the top of `inventory/host_vars/projects-and-policies.yml` create a dictionary called `dev` and `test` similar to how you see `ci_cd` defined.
   * In your editor; Open `inventory/host_vars/projects-and-policies.yml` and add the following:
 
 ```yaml
-dev:
-  NAMESPACE: "{{ namespace_prefix }}-dev"
-  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Dev"
+  # inventory/groups_vars/all.yml
+  
+  dev:
+    NAMESPACE: "{{ namespace_prefix }}-dev"
+    NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Dev"
 
-test:
-  NAMESPACE: "{{ namespace_prefix }}-test"
-  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Test"
+  test:
+    NAMESPACE: "{{ namespace_prefix }}-test"
+    NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Test"
 ```
 
 8. In the `inventory/host_vars/projects-and-policies.yml` file; add the new objects for the projects you want to create (dev & test) by adding another object to the content array for each. You can copy and paste them from the `ci-cd` example and update them accordingly. If you do this; remember to change the params_from_vars variable! e.g.
