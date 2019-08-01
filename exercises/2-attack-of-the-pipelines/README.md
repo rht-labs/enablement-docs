@@ -86,10 +86,10 @@ _____
 
 The Todolist application is a monorepo which has both front end and server layers in a single repo.
 
-1. Git clone the `todolist` project to the `do500-workspace` folder and checkout the `develop` branch using the following commands.
+1. Git clone the `todolist` project to the `projects` folder and checkout the `develop` branch using the following commands.
 
 ```bash
-cd ~/do500-workspace
+cd /projects
 ```
 ```bash
 git clone https://github.com/rht-labs/todolist.git todolist
@@ -98,10 +98,7 @@ git clone https://github.com/rht-labs/todolist.git todolist
 cd todolist
 ```
 ```bash
-./git-pull-all.sh
-```
-```bash
-git checkout develop
+git checkout -b develop
 ```
 
 1. Open up Gitlab and login. Create a new project (internal) in GitLab called `todolist` to host your clone of the project and copy its remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
