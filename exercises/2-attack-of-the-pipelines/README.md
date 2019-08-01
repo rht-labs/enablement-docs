@@ -22,8 +22,6 @@ First we will explore the sample application and get it running locally. The sam
     - More prod like infrastructure increases assurance
     - “We have already done it” behavior de-risks go live
 
-_____
-
 ## Learning Outcomes
 As a learner by the end of this lesson you will be able to:
 
@@ -46,8 +44,6 @@ As a learner by the end of this lesson you will be able to:
 > From the previous exercise; we created some supporting tooling needed by our app. Now we will introduce our Sample App and create a pipeline for it
 
 ![big-picture](../images/big-picture/big-picture-2.jpg)
-
-_____
 
 <!-- ## 10,000 Ft View
 > _This lab requires users to take the sample TODO app and create a build pipeline in Jenkins by clicking your way to success ending up with an app deployed to each of the namespaces created previously_
@@ -86,10 +82,14 @@ _____
 
 The Todolist application is a monorepo which has both front end and server layers in a single repo.
 
+2. Run the `che: init-todolist` task in your `dev-pod/main` container to clone the `todolist` code into `/projects` directory
+
+![init-code1](../images/exercise1/init-code2.png)
+
 1. Git clone the `todolist` project to the `do500-workspace` folder and checkout the `develop` branch using the following commands.
 
 ```bash
-cd ~/do500-workspace
+cd /projects/do500-workspace
 ```
 ```bash
 git clone https://github.com/rht-labs/todolist.git todolist
@@ -104,16 +104,16 @@ cd todolist
 git checkout develop
 ```
 
-1. Open up Gitlab and login. Create a new project (internal) in GitLab called `todolist` to host your clone of the project and copy its remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
+2. Open up Gitlab and login. Create a new project (internal) in GitLab called `todolist` to host your clone of the project and copy its remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
 
-2. Later in the exercise we'll automatically trigger Jenkins builds on commit, but we'll add the WebHook now. Add a WebHook to the newly created project by going to settings > integrations. ![gitlab-integrations](../images/exercise2/gitlab-integrations.png) 
+3. Later in the exercise we'll automatically trigger Jenkins builds on commit, but we'll add the WebHook now. Add a WebHook to the newly created project by going to settings > integrations. ![gitlab-integrations](../images/exercise2/gitlab-integrations.png) 
 
-3. In the field add the URL for Jenkins and the route for the webhook and token. Disable SSL Verification if the cluster has unsigned certs and Add the webhook. 
+4. In the field add the URL for Jenkins and the route for the webhook and token. Disable SSL Verification if the cluster has unsigned certs and Add the webhook. 
 ```bash
 https://<YOUR_JENKINS_URL>/multibranch-webhook-trigger/invoke?token=todolist
 ```
 
-1. In your local clone of the `todolist`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab. 
+5. In your local clone of the `todolist`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab. 
 ```bash
 git remote set-url origin <YOUR_GIT_LAB_PROJECT>
 # verify the origin has been updated
@@ -121,23 +121,12 @@ git remote -v
 git push -u origin --all
 ```
 
-
-4. The `todolist` app has a package.json at the root of the project, this defines the configuration for the app including its dependencies, dev dependencies, scripts and other configuration. Install the app's dependencies
+6. The `todolist` app has a package.json at the root of the project, this defines the configuration for the app including its dependencies, dev dependencies, scripts and other configuration. Install the app's dependencies
 ```bash
 npm install
 ```
 
-5. The `todolist` has some scripts defined in the package.json at the root of the project. A snippet of the npm scripts are shown below. To run any of these scripts run `npm run <SCRIPT_NAME>`. Let's start by serving our application and starting the database.
- ![npm-scripts](../images/exercise2/npm-scripts.png)
-```bash
-npm run mongo:start-ide
-npm run serve:all
-```
-<p class="tip" >
-<b>NOTE</b> - If you're not using the cloud hosted environment, you can start mongo using `npm run mongo` which will pull the latest image from dockerhub
-</p>
-
-1. When you are using the cloud hosted environment, you must login to OpenShift from the command line as your user.
+7. When you are using the cloud hosted environment, you must login to OpenShift from the command line as your user.
 
 ```bash
 oc login -u <username> -p <password> <CLUSTER_URL>
@@ -147,7 +136,24 @@ Because we are in a cloud IDE hosted environment, the client side config needs t
 
 ![fixApiUrl](../images/exercise2/fixApiUrl.png)
 
-1. Check things are up and running by testing the API with a `curl`. The API should return some seeded data (stored in `server/config/seed.js`)
+8. The `todolist` has some scripts defined in the package.json at the root of the project. A snippet of the npm scripts are shown below. To run any of these scripts run `npm run <SCRIPT_NAME>`. Let's start by serving our application and starting the database.
+ ![npm-scripts](../images/exercise2/npm-scripts.png)
+```bash
+npm run mongo:start-ide
+npm run serve:all
+```
+<p class="tip" >
+<b>NOTE</b> - If you're not using the cloud hosted environment, you can start mongo using `npm run mongo` which will pull the latest image from dockerhub
+</p>
+
+9. Within the cloud ide a preview of `todolist` app homepage appears when you start the application
+ ![fullstack-app](../images/exercise2/fullstack-app.png)
+
+<p class="tip" >
+<b>NOTE</b> - In a local environment you may open the browser (http://localhost:8080) for displaying the homepage.
+</p>
+
+8. Check things are up and running by testing the API with a `curl`. The API should return some seeded data (stored in `server/config/seed.js`)
 ```bash
 curl localhost:9000/api/todos
 ```
@@ -166,14 +172,13 @@ curl localhost:9000/api/todos
 }]
 ```
 
-1. Open the browser (http://localhost:8080) for you displaying the homepage of the `todolist` app.
- ![fullstack-app](../images/exercise2/fullstack-app.png)
+9. Within the cloud ide a preview of `todolist` app homepage appears when you start the application
     * Click 'Todo' at the top of the home page to get to the above page.
-    * The server hosting it live reloads; so if you make changes to your code base the app will live update
+    * The server hosting live reloads; so if you make changes to your code base the app will live update
 
-2. The app is a todolist manager built in Vue.js. with a NodeJS backend. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page your todos are persisted.
+10. The app is a todolist manager built in Vue.js. with a NodeJS backend. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page your todos are persisted.
 
-3. The structure of the `todolist-fe` is as follows.
+11. The structure of the `todolist-fe` is as follows.
 ```bash
 todolist
 ├── Dockerfile
@@ -247,7 +252,7 @@ where the following are the important things:
     * `Grunt` is a taskrunner for use with Node.JS projects
     * `package.json` contains the dependency list and a lot of very helpful scripts for managing the app lifecycle
 
-1. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables and change `<YOUR_NAME>` accordingly in the below commands. This is a one time activity and would be automated in a non-training environment.
+11. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables and change `<YOUR_NAME>` accordingly in the below commands. This is a one time activity and would be automated in a non-training environment.
 
 ```bash
 oc login -u <username> -p <password> <CLUSTER_URL>
