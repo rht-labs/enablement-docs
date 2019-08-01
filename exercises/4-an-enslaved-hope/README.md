@@ -53,9 +53,8 @@ _____
 
 2. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-zap` and add the following variables to tell your template where to find the slave definition
 
+<kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
-# inventory/host_vars/ci-cd-tooling.yml
-
   zap:
     SOURCE_REPOSITORY_URL: https://github.com/redhat-cop/containers-quickstarts.git
     SOURCE_CONTEXT_DIR: jenkins-slaves/jenkins-slave-zap
@@ -67,9 +66,9 @@ _____
 ```
 
 3. Create the object for feeding the template with the parameters
- 
+
+<kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
-# inventory/host_vars/ci-cd-tooling.yml
 
   - object: jenkins-slave-nodes
     content:
@@ -98,8 +97,8 @@ ansible-playbook apply.yml -e target=tools \
 
 1. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-arachni` with the following content for our Arachni slave:
 
+<kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
-# inventory/host_vars/ci-cd-tooling.yml
 
   arachni:
     SOURCE_REPOSITORY_URL: "{{ cop_quickstarts }}"
@@ -113,9 +112,8 @@ ansible-playbook apply.yml -e target=tools \
 
 2. Add the definition below underneath the Zap config
 
+<kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
-   # inventory/host_vars/ci-cd-tooling.yml
-   
       - name: jenkins-slave-arachni
         template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
         params_from_vars: "{{ arachni }}"
@@ -167,6 +165,8 @@ NAME=todolist
 ```
 
 4. Create a new object in `inventory/group_vars/all.yml` to drive the `ocp-pipeline` template with the parameters file you've just created. It can be put under the existing `todolist-build` object.
+
+<kbd>*inventory/group_vars/all.yml*</kbd>
 ```yaml
   - name: todolist-pipeline
     template: "{{ playbook_dir }}/templates/ocp-pipeline.yml"
