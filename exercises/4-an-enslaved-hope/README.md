@@ -54,28 +54,32 @@ _____
 2. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-zap` and add the following variables to tell your template where to find the slave definition
 
 ```yaml
-zap:
-  SOURCE_REPOSITORY_URL: https://github.com/redhat-cop/containers-quickstarts.git
-  SOURCE_CONTEXT_DIR: jenkins-slaves/jenkins-slave-zap
-  BUILDER_IMAGE_NAME: centos:centos7
-  NAME: jenkins-slave-zap
-  SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
-  DOCKERFILE_PATH: Dockerfile
-  SLAVE_IMAGE_TAG: latest
+# inventory/host_vars/ci-cd-tooling.yml
+
+  zap:
+    SOURCE_REPOSITORY_URL: https://github.com/redhat-cop/containers-quickstarts.git
+    SOURCE_CONTEXT_DIR: jenkins-slaves/jenkins-slave-zap
+    BUILDER_IMAGE_NAME: centos:centos7
+    NAME: jenkins-slave-zap
+    SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
+    DOCKERFILE_PATH: Dockerfile
+    SLAVE_IMAGE_TAG: latest
 ```
 
 3. Create the object for feeding the template with the parameters
  
 ```yaml
-- object: jenkins-slave-nodes
-  content:
-    - name: jenkins-slave-zap
-      template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
-      params_from_vars: "{{ zap }}"
-      namespace: "{{ ci_cd_namespace }}"
-      tags:
-      - jenkins-slaves
-      - zap-slave
+# inventory/host_vars/ci-cd-tooling.yml
+
+  - object: jenkins-slave-nodes
+    content:
+      - name: jenkins-slave-zap
+        template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
+        params_from_vars: "{{ zap }}"
+        namespace: "{{ ci_cd_namespace }}"
+        tags:
+        - jenkins-slaves
+        - zap-slave
 ```
 ![zap-object](../images/exercise4/zap-object.png)
 
@@ -95,47 +99,41 @@ ansible-playbook apply.yml -e target=tools \
 1. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-arachni` with the following content for our Arachni slave:
 
 ```yaml
-arachni:
-  SOURCE_REPOSITORY_URL: "{{ cop_quickstarts }}"
-  SOURCE_CONTEXT_DIR: jenkins-slaves/jenkins-slave-arachni
-  BUILDER_IMAGE_NAME: registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:v3.11
-  NAME: jenkins-slave-arachni
-  SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
-  SLAVE_IMAGE_TAG: latest
+# inventory/host_vars/ci-cd-tooling.yml
+
+  arachni:
+    SOURCE_REPOSITORY_URL: "{{ cop_quickstarts }}"
+    SOURCE_CONTEXT_DIR: jenkins-slaves/jenkins-slave-arachni
+    BUILDER_IMAGE_NAME: registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:v3.11
+    NAME: jenkins-slave-arachni
+    SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
+    SLAVE_IMAGE_TAG: latest
 
 ```
 
 2. Add the definition below underneath the Zap config
 
 ```yaml
-    - name: jenkins-slave-arachni
-      template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
-      params_from_vars: "{{ arachni }}"
-      namespace: "{{ ci_cd_namespace }}"
-      tags:
-      - jenkins-slaves
-      - arachni-slave
+   # inventory/host_vars/ci-cd-tooling.yml
+   
+      - name: jenkins-slave-arachni
+        template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
+        params_from_vars: "{{ arachni }}"
+        namespace: "{{ ci_cd_namespace }}"
+        tags:
+        - jenkins-slaves
+        - arachni-slave
 ```
 ![arachni-object](../images/exercise4/arachni-object.png)
 
-
-3. Update the `jenkins-slave-arachni` files `SOURCE_REPOSITORY_URL` to point to your GitLab's hosted version of the `enablement-ci-cd` repo.
-```
-SOURCE_REPOSITORY_URL=https://gitlab.<APPS_URL>/<GIT_USERNAME>/enablement-ci-cd.git
-SOURCE_CONTEXT_DIR=docker/jenkins-slave-arachni
-BUILDER_IMAGE_NAME=registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:latest
-NAME=jenkins-slave-arachni
-SOURCE_REPOSITORY_REF=master
-```
-
-4. Run the ansible playbook filtering with tag `arachni` so only the arachni build pods are run.
+3. Run the ansible playbook filtering with tag `arachni` so only the arachni build pods are run.
 ```bash
 ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=arachni-slave"
 ```
 
-5. With these changes in place, push your changes to the `master` branch.
+4. With these changes in place, push your changes to the `master` branch.
 ```bash
 git add .
 ```
@@ -146,7 +144,7 @@ git commit -m "ADD - Arachni and Zap scanning images"
 git push
 ```
 
-6. Your OpenShift cluster should now show both slaves have been built in your `ci-cd` namepsace
+5. Your OpenShift cluster should now show both slaves have been built in your `ci-cd` namepsace
 ![all-slaves](../images/exercise4/all-slaves.png)
 
 
@@ -208,8 +206,9 @@ git push
 8. Running the pipeline from here will run it in Jenkins. You can see the job sync between OpenShift and Jenkins if you login to Jenkins. You should see a folder with `<YOUR_NAME>-ci-cd` and your pipeline jobs inside of it.
 ![ocp-pipeline-jenkins](../images/exercise4/ocp-pipeline-jenkins.png)
 
-> NOTE: If you see failures in the first pipeline run, re-run the pipeline again and it should succeed.
-
+<p class="tip">
+<b>NOTE</b> - If you see failures in the first pipeline run, re-run the pipeline again and it should succeed.
+</p>
 _____
 
 ## Extension Tasks

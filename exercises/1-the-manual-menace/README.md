@@ -105,6 +105,8 @@ cd enablement-ci-cd
  * `apply.yml` is a playbook that sets up some variables and runs the OpenShift Applier role.
 
 4. Open the `inventory/groups_vars/all.yml` file. Update the `namespace_prefix` variables by replacing the `<YOUR_NAME>` (including the `<` and `>`) with your name or initials. **Don't use uppercase or special characters**. For example; if your name is Tim Smith you would replace `<YOUR_NAME>` and set `namespace_prefix` to something like `tim` or `tsmith`.
+
+<kbd>*inventory/groups_vars/all.yml*</kbd>
 ```yaml
   namespace_prefix: "<YOUR_NAME>"
 ```
@@ -113,54 +115,58 @@ cd enablement-ci-cd
 
 6. Inside of the `inventory/host_vars/projects-and-policies.yml` you'll see the following
 
+<kbd>*inventory/groups_vars/all.yml*</kbd>
 ```yaml
-ci_cd:
-  NAMESPACE: "{{ namespace_prefix }}-ci-cd"
-  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }}s CI/CD"
+  ci_cd:
+    NAMESPACE: "{{ namespace_prefix }}-ci-cd"
+    NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }}s CI/CD"
 ```
 * This will define the variables that we'll soon be using to deploy our CI/CD project. It relies on the `namespace_prefix` that we updated earlier. Pulling these two sets of variables together will now allow us to pass the newly created variables to our template that will create our project appropriately. You'll notice that the name of the variable above (`ci_cd`) is then assigned to `params_from_vars` in our inventory.
 
+<kbd>*inventory/groups_vars/all.yml*</kbd>
 ```yaml
-ansible_connection: local
-openshift_cluster_content:
-- object: projectrequest
-  content:
-  - name: "{{ ci_cd_namespace }}"
-    template: "{{ playbook_dir }}/templates/project-requests.yml"
-    action: create
-    params_from_vars: "{{ ci_cd }}"
-    tags:
-    - projects
+  ansible_connection: local
+  openshift_cluster_content:
+  - object: projectrequest
+    content:
+    - name: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/project-requests.yml"
+      action: create
+      params_from_vars: "{{ ci_cd }}"
+      tags:
+      - projects
 ```
 
 7. Let's add two more params dicts to pass to our template to be able to create a `dev` and `test` project.At the top of `inventory/host_vars/projects-and-policies.yml` create a dictionary called `dev` and `test` similar to how you see `ci_cd` defined.
   * In your editor; Open `inventory/host_vars/projects-and-policies.yml` and add the following:
 
+<kbd>*inventory/groups_vars/all.yml*</kbd>
 ```yaml
-dev:
-  NAMESPACE: "{{ namespace_prefix }}-dev"
-  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Dev"
+  dev:
+    NAMESPACE: "{{ namespace_prefix }}-dev"
+    NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Dev"
 
-test:
-  NAMESPACE: "{{ namespace_prefix }}-test"
-  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Test"
+  test:
+    NAMESPACE: "{{ namespace_prefix }}-test"
+    NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Test"
 ```
 
 8. In the `inventory/host_vars/projects-and-policies.yml` file; add the new objects for the projects you want to create (dev & test) by adding another object to the content array for each. You can copy and paste them from the `ci-cd` example and update them accordingly. If you do this; remember to change the params_from_vars variable! e.g.
 
+<kbd>*inventory/host_vars/projects-and-policies.yml*</kbd>
 ```yaml
-    - name: "{{ dev_namespace }}"
-      template: "{{ playbook_dir }}/templates/project-requests.yml"
-      action: create
-      params_from_vars: "{{ dev }}"
-      tags:
-      - projects
-    - name: "{{ test_namespace }}"
-      template: "{{ playbook_dir }}/templates/project-requests.yml"
-      action: create
-      params_from_vars: "{{ test }}"
-      tags:
-      - projects
+  - name: "{{ dev_namespace }}"
+    template: "{{ playbook_dir }}/templates/project-requests.yml"
+    action: create
+    params_from_vars: "{{ dev }}"
+    tags:
+    - projects
+  - name: "{{ test_namespace }}"
+    template: "{{ playbook_dir }}/templates/project-requests.yml"
+    action: create
+    params_from_vars: "{{ test }}"
+    tags:
+    - projects
 ```
 
 10. With the configuration in place; install the OpenShift Applier dependency
@@ -195,7 +201,9 @@ oc projects
 
 For this part, we will use an OpenShift Container Platform **template** to install and configure Nexus. This template contains all the things needed to setup a persistent nexus server, exposing a service and route while also creating the persistent volume needed. Have a read through the template; at the bottom you'll see a collection of parameters we will pass to the template.
 
-> _Note below how we are utilizing an OpenShift Container Platform template from a different repository by accessing it by its RAW GitHub URL (from the redhat-cop repo in this case)_
+<p class="tip">
+<b>NOTE</b> - Below how we are utilizing an OpenShift Container Platform template from a different repository by accessing it by its RAW GitHub URL (from the redhat-cop repo in this case)
+</p>
 
 1. Add some parameters for running the template by creating a new file in the `params` directory.
 ```bash
@@ -203,7 +211,9 @@ touch params/nexus
 ```
 
 2. The essential params to include in this file are:
-```bash
+
+<kbd>*params/nexus*</kbd>
+```
 VOLUME_CAPACITY=5Gi
 MEMORY_LIMIT=1Gi
 ```
@@ -212,6 +222,7 @@ MEMORY_LIMIT=1Gi
 
 3. Create a new object in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `ci-cd-tooling` and populate its `content` as follows
 
+<kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
 ---
 ansible_connection: local
@@ -236,9 +247,6 @@ ansible-playbook apply.yml -e target=tools \
 
 5. Once successful; login to the cluster through the browser (using cluster URL) and navigate to the `<YOUR_NAME>-ci-cd`. You should see Nexus up and running. You can login with default credentials (admin / admin123) ![nexus-up-and-running](../images/exercise1/nexus-up-and-running.png)
 
-
-<!-- #### 3 - Commit CI/CD -->
-
 ### Part 3 - Commit CI/CD
 
 1. Navigate to GitLab login page. You can login using your cluster credentials using the LDAP tab
@@ -246,9 +254,6 @@ ansible-playbook apply.yml -e target=tools \
 
 2. Once logged in create a new project called `enablement-ci-cd` and mark it as internal. Once created; copy out the `git url` for use on the next step.
 ![gitlab-new-project](../images/exercise1/gitlab-new-project.png)
-<!-- <p class="tip">
-Note - we would not normally make the project under your name but create a group and add the project there on residency but for simplicity of the exercise we'll do that here
-</p> -->
 
 3. If you have not used Git before; you may need to tell Git who you are and what your email is before we commit. Run the following commands, substituting your email and "Your Name". If you've done this before move on to the next step.
 
@@ -278,6 +283,7 @@ git push -u origin --all
 
 1. Open `enablement-ci-cd` in your favourite editor. Edit the `inventory/host_vars/ci-cd-tooling.yml` to include a new object for our mongodb as shown below. This item can be added below Nexus in the `ci-cd-tooling` section.
 
+<kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
   - name: "jenkins-mongodb"
     namespace: "{{ ci_cd_namespace }}"
@@ -308,12 +314,13 @@ ansible-playbook apply.yml -e target=tools \
 ![ocp-mongo](../images/exercise3/ocp-mongo.png)
 
 <p class="tip">
-Note - When making changes to the "enablement-ci-cd" repo, you should frequently commit and push the changes to git.
+<b>NOTE</b> - When making changes to the "enablement-ci-cd" repo, you should frequently commit and push the changes to git.
 </p>
 
 ### Part 5 - Jenkins & S2I
 > _Create a build and deployment config for Jenkins. Add new configuration and plugins to the OpenShift default Jenkins image using s2i_
 
+<kbd>*params/jenkins*</kbd>
 1. As before; create a new set of params by creating a `params/jenkins` file and adding some overrides to the template and updating the `<YOUR_NAME>` value accordingly.
 ```
 MEMORY_LIMIT=3Gi
@@ -326,6 +333,7 @@ JENKINS_OPTS=--sessionTimeout=720
 
 2. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo in  `inventory/host_vars/ci-cd-tooling.yml`.
 
+<kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
     - name: "jenkins"
       namespace: "{{ ci_cd_namespace }}"
@@ -343,13 +351,13 @@ The structure of the Jenkins s2i config is
 jenkins-s2i
 ├── README.md
 ├── configuration
-│   ├── build-failure-analyzer.xml
-│   ├── init.groovy
-│   ├── jenkins.plugins.slack.SlackNotifier.xml
-│   ├── scriptApproval.xml
-│   └── jobs
-│       └── seed-multibranch-job
-│           └── config.xml
+│   ├── build-failure-analyzer.xml
+│   ├── init.groovy
+│   ├── jenkins.plugins.slack.SlackNotifier.xml
+│   ├── scriptApproval.xml
+│   └── jobs
+│       └── seed-multibranch-job
+│           └── config.xml
 └── plugins.txt
 ```
  * `plugins.txt` is a list of `pluginId:version` for Jenkins to pre-install when starting
@@ -371,12 +379,16 @@ Why does Jenkins use blue to represent success? More can be found [on reddit](ht
 There are a few ways we can do this; either adding them to the `template/jenkins.yml` as environment variables and then including them in the `params/jenkins` file.  We could also create a token in GitLab and use it as the source secret in the Jenkins template.
 
 For the sake of simplicity, just replace the `<USERNAME>` && `<PASSWORD>` in the `jenkins-s2i/configuration/init.groovy` with your LDAP credentials as seen below. This init file gets run when Jenkins launches, and will setup the credentials for use in our Jobs in the next exercises
+
+<kbd>*jenkins-s2i/configuration/init.groovy*</kbd>
 ```groovy
 gitUsername = System.getenv("GIT_USERNAME") ?: "<USERNAME>"
 gitPassword = System.getenv("GIT_PASSWORD") ?: "<PASSWORD>"
 ```
 
 6. Open `params/jenkins-s2i-secret` and add the following content; replacing variables as appropriate.
+
+<kbd>*params/jenkins-s2i-secret*</kbd>
 ```
 SECRET_NAME=gitlab-auth
 USERNAME=<YOUR_LDAP_USERNAME>
@@ -387,6 +399,8 @@ where
     * `<YOUR_LDAP_PASSWORD>` is the password the builder pod will use to authenticate and clone the repo using
 
 7. Open `params/jenkins-s2i` and add the following content; replacing variables as appropriate.
+
+<kbd>*params/jenkins-s2i*</kbd>
 ```
 SOURCE_REPOSITORY_URL=<GIT_URL>
 NAME=jenkins
@@ -399,6 +413,8 @@ where
     * `<YOUR_NAME>` is the prefix for your `-ci-cd` project.
 
 8. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
+
+<kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
   - object: ci-cd-builds
     content:
@@ -443,7 +459,7 @@ ansible-playbook apply.yml -e target=tools \
 ### Part 6 - Jenkins Hello World
 > _To test things are working end-to-end; create a hello world job that doesn't do much but proves we can pull code from git and that our builds are green._
 
-1. Log in to Jenkins and hit `New Item` ![new-item](../images/exercise1/new-item.png).
+1. Log in to Jenkins and hit `New Item`<br>![new-item](../images/exercise1/new-item.png).
 
 2. Create a freestyle job called `hello-world` ![jenkins-new-hello-world](../images/exercise1/jenkins-new-hello-world.png).
 

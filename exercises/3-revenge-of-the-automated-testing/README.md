@@ -93,70 +93,53 @@ _On page load:_
 #### 1a - Unit tests
 > In this exercise we will execute our test for the front end locally. Once verified we will add them to Jenkins.
 
-1. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist-fe` directory and run `test`.
+1. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist` directory and run `test`.
 ```bash
-cd todolist-fe
+cd todolist
 ```
 ```bash
 npm run test
 ```
 <p class="tip" >
-`test` is an alias used that runs `vue-cli-service test` from the scripts object in `package.json`
+<b>NOTE</b> - `test` is an alias used that runs `vue-cli-service test` from the scripts object in `package.json`
 </p>
 
 ![screenshot-scripts](../images/exercise3/screenshot-scripts.png)
 
-2. This command will run all `*spec.js` files. Our test files are stored in the following places. There are 12 front end test files stored in these directories: `todolist-fe/tests/unit/vue-components/*` & `todolist-fe/tests/unit/javascript/*`
+2. This command will run all `*spec.js` files. Our test files are stored in the following places. There are 12 front end test files stored in these directories: `todolist/tests/unit/vue-components/*` & `todolist/tests/unit/javascript/*`
 
 3. You should see an output similar to the following. The above command has run a test suite for every `*.spec.js` file. The table generated in the terminal shows the code coverage. We're going to be focusing on the unit tests for now.
 
 ![test-run-locally](../images/exercise3/test-run-locally.png)
 
-4. Repeat the same process for `todolist-api` and verify that all the tests run. If you have an ExpressJS server already running from previous exercise; you should kill it before running the tests. The `mocha` test suite will launch a dev server for running the tests. There are 2 API test files: `todolist-api/server/api/todo/todo.spec.js` & `todolist-api/server/mocks/mock-routes.spec.js` for our API and the Mocks server. Remember to start the `mongo` container before running the tests
-```bash
-cd todolist-api
-```
-```bash
-npm run mongo:start
-```
-```bash
-npm run test
-```
-
-> NOTE: On Windows systems, tests will fail because Mocha is unable to find the `*.spec.js` files. Edit the `package.json` file, and remove the single quotes around `server/**/*.spec.js` in the `test` line as follows:
-
-```bash
-"test": "node_modules/.bin/nyc node_modules/.bin/mocha server/**/*.spec.js --exit"
-```
-
-5. Navigate to your instance of Jenkins at `https://jenkins-<YOUR_NAME>-ci-cd.<APPS_URL>`.
-Click on `dev-todolist-fe-build` and then click the `configure` button on the left-hand side.
+4. Navigate to your instance of Jenkins at `https://jenkins-<YOUR_NAME>-ci-cd.<APPS_URL>`.
+Click on `dev-todolist-build` and then click the `configure` button on the left-hand side.
 
 ![jenkins-configure-job](../images/exercise3/jenkins-configure-job.png)
 
-6. Scroll to the `Build` part of the configuration page and add `npm run test` below `npm install`.
+5. Scroll to the `Build` part of the configuration page and add `npm run test` below `npm install`.
 
 ![jenkins-build-step](../images/exercise3/jenkins-build-step.png)
 
-7. Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report` (Jenkins might place this at the top of the `Post-build Actions` list).
+6. Scroll to the `Post-build Actions` section and click `Add post-build action`. Select `Publish xUnit test result report` (Jenkins might place this at the top of the `Post-build Actions` list).
 
 ![xunit-action](../images/exercise3/xunit-action.png)
 
-8. Click the `Add` button under `Publish xUnit test result report` and select `JUnit`. In the pattern field enter `test-report.xml`. In the `Failed Tests Thresholds`  input box enter 0 under `Red Ball Total`. It should look a little something like this:
+7. Click the `Add` button under `Publish xUnit test result report` and select `JUnit`. In the pattern field enter `test-report.xml`. In the `Failed Tests Thresholds`  input box enter 0 under `Red Ball Total`. It should look a little something like this:
 
 ![post-build-actions](../images/exercise3/post-build-actions.png)
 
-9. Click `Save` at the bottom to save the changes. Run the `dev-todolist-fe-build` job and verify that this passes and the `build` and `bake` jobs are both triggered.
+8. Click `Save` at the bottom to save the changes. Run the `dev-todolist-build` job and verify that this passes and the `build` and `bake` jobs are both triggered.
 
 
 #### 1b - End to End Tests (e2e)
 > _Unit tests are a great way to get immediate feedback as part of testing an application. End to end tests that drive user behaviour are another amazing way to ensure an application is behaving as expected._
 
-In this part of the exercise, we will add a new stage to our pipeline called `dev-todolist-fe-e2e` that will run after the deploy has been completed. End to end tests will use `Nightwatch.js` to orchestrate a selenium webdriver instance that controls the web browser; in this case Google Chrome!
+In this part of the exercise, we will add a new stage to our pipeline called `dev-todolist-e2e` that will run after the deploy has been completed. End to end tests will use `Nightwatch.js` to orchestrate a selenium webdriver instance that controls the web browser; in this case Google Chrome!
 
-1. Let's start by checking that our tests execute locally. On the terminal move to the `todolist-fe` folder. Our end to end tests are stored in `tests/e2e/specs/`. The vuejs cli uses Nightwatch.js and comes pre-configured to run tests against Google Chrome. We have created some additional configuration in the root of the project `nightwatch.config.js` to run headless in CI mode on Jenkins.
+1. Let's start by checking that our tests execute locally. On the terminal move to the `todolist` folder. Our end to end tests are stored in `tests/e2e/specs/`. The vuejs cli uses Nightwatch.js and comes pre-configured to run tests against Google Chrome. We have created some additional configuration in the root of the project `nightwatch.config.js` to run headless in CI mode on Jenkins.
 ```bash
-cd todolist-fe
+cd todolist
 ```
 
 2. Run the tests locally by executing the following. This should start the dev server and run the test. You may see the browser pop up and close while tests execute.
@@ -166,16 +149,17 @@ npm run e2e
 
 ![local-e2e](../images/exercise3/local-e2e.png)
 
-> NOTE: On Windows systems, you will see the firewall pop-up and ask permission to allow access. Click allow access to continue.
+<p class="tip" >
+<b>NOTE</b> - On Windows systems, you will see the firewall pop-up and ask permission to allow access. Click allow access to continue.
+</p>
 
-
-3. With tests executing locally; let's add them to our Jenkins pipeline. To do this; we'll create a new job and connect it up to our `todolist-fe` jobs. Open Jenkins and create a `New Item` called `dev-todolist-fe-e2e`. Make this Job `Freestyle`.
+3. With tests executing locally; let's add them to our Jenkins pipeline. To do this; we'll create a new job and connect it up to our `todolist` jobs. Open Jenkins and create a `New Item` called `dev-todolist-e2e`. Make this Job `Freestyle`.
 
 4. On the configuration page (under the general tab); Set the Label for the job to run on as `jenkins-slave-npm`. Check the box marking the build parameterised and add a String parameter of `BUILD_TAG` as done before
 
 ![e2e-general](../images/exercise3/e2e-general.png)
 
-5. On the Source Code Management tab; set the source code to git and add the url to your `todolist-fe` app. Set the branch to `refs/tags/${BUILD_TAG}`
+5. On the Source Code Management tab; set the source code to git and add the url to your `todolist` app. Set the branch to `refs/tags/${BUILD_TAG}`
 
 ![e2e-git](../images/exercise3/e2e-git.png)
 
@@ -183,7 +167,7 @@ npm run e2e
 
 7. On the Build section; add a build step to execute shell and fill in the following substituting `<YOUR_NAME>` accordingly:
 ```bash
-export E2E_TEST_ROUTE=todolist-fe-<YOUR_NAME>-dev.<APPS_URL>
+export E2E_TEST_ROUTE=todolist-<YOUR_NAME>-dev.<APPS_URL>
 npm install
 npm run e2e:ci
 ```
@@ -193,7 +177,7 @@ npm run e2e:ci
 
 ![e2e-post-build](../images/exercise3/e2e-post-build.png)
 
-9. We want to connect the e2e job we just created to our dev pipleline by editing the post build actions on `dev-todolist-fe-deploy` job. Open the `dev-todolist-fe-deploy` job and hit `configure`. In the `Post-build actions` section of this job add a `Trigger parameterised build` on other jobs. Set the `Projects to build` to be `dev-todolist-fe-e2e`. Add a Parameter and set the it to the `Current build parameters`. Save the settings.
+9. We want to connect the e2e job we just created to our dev pipleline by editing the post build actions on `dev-todolist-deploy` job. Open the `dev-todolist-deploy` job and hit `configure`. In the `Post-build actions` section of this job add a `Trigger parameterised build` on other jobs. Set the `Projects to build` to be `dev-todolist-e2e`. Add a Parameter and set the it to the `Current build parameters`. Save the settings.
 
 ![e2e-trigger](../images/exercise3/e2e-trigger.png)
 
@@ -214,12 +198,12 @@ _On page load:_
 - [ ] should display existing todos that are not marked important
 - [ ] should display existing todos that are marked important with an red flag
 
-#### 2a - Create todolist-api tests
+#### 2a - Create todolist api tests
 > Using [Mocha](https://mochajs.org/) as our test runner; we will now write some tests for backend functionality to persist our important-flag. The changes required to the backend are minimal but we will use TDD to create our test first, then implement the functionality.
 
-1.  Create a new branch in your `todolist-api` app for our feature and push it to the remote
+1.  Create a new branch in your `todolist` app for our feature and push it to the remote
 ```bash
-cd todolist-api
+cd todolist
 ```
 ```bash
 git checkout -b feature/important-flag
@@ -231,6 +215,8 @@ git push -u origin feature/important-flag
 2.  Navigate to the `server/api/todo/todo.spec.js` file. This contains all of the existing todo list api tests. These are broken down into simple `describe("api definition", function(){})` blocks which is BDD speak for how the component being tested should behave. Inside of each `it("should do something ", function(){})` statements we use some snappy language to illustrate the expected behaviour of the test. For example a `GET` request of the api is described and tested for the return to be of type Array as follows.
 
 ```javascript
+// server/api/todo/todo.spec.js
+
 describe("GET /api/todos", function() {
     it("should respond with JSON array", function(done) {
         request(app)
@@ -271,6 +257,8 @@ npm run test
     * Add a new test assertion to check that `res.body.important` is `true` below the `// YOUR TEST GO HERE` line.
 
 ```javascript
+// server/api/todo/todo.spec.js
+
 // Exercise 3 test case!
 it("should mark todo as important and persist it", function(done) {
     request(app)
@@ -303,6 +291,8 @@ npm run test
 7.  With our test now failing; let's implement the feature. This is quite a simple change - we first need to update the `server/api/todo/todo.model.js`. Add an additional property on the schema called `important` and make its type Boolean.
 
 ```javascript
+// server/api/todo/todo.model.js
+
 const TodoSchema = new Schema({
   title: String,
   completed: Boolean,  
@@ -342,12 +332,12 @@ git merge feature/important-flag
 git push
 ```
 
-3.  After pushing your changes; start back up the `todolist-api` app on a new terminal session
+11.  After pushing your changes; start back up the `todolist` app on a new terminal session
 ```bash
 npm run start
 ```
 
-#### 2b - Create todolist-fe tests
+#### 2b - Create todolist front-end tests
 > Using [Jest](https://facebook.github.io/jest/) as our test runner and the `vue-test-utils` library for managing our vue components; we will now write some tests for front end functionality to persist our important-flag. The changes required to the front end are quite large but we will use TDD to create our test first, then implement the functionality.
 
 Our TodoList App uses `vuex` to manage the state of the app's todos and `axios` HTTP library to connect to the backend. `Vuex` is an opinionated framework for managing application state and has some key design features you will need to know to continue with the exercise.
@@ -359,17 +349,17 @@ There are two parts of the lifecycle to updating the store, the `actions` & `mut
 For example; when marking a todo as done in the UI, the following flow occurs
   * The `TodoItem.vue` calls the `markTodoDone()` function which dispatches an event to the store.
   * This calls the `updateTodo()` function in the `actions.js` file
-  * The action will update the backend db (calling our `todolist-api`) with our updated todo object.
+  * The action will update the backend db (calling our `todolist api`) with our updated todo object.
   * The action will commit the change to the store by calling the mutation method `MARK_TODO_COMPLETED`
   * The `MARK_TODO_COMPLETED` will directly access the store object and update it with the new state value
   * The `ListOfTodos.vue` component is watching the store for changes and when something gets updated it re-renders the `TodoItem.vue`.
 
 The implementation of our `important` flag will follow this same flow.
 
-1. Let's implement our feature by first creating a branch. Our new feature, important flag will behave in the same way as the `MARK_TODO_COMPLETED`. Create a new branch in your `todolist-fe` app for our feature and push it to the remote
+1. Let's implement our feature by first creating a branch. Our new feature, important flag will behave in the same way as the `MARK_TODO_COMPLETED`. Create a new branch in your `todolist` app for our feature and push it to the remote
 
 ```bash
-cd todolist-fe
+cd todolist
 ```
 ```bash
 git checkout -b feature/important-flag
@@ -383,12 +373,15 @@ git push -u origin feature/important-flag
 npm run test -- --watch
 ```
 
-> NOTE: You may see an `ENOSPC` error on Linux systems like the following:
+<p class="tip" >
+<b>NOTE</b> - You may see an `ENOSPC` error on Linux systems like the following:
+</p>
+
 ```bash
 ERROR jest exited with code 1.
 npm ERR! code ELIFECYCLE
 npm ERR! errno 1
-npm ERR! todolist-fe@1.0.0 test: `vue-cli-service test "--watch"`
+npm ERR! todolist@1.0.0 test: `vue-cli-service test "--watch"`
 npm ERR! Exit status 1
 ```
 To fix this error, run the following command:
@@ -411,6 +404,8 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 6. Let's implement the first test `it("should render a button with important flag"`. This test will assert if the button is present on the page and it contains the `.important-flag` CSS class. To implement this; add the `expect` statement as follows below the `// TODO - test goes here!` comment.  
 
 ```javascript
+  //tests/unit/vue-components/TodoItem.spec.js
+
   it("should render a button with important flag", () => {
     const wrapper = mount(TodoItem, {
       propsData: { todoItem: importantTodo }
@@ -427,6 +422,8 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 8. With a basic assertion in place, let's continue on to the next few tests. We want the important flag to be red when an item in the todolist is marked accordingly. Conversely we want it to be not red when false. Let's create a check for `.red-flag` CSS property to be present when important is true and not when false. Complete the `expect` statements in your test file as shown below for both tests.
 
 ```javascript
+  // tests/unit/vue-components/TodoItem.spec.js
+
   it("should set the colour to red when true", () => {
     const wrapper = mount(TodoItem, {
       propsData: { todoItem: importantTodo }
@@ -447,6 +444,8 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 9. Finally, we want to make the flag clickable and for it to call a function to update the state. The final test in the `TodoItem.spec.js` we want to create should simulate this behaviour. Implement the `it("call markImportant when clicked", () ` test by first simulating the click of our important-flag and asserting the function `markImportant()` to write is executed.
 
 ```javascript
+  // tests/unit/vue-components/TodoItem.spec.js
+
   it("call markImportant when clicked", () => {
     const wrapper = mount(TodoItem, {
       methods,
@@ -468,6 +467,8 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 11. Underneath the `</md-list-item>` tag, let's add a new md-button. Add an `.important-flag` class on the `md-button` and put the svg of the flag provided inside it.
 
 ```html
+    <!--  src/components/TodoItem.vue -->
+
     </md-list-item>
     <!-- TODO - SVG for use in Exercise3 -->
     <md-button class="important-flag">
@@ -478,6 +479,8 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 12. We should now see the first of our failing tests has started to pass. Running the app locally (using `npm run serve`) should show the flag appear in the UI. It is clickable but won't fire any events and the colour is not red as per our requirement. Let's continue to implement the colour change for the flag. On our `<svg/>` tag, add some logic to bind the css to the property of a `todo.important` by adding ` :class="{'red-flag': todoItem.important}"  `. This logic will apply the CSS class when `todo.important`  is true.
 
 ```html
+<!--  src/components/TodoItem.vue -->
+
 <md-button class="important-flag">
     <svg :class="{'red-flag': todoItem.important}"  height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" ><path d="M0 0h24v24H0z" fill="none"/><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
 </md-button>
@@ -486,6 +489,8 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 13. More tests should now be passing. Let's wire the click of the flag to an event in Javascript. In the methods section of the `<script></script>` tags in the Vue file, implement the `markImportant()`. We want to wire this to the action to updateTodo, just like we have in the `markCompleted()` call above it. We also need to pass an additional property to this method called `important`
 
 ```javascript
+    // src/components/TodoItem.vue
+
     markImportant() {
       // TODO - FILL THIS OUT IN THE EXERCISE
       this.$store.dispatch("updateTodo", {id: this.todoItem._id, important: true});
@@ -496,6 +501,8 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 14. Let's connect the click button in the DOM to the Javascript function we've just created. In the template, add a click handler to the md-button to call the function `markImportant()` by adding ` @click="markImportant()"` to the `<md-button>` tag
 
 ```html
+    <!--  src/components/TodoItem.vue -->
+
     <!-- TODO - SVG for use in Exercise3 -->
     <md-button class="important-flag" @click="markImportant()">
         <svg :class="{'red-flag': todoItem.important}"  height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" ><path d="M0 0h24v24H0z" fill="none"/><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
@@ -528,6 +535,8 @@ npm run serve
 19. We need to implement the `actions` and `mutations` for our feature. Let's start with the tests. Open the `tests/unit/javascript/actions.spec.js` and navigate to the bottom of the file. Our action should should commit the `MARK_TODO_IMPORTANT` to the mutations. Scroll to the end of the test file and implement the skeleton test by adding `expect(commit.firstCall.args[0]).toBe("MARK_TODO_IMPORTANT");` as the assertion.
 
 ```javascript
+  // tests/unit/javascript/actions.spec.js
+
   it("should call MARK_TODO_IMPORTANT", done => {
     const commit = sinon.spy();
     state.todos = todos;
@@ -542,6 +551,8 @@ npm run serve
 20. We should now have more failing tests, let's fix this by adding the call from our action to the mutation method. Open the `src/store/actions.js` file and scroll to the bottom to the `updateTodo()` method. Complete the if block by adding `commit("MARK_TODO_IMPORTANT", i);` as shown below.
 
 ```javascript
+// src/store/actions.js
+
 updateTodo({ commit, state }, { id, important }) {
     let i = state.todos.findIndex(todo => todo._id === id);
     if (important) {
@@ -555,6 +566,8 @@ updateTodo({ commit, state }, { id, important }) {
 21. Finally, let's implement the `mutation` for our feature. Again, starting with the tests... Open the `tests/unit/javascript/mutations.spec.js` to find our skeleton tests at the bottom of the file. Our mutation method is responsible for toggling the todo's `important` property between `true` and `false`. Let's implement the tests for this functionality by setting important to be true and calling the method expecting the inverse. Then let's set it to false and call the method expecting the inverse. Add the expectations below the `// TODO - test goes here!` comment as done previously.
 
 ```javascript
+  // tests/unit/javascript/mutations.spec.js
+
   it("it should MARK_TODO_IMPORTANT as false", () => {
     state.todos = importantTodos;
     // TODO - test goes here!
@@ -574,6 +587,8 @@ updateTodo({ commit, state }, { id, important }) {
 22. With our tests running and failing, let's implement the feature to their spec. Open the `src/store/mutations.js` and add another function called `MARK_TODO_IMPORTANT` below the `MARK_TODO_COMPLETED` to toggle `todo.important` between true and false. NOTE - add a `,` at the end of the `MARK_TODO_COMPLETED(){}` function call.
 
 ```javascript
+  // src/store/mutations.js
+
   MARK_TODO_IMPORTANT(state, index) {
     console.log("INFO - MARK_TODO_IMPORTANT");
     state.todos[index].important = !state.todos[index].important;
@@ -622,11 +637,15 @@ git push --all
 touch tests/e2e/specs/importantFlag.js
 ```
 
-> NOTE: Windows users should create this new file using a text editor.
+<p class="tip">
+<b>NOTE</b> - Windows users should create this new file using a text editor.
+</p>
 
 2.  Open this new file in your code editor and set out the initial blank template for an e2e test as below:
 ```javascript
-module.exports = {
+// tests/e2e/specs/importantFlag.js
+
+  module.exports = {
     "Testing important flag setting": browser => {
 
     }
@@ -652,7 +671,9 @@ module.exports = {
 
 6.  Write the following test code. The pauses allow for the body of the page to render the todo list before exercising the test code:
 ```javascript
-module.exports = {
+// src/components/XofYItems.vue
+
+  module.exports = {
     "Testing important flag setting": browser => {
       browser
         .url(process.env.VUE_DEV_SERVER_URL + '/#/todo')

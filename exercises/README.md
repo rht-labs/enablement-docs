@@ -40,13 +40,10 @@ The following table lists the software requirements for running the lab exercise
  | Text editor such as Atom or Visual Studio Code <br><br> (The exercises were created using `VSCode`, so the screenshots will match its layout and color schemes) | - | - |
 
 
-
- <b><span style="color:red">NOTE</span></b>
-
- > You will need administrator or super user level access on your system to install the prerequisite software for all the three operating systems.
+ <p class="tip">
+ <b>NOTE</b> - You will need administrator or super user level access on your system to install the prerequisite software for all the three operating systems.
  Locked down systems with restricted accounts are not supported.
-
- > You can use any text editor to edit lab files. Using an editor that provides syntax highlighting and automatic indentation is helpful. We recommend ***Atom*** or ***Visual Studio Code***  for this course.
+ </p>
 
 ### Linux
 
@@ -87,11 +84,6 @@ usermod -aG docker $USER
 dnf install origin-clients
 ```
 
-7. Download and install Atom text editor RPM installer from https://atom.io/download/rpm, or the Visual Studio Code RPM installer from https://code.visualstudio.com/docs/?dv=linux64_rpm
-```bash
-dnf install <rpm_name>
-```
-
 ### macOS
 1. Install HomeBrew for macOS by following the installation instructions at https://brew.sh/
 
@@ -116,9 +108,8 @@ brew install git
 ```bash
 brew install ansible
 ```
-8. Download and install Atom text editor from https://atom.io/download/mac, or Visual Studio Code from https://code.visualstudio.com/docs/?dv=osx
 
-9. Download and uncompress the OpenShift 3.11 client binary archive. Copy the ***oc*** binary to ***/usr/local/bin*** folder on your system
+8. Download and uncompress the OpenShift 3.11 client binary archive. Copy the ***oc*** binary to ***/usr/local/bin*** folder on your system
 ```bash
 curl -L -O https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-mac.zip
 unzip openshift-origin-client-tools-v3.11.0-0cbc58b-mac.zip
@@ -130,39 +121,39 @@ chmod +x /usr/local/bin/oc
 
 You will be adding several directories to the ***PATH*** environment variable. Follow the instructions at https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/ to edit the ***PATH*** environment variable on Windows 10.
 
-1. Download the Node.js 8.x LTS Windows 64-bit binary archive file from https://nodejs.org/dist/latest-v8.x/. The binary will be named as ***node-v8.x.y-win-x64.zip***, where 'x' and 'y' indicates the major and minor version of the latest Node.js 8 LTS release.
+1. Download the Node.js 8.x LTS Windows 64-bit binary archive file from https://nodejs.org/dist/latest-v8.x/. The binary will be named as ***node-v8.x.y-win-x64.zip***, where 'x' and 'y' indicates the major and minor version of the latest Node.js 8 LTS release. 
 
-Extract the zip file archive under a suitable folder in the ***C:\*** drive, for example ***C:\nodejs***. Make sure that your directory name does not have any spaces in it.
+2. Extract the zip file archive under a suitable folder in the ***C:\*** drive, for example ***C:\nodejs***. Make sure that your directory name does not have any spaces in it.
 
-Add the directory where you uncompressed the zip file to the ***PATH*** environment variable, so that the ***node.exe*** and ***npm.cmd*** executable files are available in the system path.
+3. Add the directory where you uncompressed the zip file to the ***PATH*** environment variable, so that the ***node.exe*** and ***npm.cmd*** executable files are available in the system path.
 
-2. Install JDK version 1.8 for Windows 64-bit by using the installer from the Oracle website at https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+4. Install JDK version 1.8 for Windows 64-bit by using the installer from the Oracle website at https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
 Ensure that you install the JDK into a directory which has no spaces in its name, for example ***C:\Java***. Add a new environment variable called ***JAVA_HOME*** which points to the top level directory where you installed the JDK.
 
-Add the ***JAVA_HOME\bin*** directory to the ***PATH*** environment variable, so that the ***java.exe*** and ***javac.exe*** executable files are available in the system path.
+5. Add the ***JAVA_HOME\bin*** directory to the ***PATH*** environment variable, so that the ***java.exe*** and ***javac.exe*** executable files are available in the system path.
 
-3. Install Google Chrome version 70 or higher by downloading it from https://google.com/chrome
+6. Install Google Chrome version 70 or higher by downloading it from https://google.com/chrome
 
-4. Install Docker for Windows by following the instructions from https://hub.docker.com/editions/community/docker-ce-desktop-windows. Before downloading, you will be asked to create an account. Register and download Docker for Windows.
+7. Install Docker for Windows by following the instructions from https://hub.docker.com/editions/community/docker-ce-desktop-windows. Before downloading, you will be asked to create an account. Register and download Docker for Windows.
 
 Ensure that you install Docker into a directory which has no spaces in its name, for example ***C:\Docker***. You will be prompted to enable Hyper-V during installation.
 
 Windows will restart a couple of times after enabling Hyper-V and continue with the Docker installation. Follow the instructions provided in the link above to test and verify your Docker installation.
 
-5. Download and install Git for Windows by using the 64-bit installer from https://github.com/git-for-windows/git/releases/download/v2.20.0.windows.1/Git-2.20.0-64-bit.exe.
+7. Download and install Git for Windows by using the 64-bit installer from https://github.com/git-for-windows/git/releases/download/v2.20.0.windows.1/Git-2.20.0-64-bit.exe.
 
-Follow the instructions at https://www.atlassian.com/git/tutorials/install-git#windows to install and verify your Git installation. Ensure that you install Git into a directory which has no spaces in its name, for example ***C:\Git***.
+8. Follow the instructions at https://www.atlassian.com/git/tutorials/install-git#windows to install and verify your Git installation. Ensure that you install Git into a directory which has no spaces in its name, for example ***C:\Git***.
 
-<b><span style="color:red">NOTE</span></b>
+<p class="tip">
+<b>NOTE</b> - Ensure that the <i>Git Bash</i> component is selected during installation. You will need this to run bash shell scripts during the execution of lab exercises.
+</p>
 
-> Ensure that the ***Git Bash*** component is selected during installation. You will need this to run bash shell scripts during the execution of lab exercises.
+9. Download and install Atom text editor from https://github.com/atom/atom/releases/download/v1.33.0/AtomSetup-x64.exe, or Visual Studio Code from https://code.visualstudio.com/docs/?dv=win64
 
-6. Download and install Atom text editor from https://github.com/atom/atom/releases/download/v1.33.0/AtomSetup-x64.exe, or Visual Studio Code from https://code.visualstudio.com/docs/?dv=win64
+10. You will use a custom container image for running OpenShift client commands, and Ansible playbooks. You will map a directory on your local Windows system containing Ansible playbooks to a directory inside the container, and run the Ansible playbooks from within the container.
 
-7. You will use a custom container image for running OpenShift client commands, and Ansible playbooks. You will map a directory on your local Windows system containing Ansible playbooks to a directory inside the container, and run the Ansible playbooks from within the container.
-
-Execute the following commands in the ***Windows Command Prompt*** to run Ansible playbooks on Windows systems:
+11. Execute the following commands in the ***Windows Command Prompt*** to run Ansible playbooks on Windows systems:
 
 * Pull the container image containing the tools and utilities that are required for running Ansible playbooks:
 ```bash
@@ -177,9 +168,9 @@ mkdir C:\do500-workspace
 ```bash
 docker run -it -v C:/do500-workspace:/home/tool-box/workarea:Z quay.io/redhat/do500-toolbox /bin/bash
 ```
-
-<b><span style="color:red">NOTE</span></b>
-> When you launch the container for the very first time, you will be prompted by Docker, as well as the Windows security subsystem to allow read and write access to the ***C:\do500-workspace*** directory. Allow read and write access to this directory by entering your Windows username and password when prompted.
+<p class="tip">
+<b>NOTE</b> - When you launch the container for the very first time, you will be prompted by Docker, as well as the Windows security subsystem to allow read and write access to the ***C:\do500-workspace*** directory. Allow read and write access to this directory by entering your Windows username and password when prompted.
+</p>
 
 * Once you are inside the container, you can log in to the OpenShift cluster using the OpenShift ***oc*** command-line client, and verify that Ansible is installed:
 ```bash
