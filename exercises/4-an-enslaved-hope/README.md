@@ -55,8 +55,6 @@ _____
 
 <kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
-  ---
-
   zap:
     SOURCE_REPOSITORY_URL: https://github.com/redhat-cop/containers-quickstarts.git
     SOURCE_CONTEXT_DIR: jenkins-slaves/jenkins-slave-zap
@@ -72,14 +70,14 @@ _____
 <kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
 - object: jenkins-slave-nodes
-  content:
-  - name: jenkins-slave-zap
-    template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
-    params_from_vars: "{{ zap }}"
-    namespace: "{{ ci_cd_namespace }}"
-    tags:
-    - jenkins-slaves
-    - zap-slave
+    content:
+      - name: jenkins-slave-zap
+        template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
+        params_from_vars: "{{ zap }}"
+        namespace: "{{ ci_cd_namespace }}"
+        tags:
+        - jenkins-slaves
+        - zap-slave
 ```
 ![zap-object](../images/exercise4/zap-object.png)
 
@@ -100,26 +98,27 @@ ansible-playbook apply.yml -e target=tools \
 
 <kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
-arachni:
-  SOURCE_REPOSITORY_URL: "{{ cop_quickstarts }}"
-  SOURCE_CONTEXT_DIR: jenkins-slaves/jenkins-slave-arachni
-  BUILDER_IMAGE_NAME: registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:v3.11
-  NAME: jenkins-slave-arachni
-  SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
-  SLAVE_IMAGE_TAG: latest
+
+  arachni:
+    SOURCE_REPOSITORY_URL: "{{ cop_quickstarts }}"
+    SOURCE_CONTEXT_DIR: jenkins-slaves/jenkins-slave-arachni
+    BUILDER_IMAGE_NAME: registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:v3.11
+    NAME: jenkins-slave-arachni
+    SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
+    SLAVE_IMAGE_TAG: latest
 ```
 
 2. Add the definition below underneath the Zap config
 
 <kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
-  - name: jenkins-slave-arachni
-    template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
-    params_from_vars: "{{ arachni }}"
-    namespace: "{{ ci_cd_namespace }}"
-    tags:
-    - jenkins-slaves
-    - arachni-slave
+      - name: jenkins-slave-arachni
+        template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
+        params_from_vars: "{{ arachni }}"
+        namespace: "{{ ci_cd_namespace }}"
+        tags:
+        - jenkins-slaves
+        - arachni-slave
 ```
 ![arachni-object](../images/exercise4/arachni-object.png)
 
