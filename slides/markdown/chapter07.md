@@ -186,8 +186,3 @@ In Your Teams
 - [Showcase](https://openpracticelibrary.com/practice/showcase/)
 - [Retrospectives](https://openpracticelibrary.com/practice/retrospectives/)
 - [Backlog Refinement](https://openpracticelibrary.com/practice/backlog-refinement)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png", class="white-style" -->
-[Chapter 8, Metric-Based Process Mapping](chapter08.html)
