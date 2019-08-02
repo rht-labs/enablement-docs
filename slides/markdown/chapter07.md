@@ -125,7 +125,6 @@ The agile approach can minimize risk by getting a working piece of software into
 
 
 
-### 5 Key Ceremonies
 ![Scrum Ceremonies](images/Agile/scrum_process.png)
 
 
