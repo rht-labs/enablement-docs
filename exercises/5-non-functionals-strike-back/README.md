@@ -69,7 +69,7 @@ _____
 
 1. Open the `todolist` application's `Jenkinsfile` in your favourite editor. The file is stored in the root of the project. Ensure that you using the `master` branch of `todolist`
 ```bash
-cd todolist
+cd /projects/todolist
 git checkout master
 ```
 
