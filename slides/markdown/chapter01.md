@@ -21,10 +21,7 @@ Draw a simple representation of an animal that you feel represents your current 
 
 
 
-## These five days will **not** be:
-- Death by powerpoint
-- Theory only
-- Just about the tools and frameworks
+## The Next Five Days...
 
 
 
