@@ -101,7 +101,7 @@ cd /projects/todolist
 npm run test:client
 ```
 <p class="tip" >
-<b>NOTE</b> - `test:client` is an alias used that runs `vue-cli-service test` from the scripts object in `package.json`
+<b>NOTE</b> - <i>test:client</i> is an alias used that runs <i>vue-cli-service test</i> from the scripts object in <i>package.json</i>
 </p>
 
 2. This command will run all `*spec.js` files. Our test files are stored in the following places. There are 12 front end test files stored in these directories: `todolist/tests/unit/vue-components/*` & `todolist/tests/unit/javascript/*`
@@ -124,7 +124,7 @@ npm run test:server
 ```
 ![test-server-run-locally](../images/exercise3/test-server-run-locally.png)
 
-6. With our tests all passing locally, let's add them to our pipeline. Open the `Jenkinsfile` in your editor and add the command to run all the tests in the `steps{}` part of the `node-build` stage.
+6. With our tests all passing in the cloud ide, let's add them to our pipeline. Open the `Jenkinsfile` in your editor and add the command to run all the tests in the `steps{}` part of the `node-build` stage.
 
 <kbd>📝 todolist/Jenkinsfile</kbd>
 ```Jenksfile
@@ -166,13 +166,15 @@ git push
 
 In this part of the exercise, we will add a new stage to our pipeline called `todolist-e2e` that will run after the deploy has been completed. End to end tests will use `Nightwatch.js` to orchestrate a Selenium WebDriver instance that controls the web browser; in this case Google Chrome!
 
-1. Let's start by checking that our tests execute locally. Our end to end tests are stored in `tests/e2e/specs/`. The VueJS cli uses `Nightwatch.js` and comes pre-configured to run tests against Google Chrome. The tests run headlessly in our CodeReady workspace. To get them executing, open a new Terminal and fire up the Selenium service and leave it running.
+1. Let's start by checking that our tests execute in the cloud ide. Our end to end tests are stored in `tests/e2e/specs/`. The VueJS cli uses `Nightwatch.js` and comes pre-configured to run tests against Google Chrome. The tests run headlessly in our CodeReady workspace. To get them executing, open a new Terminal and fire up the Selenium service and leave it running.
 ```bash
+cd /projects/todolist
 npm run selenium
 ```
 
 2. On a new terminal move to the `todolist` folder. Run the tests locally by executing the following command. This should start the dev server and run the test.
 ```bash
+cd /projects/todolist
 npm run e2e
 ```
 
@@ -184,7 +186,7 @@ npm run e2e
 ```Jenksfile
 stage("e2e test") {
       
-    }
+}
 ```
 ![e2e-stage-new](../images/exercise3/e2e-stage-new.png)
 
@@ -691,9 +693,6 @@ touch tests/e2e/specs/importantFlag.js
     }
   };
 ```
-    <!-- ![if-e2e-step4](../images/exercise3/if-e2e-step4.png) -->
-    
-    <!-- ![if-e2e-step4](../images/exercise3/e2e-code-listing-full.jpg) -->
 
 7. Your final E2E test should look like the following:
 
