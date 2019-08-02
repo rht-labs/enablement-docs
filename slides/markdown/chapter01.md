@@ -28,15 +28,6 @@ Draw a simple representation of an animal that you feel represents your current 
 
 
 
-<!-- .slide: id="intro-devops" -->
-### Introducing
-#### Feedback Loops
-![Chef Food](images/chef-food.png) <!-- {_class="inline-image"} -->
-- The Real-time Retrospective
-- GitHub Issues
-- Pull Requests
-
-
 
 ### Introducing
 #### The room and the walls
