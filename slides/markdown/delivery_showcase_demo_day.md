@@ -66,10 +66,6 @@ In teams, take some time to brainstorm:
 
 
 
-## Lab Catchup and Questions
-
-
-
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
 ### DevOps practices used in this section:
 - [Showcase](https://openpracticelibrary.com/practice/showcase/)
