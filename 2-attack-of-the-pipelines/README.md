@@ -348,7 +348,7 @@ with the following
 
 ![applier](../images/exercise2/applier.png)
 
-1. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency, using the `ansible-galaxy tool` as per exercise one and then run the playbook (from the `todolist` directory). This will populate the cluster with all the config needed for the front end app.
+1. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency, using the `ansible-galaxy tool` as per exercise one and then run the playbook (from the todolist directory). This will populate the cluster with all the config needed for the front end app.
 
 ```bash
 # login if needed
