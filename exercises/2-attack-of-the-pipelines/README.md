@@ -87,7 +87,7 @@ The Todolist application is a monorepo which has both front end and server layer
 ![init-code1](../images/exercise1/init-code2.png)
 
 <p class="tip">
-<b>NOTE</b> - If you do not plan on using the cloud ide you can clone the repository locally from here https://github.com/rht-labs/todolist.git
+⛷️ <b>NOTE</b> ⛷️ - If you do not plan on using the cloud ide you can clone the repository locally from here https://github.com/rht-labs/todolist.git
 </p>
 
 2. Open up Gitlab and login. Create a new project (internal) in GitLab called `todolist` to host your clone of the project and copy its remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
@@ -283,7 +283,7 @@ with the following
     * the `params` contains the variables we'll apply to the `templates`
     * the `templates` required by the app. These include the Build, Deploy configs as well as the services, health checks, and other app definitions.
 
-1. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency, using the `ansible-galaxy tool` as per exercise one and then run the playbook (from the `.openshift-applier` directory). This will populate the cluster with all the config needed for the front end app.
+2. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency, using the `ansible-galaxy tool` as per exercise one and then run the playbook (from the `.openshift-applier` directory). This will populate the cluster with all the config needed for the front end app.
 
 ```bash
 # login if needed
@@ -298,7 +298,7 @@ ansible-playbook site.yml -i inventory/
 ```
 ![ansible-success](../images/exercise2/ansible-success.png)
 
-2. Once successful, `commit` and `push` your changes to gitlab.
+3. Once successful, `commit` and `push` your changes to gitlab.
 ```bash
 git add .
 ```
@@ -309,10 +309,10 @@ git commit -m "UPDATE - change namespace vars to the teams"
 git push
 ```
 
-3.  Validate the build and deploy configs have been created in Openshift by opening the console and checking `<YOUR_NAME> CI-CD builds` for the `BuildConfigs`
+4.  Validate the build and deploy configs have been created in Openshift by opening the console and checking `<YOUR_NAME> CI-CD builds` for the `BuildConfigs`
 ![ocp-app-bc](../images/exercise2/ocp-app-bc.png)
 
-4. Check `<YOUR_NAME>-dev` to see the deployment configs are in place
+5. Check `<YOUR_NAME>-dev` to see the deployment configs are in place
 ![ocp-app-dc](../images/exercise2/ocp-app-dc.png)
 
 ### Part 3 - Build > Bake > Deploy
@@ -405,7 +405,7 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
 
 ![param-trigger-bake](../images/exercise2/param-trigger-bake.png)
 
-1. This time set the `Restrict where this project can be run` label to `master`.
+3. This time set the `Restrict where this project can be run` label to `master`.
 <p class="tip">
     <b>NOTE</b> - `Master` is the default node that jobs run on. We don't want jenkins to execute the *bake* on any other nodes if the `master` is busy so it is always safer to specify it here.
 </p>
