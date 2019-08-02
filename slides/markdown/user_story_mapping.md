@@ -97,7 +97,9 @@ minimally viable product.
 
 
 
-![Video](images/usm/value_slicing.mp4)
+<video width="320" height="240" controls>
+  <source src="images/usm/value_slicing.mp4" type="video/mp4">
+</video>
 
 
 
