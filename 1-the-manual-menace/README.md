@@ -198,13 +198,21 @@ https://codeready-workspaces.apps.<DOMAIN_FOR_YOUR_CLASS>/dashboard/#/load-facto
 
 ![open-terminal](../images/exercise1/open-terminal.png)
 
-10.  Change to the `enablement-ci-cd` directory
+<p class="tip">
+<b>NOTE</b> - If you want to try <b>z shell</b> as your default in the cloud ide run this command
+</p>
+
+```
+echo "zsh" >> ~/.bashrc
+```
+
+10.   Change to the `enablement-ci-cd` directory
 
 ```bash
 cd enablement-ci-cd
 ```
 
-11. With the configuration in place, install the OpenShift Applier dependency
+11.  With the configuration in place, install the OpenShift Applier dependency
 
 ```bash
 ansible-galaxy install -r requirements.yml --roles-path=roles
