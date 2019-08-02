@@ -52,8 +52,3 @@ Lab Exercise 4: _An Enslaved Hope_
 ### DevOps practices used in this section:
 - [Continuous Integration](https://openpracticelibrary.com/practice/continuous-integration/)
 - [Everything as Code](https://openpracticelibrary.com/practice/everything-as-code/)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png", class="white-style" -->
-[Chapter 15, Non-Functional Testing](chapter15.html)

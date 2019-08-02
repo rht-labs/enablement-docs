@@ -22,8 +22,3 @@ Part 2
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
 ### DevOps practices used in this section:
 - [Test Driven Development](https://openpracticelibrary.com/practice/test-driven-development/)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png", class="white-style" -->
-[Chapter 14, Pipelines as Code](chapter14.html)

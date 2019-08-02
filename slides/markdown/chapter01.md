@@ -21,20 +21,8 @@ Draw a simple representation of an animal that you feel represents your current 
 
 
 
-## These five days will **not** be:
-- Death by powerpoint
-- Theory only
-- Just about the tools and frameworks
+## The Next Five Days...
 
-
-
-<!-- .slide: id="intro-devops" -->
-### Introducing
-#### Feedback Loops
-![Chef Food](images/chef-food.png) <!-- {_class="inline-image"} -->
-- The Real-time Retrospective
-- GitHub Issues
-- Pull Requests
 
 
 
@@ -99,8 +87,3 @@ _What are Target Outcomes?_
 - [Definition of Done](https://www.scruminc.com/definition-of-done/)
 - [Retrospectives](https://openpracticelibrary.com/practice/retrospectives/)
 - [Team Sentiment](https://openpracticelibrary.com/practice/team-sentiment/)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png" class="white-style" -->
-[Chapter 2, Team Identity, Social Contracts and Priority Sliders](chapter02.html)

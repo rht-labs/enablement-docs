@@ -208,8 +208,3 @@ Management application.
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
 ### DevOps practices used in this section:
 - [Event Storming](https://openpracticelibrary.com/practice/event-storming/)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png", class="white-style" -->
-[Chapter 11, User Story Mapping and Value Slicing](chapter11.html)

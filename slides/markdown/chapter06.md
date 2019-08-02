@@ -85,8 +85,3 @@ As a team:
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
 ### DevOps practices used in this section:
 - [Impact Mapping](https://openpracticelibrary.com/practice/impact-mapping/)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png", class="white-style" -->
-[Chapter 7, Agile Practices](chapter07.html)

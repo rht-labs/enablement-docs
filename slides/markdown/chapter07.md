@@ -1,6 +1,6 @@
 <!-- .slide: data-background-image="images/RH_NewBrand_Background.png" -->
 ## DevOps Culture and Practice <!-- {_class="course-title"} -->
-### Agile Practices <!-- {_class="title-color"} -->
+### Agile Overview <!-- {_class="title-color"} -->
 DO500 <!-- {_class="title-color"} -->
 
 
@@ -125,7 +125,6 @@ The agile approach can minimize risk by getting a working piece of software into
 
 
 
-### 5 Key Ceremonies
 ![Scrum Ceremonies](images/Agile/scrum_process.png)
 
 
@@ -186,8 +185,3 @@ In Your Teams
 - [Showcase](https://openpracticelibrary.com/practice/showcase/)
 - [Retrospectives](https://openpracticelibrary.com/practice/retrospectives/)
 - [Backlog Refinement](https://openpracticelibrary.com/practice/backlog-refinement)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png", class="white-style" -->
-[Chapter 8, Metric-Based Process Mapping](chapter08.html)

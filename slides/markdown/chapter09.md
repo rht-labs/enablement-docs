@@ -164,21 +164,8 @@ Lab Exercise 2: _The Attack of the Pipelines_
 
 
 
-## Parking Lot Review
-
-
-
-## Daily Retrospective
-
-
-
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
 ### DevOps practices used in this section:
 - [Continuous Integration](https://openpracticelibrary.com/practice/continuous-integration)
 - [Continuous Deployment](https://openpracticelibrary.com/practice/continuous-deployment)
 - [Continuous Delivery](https://openpracticelibrary.com/practice/continuous-delivery)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png", class="white-style" -->
-[Chapter 10, Event Storming](chapter10.html)
