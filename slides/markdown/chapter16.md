@@ -64,8 +64,3 @@ Lab Exercise 6: _Return of the Monitoring_
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
 ### DevOps practices used in this section:
 - [Visualization of Work](https://openpracticelibrary.com/practice/visualisation-of-work/)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png", class="white-style" -->
-[Chapter 17, Demo Day](chapter17.html)
