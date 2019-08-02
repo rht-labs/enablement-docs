@@ -416,17 +416,21 @@ where
 SOURCE_REPOSITORY_URL=<GIT_URL>
 NAME=jenkins
 SOURCE_REPOSITORY_CONTEXT_DIR=jenkins-s2i
-IMAGE_STREAM_NAMESPACE=<YOUR_NAME>-ci-cd
 SOURCE_REPOSITORY_SECRET=gitlab-auth
 ```
 where
     * `<GIT_URL>` is the full clone path of the repo where this project is stored (including the https && .git)
-    * `<YOUR_NAME>` is the prefix for your `-ci-cd` project.
 
-7. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
+7.  In order for Jenkins to be able to run `npm` builds and installs we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. These slaves can take a time to build themselves so to speed up we have placed the slave within OpenShift and an ImageStream to reference it, with the "role=jenkins-slave" label. This is all added by the `jenkins-slave-npm` section of the Configuration-as-Code inventory below.
+
+8. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
 
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
+
+ci_cd:
+  IMAGE_STREAM_NAMESPACE: "{{ ci_cd_namespace }}"
+
 - object: ci-cd-builds
   content:
   - name: "jenkins-s2i-secret"
@@ -439,11 +443,19 @@ where
     namespace: "{{ ci_cd_namespace }}"
     template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/jenkins-s2i-build/jenkins-s2i-build-template-with-secret.yml"
     params: "{{ playbook_dir }}/params/jenkins-s2i"
+    params_from_vars: "{{ ci_cd }}"
+    tags:
+    - jenkins
+  - name: "jenkins-slave-npm"
+    namespace: "{{ ci_cd_namespace }}"
+    template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/imagestreams/imagestream-generic.yml"
+    params: "{{ playbook_dir }}/params/jenkins-slave-npm"
+    params_from_vars: "{{ ci_cd }}"
     tags:
     - jenkins
 ```
 
-8. Commit your code to your GitLab instance
+9. Commit your code to your GitLab instance
 ```bash
 git add .
 ```
@@ -453,7 +465,6 @@ git commit -m "Adding Jenkins and Jenkins s2i"
 ```bash
 git push
 ```
-9.  In order for Jenkins to be able to run `npm` builds and installs we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. These slaves can take a time to build themselves so to speed up we have placed the slave within OpenShift and an ImageStream, with the "role=jenkins-slave" label, is added by the Configuration-as-Code run managed by the openshift-applier run below.
 
 10. Now your code is commited; run the OpenShift Applier to add the config to the cluster
 ```bash
