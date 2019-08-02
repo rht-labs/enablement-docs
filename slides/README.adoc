@@ -42,6 +42,17 @@ port by using:
 1. Run the slides locally as described above.
 2. Open the slides in Chrome or Chromium.
 3. Add `?print-pdf` to the URL. For example: `http://localhost:8000/chapter17.html?print-pdf#/`
-4. Print the web page to PDF!
+4. use Headless Chrome to download the pdf by using 
+[source, sh]
+for i in `seq 1 9`;
+do
+    $GOOGLE_CRHOME_PATH --headless --disable-gpu --print-to-pdf=./chapter0$i.pdf http://localhost:8000/chapter0$i.html\?print-pdf\#/
+done
+for i in `seq 10 17`;
+do
+    $GOOGLE_CHROME_PATH --headless --disable-gpu --print-to-pdf=./chapter$i.pdf http://localhost:8000/chapter$i.html\?print-pdf\#/
+done
 
-In the future, it would be cool to automate this process using headless Chrome!
+if you are using macOS the Google Chrome path is in 
+`/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome`
+
