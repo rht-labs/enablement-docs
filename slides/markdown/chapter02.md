@@ -1,6 +1,6 @@
 <!-- .slide: data-background-image="images/RH_NewBrand_Background.png" -->
 ## DevOps Culture and Practice <!-- {_class="course-title"} -->
-### Team Identify, Social Contracts and Priority Sliders <!-- {_class="title-color"} -->
+### Team Identity, Social Contracts and Priority Sliders <!-- {_class="title-color"} -->
 DO500 <!-- {_class="title-color"} -->
 
 
