@@ -108,8 +108,3 @@ Form a straight line across the room in order of relative technical experience i
 ### DevOps practices used in this section:
 - [Priority Sliders](https://openpracticelibrary.com/practice/priority-sliders/)
 - [Social Contracting](https://openpracticelibrary.com/practice/social-contract/)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png", class="white-style" -->
-[Chapter 3, What is DevOps?](chapter03.html)
