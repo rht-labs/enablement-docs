@@ -67,9 +67,9 @@ _____
 ### Part 1 - Add Security scanning to the pipeline
 > _In this exercise, the first of our non-functional testing is explored in the form of some security scanning. We will add the scan to our Jenkinsfile and have them run as a new stage_
 
-1. Open the `todolist` application's `Jenkinsfile` in your favourite editor. The file is stored in the root of the project. Ensure that you using the `master` branch of `todolist`
+1. Open the `todolist` application's `Jenkinsfile` in your cloud ide. The file is stored in the root of the project. Ensure that you using the `master` branch of `todolist`
 ```bash
-cd todolist
+cd /projects/todolist
 git checkout master
 ```
 
