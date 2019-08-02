@@ -33,8 +33,7 @@ Draw a simple representation of an animal that you feel represents your current 
 - Burndown for the week
 - Emerging Big Picture
 - Emerging Practice Corner
-- Accommodations
-- Mood Marbles
+- ...
 
 
 
