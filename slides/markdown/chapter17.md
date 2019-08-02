@@ -73,8 +73,3 @@ In teams, take some time to brainstorm:
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
 ### DevOps practices used in this section:
 - [Showcase](https://openpracticelibrary.com/practice/showcase/)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png", class="white-style" -->
-[Chapter 18, Open Practice Library](chapter18.html)
