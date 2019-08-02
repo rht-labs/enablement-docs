@@ -89,6 +89,7 @@ _____
 1. Open the `todolist-fe` app in your favourite editor. In this exercise, we will fail a test and capture the message in the log and visualise it on a dashboard.
 
 2. Open one of the tests you wrote in previous exercises; for example `tests/unit/vue-components/TodoItem.spec.js`. Negate the test at the very bottom of the file by adding a `.not` to the `expect()` statement as shown below.
+<kbd>📝 *tests/unit/vue-components/TodoItem.spec.js*</kbd>
 ```javascript
   it("call makImportant when clicked", () => {
     const wrapper = mount(TodoItem, {

@@ -97,7 +97,7 @@ ansible-playbook apply.yml -e target=tools \
 
 1. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-arachni` with the following content for our Arachni slave:
 
-<kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
+<kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
 
   arachni:
@@ -112,7 +112,7 @@ ansible-playbook apply.yml -e target=tools \
 
 2. Add the definition below underneath the Zap config
 
-<kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
+<kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
       - name: jenkins-slave-arachni
         template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
@@ -166,7 +166,7 @@ NAME=todolist
 
 4. Create a new object in `inventory/group_vars/all.yml` to drive the `ocp-pipeline` template with the parameters file you've just created. It can be put under the existing `todolist-build` object.
 
-<kbd>*inventory/group_vars/all.yml*</kbd>
+<kbd>📝 *inventory/group_vars/all.yml*</kbd>
 ```yaml
   - name: todolist-pipeline
     template: "{{ playbook_dir }}/templates/ocp-pipeline.yml"
