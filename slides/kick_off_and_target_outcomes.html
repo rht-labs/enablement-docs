@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 		<link type="image/x-icon" rel="shortcut icon" href="css/images/favicon.ico" />
-		<title>DO500 - Impact Mapping</title>
+		<title>DO500 - Kickoff and Target Outcomes</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/redhat.css">
@@ -25,17 +25,11 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<!-- <section data-state='white' data-background-image='css/images/RH_Title_Background.png'>
-				 	<img src="css/images/RHLogo3.png" class="title-logo"/>
-					 <h2 class="course-title">DevOps Culture and Practice</h2>
-					 <h3 class="title-color">Social Contracts</h3>
-				 	 <p class="title-color">DO500</p>
-				</section> -->
-				<section data-markdown="markdown/chapter06.md"
+				<section data-markdown="markdown/kick_off_and_target_outcomes.md"
          data-separator="^\n\n\n"
          data-separator-vertical="^\n\n"
          data-separator-notes="^Note:"
-         data-charset="iso-8859-15" data-element-attributes="{_\s*?([^}]+?)}">
+         data-charset="utf-8" data-element-attributes="{_\s*?([^}]+?)}">
     <!--
         Note that Windows uses `\r\n` instead of `\n` as its linefeed character.
         For a regex that supports all operating systems, use `\r?\n` instead of `\n`.
@@ -63,13 +57,13 @@
 					src: 'plugin/notes/notes.js',
 					async: true
 				},
-				// {
-				// 	src: 'plugin/highlight/highlight.js',
-				// 	async: true,
-				// 	callback: function() {
-				// 		hljs.initHighlightingOnLoad();
-				// 	}
-				//},
+				{
+					src: 'plugin/highlight/highlight.js',
+					async: true,
+					callback: function() {
+						hljs.initHighlightingOnLoad();
+					}
+				},
 				// Zoom in and out with Alt+click
 				{ src: 'plugin/zoom-js/zoom.js', async: true }
 			]
