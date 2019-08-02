@@ -130,9 +130,9 @@ Because we are in a cloud IDE hosted environment, the client side config needs t
 
 ![fixApiUrl](../images/exercise2/fixApiUrl.png)
 
-This updates the API endpoint in the `openshift.js` config file
+This updates the API endpoint in the `index.js` config file
 
-<kbd>📝 *todolist/src/config/openshift.js*</kbd>
+<kbd>📝 *todolist/src/config/index.js*</kbd>
 ```
 export default {
   todoEndpoint: "/api/todos"
@@ -335,7 +335,7 @@ with the following
     * the `params` contains the variables we'll apply to the `templates`
     * the `templates` required by the app. These include the Build, Deploy configs as well as the services, health checks, and other app definitions.
 
-2. Before we do this we need to change `YOUR_NAME` accordingly in the apply.yml file.
+2. Before we do this we need to change `<YOUR_NAME>` accordingly in the apply.yml file.
 
 <kbd>📝 *todolist/.openshift-applier/apply.yml*</kbd>
 ```
@@ -348,7 +348,7 @@ with the following
 
 ![applier](../images/exercise2/applier.png)
 
-3. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency, using the `ansible-galaxy tool` as per exercise one and then run the playbook (from the `.openshift-applier` directory). This will populate the cluster with all the config needed for the front end app.
+1. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency, using the `ansible-galaxy tool` as per exercise one and then run the playbook (from the `todolist` directory). This will populate the cluster with all the config needed for the front end app.
 
 ```bash
 # login if needed
