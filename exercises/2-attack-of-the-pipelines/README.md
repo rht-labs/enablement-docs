@@ -100,7 +100,11 @@ https://<YOUR_JENKINS_URL>/multibranch-webhook-trigger/invoke?token=todolist
 ```
 
 5. In your local clone of the `todolist`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab. 
+
+Use the `Terminal > OpenTerminal in specific container` menu item to open a terminal in the `dev-pod/main` container
+
 ```bash
+cd todolist
 git remote set-url origin <YOUR_GIT_LAB_PROJECT>
 # verify the origin has been updated
 git remote -v
@@ -118,30 +122,78 @@ npm install
 oc login -u <username> -p <password> <CLUSTER_URL>
 ```
 
-Because we are in a cloud IDE hosted environment, the client side config needs to be updated to use the route that is generated application API. Run the helper script `fixApiUrl`
+<p class="tip">
+️🐇 <b>NOTE</b> 🐇- A bit of black magic here - Run the helper script fixApiUrl
+</p>
+
+Because we are in a cloud IDE hosted environment, the client side config needs to be updated to use the route that is generated application API. Run the `fixApiUrl` script in your terminal
 
 ![fixApiUrl](../images/exercise2/fixApiUrl.png)
 
-8. The `todolist` has some scripts defined in the package.json at the root of the project. A snippet of the npm scripts are shown below. To run any of these scripts run `npm run <SCRIPT_NAME>`. Let's start by serving our application and starting the database.
- ![npm-scripts](../images/exercise2/npm-scripts.png)
+This updates the API endpoint in the `index.js` config file
+
+<kbd>📝 *todolist/src/config/index.js*</kbd>
+```
+export default {
+  todoEndpoint: "/api/todos"
+};
+```
+![fixApiUrl](../images/exercise2/black-magic.png)
+
+8. The `todolist` has some scripts defined in the package.json at the root of the project. A snippet of the npm scripts are shown below. To run any of these scripts run `npm run <SCRIPT_NAME>`.
+<kbd>📝 *todolist/package.json*</kbd>
+```
+  "scripts": {
+    "serve": "vue-cli-service serve --open",
+    "serve:all": "npm-run-all -p -r serve dev:server",
+    "start": "node server/app.js",
+    "clean": "rm -rf reports package-contents* reports dist ",
+    "build:client": "vue-cli-service build",
+    "build:ci": "cp src/config/openshift.js src/config/index.js && npm run build:client && mkdir -p package-contents && cp -vr dist server Dockerfile package.json package-contents",
+    "package": "zip -r package-contents.zip package-contents",
+```
+![npm-scripts](../images/exercise2/npm-scripts.png)
+
+9. Let's start by serving our application and starting the database. Use the `Terminal > OpenTerminal in specific container` menu item to open a terminal in the `dev-pod/main` container. Then run the mongo database.
+
 ```bash
+cd todolist
 npm run mongo:start-ide
-npm run serve:all
 ```
 <p class="tip" >
 <b>NOTE</b> - If you're not using the cloud hosted environment, you can start mongo using `npm run mongo` which will pull the latest image from dockerhub
 </p>
 
-9. Within the cloud ide a preview of `todolist` app homepage appears when you start the application
+You will get a popup in your cloud ide asking if you want to `add a redirect` that you can close.
+![close-popup](../images/exercise2/close-popup.png)
+
+10. Use the `Terminal > OpenTerminal in specific container` menu item in the cloud ide to open your second terminal in the `dev-pod/main` container. Now we can run the todolist application.
+
+```bash
+cd todolist
+npm run serve:all
+```
+
+Once the application starts, we will get an `Open Link` popup that we can select to open the todolist web application
+
+![8080-popup](../images/exercise2/8080-popup.png)
+
+11. Within the cloud ide a preview of `todolist` app homepage appears when you start the application
  ![fullstack-app](../images/exercise2/fullstack-app.png)
+
+You can open the preview into a web browser outside of the cloud ide by clicking on the arrow box next to the url
+
+![open-in-browser](../images/exercise2/open-in-browser.png)
 
 <p class="tip" >
 <b>NOTE</b> - In a local environment you may open the browser (http://localhost:8080) for displaying the homepage.
 </p>
 
-10. Check things are up and running by testing the API with a `curl`. The API should return some seeded data (stored in `server/config/seed.js`)
+12. Use the `Terminal > OpenTerminal in specific container` menu item in the cloud ide to open your third terminal in the `dev-pod/main` container. Check things are up and running by testing the API with a `curl`. The API should return some seeded data (stored in `server/config/seed.js`)
+
 ```bash
-curl localhost:9000/api/todos
+cd todolist
+curl -s localhost:9000/api/todos | jq
 ```
 ```json
 [{
@@ -158,13 +210,13 @@ curl localhost:9000/api/todos
 }]
 ```
 
-11. Within the cloud ide a preview of `todolist` app homepage appears when you start the application
+13. Within the cloud ide a preview of `todolist` app homepage appears when you start the application
     * Click 'Todo' at the top of the home page to get to the above page.
     * The server hosting live reloads; so if you make changes to your code base the app will live update
 
-12.  The app is a todolist manager built in Vue.js. with a NodeJS backend. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page your todos are persisted.
+14.  The app is a todolist manager built in Vue.js. with a NodeJS backend. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page your todos are persisted.
 
-13.  The structure of the `todolist-fe` is as follows.
+15.  The structure of the `todolist` is as follows.
 ```bash
 todolist
 ├── Dockerfile
@@ -238,7 +290,7 @@ where the following are the important things:
     * `Grunt` is a taskrunner for use with Node.JS projects
     * `package.json` contains the dependency list and a lot of very helpful scripts for managing the app lifecycle
 
-14. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables and change `<YOUR_NAME>` accordingly in the below commands. This is a one time activity and would be automated in a non-training environment.
+16. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables and change `<YOUR_NAME>` accordingly in the below commands. This is a one time activity and would be automated in a non-training environment.
 
 ```bash
 oc login -u <username> -p <password> <CLUSTER_URL>
@@ -247,7 +299,7 @@ oc login -u <username> -p <password> <CLUSTER_URL>
 export NEXUS_SERVICE_HOST=$(oc get route nexus --template='{{.spec.host}}' -n <YOUR_NAME>-ci-cd)
 ```
 ```bash
-export NEXUS_SERVICE_PORT=80
+export NEXUS_SERVICE_PORT=443
 ```
 ```bash
 npm run prepare-nexus
@@ -283,7 +335,20 @@ with the following
     * the `params` contains the variables we'll apply to the `templates`
     * the `templates` required by the app. These include the Build, Deploy configs as well as the services, health checks, and other app definitions.
 
-2. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency, using the `ansible-galaxy tool` as per exercise one and then run the playbook (from the `.openshift-applier` directory). This will populate the cluster with all the config needed for the front end app.
+2. Before we do this we need to change `<YOUR_NAME>` accordingly in the apply.yml file.
+
+<kbd>📝 *todolist/.openshift-applier/apply.yml*</kbd>
+```
+- name: Build and Deploy todolist
+  hosts: app
+  vars:
+    namespace_prefix: '<YOUR_NAME>'
+    ci_cd_namespace: '{{ namespace_prefix }}-ci-cd'
+```
+
+![applier](../images/exercise2/applier.png)
+
+1. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency, using the `ansible-galaxy tool` as per exercise one and then run the playbook (from the todolist directory). This will populate the cluster with all the config needed for the front end app.
 
 ```bash
 # login if needed
@@ -291,14 +356,15 @@ oc login -u <username> -p <password> <CLUSTER_URL>
 ```
 
 ```bash
-ansible-galaxy install -r requirements.yml --roles-path=roles
+ansible-galaxy install -r .openshift-applier/requirements.yml --roles-path=roles
 ```
 ```bash
-ansible-playbook site.yml -i inventory/
+ansible-playbook .openshift-applier/apply.yml -i .openshift-applier/inventory/
 ```
+
 ![ansible-success](../images/exercise2/ansible-success.png)
 
-3. Once successful, `commit` and `push` your changes to gitlab.
+4. Once successful, `commit` and `push` your changes to gitlab.
 ```bash
 git add .
 ```
@@ -309,11 +375,12 @@ git commit -m "UPDATE - change namespace vars to the teams"
 git push
 ```
 
-4.  Validate the build and deploy configs have been created in Openshift by opening the console and checking `<YOUR_NAME> CI-CD builds` for the `BuildConfigs`
+5.  Validate the build and deploy configs have been created in Openshift by opening the console and checking `<YOUR_NAME> CI-CD builds` for the `BuildConfigs`
 ![ocp-app-bc](../images/exercise2/ocp-app-bc.png)
 
-5. Check `<YOUR_NAME>-dev` to see the deployment configs are in place
+6. Check `<YOUR_NAME>-dev` to see the deployment configs are in place
 ![ocp-app-dc](../images/exercise2/ocp-app-dc.png)
+
 
 ### Part 3 - Build > Bake > Deploy
 > _In this exercise; we take what we have working locally and get it working in OpenShift_
@@ -454,17 +521,6 @@ echo "### END DEPLOY IMAGE ###"
 
 8.  Hit `save` which will take you to the job overview page.
 
-9. Since we are using self-signed certificates for the Git server instance in the lab, you need to set some global environment variables in the Jenkins configuration to bypass SSL certificate verification and git client configuration
-    * From the Jenkins main page, navigate to `Manage Jenkins` > `Configure System` and then scroll down to the `Git plugin` section and add your username and email as follows:
-
-    ![jenkins-git-client-config](../images/exercise2/jenkins-git-client-config.png)
-
-    * In the same page, locate the `jenkins-slave-npm` section under `Kubernetes Pod Template` and add add a new environment variable called `GIT_SSL_NO_VERIFY` and set its value to `true`:
-    
-    ![jenkins-slave-npm-nossl](../images/exercise2/jenkins-slave-npm-nossl.png)
-
-    * Click `Save` at the bottom of the page to save your global settings.
-
 #### 3c - Pipeline
 
 1. Back on Jenkins; We can tie all the jobs in the pipeline together into a nice single view using the Build Pipeline view. Back on the Jenkins home screen Click the + beside the all tab on the top.
@@ -489,7 +545,7 @@ echo "### END DEPLOY IMAGE ###"
 ### Part 4 - The Jenkinsfile
 > _In this exercise we'll use pipeline-as-code to create a pipeline in Jenkins_
 
-1. Open up your `todolist` application in your favourite editor and move to the `Jenkinsfile` in the root of the project. The high-level structure of the file is shown collapsed below.
+1. Open up your `todolist` application in your cloud ide and move to the `Jenkinsfile` in the root of the project. The high-level structure of the file is shown collapsed below.
 ![pipeline-overview](../images/exercise4/pipeline-overview.png)
 Some of the key things to note:
     * `pipeline {}` is how all declarative Jenkins pipelines begin.
@@ -501,7 +557,9 @@ Some of the key things to note:
     * `post {}` hook is used to specify the post-build-actions. Jenkins declarative pipeline syntax provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
     * `when {}` is used for flow control. It can be used at the stage level and be used to stop pipeline entering that stage. e.g. when branch is master; deploy to `test` environment.
     
-2. The Jenkinsfile is mostly complete to do all the testing etc that was done in previous exercises. Some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
+2. The Jenkinsfile is mostly complete however some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
+
+<kbd>📝 *todolist/Jenkinsfile*</kbd>
 ```groovy
    // Jenkinsfile
    
@@ -541,7 +599,7 @@ git push
 6. On the job's configure page; set the Branch Sources to `git`
 ![multibranch-select-git](../images/exercise4/multibranch-select-git.png)
 
-7. Fill in the Git settings with your `todolist-api` GitLab url and set the credentials as you've done before. `https://gitlab.<APPS_URL>/<YOUR_NAME>/todolist-api.git`
+7. Fill in the Git settings with your `todolist` GitLab url and set the credentials as you've done before. `https://gitlab.<APPS_URL>/<YOUR_NAME>/todolist.git`
 ![multibranch-git](../images/exercise4/multibranch-git.png)
 
 8. Set the `Scan Multibranch Pipeline Triggers` to be Scan by webhook and set the token to be `todolist` as we set at the beginning of the exercise. This will trigger the job to scan for changes in the repo when there are pushes. 
