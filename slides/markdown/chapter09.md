@@ -163,14 +163,6 @@ Lab Exercise 2: _The Attack of the Pipelines_
 
 
 
-## Parking Lot Review
-
-
-
-## Daily Retrospective
-
-
-
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
 ### DevOps practices used in this section:
 - [Continuous Integration](https://openpracticelibrary.com/practice/continuous-integration)
