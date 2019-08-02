@@ -1,6 +1,6 @@
 <!-- .slide: data-background-image="images/RH_NewBrand_Background.png" -->
 ## DevOps Culture and Practice <!-- {_class="course-title"} -->
-### Configuration as code <!-- {_class="title-color"} -->
+### Configuration as Code <!-- {_class="title-color"} -->
 DO500 <!-- {_class="title-color"} -->
 
 
