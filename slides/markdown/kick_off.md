@@ -21,6 +21,7 @@ DO500 <!-- {_class="title-color"} -->
 - Burndown for the week
 - Emerging Big Picture
 - Emerging Practice Corner
+- ...
 
 
 
