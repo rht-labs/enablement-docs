@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link type="image/x-icon" rel="shortcut icon" href="css/images/favicon.ico" />
+		<title>DO500 - User Story Mapping and Value Slicing</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/redhat.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<!-- <section data-state='white' data-background-image='css/images/RH_Title_Background.png'>
+				 	<img src="css/images/RHLogo3.png" class="title-logo"/>
+					 <h2 class="course-title">DevOps Culture and Practice</h2>
+					 <h3 class="title-color">Social Contracts</h3>
+				 	 <p class="title-color">DO500</p>
+				</section> -->
+				<section data-markdown="markdown/user_story_mapping.md"
+         data-separator="^\n\n\n"
+         data-separator-vertical="^\n\n"
+         data-separator-notes="^Note:"
+         data-charset="iso-8859-15" data-element-attributes="{_\s*?([^}]+?)}">
+    <!--
+        Note that Windows uses `\r\n` instead of `\n` as its linefeed character.
+        For a regex that supports all operating systems, use `\r?\n` instead of `\n`.
+    -->
+				</section>
+
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+		Reveal.initialize({
+			history: true,
+			logo: true,
+			previewLinks: true,
+			dependencies: [{
+					src: 'plugin/markdown/marked.js'
+				},
+				{
+					src: 'plugin/markdown/markdown.js'
+				},
+				{
+					src: 'plugin/notes/notes.js',
+					async: true
+				},
+				// {
+				// 	src: 'plugin/highlight/highlight.js',
+				// 	async: true,
+				// 	callback: function() {
+				// 		hljs.initHighlightingOnLoad();
+				// 	}
+				//},
+				// Zoom in and out with Alt+click
+				{ src: 'plugin/zoom-js/zoom.js', async: true }
+			]
+		});
+		</script>
+	</body>
+</html>
