@@ -386,7 +386,6 @@ jenkins-s2i
 ```
  * `plugins.txt` is a list of `pluginId:version` for Jenkins to pre-install when starting
  * `./configuration` contains content that is placed in `${JENKINS_HOME}`. A `config.xml` could be placed in here to control the bulk of Jenkins configuration.
- * `./configuration/jobs/*` contains job names and xml config that jenkins loads when starting. The seed job in there we will return to in later lessons.
  * `build-failure-analyzer.xml` is config for the plugin to read the logs and look for key items based on a Regex. More on this in later lessons.
  * `init.groovy` contains a collection of settings jenkins configures itself with when launching
 
@@ -398,19 +397,7 @@ greenballs:1.15
 
 Why does Jenkins use blue to represent success? More can be found [on reddit](https://www.reddit.com/r/programming/comments/4lu6q8/why_does_jenkins_have_blue_balls/) or the [Jenkins blog](https://jenkins.io/blog/2012/03/13/why-does-jenkins-have-blue-balls/).
 
-5. Before building and deploying the Jenkins s2i; add your git credentials to it. These will be used by Jenkins to access the Git Repositories where our apps will be stored. We want Jenkins to be able to push tags to it, so write access is required. 
-
-There are a few ways we can do this; either adding them to the `template/jenkins.yml` as environment variables and then including them in the `params/jenkins` file.  We could also create a token in GitLab and use it as the source secret in the Jenkins template.
-
-For the sake of simplicity, just replace the `<USERNAME>` && `<PASSWORD>` in the `jenkins-s2i/configuration/init.groovy` with your LDAP credentials as seen below. This init file gets run when Jenkins launches, and will setup the credentials for use in our Jobs in the next exercises
-
-<kbd>📝 *enablement-ci-cd/jenkins-s2i/configuration/init.groovy*</kbd>
-```groovy
-gitUsername = System.getenv("GIT_USERNAME") ?: "<USERNAME>"
-gitPassword = System.getenv("GIT_PASSWORD") ?: "<PASSWORD>"
-```
-
-6. Create `params/jenkins-s2i-secret` and add the following content; replacing variables as appropriate.
+5. Before building and deploying the Jenkins s2i; add your git credentials to it. These will be used by Jenkins to access the Git Repositories where our apps will be stored. We want Jenkins to be able to push tags to it, so write access is required. Create `params/jenkins-s2i-secret` and add the following content; replacing variables as appropriate. There is an annotation on the secret which binds the credential in Jenkins
 
 <kbd>📝 *enablement-ci-cd/params/jenkins-s2i-secret*</kbd>
 ```
@@ -422,7 +409,7 @@ where
     * `<YOUR_LDAP_USERNAME>` is the username builder pod will use to login and clone the repo with
     * `<YOUR_LDAP_PASSWORD>` is the password the builder pod will use to authenticate and clone the repo using
 
-7. Create `params/jenkins-s2i` and add the following content; replacing variables as appropriate.
+6. Create `params/jenkins-s2i` and add the following content; replacing variables as appropriate.
 
 <kbd>📝 *enablement-ci-cd/params/jenkins-s2i*</kbd>
 ```
@@ -436,7 +423,7 @@ where
     * `<GIT_URL>` is the full clone path of the repo where this project is stored (including the https && .git)
     * `<YOUR_NAME>` is the prefix for your `-ci-cd` project.
 
-8. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
+7. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
 
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
@@ -456,7 +443,7 @@ where
     - jenkins
 ```
 
-9. Commit your code to your GitLab instance
+8. Commit your code to your GitLab instance
 ```bash
 git add .
 ```
@@ -466,19 +453,19 @@ git commit -m "Adding Jenkins and Jenkins s2i"
 ```bash
 git push
 ```
-10.  In order for Jenkins to be able to run `npm` builds and installs we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. These slaves can take a time to build themselves so to speed up we have placed the slave within OpenShift and an ImageStream, with the "role=jenkins-slave" label, is added by the Configuration-as-Code run managed by the openshift-applier run below.
+9.  In order for Jenkins to be able to run `npm` builds and installs we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. These slaves can take a time to build themselves so to speed up we have placed the slave within OpenShift and an ImageStream, with the "role=jenkins-slave" label, is added by the Configuration-as-Code run managed by the openshift-applier run below.
 
-11. Now your code is commited; run the OpenShift Applier to add the config to the cluster
+10. Now your code is commited; run the OpenShift Applier to add the config to the cluster
 ```bash
 ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=jenkins"
 ```
 
-12. This will trigger a build of the s2i and when it's complete it will add an imagestream of `<YOUR_NAME>-ci-cd/jenkins:latest` to the project. The Deployment config should kick in and deploy the image once it arrives. You can follow the build of the s2i by going to the OpenShift console's project
+11. This will trigger a build of the s2i and when it's complete it will add an imagestream of `<YOUR_NAME>-ci-cd/jenkins:latest` to the project. The Deployment config should kick in and deploy the image once it arrives. You can follow the build of the s2i by going to the OpenShift console's project
 ![jenkins-s2i-log](../images/exercise1/jenkins-s2i-log.png)
 
-13. When the Jenkins deployment has completed; login (using your OpenShift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
+12. When the Jenkins deployment has completed; login (using your OpenShift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
 
 ### Part 7 - Jenkins Hello World
 > _To test things are working end-to-end; create a hello world job that doesn't do much but proves we can pull code from git and that our builds are green._
