@@ -224,7 +224,7 @@ ansible-galaxy install -r requirements.yml --roles-path=roles
 oc login <CLUSTER_URL>
 ```
 ```bash
-ansible-playbook playbook/apply.yml -i inventory/ -e target=bootstrap
+ansible-playbook apply.yml -i inventory/ -e target=bootstrap
 ```
 
 where the `-e target=bootstrap` is passing an additional variable specifying that we run the `bootstrap` inventory
