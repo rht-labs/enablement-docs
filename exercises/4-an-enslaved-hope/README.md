@@ -51,12 +51,12 @@ _____
 
 1. On your  editor; move to the `enablement-ci-cd` repo and opten the `inventory/host_vars/ci-cd-tooling.yml`.
 
-2. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-zap` and add the following variables to tell your template where to find the slave definition
+2. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `zap` and add the following variables to tell your template where to find the slave definition
 
-<kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
+<kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
   zap:
-    SOURCE_REPOSITORY_URL: https://github.com/redhat-cop/containers-quickstarts.git
+    SOURCE_REPOSITORY_URL: "{{ cop_quickstarts }}"
     SOURCE_CONTEXT_DIR: jenkins-slaves/jenkins-slave-zap
     BUILDER_IMAGE_NAME: centos:centos7
     NAME: jenkins-slave-zap
@@ -64,25 +64,31 @@ _____
     DOCKERFILE_PATH: Dockerfile
     SLAVE_IMAGE_TAG: latest
 ```
+![zap-object](../images/exercise4/zap-object1.png)
 
 3. Create the object for feeding the template with the parameters
 
-<kbd>*inventory/host_vars/ci-cd-tooling.yml*</kbd>
+<kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
-
-  - object: jenkins-slave-nodes
-    content:
-      - name: jenkins-slave-zap
-        template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
-        params_from_vars: "{{ zap }}"
-        namespace: "{{ ci_cd_namespace }}"
-        tags:
-        - jenkins-slaves
-        - zap-slave
+- object: jenkins-slave-nodes
+  content:
+    - name: jenkins-slave-zap
+      template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
+      params_from_vars: "{{ zap }}"
+      namespace: "{{ ci_cd_namespace }}"
+      tags:
+      - jenkins-slaves
+      - zap-slave
 ```
 ![zap-object](../images/exercise4/zap-object.png)
 
 4. Run the ansible playbook filtering with tag `zap` so only the zap build pods are run.
+
+```bash
+# login if needed
+oc login -u <username> -p <password> <CLUSTER_URL>
+```
+
 ```bash
 ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
@@ -95,7 +101,7 @@ ansible-playbook apply.yml -e target=tools \
 #### 1b - Arachni Scan
 > _Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of web applications._
 
-1. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `jenkins-slave-arachni` with the following content for our Arachni slave:
+1. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `arachni` with the following content for our Arachni slave:
 
 <kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
@@ -114,13 +120,13 @@ ansible-playbook apply.yml -e target=tools \
 
 <kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
-      - name: jenkins-slave-arachni
-        template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
-        params_from_vars: "{{ arachni }}"
-        namespace: "{{ ci_cd_namespace }}"
-        tags:
-        - jenkins-slaves
-        - arachni-slave
+    - name: jenkins-slave-arachni
+      template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
+      params_from_vars: "{{ arachni }}"
+      namespace: "{{ ci_cd_namespace }}"
+      tags:
+      - jenkins-slaves
+      - arachni-slave
 ```
 ![arachni-object](../images/exercise4/arachni-object.png)
 
@@ -149,13 +155,12 @@ git push
 ### Part 2 - OCP Pipeline
 > _This exercise adds a new BuildConfig to our cluster for the todolist-apps to run their pipelines in OpenShift using the OpenShift Jenkins Sync Plugin. We will use the OpenShift Applier to create the content in the cluster_
 
-1. For the rest of the lab, ensure that you are working from the `master` branch
+1. Change directory to `todolist`
 ```bash
-cd todolist
-git checkout master
+cd /projects/todolist
 ```
 
-2. Open the `todolist` app in your favourite editor. Move to the `.openshift-applier` directory. Explore the `template/ocp-pipeline`. This template creates a BuildConfig for OpenShift with a Jenkinsfile from a given repo. In this case; it will be the `Jenkinsfile` at the root of our application.
+2. Open the `todolist` app in your cloud ide. Open `template/ocp-pipeline` directory. This template creates a BuildConfig for OpenShift with a Jenkinsfile from a given repo. In this case; it will be the `Jenkinsfile` at the root of our application.
 
 3. Open the `params/ocp-pipeline` file and update `PIPELINE_SOURCE_REPOSITORY_URL` with the git url of your project (Don't forget to add the `.git` at the end). For example:
 ```
@@ -179,13 +184,7 @@ NAME=todolist
 
 5. Log in to OpenShift using the `oc` client, and use the OpenShift Applier to create the cluster content
 ```bash
-oc login https://<CLUSTER_URL>
-```
-```bash
-cd todolist/.openshift-applier
-```
-```bash
-ansible-playbook apply.yml -i inventory/ \
+ansible-playbook .openshift-applier/apply.yml -i .openshift-applier/inventory/ \
      -e "filter_tags=pipeline"
 ```
 
@@ -206,16 +205,13 @@ git push
 8. Running the pipeline from here will run it in Jenkins. You can see the job sync between OpenShift and Jenkins if you login to Jenkins. You should see a folder with `<YOUR_NAME>-ci-cd` and your pipeline jobs inside of it.
 ![ocp-pipeline-jenkins](../images/exercise4/ocp-pipeline-jenkins.png)
 
-<p class="tip">
-<b>NOTE</b> - If you see failures in the first pipeline run, re-run the pipeline again and it should succeed.
-</p>
 _____
 
 ## Extension Tasks
 > _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope._
 
 Jenkins S2I
- - Add the multi-branch configuration to the S2I to have Jenkins come alive with the `todolist-api` and `` configuration cooked into it for future uses.
+ - Add the multi-branch configuration to the S2I to have Jenkins come alive with the `todolist` cooked into it for future uses.
 
 Jenkins Pipeline Extension
  - Add an extension to the pipeline that promotes code to the UAT environment once the master job has been successful.
