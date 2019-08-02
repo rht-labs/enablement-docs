@@ -211,14 +211,6 @@ Was your final design different than you expected? Discuss.
 
 
 
-## Parking Lot Review
-
-
-
-## Daily Retrospective
-
-
-
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
 ### DevOps practices used in this section:
 - [Test Driven Development](https://openpracticelibrary.com/practice/test-driven-development/)
