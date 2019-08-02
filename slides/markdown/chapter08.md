@@ -149,8 +149,3 @@ how the work is actually done.
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
 ### DevOps practices used in this section:
 - [Metric-Based Processing Mapping](https://openpracticelibrary.com/practice/vsm-and-mbpm/)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png", class="white-style" -->
-[Chapter 9, Continuous Integration, Deployment, and Delivery](chapter09.html)
