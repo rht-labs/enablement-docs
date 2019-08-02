@@ -126,8 +126,3 @@ Reflect on the first day of class, and make adjustments to continuously improve
 - [Retrospectives](https://openpracticelibrary.com/practice/retrospectives/)
 - [Realtime Retrospective](https://openpracticelibrary.com/practice/realtime-retrospective/)
 - [Information Radiators](https://openpracticelibrary.com/practice/visualisation-of-work/)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png" class="white-style" -->
-[Chapter 6, Impact Mapping](chapter06.html)

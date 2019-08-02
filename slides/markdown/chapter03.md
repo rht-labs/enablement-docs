@@ -174,8 +174,3 @@ https://web.devopstopologies.com/ <!-- {_class="small"} -->
 - [Continuous Integration](https://openpracticelibrary.com/practice/continuous-integration/)
 - [Continuous Delivery](https://openpracticelibrary.com/practice/continuous-delivery/)
 - [Continuous Deployment](https://openpracticelibrary.com/practice/continuous-deployment/)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png", class="white-style" -->
-[Chapter 4, Pairing and Mobbing](chapter04.html)

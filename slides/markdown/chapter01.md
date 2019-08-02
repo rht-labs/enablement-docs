@@ -99,8 +99,3 @@ _What are Target Outcomes?_
 - [Definition of Done](https://www.scruminc.com/definition-of-done/)
 - [Retrospectives](https://openpracticelibrary.com/practice/retrospectives/)
 - [Team Sentiment](https://openpracticelibrary.com/practice/team-sentiment/)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png" class="white-style" -->
-[Chapter 2, Team Identity, Social Contracts and Priority Sliders](chapter02.html)

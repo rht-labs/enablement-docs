@@ -65,8 +65,3 @@ Lab Exercise 5: _The Non-Functionals Strike Back_
 ### DevOps practices used in this section:
 - [Continuous Integration](https://openpracticelibrary.com/practice/continuous-integration/)
 - [Test Automation](https://openpracticelibrary.com/practice/test-automation/)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png", class="white-style" -->
-[Chapter 16, Build Monitoring](chapter16.html)

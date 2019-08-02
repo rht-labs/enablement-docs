@@ -163,8 +163,3 @@ Lab Exercise 1: _The Manual Menace_
 - [Pair Programming](https://openpracticelibrary.com/practice/pair-programming/)
 - [Mob Programming](https://openpracticelibrary.com/practice/mob-programming/)
 - [Everything As Code](https://openpracticelibrary.com/practice/everything-as-code/)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png", class="white-style" -->
-[Chapter 5, Retrospectives, Information Radiators, and Team Sentiment](chapter05.html)
