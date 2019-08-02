@@ -167,8 +167,3 @@ improvement and optimization.
 ### DevOps practices used in this section:
 - [User Story Mapping](https://openpracticelibrary.com/practice/user-story-mapping/)
 - [Empathy Mapping](https://openpracticelibrary.com/practice/empathy-mapping/)
-
-
-
-<!-- .slide: data-background-image="css/images/RH_Chapter_Title_Background2.png", class="white-style" -->
-[Chapter 12, Automated Testing Part 1](chapter12.html)
