@@ -443,8 +443,8 @@ Automated commit by jenkins from ${JOB_NAME}.${BUILD_NUMBER}
 ![git-publisher](../images/exercise2/git-publisher.png)
 
 10. Finally; add the trigger for the next job in the pipeline. This is to trigger the bake job with the current build tag. Add another post-build action from the dropdown called `Trigger parameterized build on other projects`.
-    * Set the project to build to be `dev-todolist-bake-deploy`.
-    * Set the condition to be `Stable or unstable but not failed`.
+    * Set the project to build to be `dev-todolist-bake-deploy`
+    * Set the condition to be `Stable or unstable but not failed`
     * Click Add Parameters dropdown and select Predefined parameters.
     * In the box, insert our BUILD_TAG as follows
 ```bash
