@@ -483,6 +483,7 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
 Remember to replace `<YOUR_NAME>` accordingly.
 ```bash
 #!/bin/bash
+set -o xtrace
 echo "### START BAKE IMAGE ###"
 curl -v -f \
     http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${BUILD_TAG}/package-contents.zip \
