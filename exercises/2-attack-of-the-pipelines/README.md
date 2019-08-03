@@ -161,7 +161,7 @@ cd todolist
 npm run mongo:start-ide
 ```
 <p class="tip" >
-<b>NOTE</b> - If you're not using the cloud hosted environment, you can start mongo using `npm run mongo` which will pull the latest image from dockerhub
+<b>NOTE</b> - If you're not using the cloud hosted environment, you can start mongo using <i>npm run mongo<i> which will pull the latest image from dockerhub
 </p>
 
 You will get a popup in your cloud ide asking if you want to `add a redirect` that you can close.
@@ -443,7 +443,7 @@ Automated commit by jenkins from ${JOB_NAME}.${BUILD_NUMBER}
 ![git-publisher](../images/exercise2/git-publisher.png)
 
 10. Finally; add the trigger for the next job in the pipeline. This is to trigger the bake job with the current build tag. Add another post-build action from the dropdown called `Trigger parameterized build on other projects`.
-    * Set the project to build to be `dev-todolist-bake-deploy`
+    * Set the project to build to be `dev-todolist-bake-deploy`.
     * Set the condition to be `Stable or unstable but not failed`.
     * Click Add Parameters dropdown and select Predefined parameters.
     * In the box, insert our BUILD_TAG as follows
