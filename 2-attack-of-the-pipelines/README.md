@@ -567,7 +567,7 @@ Some of the key things to note:
         // Global Vars
         NAMESPACE_PREFIX="<YOUR_NAME>"
         GITLAB_DOMAIN = "<GITLAB_FQDN>"
-        GITLAB_PROJECT = "<GIT_USERNAME>"
+        GITLAB_PROJECT = "<GITLAB_PROJECT>"
 
         PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
         APP_NAME = "todolist"
