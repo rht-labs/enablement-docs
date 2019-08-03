@@ -467,14 +467,14 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
     * You can set `dev-todolist-build.` as the default value for ease when triggering manually.
     * The description is not required but a handy one for reference would be `${JOB_NAME}.${BUILD_NUMBER} of previous build e.g. dev-todolist-build.1232`
 <p class="tip">
-    <b>NOTE</b> - Don't forget to include the `.` after `dev-todolist-build` in the Default Value box.
+    <b>NOTE</b> - Don't forget to include the <i>.</i> after <i>dev-todolist-build</i> in the Default Value box.
 </p>
 
 ![param-trigger-bake](../images/exercise2/param-trigger-bake.png)
 
 3. This time set the `Restrict where this project can be run` label to `master`.
 <p class="tip">
-    <b>NOTE</b> - `Master` is the default node that jobs run on. We don't want jenkins to execute the *bake* on any other nodes if the `master` is busy so it is always safer to specify it here.
+    <b>NOTE</b> - <i>Master</i> is the default node that jobs run on. We don't want jenkins to execute the <i>bake</i> on any other nodes if the <i>master</i>is busy so it is always safer to specify it here.
 </p>
 
 4. There is no Git or SCM needed for this job so move down to the Build Environment and tick `Delete workspace before build starts`
