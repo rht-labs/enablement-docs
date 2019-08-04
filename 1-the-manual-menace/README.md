@@ -167,13 +167,13 @@ https://codeready-workspaces.apps.<DOMAIN_FOR_YOUR_CLASS>/dashboard/#/load-facto
 
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/projects-and-policies.yml*</kbd>
 ```yaml
-  dev:
-    NAMESPACE: "{{ namespace_prefix }}-dev"
-    NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Dev"
+dev:
+  NAMESPACE: "{{ namespace_prefix }}-dev"
+  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Dev"
 
-  test:
-    NAMESPACE: "{{ namespace_prefix }}-test"
-    NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Test"
+test:
+  NAMESPACE: "{{ namespace_prefix }}-test"
+  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Test"
 ```
 
 8. In the `enablement-ci-cd/inventory/host_vars/projects-and-policies.yml` file; add the new objects for the projects you want to create (dev & test) by adding another object to the content array for each. You can copy and paste them from the `ci-cd` example and update them accordingly. If you do this; remember to change the params_from_vars variable! e.g.
@@ -229,7 +229,7 @@ ansible-playbook apply.yml -i inventory/ -e target=bootstrap
 
 where the `-e target=bootstrap` is passing an additional variable specifying that we run the `bootstrap` inventory
 
-13. Once successful you should see an output similar to this (Cows not included): ![playbook-success](../images/exercise1/play-book-success.png)
+13. Once successful you should see an output similar to this: ![playbook-success](../images/exercise1/play-book-success.png)
 
 14. You can check to see the projects have been created successfully by running
 
@@ -539,7 +539,6 @@ _____
 ## Extension Tasks
 > _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution and are provided for additional scope._
 
- - Install Cowsay for 100% more Ansible Fun!
  - Add more secure access for Nexus (ie not admin / admin123) using the automation to drive secret creation
  - Add a SonarQube persistent deployment to the `ci-cd-deployments` section.
  - Add `jenkins.plugins.slack.SlackNotifier.xml` to `jenkins-s2i/configuration` to include URL of Slack for team build notifications and rebuild Jenkins S2I
