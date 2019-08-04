@@ -161,7 +161,7 @@ cd todolist
 npm run mongo:start-ide
 ```
 <p class="tip" >
-<b>NOTE</b> - If you're not using the cloud hosted environment, you can start mongo using `npm run mongo` which will pull the latest image from dockerhub
+<b>NOTE</b> - If you're not using the cloud hosted environment, you can start mongo using <i>npm run mongo<i> which will pull the latest image from dockerhub
 </p>
 
 You will get a popup in your cloud ide asking if you want to `add a redirect` that you can close.
@@ -348,7 +348,7 @@ with the following
 
 ![applier](../images/exercise2/applier.png)
 
-1. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency, using the `ansible-galaxy tool` as per exercise one and then run the playbook (from the todolist directory). This will populate the cluster with all the config needed for the front end app.
+3. With those changes in place we can now run the playbook. First install the `openshift-applier` dependency, using the `ansible-galaxy tool` as per exercise one and then run the playbook (from the todolist directory). This will populate the cluster with all the config needed for the front end app.
 
 ```bash
 # login if needed
@@ -356,7 +356,7 @@ oc login -u <username> -p <password> <CLUSTER_URL>
 ```
 
 ```bash
-ansible-galaxy install -r .openshift-applier/requirements.yml --roles-path=roles
+ansible-galaxy install -r .openshift-applier/requirements.yml --roles-path=.openshift-applier/roles
 ```
 ```bash
 ansible-playbook .openshift-applier/apply.yml -i .openshift-applier/inventory/
@@ -444,7 +444,7 @@ Automated commit by jenkins from ${JOB_NAME}.${BUILD_NUMBER}
 
 10. Finally; add the trigger for the next job in the pipeline. This is to trigger the bake job with the current build tag. Add another post-build action from the dropdown called `Trigger parameterized build on other projects`.
     * Set the project to build to be `dev-todolist-bake-deploy`
-    * Set the condition to be `Stable or unstable but not failed`.
+    * Set the condition to be `Stable or unstable but not failed`
     * Click Add Parameters dropdown and select Predefined parameters.
     * In the box, insert our BUILD_TAG as follows
 ```bash
@@ -467,14 +467,14 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
     * You can set `dev-todolist-build.` as the default value for ease when triggering manually.
     * The description is not required but a handy one for reference would be `${JOB_NAME}.${BUILD_NUMBER} of previous build e.g. dev-todolist-build.1232`
 <p class="tip">
-    <b>NOTE</b> - Don't forget to include the `.` after `dev-todolist-build` in the Default Value box.
+    <b>NOTE</b> - Don't forget to include the <i>.</i> after <i>dev-todolist-build</i> in the Default Value box.
 </p>
 
 ![param-trigger-bake](../images/exercise2/param-trigger-bake.png)
 
 3. This time set the `Restrict where this project can be run` label to `master`.
 <p class="tip">
-    <b>NOTE</b> - `Master` is the default node that jobs run on. We don't want jenkins to execute the *bake* on any other nodes if the `master` is busy so it is always safer to specify it here.
+    <b>NOTE</b> - <i>Master</i> is the default node that jobs run on. We don't want jenkins to execute the <i>bake</i> on any other nodes if the <i>master</i>is busy so it is always safer to specify it here.
 </p>
 
 4. There is no Git or SCM needed for this job so move down to the Build Environment and tick `Delete workspace before build starts`
@@ -483,6 +483,7 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
 Remember to replace `<YOUR_NAME>` accordingly.
 ```bash
 #!/bin/bash
+set -o xtrace
 echo "### START BAKE IMAGE ###"
 curl -v -f \
     http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${BUILD_TAG}/package-contents.zip \
