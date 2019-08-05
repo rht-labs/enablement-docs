@@ -5,19 +5,6 @@ DO500 <!-- {_class="title-color"} -->
 
 
 
-## Walk the Walls
-
-
-
-## Practice Board Review
-
-
-
-<!-- .slide: id="event-storming"-->
-## Event Storming
-
-
-
 ### Event Storming
 #### _What is It?_
 * Provides a repeatable, teachable technique for modeling:
