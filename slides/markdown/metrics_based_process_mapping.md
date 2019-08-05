@@ -138,14 +138,6 @@ how the work is actually done.
 
 
 
-### Exercise - Batch Processing
-1. Break out into teams and experiment with batch processing using poker chips.
-2. Follow the facilitator's instructions.
-
-[The Penny Game](https://www.leanagiletraining.com/better-agile/agile-penny-game-rules/)
-
-
-
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
 ### DevOps practices used in this section:
 - [Metric-Based Processing Mapping](https://openpracticelibrary.com/practice/vsm-and-mbpm/)
