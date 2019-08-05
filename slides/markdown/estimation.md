@@ -5,9 +5,40 @@ DO500 <!-- {_class="title-color"} -->
 
 
 
-### Exercise - Fruit Salad
+### Estimation
+#### _What is it_
+* Means to gauge complexity and effort of work items
 
-1. BLA BLA BLA
+
+
+### Estimation
+#### _Why use it_
+* Uncover hidden complexity when team disagrees
+* Create common understanding of the work items as a team
+* Support roadmap planning and velocity trends
+
+
+
+### Estimation
+#### _Common Formats_
+* Relative Estimation
+* Planning Poker
+* Count number of work items
+
+
+
+### Exercise - Fruit Salad 1/2
+#### _Relative Estimation_
+* Individually - write as many fruits as you can think of
+
+
+
+### Exercise - Fruit Salad 2/2
+#### _Relative Estimation_
+* As a Team
+  * Compare and remove duplicates
+  * Create 7 rows in a space
+  * Relative Estimate your fruit
 
 
 
