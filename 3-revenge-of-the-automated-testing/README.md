@@ -112,7 +112,7 @@ npm run test:client
 
 4. Let's now try and get our Server tests running locally. Ensure your Database is running by opening a new terminal session and run the following command. This will start our mongodb locally. 
 ```bash
-npm run mongdo:ide-start
+npm run mongo:start-ide
 ```
 <p class="tip" >
 <b>NOTE</b> - you can skip this step if you have your DB running from previous exercise
