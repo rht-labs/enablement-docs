@@ -269,8 +269,9 @@ MEMORY_LIMIT=1Gi
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
 ---
-ansible_connection: local
 openshift_cluster_content:
+- galaxy_requirements:
+  - "{{ inventory_dir }}/../exercise-requirements.yml"
 - object: ci-cd-tooling
   content:
   - name: "nexus"
@@ -281,6 +282,10 @@ openshift_cluster_content:
     - nexus
 ```
 ![ci-cd-deployments-yml](../images/exercise1/ci-cd-deployments-yml.png)
+
+<p class="tip">
+<b>NOTE</b> The <i>galaxy_requirements</i> above is necessary to pull in the pre/post steps dependencies as explained under the Jenkins section below.
+</p>
 
 4. Run the OpenShift applier, specifying the tag `nexus` to speed up its execution (`-e target=tools` is to run the other inventory).
 ```bash
