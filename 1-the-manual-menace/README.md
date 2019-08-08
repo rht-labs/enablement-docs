@@ -431,14 +431,15 @@ where
 
 7.  In order for Jenkins to be able to run `npm` builds and installs we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. These slaves can take a time to build themselves so to speed up we have placed the slave within OpenShift and an ImageStream to reference it, with the "role=jenkins-slave" label. This is all added by the `jenkins-slave-npm` section of the Configuration-as-Code inventory below.
 
-8. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
-
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
+8. At the top of `inventory/host_vars/ci-cd-tooling.yml`, add the following:
 ```yaml
-
 ci_cd:
   IMAGE_STREAM_NAMESPACE: "{{ ci_cd_namespace }}"
+``
 
+<kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
+9. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
 - object: ci-cd-builds
   content:
   - name: "jenkins-s2i-secret"
@@ -463,7 +464,7 @@ ci_cd:
     - jenkins
 ```
 
-9. Commit your code to your GitLab instance
+10. Commit your code to your GitLab instance
 ```bash
 git add .
 ```
@@ -474,17 +475,17 @@ git commit -m "Adding Jenkins and Jenkins s2i"
 git push
 ```
 
-10. Now your code is commited; run the OpenShift Applier to add the config to the cluster
+11. Now your code is commited; run the OpenShift Applier to add the config to the cluster
 ```bash
 ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=jenkins"
 ```
 
-11. This will trigger a build of the s2i and when it's complete it will add an imagestream of `<YOUR_NAME>-ci-cd/jenkins:latest` to the project. The Deployment config should kick in and deploy the image once it arrives. You can follow the build of the s2i by going to the OpenShift console's project
+12. This will trigger a build of the s2i and when it's complete it will add an imagestream of `<YOUR_NAME>-ci-cd/jenkins:latest` to the project. The Deployment config should kick in and deploy the image once it arrives. You can follow the build of the s2i by going to the OpenShift console's project
 ![jenkins-s2i-log](../images/exercise1/jenkins-s2i-log.png)
 
-12. When the Jenkins deployment has completed; login (using your OpenShift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
+13. When the Jenkins deployment has completed; login (using your OpenShift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
 
 ### Part 7 - Jenkins Hello World
 > _To test things are working end-to-end; create a hello world job that doesn't do much but proves we can pull code from git and that our builds are green._
