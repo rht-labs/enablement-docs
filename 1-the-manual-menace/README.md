@@ -269,8 +269,9 @@ MEMORY_LIMIT=1Gi
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
 ---
-ansible_connection: local
 openshift_cluster_content:
+- galaxy_requirements:
+  - "{{ inventory_dir }}/../exercise-requirements.yml"
 - object: ci-cd-tooling
   content:
   - name: "nexus"
@@ -281,6 +282,10 @@ openshift_cluster_content:
     - nexus
 ```
 ![ci-cd-deployments-yml](../images/exercise1/ci-cd-deployments-yml.png)
+
+<p class="tip">
+<b>NOTE</b> The <i>galaxy_requirements</i> above is necessary to pull in the pre/post steps dependencies as explained under the Jenkins section below.
+</p>
 
 4. Run the OpenShift applier, specifying the tag `nexus` to speed up its execution (`-e target=tools` is to run the other inventory).
 ```bash
@@ -368,12 +373,25 @@ JENKINS_OPTS=--sessionTimeout=720
 
 2. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo in  `inventory/host_vars/ci-cd-tooling.yml`.
 
+<p class="tip">
+<b>NOTE</b> In order for Jenkins to be able to run `npm` builds and installs we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. These slaves can take a time to build themselves so to speed up we have placed the slave with a corresponding ImageStream within OpenShift. To leverage this existing slave image, we are using a feature of the openshift-applier to process a couple of post-steps part of the inventory. These steps are utilized to perform pre and post tasks necessary to make our inventory work correctly. In this case, we use the post steps to tag and label the jenkins-slave-npm ImageStream within our CI/CD project so Jenkins knows how to find and use it.
+</p>
+
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
   - name: "jenkins"
     namespace: "{{ ci_cd_namespace }}"
     template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/jenkins/jenkins-persistent-template.yml"
     params: "{{ playbook_dir }}/params/jenkins"
+    post_steps:
+      - role: casl-ansible/roles/openshift-imagetag
+        vars:
+          source_img: "openshift/jenkins-slave-npm:latest"
+          img_tag: "jenkins-slave-npm:latest"
+      - role: casl-ansible/roles/openshift-labels
+        vars:
+          label: "role=jenkins-slave"
+          target_object: "imagestream/jenkins-slave-npm"
     tags:
     - jenkins
 ```
@@ -429,17 +447,15 @@ SOURCE_REPOSITORY_SECRET=gitlab-auth
 where
     * `<GIT_URL>` is the full clone path of the repo where this project is stored (including the https && .git)
 
-7.  In order for Jenkins to be able to run `npm` builds and installs we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. These slaves can take a time to build themselves so to speed up we have placed the slave within OpenShift and an ImageStream to reference it, with the "role=jenkins-slave" label. This is all added by the `jenkins-slave-npm` section of the Configuration-as-Code inventory below.
-
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
-8. At the top of `inventory/host_vars/ci-cd-tooling.yml`, add the following:
+7. At the top of `inventory/host_vars/ci-cd-tooling.yml`, add the following:
 ```yaml
 ci_cd:
   IMAGE_STREAM_NAMESPACE: "{{ ci_cd_namespace }}"
 ``
 
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
-9. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
+8. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
 - object: ci-cd-builds
   content:
   - name: "jenkins-s2i-secret"
@@ -455,16 +471,9 @@ ci_cd:
     params_from_vars: "{{ ci_cd }}"
     tags:
     - jenkins
-  - name: "jenkins-slave-npm"
-    namespace: "{{ ci_cd_namespace }}"
-    template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/imagestreams/imagestream-generic.yml"
-    params: "{{ playbook_dir }}/params/jenkins-slave-npm"
-    params_from_vars: "{{ ci_cd }}"
-    tags:
-    - jenkins
 ```
 
-10. Commit your code to your GitLab instance
+9. Commit your code to your GitLab instance
 ```bash
 git add .
 ```
@@ -475,17 +484,17 @@ git commit -m "Adding Jenkins and Jenkins s2i"
 git push
 ```
 
-11. Now your code is commited; run the OpenShift Applier to add the config to the cluster
+10. Now your code is commited; run the OpenShift Applier to add the config to the cluster
 ```bash
 ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=jenkins"
 ```
 
-12. This will trigger a build of the s2i and when it's complete it will add an imagestream of `<YOUR_NAME>-ci-cd/jenkins:latest` to the project. The Deployment config should kick in and deploy the image once it arrives. You can follow the build of the s2i by going to the OpenShift console's project
+11. This will trigger a build of the s2i and when it's complete it will add an imagestream of `<YOUR_NAME>-ci-cd/jenkins:latest` to the project. The Deployment config should kick in and deploy the image once it arrives. You can follow the build of the s2i by going to the OpenShift console's project
 ![jenkins-s2i-log](../images/exercise1/jenkins-s2i-log.png)
 
-13. When the Jenkins deployment has completed; login (using your OpenShift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
+12. When the Jenkins deployment has completed; login (using your OpenShift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
 
 ### Part 7 - Jenkins Hello World
 > _To test things are working end-to-end; create a hello world job that doesn't do much but proves we can pull code from git and that our builds are green._
