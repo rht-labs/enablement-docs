@@ -99,9 +99,7 @@ The Todolist application is a monorepo which has both front end and server layer
 https://<YOUR_JENKINS_URL>/multibranch-webhook-trigger/invoke?token=todolist
 ```
 
-5. In your local clone of the `todolist`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab. 
-
-Use the `Terminal > OpenTerminal in specific container` menu item to open a terminal in the `dev-pod/main` container
+5. In your local clone of the `todolist`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab. Use the `Terminal > OpenTerminal in specific container` menu item to open a terminal in the `dev-pod/main` container
 
 ```bash
 cd todolist
@@ -128,9 +126,13 @@ oc login -u <username> -p <password> <CLUSTER_URL>
 
 Because we are in a cloud IDE hosted environment, the client side config needs to be updated to use the route that is generated application API. Run the `fixApiUrl` script in your terminal
 
+<p class="tip">
+🔥 <b>NOTE</b> 🔥 - Make sure that you are in your `workspace*` project while running this command. Otherwise the terminal will crash and the helper function won't help.
+</p>
+
 ![fixApiUrl](../images/exercise2/fixApiUrl.png)
 
-This updates the API endpoint in the `index.js` config file
+This updates the API endpoint in the `index.js` config file. Before you run the command, it will look like the following.
 
 <kbd>📝 *todolist/src/config/index.js*</kbd>
 ```
@@ -138,6 +140,8 @@ export default {
   todoEndpoint: "/api/todos"
 };
 ```
+Afterwards, you should see something like this:
+
 ![fixApiUrl](../images/exercise2/black-magic.png)
 
 8. The `todolist` has some scripts defined in the package.json at the root of the project. A snippet of the npm scripts are shown below. To run any of these scripts run `npm run <SCRIPT_NAME>`.
@@ -558,7 +562,7 @@ Some of the key things to note:
     * `post {}` hook is used to specify the post-build-actions. Jenkins declarative pipeline syntax provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
     * `when {}` is used for flow control. It can be used at the stage level and be used to stop pipeline entering that stage. e.g. when branch is master; deploy to `test` environment.
     
-2. The Jenkinsfile is mostly complete however some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GIT_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
+2. The Jenkinsfile is mostly complete however some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GITLAB_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
 
 <kbd>📝 *todolist/Jenkinsfile*</kbd>
 ```groovy
@@ -577,7 +581,7 @@ Some of the key things to note:
         JOB_NAME = "${JOB_NAME}".replace("/", "-")
 
         GIT_SSL_NO_VERIFY = true
-        GIT_CREDENTIALS = credentials('jenkins-git-creds')
+        GIT_CREDENTIALS = credentials("${NAMESPACE_PREFIX}-ci-cd-gitlab-auth")
     }
 ```
 

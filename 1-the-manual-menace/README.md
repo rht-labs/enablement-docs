@@ -269,8 +269,9 @@ MEMORY_LIMIT=1Gi
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
 ---
-ansible_connection: local
 openshift_cluster_content:
+- galaxy_requirements:
+  - "{{ inventory_dir }}/../exercise-requirements.yml"
 - object: ci-cd-tooling
   content:
   - name: "nexus"
@@ -281,6 +282,10 @@ openshift_cluster_content:
     - nexus
 ```
 ![ci-cd-deployments-yml](../images/exercise1/ci-cd-deployments-yml.png)
+
+<p class="tip">
+<b>NOTE</b> The <i>galaxy_requirements</i> above is necessary to pull in the pre/post steps dependencies as explained under the Jenkins section below.
+</p>
 
 4. Run the OpenShift applier, specifying the tag `nexus` to speed up its execution (`-e target=tools` is to run the other inventory).
 ```bash
@@ -368,12 +373,25 @@ JENKINS_OPTS=--sessionTimeout=720
 
 2. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo in  `inventory/host_vars/ci-cd-tooling.yml`.
 
+<p class="tip">
+<b>NOTE</b> In order for Jenkins to be able to run `npm` builds and installs we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. These slaves can take a time to build themselves so to speed up we have placed the slave with a corresponding ImageStream within OpenShift. To leverage this existing slave image, we are using a feature of the openshift-applier to process a couple of post-steps part of the inventory. These steps are utilized to perform pre and post tasks necessary to make our inventory work correctly. In this case, we use the post steps to tag and label the jenkins-slave-npm ImageStream within our CI/CD project so Jenkins knows how to find and use it.
+</p>
+
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
   - name: "jenkins"
     namespace: "{{ ci_cd_namespace }}"
     template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/jenkins/jenkins-persistent-template.yml"
     params: "{{ playbook_dir }}/params/jenkins"
+    post_steps:
+      - role: casl-ansible/roles/openshift-imagetag
+        vars:
+          source_img: "openshift/jenkins-slave-npm:latest"
+          img_tag: "jenkins-slave-npm:latest"
+      - role: casl-ansible/roles/openshift-labels
+        vars:
+          label: "role=jenkins-slave"
+          target_object: "imagestream/jenkins-slave-npm"
     tags:
     - jenkins
 ```
@@ -429,16 +447,15 @@ SOURCE_REPOSITORY_SECRET=gitlab-auth
 where
     * `<GIT_URL>` is the full clone path of the repo where this project is stored (including the https && .git)
 
-7.  In order for Jenkins to be able to run `npm` builds and installs we must configure a `jenkins-build-slave` for Jenkins to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm installed in it. These slaves can take a time to build themselves so to speed up we have placed the slave within OpenShift and an ImageStream to reference it, with the "role=jenkins-slave" label. This is all added by the `jenkins-slave-npm` section of the Configuration-as-Code inventory below.
-
-8. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
-
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
+7. At the top of `inventory/host_vars/ci-cd-tooling.yml`, add the following:
 ```yaml
-
 ci_cd:
   IMAGE_STREAM_NAMESPACE: "{{ ci_cd_namespace }}"
+``
 
+<kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
+8. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
 - object: ci-cd-builds
   content:
   - name: "jenkins-s2i-secret"
@@ -451,13 +468,6 @@ ci_cd:
     namespace: "{{ ci_cd_namespace }}"
     template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/jenkins-s2i-build/jenkins-s2i-build-template-with-secret.yml"
     params: "{{ playbook_dir }}/params/jenkins-s2i"
-    params_from_vars: "{{ ci_cd }}"
-    tags:
-    - jenkins
-  - name: "jenkins-slave-npm"
-    namespace: "{{ ci_cd_namespace }}"
-    template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/imagestreams/imagestream-generic.yml"
-    params: "{{ playbook_dir }}/params/jenkins-slave-npm"
     params_from_vars: "{{ ci_cd }}"
     tags:
     - jenkins
