@@ -392,7 +392,8 @@ JENKINS_OPTS=--sessionTimeout=720
       - role: casl-ansible/roles/openshift-labels
         vars:
           label: "role=jenkins-slave"
-          target_object: "imagestream/jenkins-slave-npm"
+          target_object: "imagestream"
+          target_name: "jenkins-slave-npm"
     tags:
     - jenkins
 ```
