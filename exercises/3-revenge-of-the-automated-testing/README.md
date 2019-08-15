@@ -124,6 +124,10 @@ npm run test:server
 ```
 ![test-server-run-locally](../images/exercise3/test-server-run-locally.png)
 
+<p class="tip" >
+<b>NOTE</b> - If you see the error <i>Uncaught Error: listen EADDRINUSE 0.0.0.0:9000</i> you may need to stop your running todolist app (or type <i>killall node</i> to stop all node processes).
+</p>
+
 6. With our tests all passing in the cloud ide, let's add them to our pipeline. Open the `Jenkinsfile` in your editor and add the command to run all the tests in the `steps{}` part of the `node-build` stage.
 
 <kbd>📝 todolist/Jenkinsfile</kbd>
@@ -166,21 +170,26 @@ git push
 
 In this part of the exercise, we will add a new stage to our pipeline called `todolist-e2e` that will run after the deploy has been completed. End to end tests will use `Nightwatch.js` to orchestrate a Selenium WebDriver instance that controls the web browser; in this case Google Chrome!
 
-1. Let's start by checking that our tests execute in the cloud ide. Our end to end tests are stored in `tests/e2e/specs/`. The VueJS cli uses `Nightwatch.js` and comes pre-configured to run tests against Google Chrome. The tests run headlessly in our CodeReady workspace. To get them executing, open a new Terminal and fire up the Selenium service and leave it running.
+1. Ensure the `todolist` app is running in a separate terminal shell.
+```
+npm run serve:all
+```
+
+2. Let's start by checking that our tests execute in the cloud ide. Our end to end tests are stored in `tests/e2e/specs/`. The VueJS cli uses `Nightwatch.js` and comes pre-configured to run tests against Google Chrome. The tests run headlessly in our CodeReady workspace. To get them executing, open a new Terminal and fire up the Selenium service and leave it running.
 ```bash
 cd /projects/todolist
 npm run selenium
 ```
 
-2. On a new terminal move to the `todolist` folder. Run the tests locally by executing the following command. This should start the dev server and run the test.
+3. On a new terminal move to the `todolist` folder. Run the tests locally by executing the following command. This should start the dev server and run the test.
 ```bash
 cd /projects/todolist
-npm run e2e
+npm run e2e:ide
 ```
 
 ![local-e2e](../images/exercise3/local-e2e.png)
 
-3. With tests executing successfully locally; let's add them to our Jenkins pipeline. To do this; we'll create a new stage in our `Jenkinsfile`. Create a new `stage` called `e2e test` to run after the `node-deploy stage`
+4. With tests executing successfully locally; let's add them to our Jenkins pipeline. To do this; we'll create a new stage in our `Jenkinsfile`. Create a new `stage` called `e2e test` to run after the `node-deploy stage`
 
 <kbd>📝 todolist/Jenkinsfile</kbd>
 ```Jenksfile
@@ -190,7 +199,7 @@ stage("e2e test") {
 ```
 ![e2e-stage-new](../images/exercise3/e2e-stage-new.png)
 
-4. Set the agent that this stage should execute on. In this case it will use the same `jenkins-slave-npm` that was used in the build stage. Set the steps needed to execute the tests and add the reporting location
+5. Set the agent that this stage should execute on. In this case it will use the same `jenkins-slave-npm` that was used in the build stage. Set the steps needed to execute the tests and add the reporting location
 
 <kbd>📝 todolist/Jenkinsfile</kbd>
 ```Jenksfile
@@ -220,14 +229,14 @@ stage("e2e test") {
         }
 ```
 
-5. With this in place, commit the changes to trigger a build and enhance our pipeline 
+6. With this in place, commit the changes to trigger a build and enhance our pipeline 
 ```bash
 git add Jenkinsfile
 git commit -m "Adding e2e tests to the pipeline"
 git push
 ```
 
-6. Jenkins should now show the additional stage in the pipeline view for the branch
+7. Jenkins should now show the additional stage in the pipeline view for the branch
 ![e2e-pipeline](../images/exercise3/e2e-pipeline.png)
 
 ### Part 2 - TodoList new feature
