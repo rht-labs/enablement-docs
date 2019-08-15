@@ -40,7 +40,7 @@ As a learner you will be able to
 > Below is a collection of the new frameworks and tools that will be used in this exercise
 
 1. [eslint](https://eslint.org/) - ESLint is an open source JavaScript linting utility originally created by Nicholas C. Zakas in June 2013. Code linting is a type of static analysis that is frequently used to find problematic patterns or code that doesn’t adhere to certain style guidelines. There are code linters for most programming languages, and compilers sometimes incorporate linting into the compilation process.
-<!-- 1. [Zed Attack Proxy](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project) - The OWASP Zed Attack Proxy (ZAP) is one of the world’s most popular free security tools and is actively maintained by hundreds of international volunteers*. It can help you automatically find security vulnerabilities in your web applications while you are developing and testing your applications. Its also a great tool for experienced pentesters to use for manual security testing. -->
+1. [Zed Attack Proxy](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project) - The OWASP Zed Attack Proxy (ZAP) is one of the world’s most popular free security tools and is actively maintained by hundreds of international volunteers*. It can help you automatically find security vulnerabilities in your web applications while you are developing and testing your applications. Its also a great tool for experienced pentesters to use for manual security testing.
 2. [Arachni Crawler](http://www.arachni-scanner.com/) - Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of modern web applications. It is free, with its source code public and available for review. It is versatile enough to cover a great deal of use cases, ranging from a simple command line scanner utility, to a global high performance grid of scanners, to a Ruby library allowing for scripted audits, to a multi-user multi-scan web collaboration platform. In addition, its simple REST API makes integration a cinch.
 <!-- 1. [stryker](http://stryker-mutator.io/) - Mutation testing! What is it? Bugs, or mutants, are automatically inserted into your production code. Your tests are run for each mutant. If your tests fail then the mutant is killed. If your tests passed, the mutant survived. The higher the percentage of mutants killed, the more effective your tests are. It's really that simple. -->
 
@@ -67,57 +67,35 @@ _____
 ### Part 1 - Add Security scanning to the pipeline
 > _In this exercise, the first of our non-functional testing is explored in the form of some security scanning. We will add the scan to our Jenkinsfile and have them run as a new stage_
 
-1. Open the `todolist` application's `Jenkinsfile` in your cloud ide. The file is stored in the root of the project. Ensure that you using the `master` branch of `todolist`
-```bash
-cd /projects/todolist
-git checkout master
-```
+1. Open the `todolist` application's `Jenkinsfile` in your cloud ide. The file is stored in the root of the project.
 
-2. The file is laid out with a collection of stages that correspond to each part of our build as seen below. We will create a new stage to for the Arachni scan.
+2. The file is laid out with a collection of stages that correspond to each part of our build as seen below. We will create a new parallel stage to execute both our `Arachni` and our `Zap` scan.
 ![stages](../images/exercise5/stages.png)
 
-3. Create a new stage called `Arachni Scan` underneath the `stage("e2e test") { }` section as shown below. The contents of the `e2e test` have been removed for simplicity.
+3. Create a new stage called `Security Scan` underneath the `stage("e2e test") { }` section as shown below. This is a parallel stage which will allow us to define additional `stages() {}` inside of it. We will add two stages in there, one for `Zap` and one for `Arachni`. The contents of the `e2e test` have been removed for simplicity.
 
-<kbd>📝 *Jenkinsfile*</kbd>
+<kbd>📝 *todolist/Jenkinsfile*</kbd>
 ```groovy
         stage("e2e test") {
             // ... stuff in here ....
         }
-        stage('Arachni Scan') {
-        agent {
-            node {
-                label "jenkins-slave-arachni"
+        stage('Security Scan') {
+            parallel {
+                stage('OWASP Zap') {
+
+                }
+                stage('Arachni') {
+
+                }
             }
         }
-        when {
-            expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
-        }
-        steps {
-            sh '''
-                /arachni/bin/arachni http://${E2E_TEST_ROUTE} --report-save-path=arachni-report.afr
-                /arachni/bin/arachni_reporter arachni-report.afr --reporter=xunit:outfile=report.xml --reporter=html:outfile=web-report.zip
-                unzip web-report.zip -d arachni-web-report
-            '''
-        }
-        post {
-            always {
-                junit 'report.xml'
-                publishHTML target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: false,
-                    keepAll: true,
-                    reportDir: 'arachni-web-report',
-                    reportFiles: 'index.html',
-                    reportName: 'Arachni Web Crawl'
-                    ]
-            }
-        }
-    }
 ```
 
-<!-- 2. Let's start filling out the configuration for the OWASP Zap scan first. We will set the label to our slave created in previous exercise and a `when` condition of the master or develop branch.
+4. Let's start filling out the configuration for the OWASP Zap scan first. We will set the label to our slave created in previous exercise and a `when` condition to only execute the job when on either the master or develop branch.
+
+<kbd>📝 *todolist/Jenkinsfile*</kbd>
 ```groovy
-stage('OWASP Scan') {
+stage('OWASP Zap') {
     agent {
         node {
             label "jenkins-slave-zap"
@@ -129,9 +107,11 @@ stage('OWASP Scan') {
 }
 ```
 
-2.  Add a `step` with a `sh` command to run the tool by passing in the URL of the app we're going to test.
+5.  Add a `step` with a `sh` command to run the tool by passing in the URL of the app we're going to test.
+
+<kbd>📝 *todolist/Jenkinsfile*</kbd>
 ```groovy
-stage('OWASP Scan') {
+stage('OWASP Zap') {
         agent {
             node {
                 label "jenkins-slave-zap"
@@ -142,6 +122,7 @@ stage('OWASP Scan') {
         }
         steps {
             sh '''
+                export REPORT_DIR="$WORKSPACE/"
                 /zap/zap-baseline.py -r index.html -t ${E2E_TEST_ROUTE} || return_code=$?
                 echo "exit value was  - " $return_code
             '''
@@ -149,7 +130,9 @@ stage('OWASP Scan') {
 }
 ```
 
-2.  Finally add the reporting for Jenkins in `post` hook of our Declarative Pipeline. This is to report the findings of the scan in Jenkins as an HTML report.
+6.  Finally add the reporting for Jenkins in `post` hook of our Declarative Pipeline. This is to report the findings of the scan in Jenkins as an HTML report.
+
+<kbd>📝 *todolist/Jenkinsfile*</kbd>
 ```groovy
 stage('OWASP Scan') {
     agent {
@@ -162,6 +145,7 @@ stage('OWASP Scan') {
     }
     steps {
         sh '''
+            export REPORT_DIR="$WORKSPACE/"
             /zap/zap-baseline.py -r index.html -t http://${E2E_TEST_ROUTE} || return_code=$?
             echo "exit value was  - " $return_code
         '''
@@ -173,18 +157,20 @@ stage('OWASP Scan') {
               allowMissing: false,
               alwaysLinkToLastBuild: false,
               keepAll: true,
-              reportDir: '/zap/wrk',
+              reportDir: '',
               reportFiles: 'index.html',
               reportName: 'Zap Branniscan'
             ]
         }
     }
 }
-``` -->
+```
 
-<!-- 2. Let's add our Arachni Scan to the second part of the parallel block. The main difference between these sections is Jenkins will report an XML report too for failing the build accordingly. Below is the snippet for the Arachni scanning. -->
-<!-- ```groovy
-    stage('Arachni Scan') {
+7. Let's add our Arachni Scan to the second part of the parallel block. The main difference between these sections is Jenkins will report an XML report too for failing the build accordingly. Below is the snippet for the Arachni scanning.
+
+<kbd>📝 *todolist/Jenkinsfile*</kbd>
+```groovy
+    stage('Arachni') {
         agent {
             node {
                 label "jenkins-slave-arachni"
@@ -214,9 +200,13 @@ stage('OWASP Scan') {
             }
         }
     }
-``` -->
+```
 
-4. With this config in place, commit your code (from your terminal). Wait for a few minutes until a new build in Jenkins is trigerred:
+8. With this config in place, commit your code (from your terminal). Wait for a few minutes until a new build in Jenkins is trigerred:
+
+```bash
+cd /projects/todolist
+```
 ```bash
 git add .
 ```
@@ -228,7 +218,7 @@ git push
 ```
 
 5. Check out the Blue Ocean Jenkins view for how the new stage is viewed!
-![jenkins-arachni-stage](../images/exercise5/jenkins-arachni-stage.png)
+![jenkins-arachni-stage](../images/exercise5/jenkins-parallel.png)
 
 6. Once the Jobs have completed; navigate to the Jobs status and see the scores. You can find the graphs and test reports on overview of the Job. Explore the results!
 ![report-arachni](../images/exercise5/report-arachni.png)
@@ -299,7 +289,7 @@ NOTE - a good practice for teams is to try and increase the code coverage metric
 </p>
 
 
-### Part 3 - Nightly light performance testing
+### Opional Exercise - Nightly light performance testing
 > _In this part of the exercise, we will execute light performance tasks in our API to collect data about throughput time in hopes if the API ever has some `Sam` quality code checked in, we will spot it_
 
 An arbitrary value for the APIs to respond in has been chosen. It is set in the `todolist/tasks/perf-test.js` file. In this exercise we will get Jenkins to execute the tests and fail based on the score set there!
