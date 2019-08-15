@@ -165,7 +165,7 @@ cd todolist
 npm run mongo:start-ide
 ```
 <p class="tip" >
-<b>NOTE</b> - If you're not using the cloud hosted environment, you can start mongo using <i>npm run mongo<i> which will pull the latest image from dockerhub
+<b>NOTE</b> - If you're not using the cloud hosted environment, you can start mongo using <i>npm run mongo</i> which will pull the latest image from dockerhub
 </p>
 
 You will get a popup in your cloud ide asking if you want to `add a redirect` that you can close.
