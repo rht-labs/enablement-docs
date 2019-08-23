@@ -86,9 +86,10 @@ _____
 ### Part 2 - Build Fail Analyser
 > _In this exercise we will intentionally fail the build to capture some metrics about why it's failed and how we can tighten the feedback for future failures_
 
-1. Open the `todolist-fe` app in your favourite editor. In this exercise, we will fail a test and capture the message in the log and visualise it on a dashboard.
+1. Open the `todolist` app in your favourite editor. In this exercise, we will fail a test and capture the message in the log and visualise it on a dashboard.
 
 2. Open one of the tests you wrote in previous exercises; for example `tests/unit/vue-components/TodoItem.spec.js`. Negate the test at the very bottom of the file by adding a `.not` to the `expect()` statement as shown below.
+
 <kbd>📝 *tests/unit/vue-components/TodoItem.spec.js*</kbd>
 ```javascript
   it("call makImportant when clicked", () => {
