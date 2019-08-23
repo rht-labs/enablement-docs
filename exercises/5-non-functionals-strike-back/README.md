@@ -287,12 +287,31 @@ git push
 5. A new Jenkins build is trigerred and the pipeline fails. Look in the Jenkins log for what the issue might be:
 ![linting-issue](../images/exercise5/linting-issue.png)
 
-6. Fix the error identified by the linter by commenting out the offending line. Commit and push your changes to trigger a new build.
+6. Fix the error identified by the linter by commenting out the offending line.
 
-7. Once the build passes again, view the coverage graph; go to the job's build page and open the `Code Coverage` report from the nav bar on the side. Sometimes this won't display on the `yourjenkins.com/job/todolist/job/branch/` sidebar, click on an individual build in the build history and it should appear on the side navbar.
+<kbd>📝 src/components/TodoItem.vue</kbd>
+```html
+    Vue.component("checkbox", Checkbox);
+    Vue.component("radio", Radio);
+    // let biscuits;
+```
+
+7. Save the `TodoItem.vue` and Commit and push your changes to trigger a new build.
+
+```bash
+git add .
+```
+```bash
+git commit -m "FIX - fixing biscuits error due code coverage"
+```
+```bash
+git push
+```
+
+8. Once the build passes again, view the coverage graph; go to the job's build page and open the `Code Coverage` report from the nav bar on the side. Sometimes this won't display on the `yourjenkins.com/job/todolist/job/branch/` sidebar, click on an individual build in the build history and it should appear on the side navbar.
 ![report-location](../images/exercise5/report-location.png)
 
-8. Open the report to drill down into detail of where testing coverage could be improved!
+9. Open the report to drill down into detail of where testing coverage could be improved!
 ![report-coverage](../images/exercise5/report-coverage.png)
 <p class="tip">
 NOTE - a good practice for teams is to try and increase the code coverage metrics over the life of a project. Teams will often start low and use practices such as retrospective to increase the quality at specific times.
