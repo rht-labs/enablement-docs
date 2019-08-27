@@ -309,7 +309,7 @@ npm run test:server
 5. With all the tests passing; let's add our new one. For ease of completing this exercise a template of a new test has been written at the very end of the file (just below the `  // Exercise 3 test case!` comment). A PUT request responds in our API with the data that it has just updated. So provided that MongoDB accepted the change, the API will respond with an object that has the `important` property on it. To write our test; edit the template test by completing the following:
     * Edit the `it("should ...")` to describe the important flag we're testing
     * Edit the `.send()` to include `important: true` property
-    * Edit the `.expect()` to be `.expect(200)`
+    * Check the `.expect()` clause is set to `.expect(200)`
     * Add a new test assertion to check that `res.body.important` is `true` below the `// YOUR TEST GO HERE` line.
 
 <kbd>📝 todolist/server/api/todo/todo.spec.js</kbd>
