@@ -1,6 +1,6 @@
 # An Enslaved Hope
 
-> In this exercise we'll break free from the chains of point'n'click Jenkins by introducing pipeline as code in the form of `Jenkinsfile`. Following this we will introduce some new Jenkins slaves that will be used in later exercises.
+> In this exercise we will introduce some new Jenkins slaves that will be used in later exercises. We will also look at an alternative approach to doing build pipelines by creating an OpenShift buildConfig that contains our Jenkinsfile.
 
 ![jenkins-fail-meme](../images/exercise4/jenkins-fail-meme.jpeg)
 [image-ref](https://memegenerator.net/instance/76565947/days-since-its-been-0-days-since-a-jenkins-fail)
@@ -44,38 +44,41 @@ _____
 ## Step by Step Instructions
 
 ### Part 1 - Security Scanning Slaves
-> _This part of the exercise focuses on updating the `enablement-ci-cd` repo with some new jenkins-slave pods for use in future exercise_
+> _This part of the exercise focuses on updating the `enablement-ci-cd` repo with some new jenkins-slave pods for use in future exercise. We will use two different methods to import these slaves, one by tagging a prebuilt image and two by building the image in the cluster_
 
 #### 1a - OWASP ZAP
 > _OWASP ZAP (Zed Attack Proxy) is a free open source security tool used for finding security vulnerabilities in web applications._
 
-1. On your  editor; move to the `enablement-ci-cd` repo and opten the `inventory/host_vars/ci-cd-tooling.yml`.
+1. On your  editor; move to the `enablement-ci-cd` repository and open the `inventory/host_vars/ci-cd-tooling.yml`.
 
-2. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `zap` and add the following variables to tell your template where to find the slave definition
+2. Create a new Ansible object to be consumed by the OpenShift Applier at the bottom of the file. 
 
 <kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
-  zap:
-    SOURCE_REPOSITORY_URL: "{{ cop_quickstarts }}"
-    SOURCE_CONTEXT_DIR: jenkins-slaves/jenkins-slave-zap
-    BUILDER_IMAGE_NAME: centos:centos7
-    NAME: jenkins-slave-zap
-    SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
-    DOCKERFILE_PATH: Dockerfile
-    SLAVE_IMAGE_TAG: latest
+# JENKINS SLAVES
+- object: jenkins-slave-nodes
+  content:
 ```
-![zap-object](../images/exercise4/zap-object1.png)
 
-3. Create the object for feeding the template with the parameters
+3. The ZAP image we will use is pre-built and hosted on Quay. The Dockerfile used to built it can be found on the Red Hat Communities of Practice Containers Quickstarts repository, along with a host of other useful [Jenkins slaves](https://github.com/redhat-cop/containers-quickstarts/tree/master/jenkins-slaves). To save time, we will use a prebuilt image. As we did with our `jenkins-slave-npm`, let's add some `pre_steps` for the applier to pull this image into our cluster and label it for use in Jenkins.
 
 <kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
+# JENKINS SLAVES
 - object: jenkins-slave-nodes
   content:
     - name: jenkins-slave-zap
-      template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
-      params_from_vars: "{{ zap }}"
       namespace: "{{ ci_cd_namespace }}"
+      pre_steps:
+        - role: casl-ansible/roles/openshift-imagetag
+          vars:
+            source_img: "quay.io/rht-labs/jenkins-slave-zap:do500.v2"
+            img_tag: "jenkins-slave-zap:latest"
+        - role: casl-ansible/roles/openshift-labels
+          vars:
+            label: "role=jenkins-slave"
+            target_object: "imagestream"
+            target_name: "jenkins-slave-zap"
       tags:
       - jenkins-slaves
       - zap-slave
@@ -90,6 +93,7 @@ oc login -u <username> -p <password> <CLUSTER_URL>
 ```
 
 ```bash
+cd /projects/enablement-ci-cd
 ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=zap-slave"
@@ -101,7 +105,7 @@ ansible-playbook apply.yml -e target=tools \
 #### 1b - Arachni Scan
 > _Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of web applications._
 
-1. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `arachni` with the following content for our Arachni slave:
+1. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `arachni` and add the following variables to tell your template where to find the slave definition to be built.
 
 <kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
