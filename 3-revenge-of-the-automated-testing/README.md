@@ -681,6 +681,19 @@ touch tests/e2e/specs/importantFlag.js
     <!-- ![if-e2e-step3](../images/exercise3/if-e2e-step3.png) -->
     ![if-e2e-step3a](../images/exercise3/if-e2e-step3a.png)
 
+<kbd>📝 src/components/XofYItems.vue</kbd>
+```html
+  <template>
+    <div>
+        <div class="xofyDone">
+            <span> {{sumDoneTodoItems(todos)}} out of {{this.todos.length}} done. </span>
+            <md-button class="md-raised" v-on:click="clearDoneTodos()">Clear Done</md-button>
+            <md-button id="clear-all" class="md-raised" v-on:click="clearTodos()">Clear all</md-button>
+        </div>
+    </div>
+  </template>
+```
+
 6.  Write the following test code. The pauses allow for the body of the page to render the todo list before exercising the test code:
 
 <kbd>📝 todolist/tests/e2e/specs/importantFlag.js</kbd>
