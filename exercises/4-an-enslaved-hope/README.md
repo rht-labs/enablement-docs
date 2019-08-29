@@ -161,21 +161,21 @@ git push
 
 1. Change directory to `todolist`
 ```bash
-cd /projects/todolist
+cd todolist
 ```
 
-2. Open the `todolist` app in your cloud ide. Open `template/ocp-pipeline` directory. This template creates a BuildConfig for OpenShift with a Jenkinsfile from a given repo. In this case; it will be the `Jenkinsfile` at the root of our application.
+2. Open the `todolist` app in your cloud ide. Open `.openshift-applier/template/ocp-pipeline` directory. This template creates a BuildConfig for OpenShift with a Jenkinsfile from a given repo. In this case; it will be the `Jenkinsfile` at the root of our application.
 
-3. Open the `params/ocp-pipeline` file and update `PIPELINE_SOURCE_REPOSITORY_URL` with the git url of your project (Don't forget to add the `.git` at the end). For example:
+3. Open the `.openshift-applier/params/ocp-pipeline` file and update `PIPELINE_SOURCE_REPOSITORY_URL` with the git url of your project (Don't forget to add the `.git` at the end). For example:
 ```
 PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab.<APPS_URL>/<GIT_USERNAME>/todolist.git
 PIPELINE_SOURCE_REPOSITORY_REF=develop
 NAME=todolist
 ```
 
-4. Create a new object in `inventory/group_vars/all.yml` to drive the `ocp-pipeline` template with the parameters file you've just created. It can be put under the existing `todolist-build` object.
+4. Create a new object in `.openshift-applier/inventory/group_vars/all.yml` to drive the `ocp-pipeline` template with the parameters file you've just created. It can be put under the existing `todolist-build` object.
 
-<kbd>📝 *inventory/group_vars/all.yml*</kbd>
+<kbd>📝 *.openshift-applier/inventory/group_vars/all.yml*</kbd>
 ```yaml
   - name: todolist-pipeline
     template: "{{ playbook_dir }}/templates/ocp-pipeline.yml"
