@@ -161,7 +161,7 @@ git push
 
 1. Change directory to `todolist`
 ```bash
-cd todolist
+cd /projects/todolist
 ```
 
 2. Open the `todolist` app in your cloud ide. Open `.openshift-applier/template/ocp-pipeline` directory. This template creates a BuildConfig for OpenShift with a Jenkinsfile from a given repo. In this case; it will be the `Jenkinsfile` at the root of our application.
