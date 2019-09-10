@@ -387,7 +387,7 @@ JENKINS_OPTS=--sessionTimeout=720
     post_steps:
       - role: casl-ansible/roles/openshift-imagetag
         vars:
-          source_img: "openshift/jenkins-slave-npm:latest"
+          source_img: "quay.io/openshift/jenkins-slave-npm:latest"
           img_tag: "jenkins-slave-npm:latest"
       - role: casl-ansible/roles/openshift-labels
         vars:
