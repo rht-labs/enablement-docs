@@ -111,7 +111,7 @@ KISS - Keep It Simple Stupid  <!-- {_class="fragment"  data-fragment-index="1"} 
 
 YAGNI - You Ain't Gonna Need It!  <!-- {_class="fragment"  data-fragment-index="2"} -->
 
-![simple-house](http://hometimes.co.za/wp-content/uploads/2017/06/Simple-Lego-home.jpg)  <!-- {_class="fragment"  data-fragment-index="1" style="height:250px"} -->
+![simple-house](images/Simple-Lego-home.jpg)  <!-- {_class="fragment"  data-fragment-index="1" style="height:250px"} -->
 ![complex-house](http://www.abc.net.au/news/image/7370406-3x2-940x627.jpg)  <!-- {_class="fragment" style="height:250px"  data-fragment-index="2"} -->
 
 
