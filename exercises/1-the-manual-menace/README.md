@@ -65,15 +65,7 @@ If you're feeling confident and don't want to follow the step-by-step guide thes
 ### Part 1 - Create your cloud workspace
 > _Create your cloud ide environment using Che_
 
-1. To create your cloud ide environment, open a web browser using the following URL:
-
-```
-https://codeready-workspaces.apps.<DOMAIN_FOR_YOUR_CLASS>/dashboard/#/load-factory?name=DO500%20Template&user=admin
-```
-
-<p class="tip">
-<b>NOTE</b> - Complete URL should be replaced with the one you've been provided by the instructor.
-</p>
+1. To create your cloud ide environment, open a web browser using the Code Ready Workspaces (CRW) URL provided by your instructor.
 
 2. Login using the `OpenShift 3` button using your credentials
 
@@ -82,6 +74,10 @@ https://codeready-workspaces.apps.<DOMAIN_FOR_YOUR_CLASS>/dashboard/#/load-facto
 3. You should see your workspace creating
 
 ![che-workspace-create](../images/exercise1/che-workspace-create.png)
+
+<p class="tip">
+<b>NOTE</b> - If after a few minutes your workspace keeps in ´Initializing´ state, refresh your browser.
+</p>
 
 4. And finally your cloud ide should be ready
 
