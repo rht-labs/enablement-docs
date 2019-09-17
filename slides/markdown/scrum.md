@@ -55,12 +55,12 @@ DO500 <!-- {_class="title-color"} -->
 
 ### Exercise - The Ball Game (Setup)
 
-In Your Teams
+In Your Groups
 1. Draw a table with two columns and three rows.
 2. Record your estimate for an iteration.
 3. Pass the balls for one minute.
 4. Record the actual score.
-5. Reflect on your team strategy
+5. Reflect on your group strategy
 
 
 
