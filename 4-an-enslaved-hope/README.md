@@ -99,8 +99,8 @@ ansible-playbook apply.yml -e target=tools \
      -e "filter_tags=zap-slave"
 ```
 
-5. Head to <CLUSTER_URL> on OpenShift and move to your ci-cd project > builds. You should see `jenkins-slave-zap` has been built.
-![zap-build](../images/exercise4/zap-build.png)
+5. Head to <CLUSTER_URL> on OpenShift and move to your ci-cd project > Builds > Images. You should see `jenkins-slave-zap` Image Stream has been imported.
+![zap-image-stream](../images/exercise4/zap-image-stream.png)
 
 #### 1b - Arachni Scan
 > _Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of web applications._
