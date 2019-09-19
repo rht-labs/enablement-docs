@@ -478,7 +478,7 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
 
 3. This time set the `Restrict where this project can be run` label to `master`.
 <p class="tip">
-    <b>NOTE</b> - <i>Master</i> is the default node that jobs run on. We don't want jenkins to execute the <i>bake</i> on any other nodes if the <i>master</i>is busy so it is always safer to specify it here.
+    <b>NOTE</b> The <i>bake</i> step can only be executed on the <i>master</i> node because it contains the tools for baking.
 </p>
 
 4. There is no Git or SCM needed for this job so move down to the Build Environment and tick `Delete workspace before build starts`
