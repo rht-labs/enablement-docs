@@ -503,7 +503,13 @@ npm run test:client -- --watch
     </md-button>
 ```
 
-12. We should now see the first of our failing tests has started to pass. Running the app locally (using `npm run serve`) should show the flag appear in the UI. It is clickable but won't fire any events and the colour is not red as per our requirement. Let's continue to implement the colour change for the flag. On our `<svg/>` tag, add some logic to bind the css to the property of a `todo.important` by adding ` :class="{'red-flag': todoItem.important}"  `. This logic will apply the CSS class when `todo.important`  is true.
+12. We should now see the first of our failing tests has started to pass. Running the app locally (using `npm run serve`) should show the flag appear in the UI. It is clickable but won't fire any events and the colour is not red as per our requirement. 
+
+<p class="tip" >
+<b>NOTE</b> - If you don't see the important flag in the CRW UI preview window, an old UI version might be cached. Try to use the external link provided by CRW.
+</p>
+
+Let's continue to implement the colour change for the flag. On our `<svg/>` tag, add some logic to bind the css to the property of a `todo.important` by adding ` :class="{'red-flag': todoItem.important}"  `. This logic will apply the CSS class when `todo.important`  is true.
 
 <kbd>📝 todolist/src/components/TodoItem.vue</kbd>
 ```html
