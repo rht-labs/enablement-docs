@@ -152,8 +152,8 @@ git commit -m "ADD - Arachni and Zap scanning images"
 git push
 ```
 
-5. Your OpenShift cluster should now show both slaves have been built in your `ci-cd` namepsace
-![all-slaves](../images/exercise4/all-slaves.png)
+5. Your OpenShift cluster should now show that the Arachni slave has been built in your `ci-cd` namepsace.
+![all-slaves](../images/exercise4/arachni-slave.png)
 
 
 ### Part 2 - OCP Pipeline
