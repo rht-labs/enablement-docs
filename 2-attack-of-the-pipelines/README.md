@@ -334,7 +334,7 @@ npm run prepare-nexus
     └── todolist-deploy.yml
 ```
 with the following
-    * the `site.yml` file is the entrypoint.
+    * the `apply.yml` file is the entrypoint.
     * the `inventory` contains the objects to populate the cluster with.
     * the `params` contains the variables we'll apply to the `templates`
     * the `templates` required by the app. These include the Build, Deploy configs as well as the services, health checks, and other app definitions.
