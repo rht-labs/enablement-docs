@@ -176,7 +176,7 @@ test:
   NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Test"
 ```
 
-8. In the `enablement-ci-cd/inventory/host_vars/projects-and-policies.yml` file, add the new objects for the projects you want to create (dev & test) by adding another object to the `content` array (previously defined) for each. You can copy and paste them from the `ci-cd` example and update them accordingly. If you do this; remember to change the params_from_vars variable! e.g.
+8. In the `enablement-ci-cd/inventory/host_vars/projects-and-policies.yml` file, add the new objects for the projects you want to create (dev & test) by adding another object to the `content` array (previously defined) for each. You can copy and paste them from the `ci_cd_namespace` example and update them accordingly. If you do this, remember to set the names to `{{ dev_namespace}}` and `{{ test_namespace }}` and change the `params_from_vars` variable accordingly. The values for these variables used for the names (`ci_cd_namespace`, `dev_namespace` etc.) are defined in `apply.yml` file in the root of the project.
 
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/projects-and-policies.yml*</kbd>
 ```yaml
