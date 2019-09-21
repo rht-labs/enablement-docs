@@ -242,7 +242,7 @@ git push
 ### Part 2 - TodoList new feature
 > _In this exercise we will introduce a new feature to create an important flag on the todos. In order to be able to build and test our feature we will use TDD_
 
-*As a doer I want to mark todos as important so that I can keep track of and complete high prirority todos first*
+*As a doer I want to mark todos as important so that I can keep track of and complete high priority todos first*
 
 _Acceptance Criteria_
 - [ ] should be doable with a single click
@@ -424,7 +424,7 @@ npm run test:client -- --watch
 
 ![rerun-all](../images/exercise3/rerun-all.png)
 
-4. There are three places we will add new tests to validate our function behaves as expected against the acceptance criteria from the Feature Story supplied to us. We will need to write tests for our `TodoItem.vue` to handle having a red flag and that it is clickable. Our app is going to need to persist the changes in the backend so we'll want to make changes to our `actions.js` and `mutations.js` to keep the api and local copy of the store in sync. Let's start with our `TodoItem.vue` component. Open the `tests/unit/vue-components/TodoItem.spec.js` file. This has been templated with some example test to correspond with our A/Cs for speed of doing the exercise. Find the describe block for our important flag tests. It is setup already with a `beforeEach()` hook for test setup.
+4. We will add new tests in three places to validate our function behaves as expected against the acceptance criteria from the Feature Story supplied to us. We will need to write tests for our `TodoItem.vue` to verify having a red flag and that it is clickable. Our app is going to need to persist the changes in the backend so we'll want to make changes to our `actions.js` and `mutations.js` to keep the API and local copy of the store in sync. Let's start with our `TodoItem.vue` component. Open the `tests/unit/vue-components/TodoItem.spec.js` file. This has been templated with some example test to correspond with our A/Cs for speed of doing the exercise. Find the describe block for our important flag tests. It is set up already with a `beforeEach()` hook for test setup.
 
 ![important-flag-before](../images/exercise3/important-flag-before.png)
 
