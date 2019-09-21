@@ -163,7 +163,7 @@ https://codeready-workspaces.apps.<DOMAIN_FOR_YOUR_CLASS>/dashboard/#/load-facto
 
 7. Let's add two more params dicts to pass to our template to be able to create a `dev` and `test` project. At the top of `enablement-ci-cd/inventory/host_vars/projects-and-policies.yml` create a dictionary called `dev` and `test` similar to how you see `ci_cd` defined.
 
- * In your editor; Open `enablement-ci-cd/inventory/host_vars/projects-and-policies.yml` and add the following:
+ * In your editor, open `enablement-ci-cd/inventory/host_vars/projects-and-policies.yml` and add the following lines before `openshift_cluster_content`:
 
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/projects-and-policies.yml*</kbd>
 ```yaml
@@ -176,7 +176,7 @@ test:
   NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Test"
 ```
 
-8. In the `enablement-ci-cd/inventory/host_vars/projects-and-policies.yml` file, add the new objects for the projects you want to create (dev & test) by adding another object to the `content` array (previously defined) for each. You can copy and paste them from the `ci_cd_namespace` example and update them accordingly. If you do this, remember to set the names to `{{ dev_namespace}}` and `{{ test_namespace }}` and change the `params_from_vars` variable accordingly. The values for these variables used for the names (`ci_cd_namespace`, `dev_namespace` etc.) are defined in `apply.yml` file in the root of the project.
+8. In the `enablement-ci-cd/inventory/host_vars/projects-and-policies.yml` file, add the new objects for the projects you want to create (dev & test) by adding another object to the `content` array (previously defined) for each. You can copy and paste them from the `ci_cd_namespace` example and update them accordingly. If you do this, remember to set the names to `{{ dev_namespace }}` and `{{ test_namespace }}` and change the `params_from_vars` variable accordingly. The values for these variables used for the names (`ci_cd_namespace`, `dev_namespace` etc.) are defined in `apply.yml` file in the root of the project.
 
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/projects-and-policies.yml*</kbd>
 ```yaml
@@ -194,7 +194,7 @@ test:
     - projects
 ```
 
-9. Use the `Terminal > OpenTerminal in specific container` menu item to open a terminal in the `dev-pod/main` container
+9. Use the `Terminal > Open Terminal in specific container` menu item to open a terminal in the `dev-pod/main` container
 
 ![open-terminal](../images/exercise1/open-terminal.png)
 
@@ -212,13 +212,13 @@ echo "zsh" >> ~/.bashrc
 cd enablement-ci-cd
 ```
 
-11.  With the configuration in place, install the OpenShift Applier dependency
+11. With the configuration in place, install the OpenShift Applier dependency
 
 ```bash
 ansible-galaxy install -r requirements.yml --roles-path=roles
 ```
 
-12. Apply the inventory by logging into OpenShift on the terminal and running the playbook as follows (<CLUSTER_URL> should be replaced with the one you've been provided by the instructor). Accept any insecure connection warning(s) 👍:
+12. Apply the inventory by logging into OpenShift on the terminal and running the playbook as follows (`<CLUSTER_URL>` should be replaced with the one you've been provided by the instructor). Accept any insecure connection warning(s) 👍:
 
 ```bash
 oc login <CLUSTER_URL>
@@ -227,7 +227,7 @@ oc login <CLUSTER_URL>
 ansible-playbook apply.yml -i inventory/ -e target=bootstrap
 ```
 
-where the `-e target=bootstrap` is passing an additional variable specifying that we run the `bootstrap` inventory
+where the `-e target=bootstrap` is passing an additional variable specifying that we run the `bootstrap` group of the inventory.
 
 13. Once successful you should see an output similar to this: ![playbook-success](../images/exercise1/play-book-success.png)
 
@@ -242,7 +242,7 @@ oc projects
 ### Part 3 - Nexus
 > _Now that we have our Projects setup; we can start to populate them with Apps to be used in our dev lifecycle_
 
-For this part, we will use an OpenShift Container Platform **template** to install and configure Nexus. This template contains all the things needed to setup a persistent nexus server, exposing a service and route while also creating the persistent volume needed. Have a read through the template; at the bottom you'll see a collection of parameters we will pass to the template.
+For this part, we will use an OpenShift Container Platform **template** to install and configure Nexus. This template contains all the things needed to set up a persistent Nexus server, exposing a service and route while also creating the persistent volume needed. Have a read through the template; at the bottom you'll see a collection of parameters we will pass to the template.
 
 <p class="tip">
 <b>NOTE</b> - Below how we are utilizing an OpenShift Container Platform template from a different repository by accessing it by its RAW GitHub URL (from the redhat-cop repo in this case)
@@ -294,14 +294,14 @@ ansible-playbook apply.yml -e target=tools \
      -e "filter_tags=nexus"
 ```
 
-5. Once successful; login to the cluster through the browser (using cluster URL) and navigate to the `<YOUR_NAME>-ci-cd`. You should see Nexus up and running. You can login with default credentials (admin / admin123) ![nexus-up-and-running](../images/exercise1/nexus-up-and-running.png)
+5. Once successful, login to the cluster through the browser (using cluster URL) and navigate to the `<YOUR_NAME>-ci-cd`. You should see Nexus up and running. You can login with default credentials (admin / admin123) ![nexus-up-and-running](../images/exercise1/nexus-up-and-running.png)
 
 ### Part 4 - Commit CI/CD
 
 1. Navigate to GitLab login page. You can login using your cluster credentials using the LDAP tab
 ![gitlab-ui](../images/exercise1/gitlab-ui.png)
 
-2. Once logged in create a new project called `enablement-ci-cd` and mark it as internal. Once created; copy out the `git url` for use on the next step.
+2. Once logged in create a new project called `enablement-ci-cd` and mark it as internal. Once created, copy out the `git url` for use on the next step.
 ![gitlab-new-project](../images/exercise1/gitlab-new-project.png)
 
 3. Commit your local project to this new remote by first removing the existing origin (github) where the Ansible project was cloned from in the first steps. Remember to substitute `<GIT_URL>` accordingly with the one created for your `enablement-ci-cd` repository a moment ago.
@@ -372,7 +372,7 @@ JENKINS_OPTS=--sessionTimeout=720
 ```
   * You might be wondering why we have to replace <YOUR_NAME> here and can't just rely on the `namespace_prefix` variable that we've been using previously. This is because the replacement is handled by two different engines (one being ansible -- which knows about `namespace_prefix` and the other being the oc client, which does not). Because the params files are processed by the oc client, we need to update this here.
 
-2. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo in  `inventory/host_vars/ci-cd-tooling.yml` as shown below to create a DeploymentConfig for Jenkins. In order for Jenkins to be able to run `npm` commands we must configure a jenkins build slave for it to use. This slave will be dynamically provisioned when we run a build. It needs to have NodeJS and npm and a C compiler installed in it. 
+2. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo in  `inventory/host_vars/ci-cd-tooling.yml` as shown below to create a DeploymentConfig for Jenkins. In order for Jenkins to be able to run `npm` commands we must configure a jenkins build slave for it to use. This slave will be dynamically provisioned when we run a build. It needs to have Node.js and npm and a C compiler installed in it. 
 
 <p class="tip">
 <b>NOTE</b> These slaves can take a time to build themselves so to speed up we have placed the slave with a corresponding ImageStream within OpenShift. To leverage this existing slave image, we are using a feature of the openshift-applier to process a couple of post-steps part of the inventory. These steps are utilized to perform pre and post tasks necessary to make our inventory work correctly. In this case, we use the post steps to tag and label the jenkins-slave-npm ImageStream within our CI/CD project so Jenkins knows how to find and use it.
@@ -508,9 +508,9 @@ ansible-playbook apply.yml -e target=tools \
 
 1. Log in to Jenkins and hit `New Item`<br>![new-item](../images/exercise1/new-item.png).
 
-2. Create a freestyle job called `hello-world` ![jenkins-new-hello-world](../images/exercise1/jenkins-new-hello-world.png).
+2. Create an item called `hello-world` with type `Freestyle project` ![jenkins-new-hello-world](../images/exercise1/jenkins-new-hello-world.png).
 
-3. On the Source Code Management tab; add your `enablement-ci-cd` git repo and hit the dropdown to add your credentials we baked into the s2i on previous steps ![jenkins-scm-git](../images/exercise1/jenkins-scm-git.png)
+3. On the Source Code Management tab, add your `enablement-ci-cd` git repo and hit the dropdown to add your credentials we baked into the s2i on previous steps ![jenkins-scm-git](../images/exercise1/jenkins-scm-git.png)
 
 4. On the build tab add an Execute Shell step and fill it with `echo "Hello World"` ![jenkins-hello-world](../images/exercise1/jenkins-hello-world.png).
 

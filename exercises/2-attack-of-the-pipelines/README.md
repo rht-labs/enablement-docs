@@ -33,7 +33,7 @@ As a learner by the end of this lesson you will be able to:
 > The following tools are used throughout this exercise. Familiarity with them is not required but knowing what they are may help. You will not need to install Vue or MongoDB. They are taken care of by our `todolist` app.
 
 1. [Jenkins](https://jenkins.io/) - OpenSource build automation server; highly customisable through plugins
-2. [NodeJS](https://nodejs.org/en/) - Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient. Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
+2. [Node.js](https://nodejs.org/en/) - Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient. Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
 3. [MongoDB](https://www.mongodb.com/what-is-mongodb) - MongoDB stores data in flexible, JSON-like documents, meaning fields can vary from document to document and data structure can be changed over time
 4. [VueJS](https://vuejs.org/) - Vue (pronounced /vjuː/, like view) is a progressive framework for building user interfaces. It is designed from the ground up to be incrementally adoptable, and can easily scale between a library and a framework depending on different use cases. It consists of an approachable core library that focuses on the view layer only, and an ecosystem of supporting libraries that helps you tackle complexity in large Single-Page Applications.
 5. [Jenkins Pipeline](https://jenkins.io/doc/book/pipeline/) - Overview of the Jenkinsfile approach
@@ -87,19 +87,19 @@ The Todolist application is a monorepo which has both front end and server layer
 ![init-code1](../images/exercise1/init-code2.png)
 
 <p class="tip">
-⛷️ <b>NOTE</b> ⛷️ - If you do not plan on using the cloud ide you can clone the repository locally from here https://github.com/rht-labs/todolist.git
+⛷️ <b>NOTE</b> ⛷️ - If you do not plan on using the cloud IDE you can clone the repository locally from here https://github.com/rht-labs/todolist.git
 </p>
 
-2. Open up Gitlab and login. Create a new project (internal) in GitLab called `todolist` to host your clone of the project and copy its remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
+2. Open up GitLab and log in. Create a new project (internal) in GitLab called `todolist` to host your clone of the project and copy its remote address. ![new-gitlab-proj](../images/exercise2/new-gitlab-proj.png)
 
-3. Later in the exercise we'll automatically trigger Jenkins builds on commit, but we'll add the WebHook now. Add a WebHook to the newly created project by going to settings > integrations. ![gitlab-integrations](../images/exercise2/gitlab-integrations.png) 
+3. Later in the exercise we'll automatically trigger Jenkins builds on commit, but we'll add the WebHook now. Add a WebHook to the newly created project by going to Settings > Integrations. ![gitlab-integrations](../images/exercise2/gitlab-integrations.png) 
 
 4. In the field add the URL for Jenkins and the route for the webhook and token. Disable SSL Verification if the cluster has unsigned certs and Add the webhook. 
 ```bash
 https://<YOUR_JENKINS_URL>/multibranch-webhook-trigger/invoke?token=todolist
 ```
 
-5. In your local clone of the `todolist`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab. Use the `Terminal > OpenTerminal in specific container` menu item to open a terminal in the `dev-pod/main` container
+5. In your local clone of the `todolist`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab. Use the `Terminal > Open Terminal in specific container` menu item to open a terminal in the `dev-pod/main` container
 
 ```bash
 cd todolist
@@ -158,20 +158,20 @@ Afterwards, you should see something like this:
 ```
 ![npm-scripts](../images/exercise2/npm-scripts.png)
 
-9. Let's start by serving our application and starting the database. Use the `Terminal > OpenTerminal in specific container` menu item to open a terminal in the `dev-pod/main` container. Then run the mongo database.
+9. Let's start by serving our application and starting the database. Use the `Terminal > Open Terminal in specific container` menu item to open a terminal in the `dev-pod/main` container. Then run the mongo database.
 
 ```bash
 cd todolist
 npm run mongo:start-ide
 ```
 <p class="tip" >
-<b>NOTE</b> - If you're not using the cloud hosted environment, you can start mongo using <i>npm run mongo</i> which will pull the latest image from dockerhub
+<b>NOTE</b> - If you're not using the cloud hosted environment, you can start mongo using <i>npm run mongo</i> which will pull the latest `mongo` image from [Docker Hub](https://hub.docker.com/).
 </p>
 
-You will get a popup in your cloud ide asking if you want to `add a redirect` that you can close.
+You will get a pop-up in your cloud IDE asking if you want to `add a redirect` that you can close.
 ![close-popup](../images/exercise2/close-popup.png)
 
-10. Use the `Terminal > OpenTerminal in specific container` menu item in the cloud ide to open your second terminal in the `dev-pod/main` container. Now we can run the todolist application.
+10. Use the `Terminal > Open Terminal in specific container` menu item in the cloud IDE to open your second terminal in the `dev-pod/main` container. Now we can run the todolist application.
 
 ```bash
 cd todolist
@@ -182,10 +182,10 @@ Once the application starts, we will get an `Open Link` popup that we can select
 
 ![8080-popup](../images/exercise2/8080-popup.png)
 
-11. Within the cloud ide a preview of `todolist` app homepage appears when you start the application
+11. Within the cloud IDE a preview of `todolist` app homepage appears when you start the application
  ![fullstack-app](../images/exercise2/fullstack-app.png)
 
-You can open the preview into a web browser outside of the cloud ide by clicking on the arrow box next to the url
+You can open the preview into a web browser outside of the cloud IDE by clicking on the arrow box next to the url
 
 ![open-in-browser](../images/exercise2/open-in-browser.png)
 
@@ -193,7 +193,7 @@ You can open the preview into a web browser outside of the cloud ide by clicking
 <b>NOTE</b> - In a local environment you may open the browser (http://localhost:8080) for displaying the homepage.
 </p>
 
-12. Use the `Terminal > OpenTerminal in specific container` menu item in the cloud ide to open your third terminal in the `dev-pod/main` container. Check things are up and running by testing the API with a `curl`. The API should return some seeded data (stored in `server/config/seed.js`)
+12. Use the `Terminal > Open Terminal in specific container` menu item in the cloud IDE to open your third terminal in the `dev-pod/main` container. Check things are up and running by testing the API with a `curl`. The API should return some seeded data (stored in `server/config/seed.js`)
 
 ```bash
 cd todolist
@@ -214,11 +214,11 @@ curl -s localhost:9000/api/todos | jq
 }]
 ```
 
-13. Within the cloud ide a preview of `todolist` app homepage appears when you start the application
+13. Within the cloud IDE a preview of `todolist` app homepage appears when you start the application
     * Click 'Todo' at the top of the home page to get to the above page.
     * The server hosting live reloads; so if you make changes to your code base the app will live update
 
-14.  The app is a todolist manager built in Vue.js. with a NodeJS backend. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page your todos are persisted.
+14.  The app is a todolist manager built in Vue.js. with a Node.js backend. Play around with the App. You will notice when you add todos they appear and clear as expected. If you refresh the page your todos are persisted.
 
 15.  The structure of the `todolist` is as follows.
 ```bash
@@ -284,15 +284,15 @@ where the following are the important things:
     * `./src/views` is the view containers; which are responsible for loading components and managing their interactions.
     * the `./src/router.js` controls routing logic. In our case the app only has one real endpoint.
     * `./src/scss` contains custom SCSS used in the application.
-    * `./*.js` is mostly config files for running and managing the app and the tests
-    * `./server` is the main collection of files needed by the app. The entrypoint is the `app.js`
-    * `./server/api` is where the api's controller, data model & unit test are stored.
-    * `./server/mocks` is a mock server used for when there is no DB access    
-    * `./server/config` stores our Express JS config, header information and other middleware.
+    * `./*.js` is mostly config files for running and managing the app and the tests.
+    * `./server` is the main collection of files needed by the app. The entrypoint is the `app.js`.
+    * `./server/api` is where the API's controller, data model & unit test are stored.
+    * `./server/mocks` is a mock server used for when there is no DB access.
+    * `./server/config` stores our Express.js config, header information and other middleware.
     * `./server/config/environment` stores environment specific config; such as connectivity to backend services like MongoDB.
-    * `./tasks` is a collection of additional `Grunt` tasks which will be used in later exercises
-    * `Grunt` is a taskrunner for use with Node.JS projects
-    * `package.json` contains the dependency list and a lot of very helpful scripts for managing the app lifecycle
+    * `./tasks` is a collection of additional `Grunt` tasks which will be used in later exercises.
+    * `Grunt` is a task runner for use with Node.js projects.
+    * `package.json` contains the dependency list and a lot of very helpful scripts for managing the app lifecycle.
 
 16. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables and change `<YOUR_NAME>` accordingly in the below commands. This is a one time activity and would be automated in a non-training environment.
 
@@ -379,7 +379,7 @@ git commit -m "UPDATE - change namespace vars to the teams"
 git push
 ```
 
-5.  Validate the build and deploy configs have been created in Openshift by opening the console and checking `<YOUR_NAME> CI-CD builds` for the `BuildConfigs`
+5.  Validate the build and deploy configs have been created in OpenShift by opening the console and checking `<YOUR_NAME> CI-CD builds` for the `BuildConfigs`
 ![ocp-app-bc](../images/exercise2/ocp-app-bc.png)
 
 6. Check `<YOUR_NAME>-dev` to see the deployment configs are in place
@@ -414,13 +414,13 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
 3. The page that loads is the Job Configuration page and it can be returned to at anytime from Jenkins. Let's start configuring our job. To conserve space; we will make sure Jenkins only keeps the last build's artifacts. Tick the `Discard old builds` checkbox, then `Advanced` and set `Max # of builds to keep with artifacts` to 1 as indicated below
 ![keep-artifacts](../images/exercise2/keep-artifacts.png)
 
-4. Our NodeJS build needs to be run on the `jenkins-slave-npm` we bought in in the previous chapter. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-slave](../images/exercise2/label-jenkins-slave.png)
+4. Our Node.js build needs to be run on the `jenkins-slave-npm` we bought in in the previous chapter. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-slave](../images/exercise2/label-jenkins-slave.png)
 
 5. On the Source Code Management tab, select the Git radio button, specify the endpoint for our GitLab `todolist` Project and specify your credentials (`<YOUR_NAME>-ci-cd-gitlab-auth`) from the dropdown box. Set the Branch Specifier to `develop`. ![git-scm](../images/exercise2/git-scm.png)
 
 6. Scroll down to the Build Environment tab and select the `Color ANSI Console Output` checkbox ![ansi](../images/exercise2/ansi.png)
 
-7. Move on to the Build section and select `Add build step`. From the dropdown select `Execute Shell`. On the box that appears; insert the following, to build package and deploy our app to Nexus:
+7. Move on to the Build section and select `Add build step`. From the dropdown select `Execute shell`. On the box that appears; insert the following, to build package and deploy our app to Nexus:
 ```bash
 set -o xtrace
 npm install
@@ -483,7 +483,7 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
 
 4. There is no Git or SCM needed for this job so move down to the Build Environment and tick `Delete workspace before build starts`
 
-5. Move on to the Build section and select `Add build step`. From the dropdown select `Execute Shell`. On the box the appears; insert the following, to pull the package from Nexus. We patch the BuildConfig with the Jenkins Tag to get traceablility from feature to source code to built item. Finally; the oc start-build command is run:
+5. Move on to the Build section and select `Add build step`. From the dropdown select `Execute shell`. On the box the appears; insert the following, to pull the package from Nexus. We patch the BuildConfig with the Jenkins Tag to get traceablility from feature to source code to built item. Finally; the oc start-build command is run:
 Remember to replace `<YOUR_NAME>` accordingly.
 ```bash
 #!/bin/bash
@@ -501,7 +501,7 @@ echo "### END BAKE IMAGE ###"
 ```
 ![bake-step](../images/exercise2/bake-step.png)
 
-6. Hit `Add build step` again and from the dropdown select `Execute Shell`. Enter the following text and remember to change `<YOUR_NAME>` accordingly.
+6. Hit `Add build step` again and from the dropdown select `Execute shell`. Enter the following text and remember to change `<YOUR_NAME>` accordingly.
 ```bash
 #!/bin/bash
 set -o xtrace
@@ -518,7 +518,7 @@ echo "### END DEPLOY IMAGE ###"
 ```
 ![deploy-step](../images/exercise2/deploy-step.png)
 
-7. When a deployment has completed; OpenShift can verify its success. Add another step by clicking the `Add build Step` on the Build tab then `Verify OpenShift Deployment` including the following:
+7. When a deployment has completed; OpenShift can verify its success. Add another step by clicking the `Add build step` on the Build tab then `Verify OpenShift Deployment` including the following:
     * Set the Project to your `<YOUR_NAME>-dev`
     * Set the DeploymentConfig to your app's name `todolist`
     * Set the replica count to `1`
@@ -550,7 +550,7 @@ echo "### END DEPLOY IMAGE ###"
 ### Part 4 - The Jenkinsfile
 > _In this exercise we'll use pipeline-as-code to create a pipeline in Jenkins_
 
-1. Open up your `todolist` application in your cloud ide and move to the `Jenkinsfile` in the root of the project. The high-level structure of the file is shown collapsed below.
+1. Open up your `todolist` application in your cloud IDE and move to the `Jenkinsfile` in the root of the project. The high-level structure of the file is shown collapsed below.
 ![pipeline-overview](../images/exercise4/pipeline-overview.png)
 Some of the key things to note:
     * `pipeline {}` is how all declarative Jenkins pipelines begin.
@@ -562,7 +562,7 @@ Some of the key things to note:
     * `post {}` hook is used to specify the post-build-actions. Jenkins declarative pipeline syntax provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
     * `when {}` is used for flow control. It can be used at the stage level and be used to stop pipeline entering that stage. e.g. when branch is master; deploy to `test` environment.
     
-2. The Jenkinsfile is mostly complete however some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GITLAB_USERNAME>` to the one you login to the cluster with; this variable is used in the namespace of your git projects when checking out code etc. Ensure the `GITLAB_DOMAIN` matches your git host.
+2. The Jenkinsfile is mostly complete, however some minor changes will be needed to orchestrate namespaces. Find and replace all instances of `<YOUR_NAME>` in the Jenkinsfile. Update the `<GITLAB_USERNAME>` to the one you log in to the cluster with; this variable is used in the namespace of your Git projects when checking out code etc. Replace `<GITLAB_FQDN>` with your Git domain (only the hostname, without `https://` or the repository name).
 
 <kbd>📝 *todolist/Jenkinsfile*</kbd>
 ```groovy
@@ -570,7 +570,7 @@ Some of the key things to note:
    
     environment {
         // Global Vars
-        NAMESPACE_PREFIX="<YOUR_NAME>"
+        NAMESPACE_PREFIX="<YOUR_NAME>"  
         GITLAB_DOMAIN = "<GITLAB_FQDN>"
         GITLAB_USERNAME = "<GITLAB_USERNAME>"
 
@@ -623,18 +623,18 @@ _____
 ## Extension Tasks
 > _Ideas for go-getters. Advanced topic for doers to get on with if they finish early. These will usually not have a solution available and are provided for additional scope._
 
-- Pipeline Tasks
-    * Add pipeline for `master` branch for each project. Use `test-` instead of `dev-` across all config and names in the pipeline
+- Pipeline Tasks:
+    * Add pipeline for `master` branch for each project. Use `test-` instead of `dev-` across all config and names in the pipeline.
     * Do the `.openshift-applier` steps as part of the pipeline for greater end to end automation.
-- Promote build
-    * Create a _promote-to-uat_ phase after the `master` branch deploy
-    * Create a `uat` env using the OpenShift Applier as seen before
+- Promote build:
+    * Create a _promote-to-uat_ phase after the `master` branch deploy.
+    * Create a `uat` env using the OpenShift Applier as seen before.
     * Tag and promote the image without rebuilding after the `test-**-deploy`
-- MongoDB tasks
-    * Add MongoDB Stateful set for the UAT environment (or test)
-    * Inject MongoDB config into the NodeJS app using config map & secrets.
-    * Improve the security of the DB by making the user /passwords randomly generated
-- Setup Nexus as an `npm` mirror registry and use it in the builds to speed up the build time
+- MongoDB tasks:
+    * Add MongoDB Stateful set for the UAT environment (or test).
+    * Inject MongoDB config into the Node.js app using config map & secrets.
+    * Improve the security of the DB by making the user /passwords randomly generated.
+- Setup Nexus as an `npm` mirror registry and use it in the builds to speed up the build time.
 
 <!-- 
 ## Additional Reading

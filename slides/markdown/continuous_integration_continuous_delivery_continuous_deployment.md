@@ -146,7 +146,7 @@ and release management teams
 ### What new Tools and Frameworks will we use?
 * **Jenkins**: Open source build automation server that is highly customizable
 via plugins
-* **NodeJS**: Node.js(R) is a JavaScript runtime build on Chrome's V8 JavaScript
+* **Node.js**: Node.js(R) is a JavaScript runtime build on Chrome's V8 JavaScript
 engine. It uses an event-driven, non-blocking I/O model that makes it lightweight and efficient.
 * **MongoDB**: A data store for JSON-like documents giving flexibility to data structures.
 * **VueJS**: A progressive framework for building user interfaces known as single-page

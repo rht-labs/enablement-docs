@@ -99,7 +99,7 @@ ansible-playbook apply.yml -e target=tools \
      -e "filter_tags=zap-slave"
 ```
 
-5. Head to <CLUSTER_URL> on OpenShift and move to your ci-cd project > Builds > Images. You should see `jenkins-slave-zap` Image Stream has been imported.
+5. Head to `<CLUSTER_URL>` on OpenShift and move to Builds > Images in your CI/CD project. You should see `jenkins-slave-zap` Image Stream has been imported.
 ![zap-image-stream](../images/exercise4/zap-image-stream.png)
 
 #### 1b - Arachni Scan
