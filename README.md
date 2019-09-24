@@ -11,7 +11,7 @@
 ## Cluster Information
 
 An OpenShift Cluster is required to complete the lab exercises. Students will receive by email (and by the instructors on site) the following information regarding the OpenShift cluster:
- - <**CLUSTER_URL**> -- Openshift Webconsole/API Server URL
+ - <**CLUSTER_URL**> -- OpenShift Webconsole/API Server URL
  - <**APPS_URL**> -- Wildcard subdomain for the exposed applications deployed in the Cluster
 
 ## Learner Pre-requisites
@@ -31,7 +31,7 @@ The following table lists the software requirements for running the lab exercise
  | -------- | ------- | ----- |
  | OCP CLI | v3.11 | $ oc version &#124; grep -i --color oc |
  | Ansible | => v2.8 | $ ansible --version &#124; grep -i --color ansible |
- | NodeJS | v8.x LTS | $ node -v |
+ | Node.js | v8.x LTS | $ node -v |
  | Git Installed | | $ git --version |
  | Google Chrome Web Browser | (>60) | click [here](chrome://version/) if Google Chrome is your default browser else copy the link `chrome://version/` in your Chome |
  | Docker latest | Community Edition | $ docker --version |
