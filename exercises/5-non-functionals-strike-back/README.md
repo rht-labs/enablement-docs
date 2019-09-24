@@ -202,7 +202,7 @@ stage('OWASP Scan') {
     }
 ```
 
-8. With this config in place, commit your code (from your terminal). Wait for a few minutes until a new build in Jenkins is trigerred:
+8. With this config in place, commit your code (from your terminal). Wait for a few minutes until a new build in Jenkins is triggered:
 
 ```bash
 cd /projects/todolist
@@ -220,9 +220,9 @@ git push
 5. Check out the Blue Ocean Jenkins view for how the new stage is viewed!
 ![jenkins-arachni-stage](../images/exercise5/jenkins-parallel.png)
 
-6. Once the Jobs have completed; navigate to the Jobs status and see the scores. You can find the graphs and test reports on overview of the Job. Explore the results!
-![report-arachni](../images/exercise5/report-arachni.png)
+1. Once the build has completed, navigate to the build page and select `Arachni Web Crawl` from the menu on the left. You will see find the graphs and the descriptions of the issues found by Arachni. Explore the results!
 ![jenkins-arachni](../images/exercise5/jenkins-arachni.png)
+![report-arachni](../images/exercise5/report-arachni.png)
 
 <p class="tip">
 NOTE - your build may have failed, or marked as unstable because of the a security failure but the reports should still be generated, it is OK to proceed with the next exercise!
@@ -274,7 +274,7 @@ git commit -m "ADD - linting and coverage to the pipeline"
 git push
 ```
 
-5. A new Jenkins build is trigerred and the pipeline fails. Look in the Jenkins log for what the issue might be:
+5. A new Jenkins build is triggered and the pipeline fails. Look in the Jenkins log for what the issue might be:
 ![linting-issue](../images/exercise5/linting-issue.png)
 
 6. Fix the error identified by the linter by commenting out the offending line.
@@ -327,7 +327,7 @@ An arbitrary value for the APIs to respond in has been chosen. It is set in the 
 
 5. Set the `Color ANSI Console Output` on the Build Environment section.
 
-6. Click `add build step` and select `execute shell` and add the following to it, replacing `<YOUR_NAME>` as expected. We will just test the `create` and `show` API for the moment. We are grabbing the response code of the perf-test to keep Jenkins running both shells steps and then exiting with whichever fails:
+6. Click `Add build step` and select `Execute shell` and add the following to it, replacing `<YOUR_NAME>` as expected. We will just test the `create` and `show` API for the moment. We are grabbing the response code of the perf-test to keep Jenkins running both shells steps and then exiting with whichever fails:
 ```bash
 export E2E_TEST_ROUTE=todolist-<YOUR_NAME>-dev.<APPS_URL>
 npm install
@@ -340,14 +340,14 @@ set ­-e
 exit $(($rc1 | $rc2))
 ```
 
-7. On the Post Build actions section we will plot the data from the perf tests in Jenkins. Add a `Post-build Action > Plot Build Data`.
+7. On the Post Build actions section we will plot the data from the perf tests in Jenkins. Add a `Post-build Actions > Plot build data`.
 
-8. On the new dialog, name the Plot group e.g. `bench-tests` and add `create­-api` as the Plot title. Set the `Number of Builds to Include` to a large number like `100`. Set the Data Series file to be `reports/server/perf/create-perf-score.csv` and mark the `Load data from CSV field` checkbox. Apply those changes
+8. On the new dialog, name the Plot group e.g. `bench-tests` and add `create­-api` as the Plot title. Set the `Number of builds to include` to a large number like `100`. Set the Data series file to be `reports/server/perf/create-perf-score.csv` and mark the `Load data from csv file` checkbox. Apply those changes.
 ![jenkins-plot](../images/exercise5/jenkins-plot.png)
 
-9. Hit `Add Plot` to add another. Set Plot group to `bench-tests` again but this time setting the Plot title to `show­-api`. Set the Data Series file to be `reports/server/perf/show-perf-score.csv` and mark the `Load data from CSV` radio button. Save those changes and run the job (Job could take a while to execute!).
+9. Hit `Add Plot` to add another. Set Plot group to `bench-tests` again but this time setting the Plot title to `show­-api`. Set the Data Series file to be `reports/server/perf/show-perf-score.csv` and mark the `Load data from csv file` radio button. Save those changes and run the job (Job might take a while to execute!).
 
-10. Run it a few times to start to generate the data points on the plot. The `bench-tests` plot is available on the job's homepage
+10. Run it a few times to start to generate the data points on the plot. You can see the `bench-tests` by selecting `Plots` in the left menu on the job's homepage.
 ![result-plot](../images/exercise5/result-plot.png)
 
 _____
@@ -357,7 +357,7 @@ _____
 
  - Enhance the `todolist` with the security scanning tools as you've done for the `todolist`
  - Enhance the `todolist` with the coverage reporting as you've done for `todolist`
- - Add Black Duck or other package scanning tooling for our NodeJS app
+ - Add Black Duck or other package scanning tooling for our Node.js app
  - Add Container Vulnerability scanning tooling to the pipeline
  - Add `Stryker` to create mutants and do additional non functional testing of the App
  - Add the Checkstyle plugin to Jenkins for reporting scores

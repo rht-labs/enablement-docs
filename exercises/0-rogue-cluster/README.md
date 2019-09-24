@@ -6,7 +6,7 @@
 
 ## Cluster Requirements
 
-Learners will create 3 to 4 project namespaces running lightweight NodeJS app \* 2 and a MongoDB in up to three of these namespace (dev, test, uat for example). The learners ci-cd namespace will house GitLab, Nexus and Jenkins as well as any slave pods used by Jenkins.
+Learners will create 3 to 4 project namespaces running lightweight Node.js app \* 2 and a MongoDB in up to three of these namespace (dev, test, uat for example). The learners ci-cd namespace will house GitLab, Nexus and Jenkins as well as any slave pods used by Jenkins.
 
 - Jenkins requires 5Gi of Persistent Storage and 4Gi of RAM
 - GitLab requires 2Gi of storage and 2Gi of RAM
@@ -86,7 +86,7 @@ This cheat sheet will give you some of the most useful commands and tips which y
 - Run commands with root privileges
   - `sudo command1` will run a command with escalated privileges. This is safer than logging on as root user.
 
-## Openshift 101
+## OpenShift 101
 
 OpenShift, or OpenShift Container Platform (OCP) is Red Hat's container platform. It is used to run and manage containerised applications with the aim of accelerated application development and deployment. We shall be deploying all of our applications for this enablement on an OpenShift cluster.
 
