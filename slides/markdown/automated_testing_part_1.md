@@ -100,6 +100,11 @@ Refactor - Eliminate duplication & make it beautiful <!-- {_class="fragment"  da
 
 
 
+### TDD Lifecycle
+![Circle of life](https://media.giphy.com/media/DvMHwFYLVHlZe/giphy.gif)  <!-- {_class="" style="height:450px"} -->
+
+
+
 ### Prepare your environment
 Our program is made of Lego. Get your equipment ready for coding
 ![lego-space](https://media.gizmodo.co.uk/wp-content/uploads/2018/09/lego-620x349.jpg)
