@@ -5,6 +5,20 @@ DO500 <!-- {_class="title-color"} -->
 
 
 
+### Value Streams
+Each table picks a sector and a business use case (some examples below):
+* Telco - Ordering a new Broadband package
+* Finance - Creating new Current Account
+* Government - Paying for Council Tax
+* Energy - Switching energy provider
+
+What is the trigger for the stream?
+What is end business value?
+What are all the steps in between?
+What's the Technology or system that helps with that step?
+
+
+
 ### Metric-Based Process Mapping
 #### _What is It?_
 * Heavily influenced by Karen Martin's work in this area
@@ -28,7 +42,6 @@ how the work is actually done.
 ### Metric-Based Process Mapping: How To
 #### Label the map
 ![Map Label](images/vsm/mbpmstep1.png)
-
 
 
 ### Metric-Based Process Mapping: How To
