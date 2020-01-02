@@ -57,12 +57,24 @@ the **culture** and **philosophy** used to produce it
 
 
 
-### Exercise: The Successful Demo Day
+### Choose your own adventure - Exercise A or B
+
+
+
+### Exercise A: The Successful Demo Day 
 In teams, take some time to brainstorm:
 * What have you taken away from this week's set of sessions and activities:
   * People, processes **and** technology
 * What did you learn about your team, class, or instructors?
 * What did you enjoy?
+
+
+
+### Exercise B: The Success Factors and the Anti Patterns
+In teams, take some time to brainstorm:
+* Demo Day - What are the things you would bring and show during a Demo Day?
+* Success Factors - What are things or people who could help drive this new way of working and help with adoption
+* Anti Patterns - What are the things that would hinder us or prevent us from succeeding? 
 
 
 

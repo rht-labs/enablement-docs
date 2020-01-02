@@ -11,24 +11,20 @@ DO500 <!-- {_class="title-color"} -->
 
 
 ### User Stories
-#### _What are They?_
+#### As a < type of user >, I want < some goal > so that < some reason >
+As an learner, I want to stay awake so that I can be attentive and listen to teacher
+
 * A promise to create a conversation
   * Card
   * Conversation
   * Confirmation
-* Enough Detail to give direction for completion
+* Enough detail to give direction for completion
 * Provide value to the end consumer
 
 
 
 ### User Stories
-#### _User stories should be..._
-* **I**ndependent
-* **N**egotiable
-* **V**aluable
-* **E**stimable
-* **S**mall
-* **T**estable
+![invest](images/user-stories/user-stories-invest.png)
 
 
 
@@ -58,11 +54,6 @@ DO500 <!-- {_class="title-color"} -->
 
 
 
-#### PRODUCT SLICING GONE BAD!
-![Example1](images/value-slicing/slicing-gone-wrong.jpg )
-
-
-
 ### Exercise - Mapping Stories for "getting to work"
 1. As an individual, capture on stickies things you do from the moment you wake up
 until you arrive at work.
@@ -86,6 +77,11 @@ until you arrive at work.
 
 <!-- .slide: id="value-slicing" -->
 ## Value Slicing
+
+
+
+#### PRODUCT SLICING GONE BAD!
+![Example1](images/value-slicing/slicing-gone-wrong.jpg )
 
 
 
