@@ -34,6 +34,16 @@ February 2001: Snowbird Resort, Utah, United States
 
 
 
+### 4 Values
+![agile-manifesto-infographic](images/Agile/agile-manifesto-infographic.png)  <!-- {_class="" style="height:550px"} -->
+
+
+
+### 12 Principles
+![12-principles-download](images/Agile/12-principles-download.png)  <!-- {_class="" style="height:550px"} -->
+
+
+
 ### 12 Principles of the Agile Manifesto
 * Our highest priority is to satisfy the customer through early and
 continuous delivery of valuable software.

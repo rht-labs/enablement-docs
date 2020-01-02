@@ -180,15 +180,14 @@ the **event**
 ### Exercise
 ### Event Storm for To Do List Management
 ![Key](images/eventstorming/key.png) <!-- {_class="inline-image"} -->
-* As a class, walk through an example event storm for the To Do List
-Management application.
-* In teams, take this example and extend it to cover additional events:
-  1. Add the new events
-  * Add the new commands
-  * Are there new users?
-  * Are there third party systems to consider?
-  * Any questions or ambiguities to add to the event storm?
-  * Add aggregates as needed
+* In your teams, create example event storm for the Current state of the To Do List
+Management application. Cover the following things:
+  1. Add the new Events
+  * Add the new Commands, Users and Read Models
+  * Are there new Systems or Aggregates?
+* Reflect on your Impact Map deliverables and enhance it with some new functionality e.g
+  1. Sharing lists between users
+  2. Integration with other vendors or providers
 
 
 

@@ -12,8 +12,7 @@ DO500 <!-- {_class="title-color"} -->
 
 ### Impact Mapping
 #### _What is It?_
-Impact Mapping is an engaging, graphical, and strategic planning technique. It
-was introduced by Gojko Adzic in 2012.
+Impact Mapping is an engaging, graphical, and strategic planning technique.
 
 At the end of the impact map, you should have:
 * A shared understanding of your project's goal or problem statement
@@ -25,19 +24,25 @@ the aforementioned impacts
 
 
 
-![Goal](images/ImpactMapping/impact-mapping-goal.png)
+### Impact Mapping
+It was brought to the IT world by Gojko Adzic in 2012. 
+![impact-mapping](https://www.impactmapping.org/assets/cover500.png)
 
 
 
-![Goal](images/ImpactMapping/impact-mapping-actors.png)
+![Goal](images/ImpactMapping/impact-mapping-goal.png)  <!-- {_class="" style="height:550px"} -->
 
 
 
-![Goal](images/ImpactMapping/impact-mapping-impacts.png)
+![Goal](images/ImpactMapping/impact-mapping-actors.png)  <!-- {_class="" style="height:550px"} -->
 
 
 
-![Goal](images/ImpactMapping/impact-mapping-deliverables.png)
+![Goal](images/ImpactMapping/impact-mapping-impacts.png)  <!-- {_class="" style="height:550px"} -->
+
+
+
+![Goal](images/ImpactMapping/impact-mapping-deliverables.png)  <!-- {_class="" style="height:550px"} -->
 
 
 
@@ -63,22 +68,37 @@ the aforementioned impacts
 
 
 
+### Exercise - Setting the Scene
+One of the facilitators is playing the role of *CEO* of Todolist Management International (TMI&trade;)
+
+#### Market Research
+
+* TMI&trade; has been a market leader for 15 years in pen and paper TodoList Kit industry
+* Our research suggests that people most likely  to use a digital TodoList application are aged between 18 and 49 years old
+* Long Term goal is to use the Facebook model - attract millions of users to be able to harvest their data for nefarious use
+
+
+
 ### Exercise - Impact Mapping 1/2
 As a class:
 
-Our client has a To Do List app that is not doing great, and we have agreed to help them build a new one.
-
-1. Produce a simple impact map for the _To Do List Application_
-   * Goal: Create an easy to use tool to allow 1 million users to get tasks done
-2. Discuss: Is this a good goal?
-3. Who are the actors that can get us to our goal?
+1. Start at the end:
+   * We have an easy to use tool with 1 million users getting tasks done.
+2. Discuss:
+   * Is this a good goal?
+3. Diverge <> Converge:
+   * Who are the **all** the actors that can get us to our goal?
+   * Who are the focus ones? Pick one to two actors per table
 
 
 
 ### Exercise - Impact Mapping 2/2
+As a class:
+1. Walk through creating the Impacts and Deliverables for one Actor
+
 As a team:
-1. Draw the impact map so far
-2. Determine impacts and deliverables
+1. Determine impacts and deliverables for your actors
+2. Issue your Donal Dollars&trade; to identify where you should place your bets
 
 
 
