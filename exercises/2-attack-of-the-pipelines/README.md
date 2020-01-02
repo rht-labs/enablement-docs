@@ -610,12 +610,12 @@ git push
 8. Set the `Scan Multibranch Pipeline Triggers` to be Scan by webhook and set the token to be `todolist` as we set at the beginning of the exercise. This will trigger the job to scan for changes in the repo when there are pushes. 
 ![multibranch-webhook](../images/exercise2/multibranch-webhook.png)
 
-9.  Save the Job configuration to run the intial scan. The log will show scans for `master` and `develop` branches, which have `Jenkinsfile` so pipelines are dynamically created for them.
+9.  Save the Job configuration to run the initial scan. The log will show scans for `master` and `develop` branches. The `develop` branch has a `Jenkinsfile`, so a pipeline is dynamically created for it.
 ![todolist-api-multi](../images/exercise2/todolist-api-multi.png)
 
 10.  The pipeline file is setup to only run `bake` & `deploy` stages when on `master` or `develop` branch. This is to provide us with very fast feedback for team members working on feature or bug fix branches. Each time someone commits or creates a new branch a basic build with testing occurs to give very rapid feedback to the team. 
 
-11.  With the builds running for  `develop` and `master` we can explore the Blue Ocean View for Jenkins. On the Job overview page, hit the `Open Blue Ocean` button on the side to see what modern Jenkins looks like.
+11.  With the build running for  `develop`, we can explore the Blue Ocean View for Jenkins. On the Job overview page, hit the `Open Blue Ocean` button on the side to see what modern Jenkins looks like.
 ![blue-ocean-todolist](../images/exercise2/blue-ocean-todolist.png)
 
 _____
