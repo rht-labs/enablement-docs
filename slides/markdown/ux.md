@@ -67,6 +67,35 @@ improvement and optimization.
 
 
 
-<!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
-### DevOps practices used in this section:
-- [Empathy Mapping](https://openpracticelibrary.com/practice/empathy-mapping/)
+### **GREAT NEWS!**
+![Announcement](images/usm/announcement.png) <!-- {_class="" style="border:none; box-shadow:none; height:200px; float:left;"} -->
+
+MORNING ROUTINE VENTURES <!-- {_class="" style="margin-top: 100px; text-align:left;"} -->
+Wants to invest in the ‘people that are late for work market’!
+
+<p align="left">**BIG OPPORTUNITY !** </p>
+
+
+
+### Exercise
+
+![LeanUX](images/usm/lean_ux.jpg) <!-- {_class="" style="border:none; box-shadow:none; height:300px; float:right;"} -->
+<p align="left" width="200px">Invent a product based on your value slicing excercise information.  <!-- {_class="" style="width:500px;"} -->
+
+* **Step 1** - User Interview [5 mins]
+* **Step 2** - Sketch - Prototype [10 mins]
+* **Step 3** - User Testing [5 mins]
+* **Step 4** - Build with Lego [15 mins]
+
+<p>Quick Tips - Use an empathy map, Ask 5 ladder technique : WHY?</p><!--{_class="" style="text-align:left; font-size: smaller; font-weight: 100;"} -->
+
+
+
+### **TEAM PRESENTATIONS**
+![Presentation](images/usm/presentation.jpg) <!-- {_class="" style="border:none; box-shadow:none; height:350px; float:left; margin-left:100px;""} -->
+
+* Initial Idea<!-- {_class="" style="margin-top: 120px; text-align:left;"} -->
+* User Interview
+* Product
+* User Feedback
+* Learnings & Future Plans
