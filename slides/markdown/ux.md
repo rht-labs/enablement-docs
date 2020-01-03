@@ -38,6 +38,7 @@ DO500 <!-- {_class="title-color"} -->
 <!-- .slide: data-background-image="images/usm/iceberg.jpg", class="white-style" -->
 
 
+
 ### Empathy Mapping
 #### _What Is It?_
 * A tool to capture and visualize what key stakeholders are sensing when in a
@@ -59,6 +60,10 @@ developers of an application can learn directly from end users using it.
 * The tool identifies pain points, opportunities, and starts to form a basis for
 improvement and optimization.
 * The tool can be used to move from user empathy to value propositions.
+
+
+
+<!-- .slide: data-background-image="images/usm/empathy-map.jpg", class="white-style" -->
 
 
 
