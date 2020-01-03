@@ -35,6 +35,7 @@ DO500 <!-- {_class="title-color"} -->
 
 
 
+<!-- .slide: data-background-image="images/usm/iceberg.jpg", class="white-style" -->
 
 <!-- 3 lines = new slide -->
 <!-- ## Heading -->
