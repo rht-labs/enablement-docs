@@ -110,7 +110,7 @@ _____
 
 4. The `Test Suites: 1 failed, 11 passed, 12 total` string can be coded into a regex. On Jenkins homepage; hit the `Failure Cause Management` nav on the left hand menu. On the page that loads; hit `Create new`.
 
-5. Call the new Failure Cause `jest-tests`. Set the Description to be `${1,1} failed out of ${1,2}`. The `${1,1}` refers to the first capture group in a regex. Click `Add Indication > Build Log Indication`. Set the Pattern to match for the test output we've seen in our test execution on the terminal using this regex `.*Tests:.*(\d+) failed.*(\d+) total.*`. Click `Save` at the bottom of the page.
+5. Call the new Failure Cause `jest-tests`. Set the Description to be `${1,1} failed out of ${1,2}`. The `${1,1}` refers to the first capture group in a regex. Click `Add Indication > Build Log Indication`. Set the Pattern to match for the test output we've seen in our test execution on the terminal using this regex `.*Tests:.*(\d+) failed.*?(\d+) total.*`. Click `Save` at the bottom of the page.
 ![fail-cause](../images/exercise6/fail-cause.png)
 
 6. Our dashboards are set to show the `Description` field from the `Build Fail Analyser`. Run a build by checking in our failed tests and check the result on the Build Monitor created in the previous step
