@@ -111,8 +111,8 @@ brew install ansible
 
 8. Download and uncompress the OpenShift 3.11 client binary archive. Copy the ***oc*** binary to ***/usr/local/bin*** folder on your system
 ```bash
-curl -L -O https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-mac.zip
-unzip openshift-origin-client-tools-v3.11.0-0cbc58b-mac.zip
+curl -L -O https://mirror.openshift.com/pub/openshift-v4/clients/oc/4.3/macosx/oc.tar.gz
+tar xzvf oc.tar.gz
 cp oc /usr/local/bin/
 chmod +x /usr/local/bin/oc
 ```

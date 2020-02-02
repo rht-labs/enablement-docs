@@ -82,9 +82,7 @@ As a learner by the end of this lesson you will be able to:
 
 The Todolist application is a monorepo which has both front end and server layers in a single repo.
 
-1. Run the `che: init-todolist` task in your `dev-pod/main` container to clone the `todolist` code into `/projects` directory
-
-![init-code1](../images/exercise1/init-code2.png)
+1. Your cloud IDE should already have the `todolist` application cloned under `/projects/todolist` directory from the develop branch.
 
 <p class="tip">
 ⛷️ <b>NOTE</b> ⛷️ - If you do not plan on using the cloud IDE you can clone the repository locally from here https://github.com/rht-labs/todolist.git
@@ -99,14 +97,15 @@ The Todolist application is a monorepo which has both front end and server layer
 https://<YOUR_JENKINS_URL>/multibranch-webhook-trigger/invoke?token=todolist
 ```
 
-5. In your local clone of the `todolist`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab. Use the `Terminal > Open Terminal in specific container` menu item to open a terminal in the `dev-pod/main` container
+5. In your local clone of the `todolist`, remove the origin and add the GitLab origin by replacing `<YOUR_GIT_LAB_PROJECT>`. Push your app to GitLab. Use the `Terminal > Open Terminal in specific container` menu item to open a terminal in the `node-rhel7-ansible` container
 
 ```bash
 cd todolist
+git checkout -b develop
 git remote set-url origin <YOUR_GIT_LAB_PROJECT>
 # verify the origin has been updated
 git remote -v
-git push -u origin --all
+git push --set-upstream origin develop
 ```
 
 6. The `todolist` app has a package.json at the root of the project, this defines the configuration for the app including its dependencies, dev dependencies, scripts and other configuration. Install the app's dependencies
@@ -117,7 +116,7 @@ npm install
 7. When you are using the cloud hosted environment, you must login to OpenShift from the command line as your user.
 
 ```bash
-oc login -u <username> -p <password> <CLUSTER_URL>
+oc login --token=<Your Token> --server=<CLUSTER_URL>
 ```
 
 <p class="tip">
@@ -158,7 +157,7 @@ Afterwards, you should see something like this:
 ```
 ![npm-scripts](../images/exercise2/npm-scripts.png)
 
-9. Let's start by serving our application and starting the database. Use the `Terminal > Open Terminal in specific container` menu item to open a terminal in the `dev-pod/main` container. Then run the mongo database.
+9. Let's start by serving our application and starting the database. Use the `Terminal > Open Terminal in specific container` menu item to open a terminal in the `node-rhel7-ansible` container. Then run the mongo database.
 
 ```bash
 cd todolist
@@ -171,7 +170,7 @@ npm run mongo:start-ide
 You will get a pop-up in your cloud IDE asking if you want to `add a redirect` that you can close.
 ![close-popup](../images/exercise2/close-popup.png)
 
-10. Use the `Terminal > Open Terminal in specific container` menu item in the cloud IDE to open your second terminal in the `dev-pod/main` container. Now we can run the todolist application.
+10. Use the `Terminal > Open Terminal in specific container` menu item in the cloud IDE to open your second terminal in the `node-rhel7-ansible` container. Now we can run the todolist application.
 
 ```bash
 cd todolist
@@ -193,7 +192,7 @@ You can open the preview into a web browser outside of the cloud IDE by clicking
 <b>NOTE</b> - In a local environment you may open the browser (http://localhost:8080) for displaying the homepage.
 </p>
 
-12. Use the `Terminal > Open Terminal in specific container` menu item in the cloud IDE to open your third terminal in the `dev-pod/main` container. Check things are up and running by testing the API with a `curl`. The API should return some seeded data (stored in `server/config/seed.js`)
+12. Use the `Terminal > Open Terminal in specific container` menu item in the cloud IDE to open your third terminal in the `node-rhel7-ansible` container. Check things are up and running by testing the API with a `curl`. The API should return some seeded data (stored in `server/config/seed.js`)
 
 ```bash
 cd todolist
@@ -297,7 +296,7 @@ where the following are the important things:
 16. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables and change `<YOUR_NAME>` accordingly in the below commands. This is a one time activity and would be automated in a non-training environment.
 
 ```bash
-oc login -u <username> -p <password> <CLUSTER_URL>
+oc login --token=<Your Token> --server=<CLUSTER_URL>
 ```
 ```bash
 export NEXUS_SERVICE_HOST=$(oc get route nexus --template='{{.spec.host}}' -n <YOUR_NAME>-ci-cd)
@@ -356,7 +355,7 @@ with the following
 
 ```bash
 # login if needed
-oc login -u <username> -p <password> <CLUSTER_URL>
+oc login --token=<Your Token> --server=<CLUSTER_URL>
 ```
 
 ```bash
@@ -518,13 +517,7 @@ echo "### END DEPLOY IMAGE ###"
 ```
 ![deploy-step](../images/exercise2/deploy-step.png)
 
-7. When a deployment has completed; OpenShift can verify its success. Add another step by clicking the `Add build step` on the Build tab then `Verify OpenShift Deployment` including the following:
-    * Set the Project to your `<YOUR_NAME>-dev`
-    * Set the DeploymentConfig to your app's name `todolist`
-    * Set the replica count to `1`
-![verify-deployment](../images/exercise2/verify-deployment.png)
-
-8.  Hit `save` which will take you to the job overview page.
+7.  Hit `save` which will take you to the job overview page.
 
 #### 3c - Pipeline
 
