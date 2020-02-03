@@ -123,7 +123,7 @@ stage('OWASP Zap') {
         steps {
             sh '''
                 export REPORT_DIR="$WORKSPACE/"
-                /zap/zap-baseline.py -r index.html -t http://${E2E_TEST_ROUTE} || return_code=$?
+                /zap/zap-baseline.py -r index.html -t https://${E2E_TEST_ROUTE} || return_code=$?
                 echo "exit value was  - " $return_code
             '''
         }
