@@ -105,7 +105,7 @@ git checkout -b develop
 git remote set-url origin <YOUR_GIT_LAB_PROJECT>
 # verify the origin has been updated
 git remote -v
-git push --set-upstream origin develop
+git push --all
 ```
 
 6. The `todolist` app has a package.json at the root of the project, this defines the configuration for the app including its dependencies, dev dependencies, scripts and other configuration. Install the app's dependencies
