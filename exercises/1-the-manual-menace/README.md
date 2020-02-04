@@ -487,6 +487,10 @@ ci_cd:
 
 8. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
 
+<p class="tip">
+⚡ <b>NOTE</b> ⚡ - We are using a custom jenkins template that works with latest version of OpenShift until the changes can be merged upstream.
+</p>
+
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
 - object: ci-cd-builds
@@ -499,7 +503,7 @@ ci_cd:
     - jenkins
   - name: "jenkins-s2i"
     namespace: "{{ ci_cd_namespace }}"
-    template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/jenkins-s2i-build/jenkins-s2i-build-template-with-secret.yml"
+    template: "https://raw.githubusercontent.com/eformat/enablement-ci-cd/master/templates/jenkins-s2i-build-template-with-secret.yml"
     params: "{{ playbook_dir }}/params/jenkins-s2i"
     params_from_vars: "{{ ci_cd }}"
     tags:
