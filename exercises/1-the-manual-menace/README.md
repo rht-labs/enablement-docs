@@ -391,7 +391,7 @@ ansible-playbook apply.yml -e target=tools \
 <kbd>📝 *enablement-ci-cd/params/jenkins*</kbd>
 ```
 MEMORY_LIMIT=3Gi
-VOLUME_CAPACITY=10Gi
+VOLUME_CAPACITY=15Gi
 JVM_ARCH=x86_64
 NAMESPACE=<YOUR_NAME>-ci-cd
 JENKINS_OPTS=--sessionTimeout=720
