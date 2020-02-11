@@ -201,10 +201,13 @@ test:
 
 ![open-terminal](../images/exercise1/open-terminal.png)
 
-`bash` is the default shell. You can try `zsh` as your shell by typing:
+Use either `bash` or `zsh` as your shell by typing:
 ```
+bash
+# OR
 zsh
 ```
+
 <p class="tip">
 <b>NOTE</b> - If you want to try <b>z shell</b> as your default in the cloud ide run this command
 </p>
