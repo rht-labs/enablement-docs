@@ -511,7 +511,7 @@ NAME=todolist
 oc project ${NAMESPACE}
 oc tag ${PIPELINES_NAMESPACE}/${NAME}:${BUILD_TAG} ${NAMESPACE}/${NAME}:${BUILD_TAG}
 oc set env dc ${NAME} NODE_ENV=dev
-oc set image dc/${NAME} ${NAME}=docker-registry.default.svc:5000/${NAMESPACE}/${NAME}:${BUILD_TAG}
+oc set image dc/${NAME} ${NAME}=image-registry.openshift-image-registry.svc:5000/${NAMESPACE}/${NAME}:${BUILD_TAG}
 oc rollout latest dc/${NAME}
 echo "### END DEPLOY IMAGE ###"
 ```
