@@ -20,7 +20,7 @@ DO500 <!-- {_class="title-color"} -->
 ### Pop Quiz
 
 ![Question](images/usm/question.png) <!-- {_class="" style="border:none; box-shadow:none; height:300px; float:left;"} -->
-<p align="left">The main responsibility of a UX designer is to create nice looking user interface?</p><!-- {_class="" style="margin-top: 120px;"} -->
+<p align="left">The main responsibility of a UX designer is to create nice looking user interfaces?</p><!-- {_class="" style="margin-top: 120px;"} -->
 
 <p align="left">True **or** False</p>
 
