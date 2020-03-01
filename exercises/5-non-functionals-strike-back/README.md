@@ -146,7 +146,7 @@ stage('OWASP Scan') {
     steps {
         sh '''
             export REPORT_DIR="$WORKSPACE/"
-            /zap/zap-baseline.py -r index.html -t http://${E2E_TEST_ROUTE} || return_code=$?
+            /zap/zap-baseline.py -r index.html -t https://${E2E_TEST_ROUTE} || return_code=$?
             echo "exit value was  - " $return_code
         '''
     }
@@ -181,7 +181,7 @@ stage('OWASP Scan') {
         }
         steps {
             sh '''
-                /arachni/bin/arachni http://${E2E_TEST_ROUTE} --report-save-path=arachni-report.afr
+                /arachni/bin/arachni https://${E2E_TEST_ROUTE} --report-save-path=arachni-report.afr
                 /arachni/bin/arachni_reporter arachni-report.afr --reporter=xunit:outfile=report.xml --reporter=html:outfile=web-report.zip
                 unzip web-report.zip -d arachni-web-report
             '''
