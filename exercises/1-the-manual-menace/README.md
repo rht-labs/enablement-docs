@@ -269,6 +269,7 @@ MEMORY_LIMIT=1Gi
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
 ---
+ansible_connection: local
 openshift_cluster_content:
 - galaxy_requirements:
   - "{{ inventory_dir }}/../exercise-requirements.yml"
