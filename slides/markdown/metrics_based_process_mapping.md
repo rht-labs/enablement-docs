@@ -39,44 +39,75 @@ how the work is actually done.
 
 
 
-### Metric-Based Process Mapping: How To
-#### Label the map
-![Map Label](images/vsm/mbpmstep1.png)
-
-
-### Metric-Based Process Mapping: How To
-#### List functions involved in the process
-![Swimlanes](images/vsm/mbpmstep2.png)
+### Metric-Based Process Mapping
+How To
 
 
 
-### Metric-Based Process Mapping: How To
-#### Document all activities (steps)
-![Steps](images/vsm/mbpmstep3.png) <!-- {_class="inline-image"} -->
-* Fast iteration, clean up later
-* Use 4 x 6 sticky notes
-* Place sequentially in appropriate swimlane
-* No branching logic
-* Use verb/noun format
-* Be clear and concise
+#### Label the map and create Swim Lanes
+![Map Label](images/vsm/mbpm-swim-lanes.png)
 
 
 
-### Metric-Based Process Mapping: How To
-#### Number the activities (steps)
-![Number the Steps](images/vsm/mbpmstep4.png)
+#### Add time
+![Map Label](images/vsm/mbpm-swim-add-time.png)
 
 
 
-### Metric-Based Process Mapping: How To
-#### Metrics
-![Metrics](images/vsm/mbpmstep5.png)
+#### Add the activities (the steps) to the map
+![Map Label](images/vsm/mbpm-steps.png)
+
+
+
+#### Some could be in parallel
+![Map Label](images/vsm/mbpm-steps-final.png)
 
 
 
 ### Metric-Based Process Mapping
-#### Step-Specific Lead Time vs. Process Time
-![LeadTime](images/vsm/leadtime.png)
+Document all activities (the steps)
+
+
+
+#### The Activity
+![the activity](images/vsm/mbpm-activities-0.png)
+
+
+
+#### Name the activity and who's involved
+![Map Label](images/vsm/mbpm-activities-1.png)
+
+
+
+#### Add the number of people 
+![Map Label](images/vsm/mbpm-activities-2.png)
+
+
+
+#### Add the accuracy
+![Map Label](images/vsm/mbpm-activities-3.png)
+
+
+
+#### Process Time / Lead Time
+![Map Label](images/vsm/mbpm-activities-4.png)
+
+
+
+### Metric-Based Process Mapping
+Lead Time vs. Process Time
+
+
+
+![Map Label](images/vsm/pt-lt-1.png)
+
+
+
+![Map Label](images/vsm/pt-lt-2.png)
+
+
+
+![Map Label](images/vsm/pt-lt-3.png)
 
 
 
