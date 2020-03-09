@@ -145,7 +145,7 @@ https://codeready-workspaces.apps.<DOMAIN_FOR_YOUR_CLASS>/?https://raw.githubuse
 ```yaml
   ci_cd:
     NAMESPACE: "{{ namespace_prefix }}-ci-cd"
-    NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }}s CI/CD"
+    NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} CI/CD"
 ```
 
  * This will define the variables that we'll soon be using to deploy our CI/CD project. It relies on the `namespace_prefix` that we updated earlier. Pulling these two sets of variables together will now allow us to pass the newly created variables to our template that will create our project appropriately. You'll notice that the name of the variable above (`ci_cd`) is then assigned to `params_from_vars` in our inventory.
@@ -289,6 +289,7 @@ MEMORY_LIMIT=1Gi
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
 ---
+ansible_connection: local
 openshift_cluster_content:
 - galaxy_requirements:
   - "{{ inventory_dir }}/../exercise-requirements.yml"
