@@ -613,9 +613,25 @@ git push
 9.  Save the Job configuration to run the initial scan. The log will show scans for `master` and `develop` branches. The `develop` branch has a `Jenkinsfile`, so a pipeline is dynamically created for it.
 ![todolist-api-multi](../images/exercise2/todolist-api-multi.png)
 
-10.  The pipeline file is setup to only run `bake` & `deploy` stages when on `master` or `develop` branch. This is to provide us with very fast feedback for team members working on feature or bug fix branches. Each time someone commits or creates a new branch a basic build with testing occurs to give very rapid feedback to the team. 
+10. You may notice that your `develop` pipleine has succeeded, and is green. To make the `master` pipleine also succeed and turn from red to green, we need to update the code in the `master` branch. In essence we want to reflect the changes made in the `develop` branch and put them into the the `master` branch.
+```bash
+git checkout master
+```
+```bash
+git checkout develop Jenkinsfile
+```
+```bash
+git commit -m "Updated Jenkinsfile taken from develop branch"
+```
+```bash
+git push
+```
+You should notice your Jenkins pipeline detect the changes in the code base and as a result start the pipeline again. Once complete both pipelines should now be green.
+![todolist-green-pipelines](../images/exercise2/todolist-green-pipelines.png)
 
-11.  With the build running for  `develop`, we can explore the Blue Ocean View for Jenkins. On the Job overview page, hit the `Open Blue Ocean` button on the side to see what modern Jenkins looks like.
+11.  The pipeline file is setup to only run `bake` & `deploy` stages when on `master` or `develop` branch. This is to provide us with very fast feedback for team members working on feature or bug fix branches. Each time someone commits or creates a new branch a basic build with testing occurs to give very rapid feedback to the team. 
+
+12.  With the build running for  `develop`, we can explore the Blue Ocean View for Jenkins. On the Job overview page, hit the `Open Blue Ocean` button on the side to see what modern Jenkins looks like.
 ![blue-ocean-todolist](../images/exercise2/blue-ocean-todolist.png)
 
 _____
