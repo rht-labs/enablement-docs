@@ -90,8 +90,8 @@ Wants to invest in the ‘people that are late for work market’!
 <p>Quick Tips - Use an empathy map, Ask 5 ladder technique : WHY?</p><!--{_class="" style="text-align:left; font-size: smaller; font-weight: 100;"} -->
 
 
-### Interview Tips & Tricks
 
+### Interview Tips & Tricks
 ![LeanUX](images/usm/lean_ux.jpg) <!-- {_class="" style="border:none; box-shadow:none; height:300px; float:right;"} -->
 <p align="left" width="200px">Here are some useful tips for conducting the user interview   <!-- {_class="" style="width:500px;"} -->
 
@@ -101,6 +101,7 @@ Wants to invest in the ‘people that are late for work market’!
 * **4** Embrace the awkward silence
 * **5** Keep your reaction neutral
 * **6** don't mention solution until the end.
+
 
 
 ### **TEAM PRESENTATIONS**
@@ -115,7 +116,6 @@ Wants to invest in the ‘people that are late for work market’!
 
 
 ### Interview Tips & Tricks
-
 ![LeanUX](images/usm/lean_ux.jpg) <!-- {_class="" style="border:none; box-shadow:none; height:300px; float:right;"} -->
 <p align="left" width="200px">Here are some useful tips for conducting the user interview   <!-- {_class="" style="width:500px;"} -->
 
@@ -126,6 +126,7 @@ Wants to invest in the ‘people that are late for work market’!
 * **5** Keep your reaction neutral
 * **6** don't mention solution until the end.
 
-### my last test **let's see**
 
+
+### my last test **let's see**
 <p> just to see
