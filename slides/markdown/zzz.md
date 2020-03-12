@@ -5,7 +5,7 @@ DO500 <!-- {_class="title-color"} -->
 
 
 
-<!-- .slide: id="ux" -->
+<!-- .slide: id="zzz" -->
 ### Exercise - Do you know what is....
 
 ![UserTopics](images/usm/ux_topics.png) <!-- {_class="" style="border:none; box-shadow:none;"} -->
@@ -95,14 +95,12 @@ Wants to invest in the ‘people that are late for work market’!
 ![LeanUX](images/usm/lean_ux.jpg) <!-- {_class="" style="border:none; box-shadow:none; height:300px; float:right;"} -->
 <p align="left" width="200px">Here are some useful tips for conducting the user interview   <!-- {_class="" style="width:500px;"} -->
 
-* **1.** Well crafted open questions, not yes/no answers e.g. ~~Do you like?~~ What do you like about...?
-* **2.** Dig dipper, follow up e.g. you mentioned it was hard, tell me more about why
-* **3.** No Jargon
-* **4.** Embrace the awkward silence
-* **5.** Keep your reaction neutral
-* **6.** don't mention solution until the end.
-
-
+* **1** Well crafted open questions, not yes/no answers e.g. ~~Do you like?~~ What do you like about...?
+* **2** Dig deeper, follow up e.g. you mentioned it was hard, tell me more about why
+* **3** No Jargon
+* **4** Embrace the awkward silence
+* **5** Keep your reaction neutral
+* **6** don't mention solution until the end.
 
 
 ### **TEAM PRESENTATIONS**
@@ -113,3 +111,21 @@ Wants to invest in the ‘people that are late for work market’!
 * Product
 * User Feedback
 * Learnings & Future Plans
+
+
+
+### Interview Tips & Tricks
+
+![LeanUX](images/usm/lean_ux.jpg) <!-- {_class="" style="border:none; box-shadow:none; height:300px; float:right;"} -->
+<p align="left" width="200px">Here are some useful tips for conducting the user interview   <!-- {_class="" style="width:500px;"} -->
+
+* **1** Well crafted open questions, not yes/no answers e.g. ~~Do you like?~~ What do you like about...?
+* **2** Dig deeper, follow up e.g. you mentioned it was hard, tell me more about why
+* **3** No Jargon
+* **4** Embrace the awkward silence
+* **5** Keep your reaction neutral
+* **6** don't mention solution until the end.
+
+### my last test **let's see**
+
+<p> just to see
