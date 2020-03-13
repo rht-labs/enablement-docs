@@ -91,13 +91,13 @@ Wants to invest in the ‘people that are late for work market’!
 
 
 
-### Useful tips for conducting the user interview
+### User interview - useful tips
 ![LeanUX](images/usm/interview.png) <!-- {_class="" style="border:none; box-shadow:none; height:150px; float:right; margin-left:200px;"} -->
 
 * Well crafted open questions:
-*e.g. ~~Do you like?~~ What do you like about...?*
+<p> *e.g. ~~Do you like...?~~ What do you like about...?*
 * Dig deeper, follow up:
-*e.g. you mentioned it was hard, tell me more about why...*
+<p> *e.g. you mentioned it was hard, tell me more about why...*
 * Do not use jargon.
 * Embrace the awkward silence.
 * Keep your reaction neutral.
