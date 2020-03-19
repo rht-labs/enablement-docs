@@ -6,7 +6,7 @@ DO500 <!-- {_class="title-color"} -->
 
 
 <!-- .slide: id="ux" -->
-### Exercise - Do you know what is.... 
+### Exercise - Do you know what is....
 
 ![UserTopics](images/usm/ux_topics.png) <!-- {_class="" style="border:none; box-shadow:none;"} -->
 
@@ -88,6 +88,20 @@ Wants to invest in the ‘people that are late for work market’!
 * **Step 4** - Build with Lego [15 mins]
 
 <p>Quick Tips - Use an empathy map, Ask 5 ladder technique : WHY?</p><!--{_class="" style="text-align:left; font-size: smaller; font-weight: 100;"} -->
+
+
+
+### User interview - useful tips
+![LeanUX](images/usm/interview.png) <!-- {_class="" style="border:none; box-shadow:none; height:150px; float:right; margin-left:200px;"} -->
+
+* Well crafted open questions:
+<p> *e.g. ~~Do you like...?~~ What do you like about...?*
+* Dig deeper, follow up:
+<p> *e.g. you mentioned it was hard, tell me more about why...*
+* Do not use jargon.
+* Embrace the awkward silence.
+* Keep your reaction neutral.
+* Do not mention the solution until the end.
 
 
 
