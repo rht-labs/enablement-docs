@@ -7,17 +7,20 @@ DO500 <!-- {_class="title-color"} -->
 
 ### Event Storming
 #### _What is It?_
-* Provides a repeatable, teachable technique for modeling:
-  * Event-driven systems
-  * Large microservice-based systems
-* Requires a really, really large modeling surface
-* Requires lots of stickies in a rainbow of colors with a legend to their usage
+A rapid, interactive approach to business process discovery and design that yields high quality models
 
 
 
 ### Event Storming
-#### _What is It?_
-* Who: key business stakeholders and techies
+#### _What do I need?_
+* **Who**: Key business stakeholders and techies
+* A really, really large modeling surface
+* Lots of stickies in a rainbow of colors with a legend to their usage
+
+
+
+### Event Storming
+#### _Are there rules?_
 * There will be lots of talking, a fair bit of squabbling, and periodically
 some **very** heated debate
 * No chairs!
@@ -44,6 +47,9 @@ Event Storming was developed by Alberto Brandolini
   * Builds a shared understanding
   * Fail fast to solve difficult problems
   * Deliver really useful design artifacts
+* Provides a repeatable, teachable technique for modeling:
+  * Event-driven systems
+  * Large microservice-based systems
 
 
 
@@ -75,44 +81,50 @@ event model
 
 
 ### Event Storming: Events
-![Events](images/eventstorming/events.jpg) <!-- {_class="inline-image"} -->
-Something that happened that people care about
-* Subject --> Verb in past tense, e.g **Item Shipped**
-* Could be timed, e.g. **Nightly Accounts Reconciled**
-* A meaningful result of another thing, e.g. **Account Locked**
-
-
-
-### Event Storming: Events
-![Event](images/eventstorming/eventsticky.png) <!-- {_class="inline-image"} -->
-Where do events come from?
-* A system
-* Passing of time
-* Consequence of another event
+![Events](images/eventstorming/digital/eventsticky.png) <!-- {_class="inline-image"} -->
+Something that happened in the business process that people care about
+* "**Subject** --> **Verb** (in past tense)"
+* A meaningful result of another thing
+* Where do events come from?
+ * A system
+ * Passing of time
+ * Consequence of another event
+* Examples:
+  * _"Item Shipped"_
+  * _"Account Locked"_
 
 
 
 ### Event Storming: Commands
-![Command](images/eventstorming/commandsticky.png) <!-- {_class="inline-image"} -->
-* A **command** is an **action** started by an **actor**
-* It represents the **decision**
-* It is usually the reverse of the **event**, e.g:
-  * Buy Ticket
-  * Cancel Reservation
+![Command](images/eventstorming/digital/commandsticky.png) <!-- {_class="inline-image"} -->
+An action started by an actor or a previous event
+* "**Verb** (in infinitive) --> **Subject**"
+* It is usually the reverse of the **event**
+* Examples:
+  * _"Buy Ticket" (Event -> Ticket bought)_
+  * _"Cancel Reservation" (Event -> Reservation canceled)_
 
 
 
-### Event Storming: Actors
-![Actor](images/eventstorming/actorsticky.png) <!-- {_class="inline-image"} -->
-An actor is the user of the system
-* Keep it fuzzy, e.g. **Joe**
+### Event Storming: View
+![Actor](images/eventstorming/digital/viewsticky.png) <!-- {_class="inline-image"} -->
+An interface that actors interact with to carry out a task in the system
+* Normally Forms (Examples: _"Login Page"_ or _"Sing up Form"_)
+
+
+
+### Event Storming: Actor
+![Actor](images/eventstorming/digital/actorsticky.png) <!-- {_class="inline-image"} -->
+A user of the system who executes a command through a view
+* Keep it fuzzy (Examples: _"Joe"_)
 * The actor makes the decision
 
 
 
 ### Event Storming: Questions
-![Question](images/eventstorming/questionsticky.png) <!-- {_class="inline-image"} -->
-* Pain Points, e.g. **It takes a long time!**
+![Question](images/eventstorming/digital/questionsticky.png) <!-- {_class="inline-image"} -->
+Any doubt about the process
+* Pain Points  (Examples: _"It takes a long time!"_)
 * How / What / Why?
 * Hot Spots
 * Assumptions
@@ -120,15 +132,18 @@ An actor is the user of the system
 
 
 ### Event Storming: External Systems
-![System](images/eventstorming/systemsticky.png) <!-- {_class="inline-image"} -->
-* Third party services
-* Existing systems
+![System](images/eventstorming/digital/systemsticky.png) <!-- {_class="inline-image"} -->
+A third-party service provider which is affected by
+commands
+* Examples:
+ * _Payment gateway_
+ * _Shipping company_
 
 
 
 ### Event Storming: Read Model
-![ReadModel](images/eventstorming/readmodelsticky.png) <!-- {_class="inline-image"} -->
-The **information** needed in order to make a **decision**
+![ReadModel](images/eventstorming/digital/readmodelsticky.png) <!-- {_class="inline-image"} -->
+The information needed in order to make a decision
 * Represents an implementation
   * Stored Procedure
   * Query
@@ -138,37 +153,37 @@ The **information** needed in order to make a **decision**
 
 
 ### Event Storming: Policies and Procedures
-![PolicyProcedure](images/eventstorming/policysticky.png) <!-- {_class="inline-image"} -->
-* Keywords to use are **always** and **immediately**
+![PolicyProcedure](images/eventstorming/digital/policysticky.png) <!-- {_class="inline-image"} -->
+An automated process, automated rule or aggredment wich is always applied inmediately after an event
 * Procedures include:
-  * Automatic process
-  * Process manager
-  * Listener
-  * "Don't forget to..."
-  * Agreement
-  * Rules
-  * Habit
-* For example:
-
-  Refund Requested > Refund Policy > Issue Receipt
+ * Automatic process
+ * Process manager
+ * Listener
+ * "Don't forget to..."
+ * Agreement
+ * Rules
+ * Habit
+* Examples:
+ * Refund Requested > Refund Policy > Issue Receipt
 
 
 
 ### Event Storming: Aggregate
-![Aggregate](images/eventstorming/aggsticky.png) <!-- {_class="inline-image"} -->
-Part of the system that **receives** the **command** and decides to **execute**
-the **event**
-* Usually a noun, e.g. **Item**
+![Aggregate](images/eventstorming/digital/aggsticky.png) <!-- {_class="inline-image"} -->
+Part of the system that receives the command and decides to execute
+the event
+* Usually a noun (Examples: _animals, cities, cars, plants..._)
 * The aggregate is the **state machine**
 * Serve as a place to logically group commands once all event sources are identified
 
 
 
-![System](images/eventstorming/system.jpg)
+![System](images/eventstorming/digital/systemstickies.png) <!-- {_class="custom-image"} -->
 
 
 
-### Event Storming: Key Takeaways
+### Event Storming
+#### _Key Takeaways_
 * Builds a shared understanding of a problem space
 * Models business processes
 * Aggregate modeling to find key microservices and event model
@@ -177,17 +192,15 @@ the **event**
 
 
 
-### Exercise
-### Event Storm for To Do List Management
+### Exercise - Event Storm for To Do List Management
 ![Key](images/eventstorming/key.png) <!-- {_class="inline-image"} -->
-* In your teams, create example event storm for the Current state of the To Do List
-Management application. Cover the following things:
-  1. Add the new Events
-  * Add the new Commands, Users and Read Models
-  * Are there new Systems or Aggregates?
-* Reflect on your Impact Map deliverables and enhance it with some new functionality e.g
-  1. Sharing lists between users
-  2. Integration with other vendors or providers
+In your teams, create example event storm for the Current state of the To Do List
+Management application
+
+1. Add the new Events<!-- {_class="fragment"  data-fragment-index="1"} -->
+3. Add the new Commands, Users and Read Models<!-- {_class="fragment"  data-fragment-index="2"} -->
+2. Are there new Systems or Aggregates?<!-- {_class="fragment"  data-fragment-index="3"} -->
+4. Reflect on your Impact Map deliverables and enhance it with some new functionality (Examples: Sharing lists between users or Integration with other vendors or providers)<!-- {_class="fragment"  data-fragment-index="4"} -->
 
 
 
