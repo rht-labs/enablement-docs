@@ -106,16 +106,16 @@ An action started by an actor or a previous event
 
 
 
-### Event Storming: View
+### Event Storming: Views
 ![Actor](images/eventstorming/digital/viewsticky.png) <!-- {_class="inline-image"} -->
 An interface that actors interact with to carry out a task in the system
 * Normally Forms (Examples: _"Login Page"_ or _"Sing up Form"_)
 
 
 
-### Event Storming: Actor
+### Event Storming: Actors
 ![Actor](images/eventstorming/digital/actorsticky.png) <!-- {_class="inline-image"} -->
-A user of the system who executes a command through a view
+An user of the system who executes a command through a view
 * Keep it fuzzy (Examples: _"Joe"_)
 * The actor makes the decision
 
@@ -141,7 +141,7 @@ commands
 
 
 
-### Event Storming: Read Model
+### Event Storming: Read Models
 ![ReadModel](images/eventstorming/digital/readmodelsticky.png) <!-- {_class="inline-image"} -->
 The information needed in order to make a decision
 * Represents an implementation
@@ -168,7 +168,7 @@ An automated process, automated rule or aggredment wich is always applied inmedi
 
 
 
-### Event Storming: Aggregate
+### Event Storming: Aggregates
 ![Aggregate](images/eventstorming/digital/aggsticky.png) <!-- {_class="inline-image"} -->
 Part of the system that receives the command and decides to execute
 the event
