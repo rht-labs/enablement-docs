@@ -26,9 +26,15 @@ DO500 <!-- {_class="title-color"} -->
 
 
 <!-- .slide: data-background-image="images/chef-background.png" class="white-style" -->
-### DevOps practices used in this section:
+### DevOps practices introduced in this section:
 - [Backlog](https://openpracticelibrary.com/practice/backlog-refinement/)
 - [Work Visualization](https://openpracticelibrary.com/practice/visualisation-of-work/)
 - [Burndown](https://openpracticelibrary.com/practice/burndown/)
-- [Definition of Done](https://www.scruminc.com/definition-of-done/)
+- [Definition of Done](https://openpracticelibrary.com/practice/definition-of-done/)
 - [Team Sentiment](https://openpracticelibrary.com/practice/team-sentiment/)
+- [Real Time Retro](https://openpracticelibrary.com/practice/realtime-retrospective/)
+- [Big Picture](https://openpracticelibrary.com/practice/the-big-picture/)
+- Practice Corner
+- [Parking Lot (Car Park)](https://openpracticelibrary.com/practice/parking-lot-car-park/)
+- [Quote Wall](https://openpracticelibrary.com/practice/quote-wall/)
+- [Stop the world](https://openpracticelibrary.com/practice/stop-the-world-event/)
