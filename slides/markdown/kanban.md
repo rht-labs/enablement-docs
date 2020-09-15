@@ -13,7 +13,7 @@ DO500 <!-- {_class="title-color"} -->
 
 
 
-### Kanban Principles
+### Kanban Practices
 
 * Visualize the Workflow
 * Limit Work in Progress
