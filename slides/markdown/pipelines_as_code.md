@@ -1,6 +1,6 @@
 <!-- .slide: data-background-image="images/RH_NewBrand_Background.png" -->
 ## DevOps Culture and Practice <!-- {_class="course-title"} -->
-### Pipelines as Code <!-- {_class="title-color"} -->
+### Pipelines As Code <!-- {_class="title-color"} -->
 DO500 <!-- {_class="title-color"} -->
 
 
@@ -51,4 +51,5 @@ Lab Exercise 4: _An Enslaved Hope_
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
 ### DevOps practices used in this section:
 - [Continuous Integration](https://openpracticelibrary.com/practice/continuous-integration/)
+- [Continuous Delivery](https://openpracticelibrary.com/practice/continuous-delivery)
 - [Everything as Code](https://openpracticelibrary.com/practice/everything-as-code/)
