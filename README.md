@@ -6,6 +6,8 @@ This repo will house all the slides and lab exercises for the Enablement. It wil
 ## Slides
 Please navigate to the "Slides" folder and follow the ReadMe instructions on how to render and view the slides.
 
+## Requirements
+NodeJS is needed to run this project, you can download it from [NodeJS](https://nodejs.org/en/download/)
 
 ## Exercises
 Exercises are created using [Docsify](https://docsify.js.org/#/). Write docs in Markdown and use [Docsify](https://github.com/QingWei-Li/docsify-cli) cli to serve them. Store your lab exercises in the `exercises/<lab-number>` dir.
