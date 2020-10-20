@@ -89,7 +89,7 @@ _____
 
 ```bash
 # login if needed
-oc login -u <username> -p <password> <CLUSTER_URL>
+oc login -u <username> -p <password> https://api.do500.emea-1.rht-labs.com:6443
 ```
 
 ```bash
@@ -99,7 +99,7 @@ ansible-playbook apply.yml -e target=tools \
      -e "filter_tags=zap-slave"
 ```
 
-5. Head to `<CLUSTER_URL>` on OpenShift and move to Builds > Images in your CI/CD project. You should see `jenkins-slave-zap` Image Stream has been imported.
+5. Head to `https://api.do500.emea-1.rht-labs.com:6443` on OpenShift and move to Builds > Images in your CI/CD project. You should see `jenkins-slave-zap` Image Stream has been imported.
 ![zap-image-stream](../images/exercise4/zap-image-stream.png)
 
 #### 1b - Arachni Scan
@@ -112,9 +112,9 @@ ansible-playbook apply.yml -e target=tools \
 
   arachni:
     SOURCE_REPOSITORY_URL: "{{ cop_quickstarts }}"
-    SOURCE_CONTEXT_DIR: jenkins-slaves/jenkins-slave-arachni
+    SOURCE_CONTEXT_DIR: jenkins-agents/jenkins-slave-agent
     BUILDER_IMAGE_NAME: registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:v3.11
-    NAME: jenkins-slave-arachni
+    NAME: jenkins-agent-arachni
     SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
     SLAVE_IMAGE_TAG: latest
 
@@ -125,7 +125,7 @@ ansible-playbook apply.yml -e target=tools \
 <kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
     - name: jenkins-slave-arachni
-      template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
+      template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/.openshift/templates/jenkins-slave-generic-template.yml"
       params_from_vars: "{{ arachni }}"
       namespace: "{{ ci_cd_namespace }}"
       tags:

@@ -29,14 +29,14 @@ The following table lists the software requirements for running the lab exercise
 
  | Software | Version | Check |
  | -------- | ------- | ----- |
- | OCP CLI | v4.3 | $ oc version &#124; grep -i --color oc |
+ | OCP CLI | v4.5 | $ oc version &#124; grep -i --color oc |
  | Ansible | => v2.8 | $ ansible --version &#124; grep -i --color ansible |
  | Node.js | v8.x LTS | $ node -v |
  | Git Installed | | $ git --version |
  | Google Chrome Web Browser | (>60) | click [here](chrome://version/) if Google Chrome is your default browser else copy the link `chrome://version/` in your Chome |
  | Docker latest | Community Edition | $ docker --version |
  | JDK | v1.8 | $ java -version |
- | Access to an OpenShift cluster | | `oc login -u <username> -p <password> <CLUSTER_URL>` |
+ | Access to an OpenShift cluster | | `oc login -u <username> -p <password> https://api.do500.emea-1.rht-labs.com:6443` |
  | Text editor such as Atom or Visual Studio Code <br><br> (The exercises were created using `VSCode`, so the screenshots will match its layout and color schemes) | - | - |
 
  <p class="tip">
@@ -173,7 +173,7 @@ docker run -it -v C:/do500-workspace:/home/tool-box/workarea:Z quay.io/redhat/do
 
 * Once you are inside the container, you can log in to the OpenShift cluster using the OpenShift ***oc*** command-line client, and verify that Ansible is installed:
 ```bash
-bash-4.4$ oc login -u <username> -p <password> <CLUSTER_URL>
+bash-4.4$ oc login -u <username> -p <password> https://api.do500.emea-1.rht-labs.com:6443
 bash-4.4$ oc version
 bash-4.4$ ansible --version
 bash-4.4$ exit
