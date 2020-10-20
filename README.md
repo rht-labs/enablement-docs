@@ -36,7 +36,7 @@ The following table lists the software requirements for running the lab exercise
  | Google Chrome Web Browser | (>60) | click [here](chrome://version/) if Google Chrome is your default browser else copy the link `chrome://version/` in your Chome |
  | Docker latest | Community Edition | $ docker --version |
  | JDK | v1.8 | $ java -version |
- | Access to an OpenShift cluster | | `oc login -u <username> -p <password> https://api.do500.emea-1.rht-labs.com:6443` |
+ | Access to an OpenShift cluster | | `oc login -u <username> -p <password> <CLUSTER_URL>` |
  | Text editor such as Atom or Visual Studio Code <br><br> (The exercises were created using `VSCode`, so the screenshots will match its layout and color schemes) | - | - |
 
  <p class="tip">
@@ -110,7 +110,7 @@ brew install ansible
 
 8. Download and uncompress the OpenShift 3.11 client binary archive. Copy the ***oc*** binary to ***/usr/local/bin*** folder on your system
 ```bash
-curl -L -O https://mirror.openshift.com/pub/openshift-v4/clients/oc/4.3/macosx/oc.tar.gz
+curl -L -O https://mirror.openshift.com/pub/openshift-v4/clients/oc/4.5/macosx/oc.tar.gz
 tar xzvf oc.tar.gz
 cp oc /usr/local/bin/
 chmod +x /usr/local/bin/oc
@@ -173,7 +173,7 @@ docker run -it -v C:/do500-workspace:/home/tool-box/workarea:Z quay.io/redhat/do
 
 * Once you are inside the container, you can log in to the OpenShift cluster using the OpenShift ***oc*** command-line client, and verify that Ansible is installed:
 ```bash
-bash-4.4$ oc login -u <username> -p <password> https://api.do500.emea-1.rht-labs.com:6443
+bash-4.4$ oc login -u <username> -p <password> <CLUSTER_URL>
 bash-4.4$ oc version
 bash-4.4$ ansible --version
 bash-4.4$ exit

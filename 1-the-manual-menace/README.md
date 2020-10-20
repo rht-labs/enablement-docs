@@ -72,7 +72,7 @@ If you're feeling confident and don't want to follow the step-by-step guide thes
 1. To create your cloud ide environment, open a web browser using the following URL:
 
 ```
-https://codeready-workspaces.apps.do500.emea-1.rht-labs.com/f?url=https://raw.githubusercontent.com/ckavili/enablement-codereadyworkspaces/2.0-ocp4.3/do500-devfile.yaml
+https://codeready-workspaces.apps.<DOMAIN_FOR_YOUR_CLASS>/f?url=https://raw.githubusercontent.com/ckavili/enablement-codereadyworkspaces/2.0-ocp4.3/do500-devfile.yaml
 ```
 
 <p class="tip">
@@ -228,7 +228,7 @@ cd enablement-ci-cd
 ansible-galaxy install -r requirements.yml --roles-path=roles
 ```
 
-12.   Apply the inventory by logging into OpenShift on the terminal. You will need to retrieve a token first, by browsing to the token request page. This is also available from the `Copy Login Command` once you have logged into the OpenShift Web UI. (`https://api.do500.emea-1.rht-labs.com:6443` should be replaced with the one you've been provided by the instructor). Accept any insecure connection warning(s) from the cli 👍:
+12.   Apply the inventory by logging into OpenShift on the terminal. You will need to retrieve a token first, by browsing to the token request page. This is also available from the `Copy Login Command` once you have logged into the OpenShift Web UI. (`<CLUSTER_URL>` should be replaced with the one you've been provided by the instructor). Accept any insecure connection warning(s) from the cli 👍:
 ```
 # oc login will ask you to retrieve a token
 You must obtain an API token by visiting https://oauth-openshift.apps.do500.emea-1.rht-labs.com/oauth/token/request
@@ -238,7 +238,7 @@ You should see a screen like this
 
 Copy this command and run it in your cloud ide terminal to login:
 ```
-oc login --token=<Your Token> --server=https://api.do500.emea-1.rht-labs.com:6443
+oc login --token=<Your Token> --server=<CLUSTER_URL>
 ```
 
 13.  Then run the ansible playbook as follows.
@@ -576,7 +576,7 @@ oc get projects | egrep '<YOUR_NAME>-ci-cd|<YOUR_NAME>-dev|<YOUR_NAME>-test'
 
 4. Re-apply the inventory to re-create it all!
 ```bash
-oc login --token=<Your Token> --server=https://api.do500.emea-1.rht-labs.com:6443
+oc login --token=<Your Token> --server=<CLUSTER_URL>
 ```
 ```bash
 ansible-playbook apply.yml -i inventory/ -e target=bootstrap
