@@ -116,7 +116,7 @@ npm install
 7. When you are using the cloud hosted environment, you must login to OpenShift from the command line as your user.
 
 ```bash
-oc login --token=<Your Token> --server=https://api.do500.emea-1.rht-labs.com:6443
+oc login --token=<Your Token> --server=<CLUSTER_URL>
 ```
 
 <p class="tip">
@@ -296,7 +296,7 @@ where the following are the important things:
 16. To prepare Nexus to host the binaries created by the frontend and backend builds we need to run a prepare-nexus script. Before we do this we need to export some variables and change `<YOUR_NAME>` accordingly in the below commands. This is a one time activity and would be automated in a non-training environment.
 
 ```bash
-oc login --token=<Your Token> --server=https://api.do500.emea-1.rht-labs.com:6443
+oc login --token=<Your Token> --server=<CLUSTER_URL>
 ```
 ```bash
 export NEXUS_SERVICE_HOST=$(oc get route nexus --template='{{.spec.host}}' -n <YOUR_NAME>-ci-cd)
@@ -355,7 +355,7 @@ with the following
 
 ```bash
 # login if needed
-oc login --token=<Your Token> --server=https://api.do500.emea-1.rht-labs.com:6443
+oc login --token=<Your Token> --server=<CLUSTER_URL>
 ```
 
 ```bash
