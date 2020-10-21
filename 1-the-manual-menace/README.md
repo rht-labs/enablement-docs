@@ -72,7 +72,7 @@ If you're feeling confident and don't want to follow the step-by-step guide thes
 1. To create your cloud ide environment, open a web browser using the following URL:
 
 ```
-https://codeready-workspaces.apps.<DOMAIN_FOR_YOUR_CLASS>/f?url=https://raw.githubusercontent.com/ckavili/enablement-codereadyworkspaces/2.0-ocp4.3/do500-devfile.yaml
+https://codeready-workspaces.apps.<DOMAIN_FOR_YOUR_CLASS>/f?url=https://raw.githubusercontent.com/rht-labs/enablement-codereadyworkspaces/master/do500-devfile.yaml
 ```
 
 <p class="tip">
