@@ -6,7 +6,7 @@
 
 ## Cluster Requirements
 
-Learners will create 3 to 4 project namespaces running lightweight Node.js app \* 2 and a MongoDB in up to three of these namespace (dev, test, uat for example). The learners ci-cd namespace will house GitLab, Nexus and Jenkins as well as any slave pods used by Jenkins.
+Learners will create 3 to 4 project namespaces running lightweight Node.js app \* 2 and a MongoDB in up to three of these namespace (dev, test, uat for example). The learners ci-cd namespace will house GitLab, Nexus and Jenkins as well as any agent pods used by Jenkins.
 
 - Jenkins requires 5Gi of Persistent Storage and 4Gi of RAM
 - GitLab requires 2Gi of storage and 2Gi of RAM

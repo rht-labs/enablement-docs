@@ -413,7 +413,7 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
 3. The page that loads is the Job Configuration page and it can be returned to at anytime from Jenkins. Let's start configuring our job. To conserve space; we will make sure Jenkins only keeps the last build's artifacts. Tick the `Discard old builds` checkbox, then `Advanced` and set `Max # of builds to keep with artifacts` to 1 as indicated below
 ![keep-artifacts](../images/exercise2/keep-artifacts.png)
 
-4. Our Node.js build needs to be run on the `jenkins-slave-npm` we bought in in the previous chapter. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-slave](../images/exercise2/label-jenkins-slave.png)
+4. Our Node.js build needs to be run on the `jenkins-agent-npm` we bought in in the previous chapter. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-agent](../images/exercise2/label-jenkins-agent.png)
 
 5. On the Source Code Management tab, select the Git radio button, specify the endpoint for our GitLab `todolist` Project and specify your credentials (`<YOUR_NAME>-ci-cd-gitlab-auth`) from the dropdown box. Set the Branch Specifier to `develop`. ![git-scm](../images/exercise2/git-scm.png)
 
@@ -551,7 +551,7 @@ Some of the key things to note:
     * `options {}` contains specific Job specs you want to run globally across the jobs e.g. setting the terminal colour
     * `stage {}` all jobs must have one stage. This is the logical part of the build that will be executed e.g. `bake-image`
     * `steps {}` each `stage` has one or more steps involved. These could be execute shell or git checkout etc.
-    * `agent {}` specifies the node the build should be run on e.g. `jenkins-slave-npm`
+    * `agent {}` specifies the node the build should be run on e.g. `jenkins-agent-npm`
     * `post {}` hook is used to specify the post-build-actions. Jenkins declarative pipeline syntax provides very useful callbacks for `success`, `failure` and `always` which are useful for controlling the job flow
     * `when {}` is used for flow control. It can be used at the stage level and be used to stop pipeline entering that stage. e.g. when branch is master; deploy to `test` environment.
     
