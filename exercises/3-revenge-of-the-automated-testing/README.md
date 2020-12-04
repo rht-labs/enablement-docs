@@ -199,14 +199,14 @@ stage("e2e test") {
 ```
 ![e2e-stage-new](../images/exercise3/e2e-stage-new.png)
 
-5. Set the agent that this stage should execute on. In this case it will use the same `jenkins-slave-npm` that was used in the build stage. Set the steps needed to execute the tests and add the reporting location
+5. Set the agent that this stage should execute on. In this case it will use the same `jenkins-agent-npm` that was used in the build stage. Set the steps needed to execute the tests and add the reporting location
 
 <kbd>📝 todolist/Jenkinsfile</kbd>
 ```Jenksfile
 stage("e2e test") {
             agent {
                 node {
-                    label "jenkins-slave-npm"
+                    label "jenkins-agent-npm"
                 }
             }
             when {
