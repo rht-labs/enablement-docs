@@ -338,7 +338,7 @@ Select the banner and use the same password you logged into OpenShift as your lo
 ```yaml
   - name: "jenkins-mongodb"
     namespace: "{{ ci_cd_namespace }}"
-    template: "openshift//mongodb-ephemeral"
+    template: "{{ playbook_dir }}/templates/mongodb-ephemeral.yml"
     params: "{{ playbook_dir }}/params/mongodb"
     tags:
     - mongodb
@@ -372,6 +372,10 @@ ansible-playbook apply.yml -e target=tools \
 > _Create a build and deployment config for Jenkins. Add new configuration and plugins to the OpenShift default Jenkins image using s2i_
 
 1. As before; create a new set of params by creating a `params/jenkins` file and adding some overrides to the template and updating the `<YOUR_NAME>` value accordingly.
+
+```bash
+touch params/jenkins
+```
 
 <kbd>📝 *enablement-ci-cd/params/jenkins*</kbd>
 ```
@@ -428,41 +432,33 @@ jenkins-s2i
  * `build-failure-analyzer.xml` is config for the plugin to read the logs and look for key items based on a Regex. More on this in later lessons.
  * `init.groovy` contains a collection of settings jenkins configures itself with when launching
 
-4. Let's add a plugin for Jenkins to be started with, [green-balls](https://plugins.jenkins.io/greenballs). This simply changes the default `SUCCESS` status of Jenkins from Blue to Green. Append the `jenkins-s2i/plugins.txt` file with
+4. Let's add a plugin for Jenkins to be started with, [Slack](https://plugins.jenkins.io/slack/). This plugin adds support to integrate Jenkins with Slack (we may not actually use this plugin in the lab, but we've added it as an extension task if time permits). Append the `jenkins-s2i/plugins.txt` file with
 ```txt
-greenballs:1.15
+slack:2.37
 ```
-![green-balls.png](../images/exercise1/green-balls.png)
+![slack.png](../images/exercise1/slack.png)
 
-Why does Jenkins use blue to represent success? More can be found [on reddit](https://www.reddit.com/r/programming/comments/4lu6q8/why_does_jenkins_have_blue_balls/) or the [Jenkins blog](https://jenkins.io/blog/2012/03/13/why-does-jenkins-have-blue-balls/).
 
-5. Before building and deploying the Jenkins s2i; add your git credentials to it. These will be used by Jenkins to access the Git Repositories where our apps will be stored. We want Jenkins to be able to push tags to it, so write access is required. Create `params/jenkins-s2i-secret` and add the following content; replacing variables as appropriate. There is an annotation on the secret which binds the credential in Jenkins
+5. Create `params/jenkins-s2i` and add the following content; replacing variables as appropriate. These parameters will be applied to the `templates/jenkins-s2i-build-template-with-secret.yml` below in step 8, which will create the imagestream and buildconfig needed for our Jenkins image. Additionally, it will also create the `git-auth` secret in Openshift that will have your username and password crendentials for GitLab. There is an annotation on the secret which binds the credential in Jenkins (`credential.sync.jenkins.openshift.io: "true"`).
 
-<kbd>📝 *enablement-ci-cd/params/jenkins-s2i-secret*</kbd>
+```bash
+touch params/jenkins-s2i
 ```
-SECRET_NAME=gitlab-auth
-USERNAME=<YOUR_LDAP_USERNAME>
-PASSWORD=<YOUR_LDAP_PASSWORD>
-```
-where
-    * `<YOUR_LDAP_USERNAME>` is the username builder pod will use to login and clone the repo with
-    * `<YOUR_LDAP_PASSWORD>` is the password the builder pod will use to authenticate and clone the repo using
-
-
-6. Create `params/jenkins-s2i` and add the following content; replacing variables as appropriate.
 
 <kbd>📝 *enablement-ci-cd/params/jenkins-s2i*</kbd>
 ```
 SOURCE_REPOSITORY_URL=<GIT_URL>
 NAME=jenkins
 SOURCE_REPOSITORY_CONTEXT_DIR=jenkins-s2i
-SOURCE_REPOSITORY_SECRET=gitlab-auth
+SOURCE_REPOSITORY_PASSWORD=<YOUR_LDAP_PASSWORD>
+SOURCE_REPOSITORY_USERNAME=<YOUR_LDAP_USERNAME>
 ```
 where
     * `<GIT_URL>` is the full clone path of the repo where this project is stored (including the https && .git)
+    * `<YOUR_LDAP_USERNAME>` is the username builder pod will use to login and clone the repo with
+    * `<YOUR_LDAP_PASSWORD>` is the password the builder pod will use to authenticate and clone the repo using
 
-
-7. At the top of `inventory/host_vars/ci-cd-tooling.yml` file underneath the `---`, add the following:
+6. At the top of `inventory/host_vars/ci-cd-tooling.yml` file underneath the `---`, add the following:
 
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
@@ -470,7 +466,7 @@ ci_cd:
   IMAGE_STREAM_NAMESPACE: "{{ ci_cd_namespace }}"
 ```
 
-8. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
+7. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
 
 <p class="tip">
 ⚡ <b>NOTE</b> ⚡ - We are using a custom jenkins template that works with latest version of OpenShift until the changes can be merged upstream.
@@ -480,22 +476,16 @@ ci_cd:
 ```yaml
 - object: ci-cd-builds
   content:
-  - name: "jenkins-s2i-secret"
-    namespace: "{{ ci_cd_namespace }}"
-    template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/secrets/secret-user-pass-basic-auth.yml"
-    params: "{{ playbook_dir }}/params/jenkins-s2i-secret"
-    tags:
-    - jenkins
   - name: "jenkins-s2i"
     namespace: "{{ ci_cd_namespace }}"
-    template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/jenkins-s2i-build/jenkins-s2i-build-template-with-secret.yml"
+    template: "{{ playbook_dir }}/templates/jenkins-s2i-build-template-with-secret.yml"
     params: "{{ playbook_dir }}/params/jenkins-s2i"
     params_from_vars: "{{ ci_cd }}"
     tags:
     - jenkins
 ```
 
-9. Commit your code to your GitLab instance
+8. Commit your code to your GitLab instance
 ```bash
 git add .
 ```
@@ -506,17 +496,17 @@ git commit -m "Adding Jenkins and Jenkins s2i"
 git push
 ```
 
-10. Now your code is commited; run the OpenShift Applier to add the config to the cluster
+9. Now your code is commited; run the OpenShift Applier to add the config to the cluster
 ```bash
 ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
      -e "filter_tags=jenkins"
 ```
 
-11. This will trigger a build of the s2i and when it's complete it will add an imagestream of `<YOUR_NAME>-ci-cd/jenkins:latest` to the project. The Deployment config should kick in and deploy the image once it arrives. You can follow the build of the s2i by going to the OpenShift console's project
+10. This will trigger a build of the s2i and when it's complete it will add an imagestream of `<YOUR_NAME>-ci-cd/jenkins:latest` to the project. The Deployment config should kick in and deploy the image once it arrives. You can follow the build of the s2i by going to the OpenShift console's project
 ![jenkins-s2i-log](../images/exercise1/jenkins-s2i-log.png)
 
-12. When the Jenkins deployment has completed; login (using your OpenShift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
+11. When the Jenkins deployment has completed; login (using your OpenShift credentials) and accept the role permissions. You should now see a fairly empty Jenkins with just the seed job
 
 ### Part 7 - Jenkins Hello World
 > _To test things are working end-to-end; create a hello world job that doesn't do much but proves we can pull code from git and that our builds are green._
@@ -530,7 +520,7 @@ ansible-playbook apply.yml -e target=tools \
 
 4. On the build tab add an Execute Shell step and fill it with `echo "Hello World"` ![jenkins-hello-world](../images/exercise1/jenkins-hello-world.png).
 
-5. Run the build and we should see it pass successfully and with a Green ball! ![jenkins-green-balls](../images/exercise1/jenkins-green-balls.png)
+5. Run the build and we should see it pass successfully! ![jenkins-green-balls](../images/exercise1/jenkins-green-balls.png)
 
 ### Part 8 - Live, Die, Repeat
 > _In this section you will prove the infra as code is working by deleting your Cluster Content and recreating it all_
