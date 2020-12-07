@@ -93,18 +93,15 @@ https://<CODEREADY-LINK>/f?url=https://raw.githubusercontent.com/rht-labs/enable
 
 ### Part 2 - Create OpenShift Projects
 > _Using the OpenShift Applier, we will add new project namespaces to the cluster which will be used throughout the exercise._
-
-1. In this course two different git projects will be created. Select `Terminal > Run Task` in your cloud ide.
-
 <p class="tip">
 ⛷️ <b>NOTE</b> ⛷️ - If you do not plan on using the cloud ide you can clone the repository locally from here https://github.com/rht-labs/enablement-ci-cd
 </p>
 
-2. The following projects should be available in your IDE
+1. The following projects should be available in your IDE
 
 ![projects-initial](../images/exercise1/projects-initial.png)
 
-3. Open the `enablement-ci-cd` folder in your cloud ide (or your favourite editor if using a local machine). The project is laid out as follows
+2. Open the `enablement-ci-cd` folder in your cloud ide (or your favourite editor if using a local machine). The project is laid out as follows
 ```
 .
 ├── README.md
@@ -121,6 +118,8 @@ https://<CODEREADY-LINK>/f?url=https://raw.githubusercontent.com/rht-labs/enable
 ├── requirements.yml
 └── templates
     └── project-requests.yml
+    └── mongodb-ephemeral.yml
+    └── jenkins-s2i-build-template-with-secret.yml
 ```
  * `docker` folder contains sample Dockerfiles for our jenkins-agent images that will be used by the builds.
  * `jenkins-s2i` contains the configuration and plugins we want to bring jenkins to life with
@@ -130,16 +129,16 @@ https://<CODEREADY-LINK>/f?url=https://raw.githubusercontent.com/rht-labs/enable
  * `requirements.yml` is a manifest which contains the ansible roles needed to run the playbook
  * `apply.yml` is a playbook that sets up some variables and runs the OpenShift Applier role.
 
-4. Open the `inventory/groups_vars/all.yml` file. Update the `namespace_prefix` variables by replacing the `<YOUR_NAME>` (including the `<` and `>`) with your name or initials. **Don't use uppercase or special characters**. For example; if your name is Tim Smith you would replace `<YOUR_NAME>` and set `namespace_prefix` to something like `tim` or `tsmith`.
+3. Open the `inventory/groups_vars/all.yml` file. Update the `namespace_prefix` variables by replacing the `<YOUR_NAME>` (including the `<` and `>`) with your name or initials. **Don't use uppercase or special characters**. For example; if your name is Tim Smith you would replace `<YOUR_NAME>` and set `namespace_prefix` to something like `tim` or `tsmith`.
 
 <kbd>📝 *enablement-ci-cd/inventory/groups_vars/all.yml*</kbd>
 ```yaml
   namespace_prefix: "<YOUR_NAME>"
 ```
 
-5. Open the `inventory/host_vars/projects-and-policies.yml` file; you should see some variables setup already to create the `<YOUR_NAME>-ci-cd` namespace. This object is passed to the OpenShift Applier to call the `templates/project-requests.yml` template with the parameters composed from the inventory and the `ci_cd` vars in the `apply.yml` playbook. We will add some additional content here but first let's explore the parameters and the template
+4. Open the `inventory/host_vars/projects-and-policies.yml` file; you should see some variables setup already to create the `<YOUR_NAME>-ci-cd` namespace. This object is passed to the OpenShift Applier to call the `templates/project-requests.yml` template with the parameters composed from the inventory and the `ci_cd` vars in the `apply.yml` playbook. We will add some additional content here but first let's explore the parameters and the template
 
-6. Inside of the `inventory/host_vars/projects-and-policies.yml` you'll see the following
+5. Inside of the `inventory/host_vars/projects-and-policies.yml` you'll see the following
 
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/projects-and-policies.yml*</kbd>
 ```yaml
@@ -164,7 +163,7 @@ https://<CODEREADY-LINK>/f?url=https://raw.githubusercontent.com/rht-labs/enable
       - projects
 ```
 
-7. Let's add two more params dicts to pass to our template to be able to create a `dev` and `test` project. At the top of `enablement-ci-cd/inventory/host_vars/projects-and-policies.yml` create a dictionary called `dev` and `test` similar to how you see `ci_cd` defined.
+6. Let's add two more params dicts to pass to our template to be able to create a `dev` and `test` project. At the top of `enablement-ci-cd/inventory/host_vars/projects-and-policies.yml` create a dictionary called `dev` and `test` similar to how you see `ci_cd` defined.
 
  * In your editor, open `enablement-ci-cd/inventory/host_vars/projects-and-policies.yml` and add the following lines before `openshift_cluster_content`:
 
@@ -179,7 +178,7 @@ test:
   NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Test"
 ```
 
-8. In the `enablement-ci-cd/inventory/host_vars/projects-and-policies.yml` file, add the new objects for the projects you want to create (dev & test) by adding another object to the `content` array (previously defined) for each. You can copy and paste them from the `ci_cd_namespace` example and update them accordingly. If you do this, remember to set the names to `{{ dev_namespace }}` and `{{ test_namespace }}` and change the `params_from_vars` variable accordingly. The values for these variables used for the names (`ci_cd_namespace`, `dev_namespace` etc.) are defined in `apply.yml` file in the root of the project.
+7. In the `enablement-ci-cd/inventory/host_vars/projects-and-policies.yml` file, add the new objects for the projects you want to create (dev & test) by adding another object to the `content` array (previously defined) for each. You can copy and paste them from the `ci_cd_namespace` example and update them accordingly. If you do this, remember to set the names to `{{ dev_namespace }}` and `{{ test_namespace }}` and change the `params_from_vars` variable accordingly. The values for these variables used for the names (`ci_cd_namespace`, `dev_namespace` etc.) are defined in `apply.yml` file in the root of the project.
 
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/projects-and-policies.yml*</kbd>
 ```yaml
@@ -197,38 +196,23 @@ test:
     - projects
 ```
 
-9. Use the `Terminal > Open Terminal in specific container` menu item to open a terminal in the `node-rhel7-ansible` container
+8. Use the `Terminal > Open Terminal in specific container` menu item to open a terminal in the `node-rhel7-ansible` container
 
 ![open-terminal](../images/exercise1/open-terminal.png)
 
-Use either `bash` or `zsh` as your shell by typing:
-```
-bash
-# OR
-zsh
-```
-
-<p class="tip">
-<b>NOTE</b> - If you want to try <b>z shell</b> as your default in the cloud ide run this command
-</p>
-
-```
-echo "zsh" >> ~/.bashrc
-```
-
-10.   Change to the `enablement-ci-cd` directory
+9.   Change to the `enablement-ci-cd` directory
 
 ```bash
 cd enablement-ci-cd
 ```
 
-11. With the configuration in place, install the OpenShift Applier dependency
+10. With the configuration in place, install the OpenShift Applier dependency
 
 ```bash
 ansible-galaxy install -r requirements.yml --roles-path=roles
 ```
 
-12.   Apply the inventory by logging into OpenShift on the terminal. You will need to retrieve a token first, by browsing to the token request page. This is also available from the `Copy Login Command` once you have logged into the OpenShift Web UI. (`<CLUSTER_URL>` should be replaced with the one you've been provided by the instructor). Accept any insecure connection warning(s) from the cli 👍:
+11.   Apply the inventory by logging into OpenShift on the terminal. You will need to retrieve a token first, by browsing to the token request page. This is also available from the `Copy Login Command` once you have logged into the OpenShift Web UI. (`<CLUSTER_URL>` should be replaced with the one you've been provided by the instructor). Accept any insecure connection warning(s) from the cli 👍:
 ```
 # oc login will ask you to retrieve a token
 You must obtain an API token by visiting https://oauth-openshift.apps.do500.emea-1.rht-labs.com/oauth/token/request
@@ -241,7 +225,7 @@ Copy this command and run it in your cloud ide terminal to login:
 oc login --token=<Your Token> --server=<CLUSTER_URL>
 ```
 
-13.  Then run the ansible playbook as follows.
+12.  Then run the ansible playbook as follows.
 
 ```bash
 ansible-playbook apply.yml -i inventory/ -e target=bootstrap
@@ -249,9 +233,9 @@ ansible-playbook apply.yml -i inventory/ -e target=bootstrap
 
 where the `-e target=bootstrap` is passing an additional variable specifying that we run the `bootstrap` group of the inventory.
 
-14.  Once successful you should see an output similar to this: ![playbook-success](../images/exercise1/play-book-success.png)
+13.  Once successful you should see an output similar to this: ![playbook-success](../images/exercise1/play-book-success.png)
 
-15.  You can check to see the projects have been created successfully by running
+14.  You can check to see the projects have been created successfully by running
 
 ```bash
 oc projects
