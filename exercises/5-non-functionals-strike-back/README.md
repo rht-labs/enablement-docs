@@ -45,7 +45,7 @@ As a learner you will be able to
 <!-- 1. [stryker](http://stryker-mutator.io/) - Mutation testing! What is it? Bugs, or mutants, are automatically inserted into your production code. Your tests are run for each mutant. If your tests fail then the mutant is killed. If your tests passed, the mutant survived. The higher the percentage of mutants killed, the more effective your tests are. It's really that simple. -->
 
 ## Big Picture
-> In the previous exercise; we introduced pipeline-as-code and new Jenkins Slave nodes. This exercise focuses on extending the pipeline with non-functional testing and some automated security testing.
+> In the previous exercise; we introduced pipeline-as-code and new Jenkins Agent nodes. This exercise focuses on extending the pipeline with non-functional testing and some automated security testing.
 
 ![big-picture](../images/big-picture/big-picture-5.jpg)
 
@@ -91,14 +91,14 @@ _____
         }
 ```
 
-4. Let's start filling out the configuration for the OWASP Zap scan first. We will set the label to our slave created in previous exercise and a `when` condition to only execute the job when on either the master or develop branch.
+4. Let's start filling out the configuration for the OWASP Zap scan first. We will set the label to our agent created in previous exercise and a `when` condition to only execute the job when on either the master or develop branch.
 
 <kbd>📝 *todolist/Jenkinsfile*</kbd>
 ```groovy
 stage('OWASP Zap') {
     agent {
         node {
-            label "jenkins-slave-zap"
+            label "jenkins-agent-zap"
         }
     }
     when {
@@ -114,7 +114,7 @@ stage('OWASP Zap') {
 stage('OWASP Zap') {
         agent {
             node {
-                label "jenkins-slave-zap"
+                label "jenkins-agent-zap"
             }
         }
         when {
@@ -123,7 +123,7 @@ stage('OWASP Zap') {
         steps {
             sh '''
                 export REPORT_DIR="$WORKSPACE/"
-                /zap/zap-baseline.py -r index.html -t http://${E2E_TEST_ROUTE} || return_code=$?
+                /zap/zap-baseline.py -r index.html -t https://${E2E_TEST_ROUTE} || return_code=$?
                 echo "exit value was  - " $return_code
             '''
         }
@@ -137,7 +137,7 @@ stage('OWASP Zap') {
 stage('OWASP Scan') {
     agent {
         node {
-            label "jenkins-slave-zap"
+            label "jenkins-agent-zap"
         }
     }
     when {
@@ -146,7 +146,7 @@ stage('OWASP Scan') {
     steps {
         sh '''
             export REPORT_DIR="$WORKSPACE/"
-            /zap/zap-baseline.py -r index.html -t http://${E2E_TEST_ROUTE} || return_code=$?
+            /zap/zap-baseline.py -r index.html -t https://${E2E_TEST_ROUTE} || return_code=$?
             echo "exit value was  - " $return_code
         '''
     }
@@ -173,7 +173,7 @@ stage('OWASP Scan') {
     stage('Arachni') {
         agent {
             node {
-                label "jenkins-slave-arachni"
+                label "jenkins-agent-arachni"
             }
         }
         when {
@@ -181,7 +181,7 @@ stage('OWASP Scan') {
         }
         steps {
             sh '''
-                /arachni/bin/arachni http://${E2E_TEST_ROUTE} --report-save-path=arachni-report.afr
+                /arachni/bin/arachni https://${E2E_TEST_ROUTE} --report-save-path=arachni-report.afr
                 /arachni/bin/arachni_reporter arachni-report.afr --reporter=xunit:outfile=report.xml --reporter=html:outfile=web-report.zip
                 unzip web-report.zip -d arachni-web-report
             '''
@@ -316,7 +316,7 @@ An arbitrary value for the APIs to respond in has been chosen. It is set in the 
 1. Create a new Item on Jenkins, `nightly-perf-test` and make it a freestyle job.
 ![new-job](../images/exercise5/new-job.png)
 
-2. Set the `label` on `Restrict where this project can be run` to `jenkins-slave-npm` one used by the build jobs previously.
+2. Set the `label` on `Restrict where this project can be run` to `jenkins-agent-npm` one used by the build jobs previously.
 ![slave-label](../images/exercise5/slave-label.png)
 
 3. In the SCM section; set the project to use the `todolist` git project. Set the credentials accordingly.

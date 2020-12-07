@@ -20,8 +20,8 @@ _____
 As a learner you will be able to
 
 1. Run the [openshift-applier](https://github.com/redhat-cop/openshift-applier) to automate creating cluster content
-1. Create and admin project namespaces in OpenShift
-1. Deploy commonly used applications to support the development process
+2. Create and admin project namespaces in OpenShift
+3. Deploy commonly used applications to support the development process
 
 ## Tools and Frameworks
 
@@ -65,17 +65,21 @@ If you're feeling confident and don't want to follow the step-by-step guide thes
 ### Part 1 - Create your cloud workspace
 > _Create your cloud ide environment using Che_
 
+<p class="tip">
+⚡ <b>NOTE</b> ⚡ - The instructor may have created your cloud IDE for you - if so, login directly to the url provided and move on to Part 2.
+</p>
+
 1. To create your cloud ide environment, open a web browser using the following URL:
 
 ```
-https://codeready-workspaces.apps.<DOMAIN_FOR_YOUR_CLASS>/dashboard/#/load-factory?name=DO500%20Template&user=admin
+https://codeready-workspaces.apps.<DOMAIN_FOR_YOUR_CLASS>/f?url=https://raw.githubusercontent.com/rht-labs/enablement-codereadyworkspaces/master/do500-devfile.yaml
 ```
 
 <p class="tip">
 <b>NOTE</b> - Complete URL should be replaced with the one you've been provided by the instructor.
 </p>
 
-2. Login using the `OpenShift 3` button using your credentials
+2. Login using the `OpenShift/Keycloak` button using your credentials
 
 ![code-ready-workspaces](../images/exercise1/code-ready-workspaces.png)
 
@@ -96,10 +100,9 @@ https://codeready-workspaces.apps.<DOMAIN_FOR_YOUR_CLASS>/dashboard/#/load-facto
 ⛷️ <b>NOTE</b> ⛷️ - If you do not plan on using the cloud ide you can clone the repository locally from here https://github.com/rht-labs/enablement-ci-cd
 </p>
 
-2. Run the `che: init-ci-cd` task in your `dev-pod/main` container to clone the `enablement-ci-cd` code into `/projects` directory
+2. The following projects should be available in your IDE
 
-![init-code1](../images/exercise1/init-code1.png)
-![init-code1-complete](../images/exercise1/init-code1-complete.png)
+![projects-initial](../images/exercise1/projects-initial.png)
 
 3. Open the `enablement-ci-cd` folder in your cloud ide (or your favourite editor if using a local machine). The project is laid out as follows
 ```
@@ -119,7 +122,7 @@ https://codeready-workspaces.apps.<DOMAIN_FOR_YOUR_CLASS>/dashboard/#/load-facto
 └── templates
     └── project-requests.yml
 ```
- * `docker` folder contains sample Dockerfiles for our jenkins-slave images that will be used by the builds.
+ * `docker` folder contains sample Dockerfiles for our jenkins-agent images that will be used by the builds.
  * `jenkins-s2i` contains the configuration and plugins we want to bring jenkins to life with
  * `params` houses the variables we will load the templates with
  * `templates` is a collection of OpenShift Container Platform templates
@@ -194,9 +197,16 @@ test:
     - projects
 ```
 
-9. Use the `Terminal > Open Terminal in specific container` menu item to open a terminal in the `dev-pod/main` container
+9. Use the `Terminal > Open Terminal in specific container` menu item to open a terminal in the `node-rhel7-ansible` container
 
 ![open-terminal](../images/exercise1/open-terminal.png)
+
+Use either `bash` or `zsh` as your shell by typing:
+```
+bash
+# OR
+zsh
+```
 
 <p class="tip">
 <b>NOTE</b> - If you want to try <b>z shell</b> as your default in the cloud ide run this command
@@ -218,20 +228,30 @@ cd enablement-ci-cd
 ansible-galaxy install -r requirements.yml --roles-path=roles
 ```
 
-12. Apply the inventory by logging into OpenShift on the terminal and running the playbook as follows (`<CLUSTER_URL>` should be replaced with the one you've been provided by the instructor). Accept any insecure connection warning(s) 👍:
-
-```bash
-oc login <CLUSTER_URL>
+12.   Apply the inventory by logging into OpenShift on the terminal. You will need to retrieve a token first, by browsing to the token request page. This is also available from the `Copy Login Command` once you have logged into the OpenShift Web UI. (`<CLUSTER_URL>` should be replaced with the one you've been provided by the instructor). Accept any insecure connection warning(s) from the cli 👍:
 ```
+# oc login will ask you to retrieve a token
+You must obtain an API token by visiting https://oauth-openshift.apps.do500.emea-1.rht-labs.com/oauth/token/request
+```
+You should see a screen like this
+![api-login-token](../images/exercise1/api-login-token.png)
+
+Copy this command and run it in your cloud ide terminal to login:
+```
+oc login --token=<Your Token> --server=<CLUSTER_URL>
+```
+
+13.  Then run the ansible playbook as follows.
+
 ```bash
 ansible-playbook apply.yml -i inventory/ -e target=bootstrap
 ```
 
 where the `-e target=bootstrap` is passing an additional variable specifying that we run the `bootstrap` group of the inventory.
 
-13. Once successful you should see an output similar to this: ![playbook-success](../images/exercise1/play-book-success.png)
+14.  Once successful you should see an output similar to this: ![playbook-success](../images/exercise1/play-book-success.png)
 
-14. You can check to see the projects have been created successfully by running
+15.  You can check to see the projects have been created successfully by running
 
 ```bash
 oc projects
@@ -319,6 +339,12 @@ git commit -m "Adding git and nexus config"
 git push -u origin --all
 ```
 
+4. On browsing to the first project - you will need to set a local password in gitlab so you can push code.
+
+![gitlab-new-project](../images/exercise1/gitlab-passwd-set.png)
+
+Select the banner and use the same password you logged into OpenShift as your local gitlab credential. `SSH keys` are not available in this environment.
+
 ### Part 5 - MongoDB for CI tests
 > _In order to run our API tests in CI in later labs; we need there to be a MongoDB available for executing our tests. As this is part of our CI/CD Lifecycle; we will add it now._
 
@@ -366,17 +392,17 @@ ansible-playbook apply.yml -e target=tools \
 <kbd>📝 *enablement-ci-cd/params/jenkins*</kbd>
 ```
 MEMORY_LIMIT=3Gi
-VOLUME_CAPACITY=10Gi
+VOLUME_CAPACITY=15Gi
 JVM_ARCH=x86_64
 NAMESPACE=<YOUR_NAME>-ci-cd
 JENKINS_OPTS=--sessionTimeout=720
 ```
   * You might be wondering why we have to replace <YOUR_NAME> here and can't just rely on the `namespace_prefix` variable that we've been using previously. This is because the replacement is handled by two different engines (one being ansible -- which knows about `namespace_prefix` and the other being the oc client, which does not). Because the params files are processed by the oc client, we need to update this here.
 
-2. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo in  `inventory/host_vars/ci-cd-tooling.yml` as shown below to create a DeploymentConfig for Jenkins. In order for Jenkins to be able to run `npm` commands we must configure a jenkins build slave for it to use. This slave will be dynamically provisioned when we run a build. It needs to have Node.js and npm and a C compiler installed in it. 
+2. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo in  `inventory/host_vars/ci-cd-tooling.yml` as shown below to create a DeploymentConfig for Jenkins. In order for Jenkins to be able to run `npm` commands we must configure a jenkins build agent for it to use. This agent will be dynamically provisioned when we run a build. It needs to have Node.js and npm and a C compiler installed in it. 
 
 <p class="tip">
-<b>NOTE</b> These slaves can take a time to build themselves so to speed up we have placed the slave with a corresponding ImageStream within OpenShift. To leverage this existing slave image, we are using a feature of the openshift-applier to process a couple of post-steps part of the inventory. These steps are utilized to perform pre and post tasks necessary to make our inventory work correctly. In this case, we use the post steps to tag and label the jenkins-slave-npm ImageStream within our CI/CD project so Jenkins knows how to find and use it.
+<b>NOTE</b> These agents can take a time to build themselves so to speed up we have placed the agent with a corresponding ImageStream within OpenShift. To leverage this existing agent image, we are using a feature of the openshift-applier to process a couple of post-steps part of the inventory. These steps are utilized to perform pre and post tasks necessary to make our inventory work correctly. In this case, we use the post steps to tag and label the jenkins-agent-npm ImageStream within our CI/CD project so Jenkins knows how to find and use it.
 </p>
 
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
@@ -389,12 +415,12 @@ JENKINS_OPTS=--sessionTimeout=720
       - role: casl-ansible/roles/openshift-imagetag
         vars:
           source_img: "quay.io/rht-labs/enablement-npm:latest"
-          img_tag: "jenkins-slave-npm:latest"
+          img_tag: "jenkins-agent-npm:latest"
       - role: casl-ansible/roles/openshift-labels
         vars:
-          label: "role=jenkins-slave"
+          label: "role=jenkins-agent"
           target_object: "imagestream"
-          target_name: "jenkins-slave-npm"
+          target_name: "jenkins-agent-npm"
     tags:
     - jenkins
 ```
@@ -462,13 +488,17 @@ ci_cd:
 
 8. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
 
+<p class="tip">
+⚡ <b>NOTE</b> ⚡ - We are using a custom jenkins template that works with latest version of OpenShift until the changes can be merged upstream.
+</p>
+
 <kbd>📝 *enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
 - object: ci-cd-builds
   content:
   - name: "jenkins-s2i-secret"
     namespace: "{{ ci_cd_namespace }}"
-    template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/secrets/secret-user-pass-plaintext.yml"
+    template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/secrets/secret-user-pass-basic-auth.yml"
     params: "{{ playbook_dir }}/params/jenkins-s2i-secret"
     tags:
     - jenkins
@@ -544,7 +574,7 @@ oc get projects | egrep '<YOUR_NAME>-ci-cd|<YOUR_NAME>-dev|<YOUR_NAME>-test'
 
 4. Re-apply the inventory to re-create it all!
 ```bash
-oc login <CLUSTER_URL>
+oc login --token=<Your Token> --server=<CLUSTER_URL>
 ```
 ```bash
 ansible-playbook apply.yml -i inventory/ -e target=bootstrap
