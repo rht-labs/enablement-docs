@@ -413,9 +413,9 @@ This exercise will involve creating three stages (or items) in our pipeline, eac
 3. The page that loads is the Job Configuration page and it can be returned to at anytime from Jenkins. Let's start configuring our job. To conserve space; we will make sure Jenkins only keeps the last build's artifacts. Tick the `Discard old builds` checkbox, then `Advanced` and set `Max # of builds to keep with artifacts` to 1 as indicated below
 ![keep-artifacts](../images/exercise2/keep-artifacts.png)
 
-4. Our Node.js build needs to be run on the `jenkins-agent-npm` we bought in in the previous chapter. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-agent](../images/exercise2/label-jenkins-agent.png)
+4. Our Node.js build needs to be run on the `jenkins-agent-npm` we bought in in the previous chapter. Specify this in the box labelled `Restrict where this project can be run` ![label-jenkins-agent](../images/exercise2/label-jenkins-agent.png) 
 
-5. On the Source Code Management tab, select the Git radio button, specify the endpoint for our GitLab `todolist` Project and specify your credentials (`<YOUR_NAME>-ci-cd-gitlab-auth`) from the dropdown box. Set the Branch Specifier to `develop`. ![git-scm](../images/exercise2/git-scm.png)
+5. On the Source Code Management tab, select the Git radio button, specify the endpoint for our GitLab `todolist` Project and specify your credentials (`<YOUR_NAME>-ci-cd-git-auth`) from the dropdown box. Set the Branch Specifier to `develop`. ![git-scm](../images/exercise2/git-scm.png)
 
 6. Scroll down to the Build Environment tab and select the `Color ANSI Console Output` checkbox ![ansi](../images/exercise2/ansi.png)
 
@@ -432,18 +432,17 @@ npm run publish
 8. Scroll to the final section; the Post-build Actions. Add a new post-build action from the dropdown called `Archive the artifacts` and specify `**` in the box. This will zip the entire workspace and copy it back to Jenkins for inspection if needed. ![archive-artifacts](../images/exercise2/archive-artifacts.png)
 
 9. On the Post-build Actions; Add another post-build action from the dropdown called `Git Publisher`. This is useful for tying the git check-in to the feature in your tracking tool to the built product.
-    * Tick the box `Push Only If Build Succeeds`
+    * Tick the box `Push Only If Build Succeeds` 
     * Add the Tag to push of
-```bash
-${JOB_NAME}.${BUILD_NUMBER}
-```
+        ```bash
+        ${JOB_NAME}.${BUILD_NUMBER}
+        ```
     * Specify the commit message to be
-```bash
-Automated commit by jenkins from ${JOB_NAME}.${BUILD_NUMBER}
-```
-
+        ```bash
+        Automated commit by jenkins from ${JOB_NAME}.${BUILD_NUMBER}
+        ```
     * Check `Create New Tag` and set `Target remote name` to `origin`
-![git-publisher](../images/exercise2/git-publisher.png)
+        ![git-publisher](../images/exercise2/git-publisher.png)
 
 10. Finally; add the trigger for the next job in the pipeline. This is to trigger the bake job with the current build tag. Add another post-build action from the dropdown called `Trigger parameterized build on other projects`.
     * Set the project to build to be `dev-todolist-bake-deploy`
@@ -574,7 +573,7 @@ Some of the key things to note:
         JOB_NAME = "${JOB_NAME}".replace("/", "-")
 
         GIT_SSL_NO_VERIFY = true
-        GIT_CREDENTIALS = credentials("${NAMESPACE_PREFIX}-ci-cd-gitlab-auth")
+        GIT_CREDENTIALS = credentials("${NAMESPACE_PREFIX}-ci-cd-git-auth")
     }
 ```
 
