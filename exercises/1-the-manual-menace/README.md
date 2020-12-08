@@ -406,7 +406,7 @@ JENKINS_OPTS=--sessionTimeout=720
           img_tag: "jenkins-agent-npm:latest"
       - role: casl-ansible/roles/openshift-labels
         vars:
-          label: "role=jenkins-agent"
+          label: "role=jenkins-slave"
           target_object: "imagestream"
           target_name: "jenkins-agent-npm"
     tags:
