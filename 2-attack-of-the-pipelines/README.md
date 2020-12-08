@@ -125,9 +125,7 @@ oc login --token=<Your Token> --server=<CLUSTER_URL>
 
 Because we are in a cloud IDE hosted environment, the client side config needs to be updated to use the route that is generated application API. Run the `fixApiUrl` script in your terminal
 
-<p class="tip">
-🔥 <b>NOTE</b> 🔥 - Make sure that you are in your `workspace*` project while running this command. Otherwise the terminal will crash and the helper function won't help.
-</p>
+Make sure that you are in your `<USERNAME>-codready` project while running this command. Otherwise the terminal will crash and the helper function won't help. You can change your project by running `oc project <USERNAME>-codeready`.
 
 ![fixApiUrl](../images/exercise2/fixApiUrl.png)
 
