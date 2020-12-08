@@ -409,7 +409,7 @@ The implementation of our `important` flag will follow this same flow.
 cd todolist
 ```
 ```bash
-git checkout -b feature/important-flag
+git checkout feature/important-flag
 ```
 ```bash
 git push -u origin feature/important-flag
