@@ -317,7 +317,7 @@ An arbitrary value for the APIs to respond in has been chosen. It is set in the 
 ![new-job](../images/exercise5/new-job.png)
 
 2. Set the `label` on `Restrict where this project can be run` to `jenkins-agent-npm` one used by the build jobs previously.
-![slave-label](../images/exercise5/slave-label.png)
+![slave-label](../images/exercise5/label-jenkins-agent.png)
 
 3. In the SCM section; set the project to use the `todolist` git project. Set the credentials accordingly.
 ![git-settings](../images/exercise5/git-settings.png)
