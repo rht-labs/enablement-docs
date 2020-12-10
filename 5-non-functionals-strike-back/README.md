@@ -134,7 +134,7 @@ stage('OWASP Zap') {
 
 <kbd>📝 *todolist/Jenkinsfile*</kbd>
 ```groovy
-stage('OWASP Scan') {
+stage('OWASP Zap') {
     agent {
         node {
             label "jenkins-agent-zap"
