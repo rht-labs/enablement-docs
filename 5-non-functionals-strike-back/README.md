@@ -81,7 +81,7 @@ _____
         }
         stage('Security Scan') {
             parallel {
-                stage('OWASP Zap') {
+                stage('OWASP Scan') {
 
                 }
                 stage('Arachni') {
@@ -95,7 +95,7 @@ _____
 
 <kbd>📝 *todolist/Jenkinsfile*</kbd>
 ```groovy
-stage('OWASP Zap') {
+stage('OWASP Scan') {
     agent {
         node {
             label "jenkins-agent-zap"
@@ -111,7 +111,7 @@ stage('OWASP Zap') {
 
 <kbd>📝 *todolist/Jenkinsfile*</kbd>
 ```groovy
-stage('OWASP Zap') {
+stage('OWASP Scan') {
         agent {
             node {
                 label "jenkins-agent-zap"
@@ -134,7 +134,7 @@ stage('OWASP Zap') {
 
 <kbd>📝 *todolist/Jenkinsfile*</kbd>
 ```groovy
-stage('OWASP Zap') {
+stage('OWASP Scan') {
     agent {
         node {
             label "jenkins-agent-zap"
