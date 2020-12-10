@@ -726,7 +726,7 @@ touch tests/e2e/specs/importantFlag.js
 
     ![if-e2e-step4](../images/exercise3/e2e-code-listing-full.jpg)
 
-8.  At this point we should have a working e2e test. We can run this by using `npm run e2e`. When all tests pass, we can push up these changes.
+8.  At this point we should have a working e2e test. We can run this by using `npm run e2e:ide` (make sure you have the app running locally as well with `npm run serve:all`). When all tests pass, we can push up these changes.
 
 ```bash
 git add .
