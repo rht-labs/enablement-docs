@@ -76,7 +76,7 @@ _____
             img_tag: "jenkins-agent-zap:latest"
         - role: casl-ansible/roles/openshift-labels
           vars:
-            label: "role=jenkins-agent"
+            label: "role=jenkins-slave"
             target_object: "imagestream"
             target_name: "jenkins-agent-zap"
       tags:
@@ -117,6 +117,7 @@ ansible-playbook apply.yml -e target=tools \
     NAME: jenkins-agent-arachni
     SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
 ```
+![arachni-object-parameters](../images/exercise4/arachni-object-parameters.png)
 
 2. Add the definition below underneath the Zap config
 
@@ -168,6 +169,7 @@ cd /projects/todolist
 ```
 PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab.<APPS_URL>/<GIT_USERNAME>/todolist.git
 PIPELINE_SOURCE_REPOSITORY_REF=develop
+PIPELINE_SOURCE_SECRET=git-auth
 NAME=todolist
 ```
 
