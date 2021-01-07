@@ -6,29 +6,30 @@
 
 ## Frequently Asked Questions
 
-- How can I get into my CodeReady Workspace (assumes you have gone through Exercise 1, Part 1 where we created the cloud IDE)?
 
-  1. Navigate to the CodeReady workspaces link provided by your facilitators. Take note that this is not the exact same link as in Exercise 1, Part 1 which was used to deploy the cloud IDE. After navigating to the link, you should see a page similar to the picture below.
+### How can I get into my CodeReady Workspace (assumes you have gone through Exercise 1, Part 1 where we created the cloud IDE)?
+
+  - Navigate to the CodeReady workspaces link provided by your facilitators. Take note that this is not the exact same link as in Exercise 1, Part 1 which was used to deploy the cloud IDE. After navigating to the link, you should see a page similar to the picture below.
 
   ![code-ready-workspaces](../images/faq/codeready-workspace-entrypoint.png)
 
-  2. On the left nav bar under "Recent Workspaces", select the workspace that has `do500-id` (in the picture above, that's `do500-p4ez1`).
+  - On the left nav bar under "Recent Workspaces", select the workspace that has `do500-id` (in the picture above, that's `do500-p4ze1`).
 
-  3. The workspace should then start up and when complete you should be back in the cloud IDE.
+  - The workspace should then start up and when complete you should be back in the cloud IDE.
 
-- How do I get the OpenShift login token?
+### How do I get the OpenShift login token?
 
-  1. Login to the cluster at the cluster URL provided.
+  - Login to the cluster at the cluster URL provided.
 
-  2. At the top right of the page after logging in, you should see your name. Click into that tab and under your name should be a `Copy Login Command` url that you should click.
+  - At the top right of the page after logging in, you should see your name. Click into that tab and under your name should be a `Copy Login Command` url that you should click.
 
   ![ocp-login-token-link](../images/faq/ocp-token-link.png)
 
-  3. You should then be prompted for your credentials. Click `ldap` and login using your cluster credentials.
+  - You should then be prompted for your credentials. Click `ldap` and login using your cluster credentials.
 
-  4. You should then see a `Display Token` link. Once you click that, you should copy the command under the `Log in with this token` header (it starts with `oc login` and you'll want to copy the full command including the `--token` and `--server` arguments).
+  - You should then see a `Display Token` link. Once you click that, you should copy the command under the `Log in with this token` header (it starts with `oc login` and you'll want to copy the full command including the `--token` and `--server` arguments).
 
-  5. Paste the command in your cloud ide terminal. You should then be logged in. As a way to confirm, run `oc whoami` and you should see your username for the cluster.
+  - Paste the command in your cloud ide terminal. You should then be logged in. As a way to confirm, run `oc whoami` and you should see your username for the cluster.
 
 ## Labs Cheat Sheet
 
