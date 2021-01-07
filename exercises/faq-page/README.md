@@ -28,7 +28,7 @@
 
   4. You should then see a `Display Token` link. Once you click that, you should copy the command under the `Log in with this token` header (it starts with `oc login` and you'll want to copy the full command including the `--token` and `--server` arguments).
 
-  4. Paste the command in your cloud ide terminal. You should then be logged in. As a way to confirm, run `oc whoami` and you should see your username for the cluster.
+  5. Paste the command in your cloud ide terminal. You should then be logged in. As a way to confirm, run `oc whoami` and you should see your username for the cluster.
 
 ## Labs Cheat Sheet
 
