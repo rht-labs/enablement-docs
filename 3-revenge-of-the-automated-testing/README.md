@@ -93,10 +93,15 @@ _On page load:_
 #### 1a - Unit tests
 > In this exercise we will execute our test for the front end locally. Once verified we will add them to Jenkins.
 
-1. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist` directory and run `test`.
+1. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist` directory and run `test` on the `develop` branch.
 ```bash
 cd /projects/todolist
 ```
+
+```bash
+git checkout develop
+```
+
 ```bash
 npm run test:client
 ```
@@ -242,6 +247,24 @@ git push
 
 7. Jenkins should now show the additional stage in the pipeline view for the branch
 ![e2e-pipeline](../images/exercise3/e2e-pipeline.png)
+
+8. After confirming the pipeline is successful on the `develop` branch, let's bring these changes back into the main branch.
+```bash
+git checkout master
+```
+
+```bash
+git checkout develop Jenkinsfile
+```
+
+```bash
+git commit -m "Updated Jenkinsfile taken from develop branch"
+```
+
+```bash
+git push
+```
+
 
 ### Part 2 - TodoList new feature
 > _In this exercise we will introduce a new feature to create an important flag on the todos. In order to be able to build and test our feature we will use TDD_
