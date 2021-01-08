@@ -108,6 +108,10 @@ git remote -v
 git push --all
 ```
 
+<p class="tip">
+⛷️ <b>NOTE</b> ⛷️ - If you see an error along the lines of <code>the remote end hung up unexpectedly</code> - double check the Git URL. It should begin with <code>https://</code> and end with <code>.git</code>. You can rerun the set-url command to correct the URL, if necessary.
+</p>
+
 6. The `todolist` app has a package.json at the root of the project, this defines the configuration for the app including its dependencies, dev dependencies, scripts and other configuration. Install the app's dependencies
 ```bash
 npm install
@@ -561,7 +565,7 @@ Some of the key things to note:
     environment {
         // Global Vars
         NAMESPACE_PREFIX="<YOUR_NAME>"  
-        GITLAB_DOMAIN = "<GITLAB_FQDN>"
+        GITLAB_DOMAIN = "<GITLAB_FQDN>" // Should not have "https://" at the beginning or anything after the ".com" at the end of the URL
         GITLAB_USERNAME = "<GITLAB_USERNAME>"
 
         PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
