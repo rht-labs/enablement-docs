@@ -407,6 +407,9 @@ git checkout develop
 ```bash
 git merge feature/important-flag
 ```
+
+When the editor screen appears in the terminal after running the merge, type `:q` and hit enter to quit the editor.
+
 ```bash
 git push
 ```
