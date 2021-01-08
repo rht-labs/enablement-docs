@@ -181,6 +181,10 @@ cd /projects/todolist
 npm run selenium
 ```
 
+<p class="tip" >
+<b>NOTE</b> - You can close the pop-up that appears in the cloud IDE asking about the redirect after selenium is started.
+</p>
+
 3. On a new terminal move to the `todolist` folder. Run the tests locally by executing the following command. This should start the dev server and run the test.
 ```bash
 cd /projects/todolist
