@@ -241,12 +241,7 @@ cd enablement-ci-cd
 ansible-galaxy install -r requirements.yml --roles-path=roles
 ```
 
-11. Apply the inventory by logging into OpenShift on the terminal. You will need to retrieve a token first, by browsing to the token request page. This is also available from the `Copy Login Command` once you have logged into the OpenShift Web UI. (`<CLUSTER_URL>` should be replaced with the one you've been provided by the instructor). Accept any insecure connection warning(s) from the cli 👍:
-
-```
-# oc login will ask you to retrieve a token
-You must obtain an API token by visiting https://oauth-openshift.apps.do500.emea-1.rht-labs.com/oauth/token/request
-```
+11. Apply the inventory by logging into OpenShift on the terminal. You will need to retrieve a token first, by browsing to the token request page. This is also available from the `Copy Login Command` once you have logged into the OpenShift Web UI ([more information on the FAQ page here](../faq-page/README.md)). (`<CLUSTER_URL>` should be replaced with the one you've been provided by the instructor). Accept any insecure connection warning(s) from the cli 👍.
 
 You should see a screen like this
 ![api-login-token](../images/exercise1/api-login-token.png)
@@ -346,7 +341,7 @@ ansible-playbook apply.yml -e target=tools \
 1. Navigate to GitLab login page. You can login using your cluster credentials using the LDAP tab
    ![gitlab-ui](../images/exercise1/gitlab-ui.png)
 
-2. Once logged in create a new project called `enablement-ci-cd` and mark it as internal. Once created, copy out the `git url` for use on the next step.
+2. Once logged in create a new project called `enablement-ci-cd` and mark it as internal. Once created, copy out the `git url` for use on the next step. You can find the url by clicking on `Clone` and then copying the link under `Clone with HTTPS`.
    ![gitlab-new-project](../images/exercise1/gitlab-new-project.png)
 
 3. Commit your local project to this new remote by first removing the existing origin (github) where the Ansible project was cloned from in the first steps. Remember to substitute `<GIT_URL>` accordingly with the one created for your `enablement-ci-cd` repository a moment ago.
@@ -370,8 +365,6 @@ git push -u origin --all
 4. On browsing to the first project - you will need to set a local password in gitlab so you can push code.
 
 ![gitlab-new-project](../images/exercise1/gitlab-passwd-set.png)
-
-Select the banner and use the same password you logged into OpenShift as your local gitlab credential. `SSH keys` are not available in this environment.
 
 ### Part 5 - MongoDB for CI tests
 
