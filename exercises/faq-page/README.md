@@ -91,9 +91,6 @@ This cheat sheet will give you some of the most useful commands and tips which y
   - `man -k <search string>` will return a list of commands relevant to the search string you've entered.
   - If you want to know more about `man` try `man man` for more `man` on `man` information.
 
-- Run commands with root privileges
-  - `sudo command1` will run a command with escalated privileges. This is safer than logging on as root user.
-
 ## OpenShift 101
 
 OpenShift, or OpenShift Container Platform (OCP) is Red Hat's container platform. It is used to run and manage containerised applications with the aim of accelerated application development and deployment. We shall be deploying all of our applications for this enablement on an OpenShift cluster.
