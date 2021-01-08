@@ -642,7 +642,9 @@ updateTodo({ commit, state }, { id, important }) {
   });
 ```
 
-22. With our tests running and failing, let's implement the feature to their spec. Open the `src/store/mutations.js` and add another function called `MARK_TODO_IMPORTANT` below the `MARK_TODO_COMPLETED` to toggle `todo.important` between true and false. NOTE - add a `,` at the end of the `MARK_TODO_COMPLETED(){}` function call.
+22. With our tests running and failing, let's implement the feature to their spec. Open the `src/store/mutations.js` and add another function called `MARK_TODO_IMPORTANT` below the `MARK_TODO_COMPLETED` to toggle `todo.important` between true and false. 
+
+NOTE - add a `,` at the end of the `MARK_TODO_COMPLETED(){}` function call.
 
 <kbd>📝 todolist/src/store/mutations.js</kbd>
 ```javascript
@@ -676,6 +678,9 @@ git checkout develop
 ```bash
 git merge feature/important-flag
 ```
+
+When the editor screen appears in the terminal after running the merge, type `:q` and hit enter to quit the editor.
+
 ```bash
 git push --all
 ```
