@@ -154,61 +154,6 @@ git push
 5. Your OpenShift cluster should now show that the Arachni agent has been built in your `ci-cd` namepsace.
 ![all-agents](../images/exercise4/arachni-agent.png)
 
-
-### Part 2 - OCP Pipeline
-> _This exercise adds a new BuildConfig to our cluster for the todolist-apps to run their pipelines in OpenShift using the OpenShift Jenkins Sync Plugin. We will use the OpenShift Applier to create the content in the cluster_
-
-1. Change directory to `todolist`
-```bash
-cd /projects/todolist
-```
-
-2. Open the `todolist` app in your cloud ide. Open `.openshift-applier/template/ocp-pipeline` directory. This template creates a BuildConfig for OpenShift with a Jenkinsfile from a given repo. In this case; it will be the `Jenkinsfile` at the root of our application.
-
-3. Open the `.openshift-applier/params/ocp-pipeline` file and update `PIPELINE_SOURCE_REPOSITORY_URL` with the git url of your project (Don't forget to add the `.git` at the end). For example:
-```
-PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab.<APPS_URL>/<GIT_USERNAME>/todolist.git
-PIPELINE_SOURCE_REPOSITORY_REF=develop
-PIPELINE_SOURCE_SECRET=git-auth
-NAME=todolist
-```
-
-4. Create a new object in `.openshift-applier/inventory/group_vars/all.yml` to drive the `ocp-pipeline` template with the parameters file you've just created. It can be put under the existing `todolist-build` object.
-
-<kbd>📝 *.openshift-applier/inventory/group_vars/all.yml*</kbd>
-```yaml
-  - name: todolist-pipeline
-    template: "{{ playbook_dir }}/templates/ocp-pipeline.yml"
-    params: "{{ playbook_dir }}/params/ocp-pipeline"
-    namespace: "{{ ci_cd_namespace }}"
-    tags:
-    - pipeline
-```
-![ocp-pipeline-applier](../images/exercise4/ocp-pipeline-applier.png)
-
-5. Log in to OpenShift using the `oc` client, and use the OpenShift Applier to create the cluster content
-```bash
-ansible-playbook .openshift-applier/apply.yml -i .openshift-applier/inventory/ \
-     -e "filter_tags=pipeline"
-```
-
-6. With these changes in place, commit your changes to GitLab
-```bash
-git add .
-```
-```bash
-git commit -m "ADD - ocp pipeline in git repo"
-```
-```bash
-git push
-```
-
-7. Login to your OpenShift Cluster and go to the `<YOUR_NAME>-ci-cd` namespace. On the side menu; hit `Builds > Pipeline` to see your newly created pipeline running in OCP Land.
-![ocp-pipeline-view](../images/exercise4/ocp-pipeline-view.png)
-
-8. Running the pipeline from here will run it in Jenkins. You can see the job sync between OpenShift and Jenkins if you login to Jenkins. You should see a folder with `<YOUR_NAME>-ci-cd` and your pipeline jobs inside of it.
-![ocp-pipeline-jenkins](../images/exercise4/ocp-pipeline-jenkins.png)
-
 _____
 
 ## Extension Tasks
