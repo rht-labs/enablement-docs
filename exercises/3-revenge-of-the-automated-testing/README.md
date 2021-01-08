@@ -775,6 +775,21 @@ git commit -m "Implementing e2e tests"
 git push
 ```
 
+9. Once the pipeline on the `develop` branch runs successfully, let's merge our updates back into the main branch.
+
+```bash
+git checkout master
+```
+```bash
+git merge develop
+```
+
+When the editor screen appears in the terminal after running the merge, type `:q` and hit enter to quit the editor.
+
+```bash
+git push --all
+```
+
 ---
 
 ## Extension Tasks
