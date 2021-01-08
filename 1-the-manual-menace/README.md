@@ -223,6 +223,12 @@ test:
 
 ![open-terminal](../images/exercise1/open-terminal.png)
 
+And make sure that your default terminal is set to `zsh`:
+
+```bash
+echo "zsh" >> ~/.bashrc
+```
+
 9.  Change to the `enablement-ci-cd` directory
 
 ```bash
@@ -256,8 +262,11 @@ oc login --token=<Your Token> --server=<CLUSTER_URL>
 ```bash
 ansible-playbook apply.yml -i inventory/ -e target=bootstrap
 ```
-
 where the `-e target=bootstrap` is passing an additional variable specifying that we run the `bootstrap` group of the inventory.
+
+<p class="tip">
+⛷️ <b>NOTE</b> ⛷️ - Both here and going forward, Ansible requires you to be logged in to OpenShift! Run <code>oc whoami</code> to check your login status. If it returns your username, you are logged in. If it returns some longer string with <code>serviceaccount</code> in it, you are not logged in, and you should run <i>Copy Login Command</i> again. OpenShift logs you out periodically, most likely once every 24 hours.
+</p>
 
 13. Once successful you should see an output similar to this: ![playbook-success](../images/exercise1/play-book-success.png)
 

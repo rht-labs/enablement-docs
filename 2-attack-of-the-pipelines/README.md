@@ -165,8 +165,11 @@ Afterwards, you should see something like this:
 cd todolist
 npm run mongo:start-ide
 ```
+
+Alternatively, if you're not using the cloud hosted environment, you can start mongo using <i>npm run mongo</i> which will pull the latest `mongo` image from [Docker Hub](https://hub.docker.com/).
+
 <p class="tip" >
-<b>NOTE</b> - If you're not using the cloud hosted environment, you can start mongo using <i>npm run mongo</i> which will pull the latest `mongo` image from [Docker Hub](https://hub.docker.com/).
+<b>NOTE</b> - If you get an error like <code>unable to bind to port</code>, you probably already have a Mongo instance running somewhere. Either close the tab in which that is running, or run <code>killall mongo</code> to force it to close and make the port available for use again.
 </p>
 
 You will get a pop-up in your cloud IDE asking if you want to `add a redirect` that you can close.
