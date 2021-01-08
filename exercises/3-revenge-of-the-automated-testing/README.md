@@ -93,10 +93,15 @@ _On page load:_
 #### 1a - Unit tests
 > In this exercise we will execute our test for the front end locally. Once verified we will add them to Jenkins.
 
-1. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist` directory and run `test`.
+1. Before linking our automated testing to the pipeline we'll first ensure the tests run locally. Change to the `todolist` directory and run `test` on the `develop` branch.
 ```bash
 cd /projects/todolist
 ```
+
+```bash
+git checkout develop
+```
+
 ```bash
 npm run test:client
 ```
@@ -181,6 +186,10 @@ cd /projects/todolist
 npm run selenium
 ```
 
+<p class="tip" >
+<b>NOTE</b> - You can close the pop-up that appears in the cloud IDE asking about the redirect after selenium is started.
+</p>
+
 3. On a new terminal move to the `todolist` folder. Run the tests locally by executing the following command. This should start the dev server and run the test.
 ```bash
 cd /projects/todolist
@@ -238,6 +247,24 @@ git push
 
 7. Jenkins should now show the additional stage in the pipeline view for the branch
 ![e2e-pipeline](../images/exercise3/e2e-pipeline.png)
+
+8. After confirming the pipeline is successful on the `develop` branch, let's bring these changes back into the main branch.
+```bash
+git checkout master
+```
+
+```bash
+git checkout develop Jenkinsfile
+```
+
+```bash
+git commit -m "Updated Jenkinsfile taken from develop branch"
+```
+
+```bash
+git push
+```
+
 
 ### Part 2 - TodoList new feature
 > _In this exercise we will introduce a new feature to create an important flag on the todos. In order to be able to build and test our feature we will use TDD_
@@ -380,6 +407,9 @@ git checkout develop
 ```bash
 git merge feature/important-flag
 ```
+
+When the editor screen appears in the terminal after running the merge, type `:q` and hit enter to quit the editor.
+
 ```bash
 git push
 ```
@@ -612,7 +642,9 @@ updateTodo({ commit, state }, { id, important }) {
   });
 ```
 
-22. With our tests running and failing, let's implement the feature to their spec. Open the `src/store/mutations.js` and add another function called `MARK_TODO_IMPORTANT` below the `MARK_TODO_COMPLETED` to toggle `todo.important` between true and false. NOTE - add a `,` at the end of the `MARK_TODO_COMPLETED(){}` function call.
+22. With our tests running and failing, let's implement the feature to their spec. Open the `src/store/mutations.js` and add another function called `MARK_TODO_IMPORTANT` below the `MARK_TODO_COMPLETED` to toggle `todo.important` between true and false. 
+
+NOTE - add a `,` at the end of the `MARK_TODO_COMPLETED(){}` function call.
 
 <kbd>📝 todolist/src/store/mutations.js</kbd>
 ```javascript
@@ -646,6 +678,9 @@ git checkout develop
 ```bash
 git merge feature/important-flag
 ```
+
+When the editor screen appears in the terminal after running the merge, type `:q` and hit enter to quit the editor.
+
 ```bash
 git push --all
 ```
@@ -726,7 +761,7 @@ touch tests/e2e/specs/importantFlag.js
 
     ![if-e2e-step4](../images/exercise3/e2e-code-listing-full.jpg)
 
-8.  At this point we should have a working e2e test. We can run this by using `npm run e2e:ide` (make sure you have the app running locally as well with `npm run serve:all`). When all tests pass, we can push up these changes.
+8.  At this point we should have a working e2e test. We can run this by using `npm run e2e:ide` (make sure you have the app running locally with `npm run serve:all` and that selenium is running in the background with `npm run selenium`). When all tests pass, we can push up these changes.
 
 ```bash
 git add .
@@ -738,6 +773,21 @@ git commit -m "Implementing e2e tests"
 
 ```bash
 git push
+```
+
+9. Once the pipeline on the `develop` branch runs successfully, let's merge our updates back into the main branch.
+
+```bash
+git checkout master
+```
+```bash
+git merge develop
+```
+
+When the editor screen appears in the terminal after running the merge, type `:q` and hit enter to quit the editor.
+
+```bash
+git push --all
 ```
 
 ---
