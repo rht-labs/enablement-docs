@@ -108,6 +108,10 @@ git remote -v
 git push --all
 ```
 
+<p class="tip">
+⛷️ <b>NOTE</b> ⛷️ - If you see an error along the lines of <code>the remote end hung up unexpectedly</code> - double check the Git URL. It should begin with <code>https://</code> and end with <code>.git</code>. You can rerun the set-url command to correct the URL, if necessary.
+</p>
+
 6. The `todolist` app has a package.json at the root of the project, this defines the configuration for the app including its dependencies, dev dependencies, scripts and other configuration. Install the app's dependencies
 ```bash
 npm install
@@ -161,8 +165,11 @@ Afterwards, you should see something like this:
 cd todolist
 npm run mongo:start-ide
 ```
+
+Alternatively, if you're not using the cloud hosted environment, you can start mongo using <i>npm run mongo</i> which will pull the latest `mongo` image from [Docker Hub](https://hub.docker.com/).
+
 <p class="tip" >
-<b>NOTE</b> - If you're not using the cloud hosted environment, you can start mongo using <i>npm run mongo</i> which will pull the latest `mongo` image from [Docker Hub](https://hub.docker.com/).
+<b>NOTE</b> - If you get an error like <code>unable to bind to port</code>, you probably already have a Mongo instance running somewhere. Either close the tab in which that is running, or run <code>killall mongo</code> to force it to close and make the port available for use again.
 </p>
 
 You will get a pop-up in your cloud IDE asking if you want to `add a redirect` that you can close.
@@ -561,7 +568,7 @@ Some of the key things to note:
     environment {
         // Global Vars
         NAMESPACE_PREFIX="<YOUR_NAME>"  
-        GITLAB_DOMAIN = "<GITLAB_FQDN>"
+        GITLAB_DOMAIN = "<GITLAB_FQDN>" // Should not have "https://" at the beginning or anything after the ".com" at the end of the URL
         GITLAB_USERNAME = "<GITLAB_USERNAME>"
 
         PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
