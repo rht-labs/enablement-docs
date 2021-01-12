@@ -610,7 +610,7 @@ git push
 9.  Save the Job configuration to run the initial scan. The log will show scans for `master` and `develop` branches. The `develop` branch has a `Jenkinsfile`, so a pipeline is dynamically created for it.
 ![todolist-api-multi](../images/exercise2/todolist-api-multi.png)
 
-10. You may notice that your `develop` pipleine has succeeded, and is green. To make the `master` pipleine also succeed and turn from red to green, we need to update the code in the `master` branch. In essence we want to reflect the changes made in the `develop` branch and put them into the the `master` branch.
+10. You may notice that your `develop` pipeline has succeeded, and is green. To make the `master` pipeline also succeed and turn from red to green, we need to update the code in the `master` branch. In essence we want to reflect the changes made in the `develop` branch and put them into the the `master` branch.
 ```bash
 git checkout master
 ```
