@@ -149,17 +149,42 @@ https://<CODEREADY-LINK>/f?url=https://raw.githubusercontent.com/rht-labs/enable
 
 3. Open the `inventory/groups_vars/all.yml` file. Update the `namespace_prefix` variables by replacing the `<YOUR_NAME>` (including the `<` and `>`) with your name or initials. **Don't use uppercase or special characters**. For example; if your name is Tim Smith you would replace `<YOUR_NAME>` and set `namespace_prefix` to something like `tim` or `tsmith`.
 
-<kbd>📝 _enablement-ci-cd/inventory/groups_vars/all.yml_</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 enablement-ci-cd/inventory/groups_vars/all.yml</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
 
 ```yaml
 namespace_prefix: "<YOUR_NAME>"
 ```
 
+#### ** Entire File **
+
+```yaml
+---
+# Please change '<YOUR_NAME>' below to be unique for your deployment
+# Note:
+#  - keep it lowercase
+#  - do NOT use special characters
+#  - make sure to replace the entire string between the double quotes - including the '<' and '>'
+
+namespace_prefix: "<YOUR_NAME>"   # ⬅️ We care about this part!
+
+openshift_templates_raw: "https://raw.githubusercontent.com/rht-labs/openshift-templates"
+openshift_templates_raw_version_tag: "v1.4.17"
+cop_quickstarts: "https://github.com/redhat-cop/containers-quickstarts.git"
+cop_quickstarts_raw: "https://raw.githubusercontent.com/redhat-cop/containers-quickstarts"
+cop_quickstarts_raw_version_tag: "v1.29"
+```
+
+<!-- tabs:end -->
+
 4. Open the `inventory/host_vars/projects-and-policies.yml` file; you should see some variables setup already to create the `<YOUR_NAME>-ci-cd` namespace. This object is passed to the OpenShift Applier to call the `templates/project-requests.yml` template with the parameters composed from the inventory and the `ci_cd` vars in the `apply.yml` playbook. We will add some additional content here but first let's explore the parameters and the template
 
 5. Inside of the `inventory/host_vars/projects-and-policies.yml` you'll see the following
 
-<kbd>📝 _enablement-ci-cd/inventory/host_vars/projects-and-policies.yml_</kbd>
+<kbd><span style="color: #28b463; font-size: 12pt;">👀 enablement-ci-cd/inventory/host_vars/projects-and-policies.yml</span></kbd>
 
 ```yaml
 ci_cd:
@@ -169,7 +194,7 @@ ci_cd:
 
 - This will define the variables that we'll soon be using to deploy our CI/CD project. It relies on the `namespace_prefix` that we updated earlier. Pulling these two sets of variables together will now allow us to pass the newly created variables to our template that will create our project appropriately. You'll notice that the name of the variable above (`ci_cd`) is then assigned to `params_from_vars` in our inventory.
 
-<kbd>📝 _enablement-ci-cd/inventory/host_vars/projects-and-policies.yml_</kbd>
+<kbd><span style="color: #28b463; font-size: 12pt;">👀 enablement-ci-cd/inventory/host_vars/projects-and-policies.yml</span></kbd>
 
 ```yaml
 ansible_connection: local
@@ -188,7 +213,11 @@ openshift_cluster_content:
 
 - In your editor, open `enablement-ci-cd/inventory/host_vars/projects-and-policies.yml` and add the following lines before `openshift_cluster_content`:
 
-<kbd>📝 _enablement-ci-cd/inventory/host_vars/projects-and-policies.yml_</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 enablement-ci-cd/inventory/host_vars/projects-and-policies.yml</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
 
 ```yaml
 dev:
@@ -200,9 +229,43 @@ test:
   NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Test"
 ```
 
+#### ** Entire File **
+
+```yaml
+---
+ci_cd:
+  NAMESPACE: "{{ namespace_prefix }}-ci-cd"
+  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title}}s CI/CD"
+
+dev:
+  NAMESPACE: "{{ namespace_prefix }}-dev"
+  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Dev"
+
+test:
+  NAMESPACE: "{{ namespace_prefix }}-test"
+  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Test"
+
+ansible_connection: local
+openshift_cluster_content:
+- object: projectrequest
+  content:
+  - name: "{{ ci_cd_namespace }}"
+    template: "{{ playbook_dir }}/templates/project-requests.yml"
+    action: create
+    params_from_vars: "{{ ci_cd }}" 
+    tags:
+    - projects
+```
+
+<!-- tabs:end -->
+
 7. In the `enablement-ci-cd/inventory/host_vars/projects-and-policies.yml` file, add the new objects for the projects you want to create (dev & test) by adding another object to the `content` array (previously defined) for each. You can copy and paste them from the `ci_cd_namespace` example and update them accordingly. If you do this, remember to set the names to `{{ dev_namespace }}` and `{{ test_namespace }}` and change the `params_from_vars` variable accordingly. The values for these variables used for the names (`ci_cd_namespace`, `dev_namespace` etc.) are defined in `apply.yml` file in the root of the project.
 
-<kbd>📝 _enablement-ci-cd/inventory/host_vars/projects-and-policies.yml_</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 enablement-ci-cd/inventory/host_vars/projects-and-policies.yml</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
 
 ```yaml
 - name: "{{ dev_namespace }}"
@@ -218,6 +281,48 @@ test:
   tags:
     - projects
 ```
+
+#### ** Entire File **
+
+```yaml
+---
+ci_cd:
+  NAMESPACE: "{{ namespace_prefix }}-ci-cd"
+  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title}}s CI/CD"
+
+dev:
+  NAMESPACE: "{{ namespace_prefix }}-dev"
+  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Dev"
+
+test:
+  NAMESPACE: "{{ namespace_prefix }}-test"
+  NAMESPACE_DISPLAY_NAME: "{{ namespace_prefix | title }} Test"
+
+ansible_connection: local
+openshift_cluster_content:
+- object: projectrequest
+  content:
+  - name: "{{ ci_cd_namespace }}"
+    template: "{{ playbook_dir }}/templates/project-requests.yml"
+    action: create
+    params_from_vars: "{{ ci_cd }}" 
+    tags:
+    - projects
+  - name: "{{ dev_namespace }}"
+    template: "{{ playbook_dir }}/templates/project-requests.yml"
+    action: create
+    params_from_vars: "{{ dev }}"
+    tags:
+      - projects
+  - name: "{{ test_namespace }}"
+    template: "{{ playbook_dir }}/templates/project-requests.yml"
+    action: create
+    params_from_vars: "{{ test }}"
+    tags:
+      - projects
+```
+
+<!-- tabs:end -->
 
 8. Use the `Terminal > Open Terminal in specific container` menu item to open a terminal in the `node-rhel7-ansible` container
 
@@ -291,18 +396,35 @@ touch params/nexus
 
 2. The essential params to include in this file are:
 
-<kbd>📝 _enablement-ci-cd/params/nexus_</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 enablement-ci-cd/params/nexus</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
 
 ```
 VOLUME_CAPACITY=5Gi
 MEMORY_LIMIT=1Gi
 ```
 
+#### ** Entire File **
+
+```
+VOLUME_CAPACITY=5Gi
+MEMORY_LIMIT=1Gi
+```
+
+<!-- tabs: end -->
+
 - You'll notice that this is different from how we defined our params for our projects. This is because there are multiple ways to do this. In cases like this, there may be a need to change some of these variables more frequently than others (i.e. giving the app more memory,etc.). In this case, it's easier to maintain them within their own separate params files.
 
 3. Create a new object in the inventory variables `inventory/host_vars/ci-cd-tooling.yml` called `ci-cd-tooling` and populate its `content` as follows
 
-<kbd>📝 _enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml_</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
 
 ```yaml
 ---
@@ -319,6 +441,26 @@ openshift_cluster_content:
         tags:
           - nexus
 ```
+
+#### ** Entire File **
+
+```yaml
+---
+ansible_connection: local
+openshift_cluster_content:
+  - galaxy_requirements:
+      - "{{ inventory_dir }}/../exercise-requirements.yml"
+  - object: ci-cd-tooling
+    content:
+      - name: "nexus"
+        namespace: "{{ ci_cd_namespace }}"
+        template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/nexus/nexus-deployment-template.yml"
+        params: "{{ playbook_dir }}/params/nexus"
+        tags:
+          - nexus
+```
+
+<!-- tabs: end -->
 
 ![ci-cd-deployments-yml](../images/exercise1/ci-cd-deployments-yml.png)
 
@@ -372,7 +514,11 @@ git push -u origin --all
 
 1. Open `enablement-ci-cd` in your favourite editor. Edit the `inventory/host_vars/ci-cd-tooling.yml` to include a new object for our mongodb as shown below. This item can be added below Nexus in the `ci-cd-tooling` section.
 
-<kbd>📝 _enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml_</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
 
 ```yaml
 - name: "jenkins-mongodb"
@@ -382,6 +528,33 @@ git push -u origin --all
   tags:
     - mongodb
 ```
+
+#### ** Entire File **
+
+```yaml
+---
+ansible_connection: local
+
+openshift_cluster_content:
+- galaxy_requirements:
+  - "{{ inventory_dir }}/../exercise-requirements.yml"
+- object: ci-cd-tooling
+  content:
+    - name: "nexus"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/nexus/nexus-deployment-template.yml"
+      params: "{{ playbook_dir }}/params/nexus"
+      tags:
+        - nexus
+    - name: "jenkins-mongodb"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/mongodb-ephemeral.yml"
+      params: "{{ playbook_dir }}/params/mongodb"
+      tags:
+        - mongodb
+```
+
+<!-- tabs: end -->
 
 ![jenkins-mongo](../images/exercise1/jenkins-mongo.png)
 
@@ -423,7 +596,11 @@ ansible-playbook apply.yml -e target=tools \
 touch params/jenkins
 ```
 
-<kbd>📝 _enablement-ci-cd/params/jenkins_</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 enablement-ci-cd/params/jenkins</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
 
 ```
 MEMORY_LIMIT=3Gi
@@ -433,6 +610,18 @@ NAMESPACE=<YOUR_NAME>-ci-cd
 JENKINS_OPTS=--sessionTimeout=720
 ```
 
+#### ** Entire File **
+
+```
+MEMORY_LIMIT=3Gi
+VOLUME_CAPACITY=15Gi
+JVM_ARCH=x86_64
+NAMESPACE=<YOUR_NAME>-ci-cd
+JENKINS_OPTS=--sessionTimeout=720
+```
+
+<!-- tabs:end -->
+
 - You might be wondering why we have to replace <YOUR_NAME> here and can't just rely on the `namespace_prefix` variable that we've been using previously. This is because the replacement is handled by two different engines (one being ansible -- which knows about `namespace_prefix` and the other being the oc client, which does not). Because the params files are processed by the oc client, we need to update this here.
 
 2. Add a `jenkins` variable to the Ansible inventory underneath the jenkins-mongo in `inventory/host_vars/ci-cd-tooling.yml` as shown below to create a DeploymentConfig for Jenkins. In order for Jenkins to be able to run `npm` commands we must configure a jenkins build agent for it to use. This agent will be dynamically provisioned when we run a build. It needs to have Node.js and npm and a C compiler installed in it.
@@ -441,7 +630,11 @@ JENKINS_OPTS=--sessionTimeout=720
 <b>NOTE</b> These agents can take a time to build themselves so to speed up we have placed the agent with a corresponding ImageStream within OpenShift. To leverage this existing agent image, we are using a feature of the openshift-applier to process a couple of post-steps part of the inventory. These steps are utilized to perform pre and post tasks necessary to make our inventory work correctly. In this case, we use the post steps to tag and label the jenkins-agent-npm ImageStream within our CI/CD project so Jenkins knows how to find and use it.
 </p>
 
-<kbd>📝 _enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml_</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
 
 ```yaml
 - name: "jenkins"
@@ -461,6 +654,49 @@ JENKINS_OPTS=--sessionTimeout=720
   tags:
     - jenkins
 ```
+
+#### ** Entire File **
+
+```yaml
+---
+ansible_connection: local
+
+openshift_cluster_content:
+- galaxy_requirements:
+  - "{{ inventory_dir }}/../exercise-requirements.yml"
+- object: ci-cd-tooling
+  content:
+    - name: "nexus"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/nexus/nexus-deployment-template.yml"
+      params: "{{ playbook_dir }}/params/nexus"
+      tags:
+        - nexus
+    - name: "jenkins-mongodb"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/mongodb-ephemeral.yml"
+      params: "{{ playbook_dir }}/params/mongodb"
+      tags:
+        - mongodb
+    - name: "jenkins"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/jenkins/jenkins-persistent-template.yml"
+      params: "{{ playbook_dir }}/params/jenkins"
+      post_steps:
+        - role: casl-ansible/roles/openshift-imagetag
+          vars:
+            source_img: "quay.io/rht-labs/enablement-npm:latest"
+            img_tag: "jenkins-agent-npm:latest"
+        - role: casl-ansible/roles/openshift-labels
+          vars:
+            label: "role=jenkins-slave"
+            target_object: "imagestream"
+            target_name: "jenkins-agent-npm"
+      tags:
+        - jenkins0
+```
+
+<!-- tabs:end -->
 
 This configuration, if applied now, will create the deployment configuration needed for Jenkins but the `${NAMESPACE}:${JENKINS_IMAGE_STREAM_TAG}` in the template won't exist yet.
 
@@ -498,7 +734,11 @@ slack:2.37
 touch params/jenkins-s2i
 ```
 
-<kbd>📝 _enablement-ci-cd/params/jenkins-s2i_</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 enablement-ci-cd/params/jenkins-s2i</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
 
 ```
 SOURCE_REPOSITORY_URL=<GIT_URL>
@@ -508,18 +748,80 @@ SOURCE_REPOSITORY_PASSWORD=<YOUR_LDAP_PASSWORD>
 SOURCE_REPOSITORY_USERNAME=<YOUR_LDAP_USERNAME>
 ```
 
+#### ** Entire File **
+
+```
+SOURCE_REPOSITORY_URL=<GIT_URL>
+NAME=jenkins
+SOURCE_REPOSITORY_CONTEXT_DIR=jenkins-s2i
+SOURCE_REPOSITORY_PASSWORD=<YOUR_LDAP_PASSWORD>
+SOURCE_REPOSITORY_USERNAME=<YOUR_LDAP_USERNAME>
+```
+
+<!-- tabs:end -->
+
 where
 _ `<GIT_URL>` is the full clone path of the repo where this project is stored (including the https && .git)
 _ `<YOUR_LDAP_USERNAME>` is the username builder pod will use to login and clone the repo with \* `<YOUR_LDAP_PASSWORD>` is the password the builder pod will use to authenticate and clone the repo using
 
 6. At the top of `inventory/host_vars/ci-cd-tooling.yml` file underneath the `---`, add the following:
 
-<kbd>📝 _enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml_</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
 
 ```yaml
 ci_cd:
   IMAGE_STREAM_NAMESPACE: "{{ ci_cd_namespace }}"
 ```
+
+#### ** Entire File **
+
+```yaml
+---
+ci_cd:
+  IMAGE_STREAM_NAMESPACE: "{{ ci_cd_namespace }}"
+
+ansible_connection: local
+
+openshift_cluster_content:
+- galaxy_requirements:
+  - "{{ inventory_dir }}/../exercise-requirements.yml"
+- object: ci-cd-tooling
+  content:
+    - name: "nexus"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/nexus/nexus-deployment-template.yml"
+      params: "{{ playbook_dir }}/params/nexus"
+      tags:
+        - nexus
+    - name: "jenkins-mongodb"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/mongodb-ephemeral.yml"
+      params: "{{ playbook_dir }}/params/mongodb"
+      tags:
+        - mongodb
+    - name: "jenkins"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/jenkins/jenkins-persistent-template.yml"
+      params: "{{ playbook_dir }}/params/jenkins"
+      post_steps:
+        - role: casl-ansible/roles/openshift-imagetag
+          vars:
+            source_img: "quay.io/rht-labs/enablement-npm:latest"
+            img_tag: "jenkins-agent-npm:latest"
+        - role: casl-ansible/roles/openshift-labels
+          vars:
+            label: "role=jenkins-slave"
+            target_object: "imagestream"
+            target_name: "jenkins-agent-npm"
+      tags:
+        - jenkins
+```
+
+<!-- tabs:end -->
 
 7. Create a new object `ci-cd-builds` in the Ansible `inventory/host_vars/ci-cd-tooling.yml` to drive the s2i build configuration.
 
@@ -527,7 +829,12 @@ ci_cd:
 ⚡ <b>NOTE</b> ⚡ - We are using a custom jenkins template that works with latest version of OpenShift until the changes can be merged upstream.
 </p>
 
-<kbd>📝 _enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml_</kbd>
+
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 enablement-ci-cd/inventory/host_vars/ci-cd-tooling.yml</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
 
 ```yaml
 - object: ci-cd-builds
@@ -540,6 +847,61 @@ ci_cd:
       tags:
         - jenkins
 ```
+
+#### ** Entire File **
+
+```yaml
+---
+ci_cd:
+  IMAGE_STREAM_NAMESPACE: "{{ ci_cd_namespace }}"
+
+ansible_connection: local
+
+openshift_cluster_content:
+- galaxy_requirements:
+  - "{{ inventory_dir }}/../exercise-requirements.yml"
+- object: ci-cd-tooling
+  content:
+    - name: "nexus"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/nexus/nexus-deployment-template.yml"
+      params: "{{ playbook_dir }}/params/nexus"
+      tags:
+        - nexus
+    - name: "jenkins-mongodb"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/mongodb-ephemeral.yml"
+      params: "{{ playbook_dir }}/params/mongodb"
+      tags:
+        - mongodb
+    - name: "jenkins"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/jenkins/jenkins-persistent-template.yml"
+      params: "{{ playbook_dir }}/params/jenkins"
+      post_steps:
+        - role: casl-ansible/roles/openshift-imagetag
+          vars:
+            source_img: "quay.io/rht-labs/enablement-npm:latest"
+            img_tag: "jenkins-agent-npm:latest"
+        - role: casl-ansible/roles/openshift-labels
+          vars:
+            label: "role=jenkins-slave"
+            target_object: "imagestream"
+            target_name: "jenkins-agent-npm"
+      tags:
+        - jenkins
+- object: ci-cd-builds
+  content:
+    - name: "jenkins-s2i"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/jenkins-s2i-build-template-with-secret.yml"
+      params: "{{ playbook_dir }}/params/jenkins-s2i"
+      params_from_vars: "{{ ci_cd }}"
+      tags:
+        - jenkins
+```
+
+<!-- tabs:end -->
 
 8. Commit your code to your GitLab instance
 
