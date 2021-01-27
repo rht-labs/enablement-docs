@@ -22,7 +22,7 @@ The TDD cycle can be illustrated with the following diagram:
 2. `The test fails` -
    When a test is first implemented it is expected to fail. This failure validates the test is working correctly as the feature is yet to be implemented.
 
-3. `Write code to make test pass` -
+3. `Write code to make the test pass` -
    This step involves implementing the feature to pass the failed test. Code written at this stage may be inelegant and still pass the test, however this is acceptable as TDD is a recursive cycle which includes code refactoring.
 
 4. `The test passes` -
@@ -509,11 +509,17 @@ The implementation of our `important` flag will follow this same flow.
    npm run test:client -- --watch
    ```
 
-1. All the tests should be passing when we begin. If `No tests found related to files changed since last commit` is on show; hit `a` on the terminal to re-run `all` tests.
+1. All the tests should be passing when we begin. If `No tests found related to files changed since last commit` is showing, hit `a` on the terminal to re-run `all` tests.
 
    ![rerun-all](../images/exercise3/rerun-all.png)
 
-1. We will add new tests in three places to validate our function behaves as expected against the acceptance criteria from the Feature Story supplied to us. We will need to write tests for our `TodoItem.vue` to verify having a red flag and that it is clickable. Our app is going to need to persist the changes in the backend so we'll want to make changes to our `actions.js` and `mutations.js` to keep the API and local copy of the store in sync. Let's start with our `TodoItem.vue` component. Open the `tests/unit/vue-components/TodoItem.spec.js` file. This has been templated with some example test to correspond with our A/Cs for speed of doing the exercise. Find the describe block for our important flag tests. It is set up already with a `beforeEach()` hook for test setup.
+1. We will add new tests in three places to validate our function behaves as defined in the Feature Story.
+   We will need to write tests for `TodoItem.vue` to verify that it has a clickable red flag.
+   Our app is going to need to persist the changes in the backend, so we will want to modify `actions.js` and `mutations.js` to keep the API and local copy of the store in sync.
+   Let's start with our `TodoItem.vue` component. Open the `tests/unit/vue-components/TodoItem.spec.js` file.
+   Notice that this file already contains a few tests that validate some of our AC's (acceptance criteria).
+   Find the `describe` block for our important flag tests.
+   The block contains a `beforeEach()` hook, which is a special function that is called before each test in the `describe` block is run.
 
    ![important-flag-before](../images/exercise3/important-flag-before.png)
 
@@ -521,7 +527,8 @@ The implementation of our `important` flag will follow this same flow.
 
    ![todoitem-skeleton-tests](../images/exercise3/todoitem-skeleton-tests.png)
 
-1. Let's implement the first test `it("should render a button with important flag"`. This test will assert if the button is present on the page and it contains the `.important-flag` CSS class. To implement this; add the `expect` statement as follows below the `// TODO - test goes here!` comment.
+1. Let's implement the first test `it("should render a button with important flag", ...)`. This test will assert that the button is present on the page and it contains the `.important-flag` CSS class.
+   To implement this, add the `expect` statement below the `// TODO - test goes here!` comment.
 
    <kbd>📝 todolist/tests/unit/vue-components/TodoItem.spec.js</kbd>
 
@@ -539,7 +546,9 @@ The implementation of our `important` flag will follow this same flow.
 
    ![todoitem-fail-test](../images/exercise3/todoitem-fail-test.png)
 
-1. With a basic assertion in place, let's continue on to the next few tests. We want the important flag to be red when an item in the todolist is marked accordingly. Conversely we want it to be not red when false. Let's create a check for `.red-flag` CSS property to be present when important is true and not when false. Complete the `expect` statements in your test file as shown below for both tests.
+1. With a basic assertion in place, let's continue on to the next few tests. We want the important flag to be red when an item in the todolist is marked important.
+   Conversely, we want it to not be red when important is false.
+   Complete the `expect` statements in your test file as shown below for both tests.
 
    <kbd>📝 todolist/tests/unit/vue-components/TodoItem.spec.js</kbd>
 
@@ -561,7 +570,8 @@ The implementation of our `important` flag will follow this same flow.
    });
    ```
 
-1. Finally, we want to make the flag clickable and for it to call a function to update the state. The final test in the `TodoItem.spec.js` we want to create should simulate this behaviour. Implement the `it("call markImportant when clicked", () ` test by first simulating the click of our important-flag and asserting the function `markImportant()` to write is executed.
+1. Finally, we want to make the flag clickable and for it to call a function to update the state. The final test in the `TodoItem.spec.js` should simulate this behaviour.
+   Implement the `it("call markImportant when clicked", () ` test by first simulating the click of our important-flag and asserting the function `markImportant()` is executed.
 
    <kbd>📝 todolist/tests/unit/vue-components/TodoItem.spec.js</kbd>
 
@@ -578,13 +588,13 @@ The implementation of our `important` flag will follow this same flow.
    });
    ```
 
-1. With our tests written for the feature's UI component, let's implement our code to pass the tests. Explore the `src/components/TodoItem.vue`. Each vue file is broken down into 3 sections
+1. With our tests written for the feature's UI component, let's implement our code to pass the tests. Open `src/components/TodoItem.vue`. Each vue file is broken down into 3 sections
 
    - The `<template></template>` contains the HTML of our component. This could include references to other Components also
    - The `<script></script>` contains the JavaScript of our component and is essentially the logic for our component. It defines things like `properties`, `methods` and other `components`
    - The `<style></style>` contains the encapsulated CSS of our component
 
-1. Underneath the `</md-list-item>` tag, let's add a new md-button. Add an `.important-flag` class on the `md-button` and put the svg of the flag provided inside it.
+1. Underneath the `</md-list-item>` tag, let's add a new md-button. Add the `.important-flag` class on the `md-button` and put the provided svg of the flag inside it.
 
    <kbd>📝 todolist/src/components/TodoItem.vue</kbd>
 
@@ -596,11 +606,13 @@ The implementation of our `important` flag will follow this same flow.
        </md-button>
    ```
 
-1. We should now see the first of our failing tests has started to pass. Running the app locally (using `npm run serve`) should show the flag appear in the UI. It is clickable but won't fire any events and the colour is not red as per our requirement.
+1. We should now see the first of our failing tests has started to pass.
+   Running the app locally (using `npm run serve`) should show the flag in the UI.
+   It is clickable, but it won't fire any events. Additionally, the colour is not red as required in the acceptance criteria.
 
-   <p class="tip" >
-   <b>NOTE</b> - If you don't see the important flag in the CRW UI preview window, an old UI version might be cached. Try to use the external link provided by CRW.
-   </p>
+      <p class="tip" >
+      <b>NOTE</b> - If you don't see the important flag in the CRW UI preview window, an old UI version might be cached. Try to use the external link provided by CRW.
+      </p>
 
    Let's continue to implement the colour change for the flag. On our `<svg/>` tag, add some logic to bind the css to the property of a `todo.important` by adding `:class="{'red-flag': todoItem.important}" `. This logic will apply the CSS class when `todo.important` is true.
 
@@ -621,7 +633,10 @@ The implementation of our `important` flag will follow this same flow.
    </md-button>
    ```
 
-1. More tests should now be passing. Let's wire the click of the flag to an event in Javascript. In the methods section of the `<script></script>` tags in the Vue file, implement the `markImportant()`. We want to wire this to the action to updateTodo, just like we have in the `markCompleted()` call above it. We also need to pass an additional property to this method called `important`
+1. More tests should now be passing. Let's wire the click of the flag to an event in Javascript.
+   In the methods section of the `<script></script>` tags in the Vue file, implement `markImportant()`.
+   We want to wire this to the action `updateTodo`, just like we have in the `markCompleted()` call.
+   We also need to pass an additional property to this method called `important`
 
    <kbd>📝 todolist/src/components/TodoItem.vue</kbd>
 
@@ -633,7 +648,8 @@ The implementation of our `important` flag will follow this same flow.
        }
    ```
 
-1. Let's connect the click button in the DOM to the Javascript function we've just created. In the template, add a click handler to the md-button to call the function `markImportant()` by adding ` @click="markImportant()"` to the `<md-button>` tag
+1. Let's connect the click button in the DOM to the Javascript function we've just created.
+   In the template, add a click handler to the md-button to call the function `markImportant()` by adding ` @click="markImportant()"` to the `<md-button>` tag.
 
    <kbd>📝 todolist/src/components/TodoItem.vue</kbd>
 
@@ -653,9 +669,9 @@ The implementation of our `important` flag will follow this same flow.
    </md-button>
    ```
 
-1. All our tests should now be passing. On the watch tab where they are running, hit `a` to re-run all tests and update any snapshots with `u` if needed.
+1. All of our tests should now be passing. On the watch tab where they are running, hit `a` to re-run all tests and update any snapshots with `u` if needed.
 
-1. With all our tests now passing, let's commit our code. On the terminal, run
+1. With all of our tests now passing, let's commit our code. On the terminal, run
 
    ```bash
    git add .
@@ -669,7 +685,8 @@ The implementation of our `important` flag will follow this same flow.
    git push
    ```
 
-1. Before running a build in Jenkins, let's add our tests and code to the develop branch. Ask your neighbour to review your code changes and if they approve; merge them to Develop! (If you're feeling adventurous - raise a PR through GitLab and have someone on your desk peer review it!)
+1. Before running a build in Jenkins, let's add our tests and code to the `develop` branch.
+   Ask your neighbour to review your code changes and, if they approve, merge them to `develop`! (If you're feeling adventurous, raise a PR through GitLab and have someone else peer review it!)
 
    ```bash
    git checkout develop
@@ -687,119 +704,147 @@ The implementation of our `important` flag will follow this same flow.
 
 #### 2c - Create todolist e2e tests
 
-> _Using [Nightwatch.js](http://nightwatchjs.org/) We will write a reasonably simple e2e test to test the functionality of the feature we just implemented._
+Using [Nightwatch.js](http://nightwatchjs.org/) We will write a simple e2e test to test the functionality of the feature we just implemented.
 
-1.  Firstly we need to create an e2e spec test file in the correct place.
+1.  First, we need to create an e2e test file.
 
-```bash
-touch tests/e2e/specs/importantFlag.js
-```
+    ```bash
+    touch tests/e2e/specs/importantFlag.js
+    ```
 
-2.  Open this new file in your code editor and set out the initial blank template for an e2e test as below:
+1.  Open this new file in your code editor and create an initial template for an e2e test as shown below:
 
-<kbd>📝 todolist/tests/e2e/specs/importantFlag.js</kbd>
+    <kbd>📝 todolist/tests/e2e/specs/importantFlag.js</kbd>
 
-```javascript
-module.exports = {
-  "Testing important flag setting": (browser) => {},
-};
-```
+    ```javascript
+    module.exports = {
+      "Testing important flag setting": (browser) => {},
+    };
+    ```
 
-![if-e2e-step1](../images/exercise3/if-e2e-step1.png)
+    ```javascript
+    module.exports = {
+      "Testing important flag setting': browser => {
 
-3.  Now get the test to access the todos page and wait for it to load. The url can be taken from `process.env.VUE_DEV_SERVER_URL`
+      }
+    }
+    ```
 
-    ![if-e2e-step2](../images/exercise3/if-e2e-step2.png)
+1.  Now, get the test to access the todos page and wait for it to load. The url can be taken from `process.env.VUE_DEV_SERVER_URL`
 
-4.  Write code to do the following:
+    ```javascript
+    module.exports = {
+      "Testing important flag setting": (browser) => {
+        browser
+          .url(process.env.VUE_DEV_SERVER_URL + "/#/todo")
+          .waitForElementVisible("body", 5000);
+      },
+    };
+    ```
+
+1.  Write code to do the following:
 
     - Click the clear all button and then enter a value in the textbox to create a new item.
     - Assert that an 'important flag' exists (the button to set important)
     - Assert that a red flag does not exist.
     - Click the important flag and check whether the flag has turned red.
 
-5.  You will need to reference the clear all button from the test code. We will therefore have to go to `src/components/XofYItems.vue` and add `id="clear-all"` to the clear all button.
+1.  You will need to reference the clear all button from the test code. We will therefore have to go to `src/components/XofYItems.vue` and add `id="clear-all"` to the clear all button.
 
-    <!-- ![if-e2e-step3](../images/exercise3/if-e2e-step3.png) -->
+    <kbd>📝 src/components/XofYItems.vue</kbd>
 
-    ![if-e2e-step3a](../images/exercise3/if-e2e-step3a.png)
+    ```html
+    <template>
+      <div>
+        <div class="xofyDone">
+          <span>
+            {{sumDoneTodoItems(todos)}} out of {{this.todos.length}} done.
+          </span>
+          <md-button class="md-raised" v-on:click="clearDoneTodos()"
+            >Clear Done</md-button
+          >
+          <md-button id="clear-all" class="md-raised" v-on:click="clearTodos()"
+            >Clear all</md-button
+          >
+        </div>
+      </div>
+    </template>
+    ```
 
-<kbd>📝 src/components/XofYItems.vue</kbd>
+1.  Write the following test code. The pauses allow for the body of the page to render the todo list before executing the test code:
 
-```html
-<template>
-  <div>
-    <div class="xofyDone">
-      <span>
-        {{sumDoneTodoItems(todos)}} out of {{this.todos.length}} done.
-      </span>
-      <md-button class="md-raised" v-on:click="clearDoneTodos()"
-        >Clear Done</md-button
-      >
-      <md-button id="clear-all" class="md-raised" v-on:click="clearTodos()"
-        >Clear all</md-button
-      >
-    </div>
-  </div>
-</template>
-```
+    <kbd>📝 todolist/tests/e2e/specs/importantFlag.js</kbd>
 
-6.  Write the following test code. The pauses allow for the body of the page to render the todo list before exercising the test code:
+    ```javascript
+    module.exports = {
+      "Testing important flag setting": (browser) => {
+        browser
+          .url(process.env.VUE_DEV_SERVER_URL + "/#/todo")
+          .waitForElementVisible("body", 5000)
+          .pause(5000)
+          .click("#clear-all")
+          .pause(2000)
+          .setValue("input", ["set a todo", browser.Keys.ENTER])
+          .pause(2000)
+          .assert.elementPresent(".important-flag")
+          .assert.elementNotPresent(".red-flag")
+          .click(".important-flag")
+          .end();
+      },
+    };
+    ```
 
-<kbd>📝 todolist/tests/e2e/specs/importantFlag.js</kbd>
+1.  Your final E2E test should look like the following:
 
-```javascript
-module.exports = {
-  "Testing important flag setting": (browser) => {
-    browser
-      .url(process.env.VUE_DEV_SERVER_URL + "/#/todo")
-      .waitForElementVisible("body", 5000)
-      .pause(5000)
-      .click("#clear-all")
-      .pause(2000)
-      .setValue("input", ["set a todo", browser.Keys.ENTER])
-      .pause(2000)
-      .assert.elementPresent(".important-flag")
-      .assert.elementNotPresent(".red-flag")
-      .click(".important-flag")
-      .end();
-  },
-};
-```
+    ```javascript
+    module.exports = {
+      "Testing important flag setting": (browser) => {
+        browser
+          .url(process.env.VUE_DEV_SERVER_URL + "/#/todo")
+          .waitForElementVisible("body", 5000)
+          .pause(5000)
+          .click("#clear-all")
+          .pause(2000)
+          .setValue("input", ["set a todo", browser.Keys.ENTER])
+          .pause(2000)
+          .assert.elementPresent(".important-flag")
+          .assert.elementNotPresent(".red-flag")
+          .click(".important-flag")
+          .assert.elementPresent(".red-flag")
+          .end();
+      },
+    };
+    ```
 
-7. Your final E2E test should look like the following:
+1.  At this point we should have a working e2e test. We can run this by using `npm run e2e:ide` (make sure you have the app running locally with `npm run serve:all` and that selenium is running in the background with `npm run selenium`). When all tests pass, we can push up these changes.
 
-   ![if-e2e-step4](../images/exercise3/e2e-code-listing-full.jpg)
+    ```bash
+    git add .
+    ```
 
-8. At this point we should have a working e2e test. We can run this by using `npm run e2e:ide` (make sure you have the app running locally with `npm run serve:all` and that selenium is running in the background with `npm run selenium`). When all tests pass, we can push up these changes.
+    ```bash
+    git commit -m "Implementing e2e tests"
+    ```
 
-```bash
-git add .
-```
+    ```bash
+    git push
+    ```
 
-```bash
-git commit -m "Implementing e2e tests"
-```
+1.  Once the pipeline on the `develop` branch runs successfully, let's merge our updates back into the main branch.
 
-```bash
-git push
-```
+    ```bash
+    git checkout master
+    ```
 
-9. Once the pipeline on the `develop` branch runs successfully, let's merge our updates back into the main branch.
+    ```bash
+    git merge develop
+    ```
 
-```bash
-git checkout master
-```
+    When the editor screen appears in the terminal after running the merge, type `:q` and hit enter to quit the editor.
 
-```bash
-git merge develop
-```
-
-When the editor screen appears in the terminal after running the merge, type `:q` and hit enter to quit the editor.
-
-```bash
-git push --all
-```
+    ```bash
+    git push --all
+    ```
 
 ---
 
