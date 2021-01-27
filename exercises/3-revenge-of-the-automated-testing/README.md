@@ -135,8 +135,13 @@ npm run test:server
 
 6. With our tests all passing in the cloud ide, let's add them to our pipeline. Open the `Jenkinsfile` in your editor and add the command to run all the tests in the `steps{}` part of the `node-build` stage.
 
-<kbd>📝 todolist/Jenkinsfile</kbd>
-```Jenksfile
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/Jenkinsfile</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
+```groovy
 steps {
     sh 'printenv'
 
@@ -144,13 +149,209 @@ steps {
     sh 'npm install'
 
     echo '### Running tests ###'
-    sh 'npm run test:all:ci'
+    sh 'npm run test:all:ci
 ```
+
+#### ** Entire File **
+
+```groovy
+pipeline {
+
+    agent {
+        // label "" also could have been 'agent any' - that has the same meaning.
+        label "master"
+    }
+
+    environment {
+        // Global Vars
+        NAMESPACE_PREFIX="<YOUR_NAME>"
+        GITLAB_DOMAIN = "<GITLAB_FQDN>"
+        GITLAB_USERNAME = "<GITLAB_USERNAME>"
+
+        PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
+        APP_NAME = "todolist"
+
+        JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
+        JOB_NAME = "${JOB_NAME}".replace("/", "-")
+
+        GIT_SSL_NO_VERIFY = true
+        GIT_CREDENTIALS = credentials("${NAMESPACE_PREFIX}-ci-cd-git-auth")
+    }
+
+    // The options directive is for configuration that applies to the whole job.
+    options {
+        buildDiscarder(logRotator(numToKeepStr:'5'))
+        timeout(time: 15, unit: 'MINUTES')
+        ansiColor('xterm')
+        timestamps()
+    }
+
+    stages {
+        stage("prepare environment for master deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*master)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-test"
+                    env.NODE_ENV = "test"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("prepare environment for develop deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*develop)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-dev"
+                    env.NODE_ENV = "dev"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("node-build") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            steps {
+                sh 'printenv'
+
+                echo '### Install deps ###'
+                sh 'npm install'
+
+                echo '### Running tests ###'
+                sh 'npm run test:all:ci'
+
+                echo '### Running build ###'
+                sh 'npm run build:ci'
+
+                echo '### Packaging App for Nexus ###'
+                sh 'npm run package'
+                sh 'npm run publish'
+                stash 'source'
+            }
+            // Post can be used both on individual stages and for the entire build.
+            post {
+                always {
+                    archive "**"
+                    // ADD TESTS REPORTS HERE
+
+                    // publish html
+
+                }
+                success {
+                    echo "Git tagging"
+                    script {
+                      env.ENCODED_PSW=URLEncoder.encode(GIT_CREDENTIALS_PSW, "UTF-8")
+                    }
+                    sh'''
+                        git config --global user.email "jenkins@jmail.com"
+                        git config --global user.name "jenkins-ci"
+                        git tag -a ${JENKINS_TAG} -m "JENKINS automated commit"
+                        git push https://${GIT_CREDENTIALS_USR}:${ENCODED_PSW}@${GITLAB_DOMAIN}/${GITLAB_USERNAME}/${APP_NAME}.git --tags
+                    '''
+                }
+                failure {
+                    echo "FAILURE"
+                }
+            }
+        }
+
+        stage("node-bake") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                echo '### Get Binary from Nexus ###'
+                sh  '''
+                        rm -rf package-contents*
+                        curl -v -f http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${JENKINS_TAG}/package-contents.zip -o package-contents.zip
+                        unzip package-contents.zip
+                    '''
+                echo '### Create Linux Container Image from package ###'
+                sh  '''
+                        oc project ${PIPELINES_NAMESPACE} # probs not needed
+                        oc patch bc ${APP_NAME} -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"kind\\":\\"ImageStreamTag\\",\\"name\\":\\"${APP_NAME}:${JENKINS_TAG}\\"}}}}"
+                        oc start-build ${APP_NAME} --from-dir=package-contents/ --follow
+                    '''
+            }
+            // this post step chews up space. uncomment if you want all bake artefacts archived
+            // post {
+                //always {
+                    // archive "**"
+                //}
+            //}
+        }
+
+        stage("node-deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                script {
+                  openshift.withCluster() {
+                    openshift.withProject("${PROJECT_NAMESPACE}") {
+                      echo '### tag image for namespace ###'
+                      openshift.tag("${PIPELINES_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}", "${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### set env vars and image for deployment ###'
+                      openshift.raw("set","env","dc/${APP_NAME}","NODE_ENV=${NODE_ENV}")
+                      openshift.raw("set", "image", "dc/${APP_NAME}", "${APP_NAME}=image-registry.openshift-image-registry.svc:5000/${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### Rollout and Verify OCP Deployment ###'
+                      openshift.selector("dc", "${APP_NAME}").rollout().latest()
+                      openshift.selector("dc", "${APP_NAME}").rollout().status("-w")
+                      openshift.selector("dc", "${APP_NAME}").scale("--replicas=1")
+                      openshift.selector("dc", "${APP_NAME}").related('pods').untilEach("1".toInteger()) {
+                        return (it.object().status.phase == "Running")
+                      }
+                    }
+                  }
+                }
+            }
+        }
+    }
+}
+
+```
+
+<!-- tabs:end -->
 
 7. Running the tests is important, but so is reporting the results. In the `post{}` `always{}` section of the `Jenkinsfile` add the location for Jenkins for find the test reports
 
-<kbd>📝 todolist/Jenkinsfile</kbd>
-```Jenksfile
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/Jenkinsfile</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
+```groovy
 post {
     always {
         archive "**"
@@ -159,6 +360,198 @@ post {
         junit 'reports/server/mocha/test-results.xml'
     }
 ```
+
+#### ** Entire File **
+
+```groovy
+pipeline {
+
+    agent {
+        // label "" also could have been 'agent any' - that has the same meaning.
+        label "master"
+    }
+
+    environment {
+        // Global Vars
+        NAMESPACE_PREFIX="<YOUR_NAME>"
+        GITLAB_DOMAIN = "<GITLAB_FQDN>"
+        GITLAB_USERNAME = "<GITLAB_USERNAME>"
+
+        PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
+        APP_NAME = "todolist"
+
+        JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
+        JOB_NAME = "${JOB_NAME}".replace("/", "-")
+
+        GIT_SSL_NO_VERIFY = true
+        GIT_CREDENTIALS = credentials("${NAMESPACE_PREFIX}-ci-cd-git-auth")
+    }
+
+    // The options directive is for configuration that applies to the whole job.
+    options {
+        buildDiscarder(logRotator(numToKeepStr:'5'))
+        timeout(time: 15, unit: 'MINUTES')
+        ansiColor('xterm')
+        timestamps()
+    }
+
+    stages {
+        stage("prepare environment for master deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*master)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-test"
+                    env.NODE_ENV = "test"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("prepare environment for develop deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*develop)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-dev"
+                    env.NODE_ENV = "dev"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("node-build") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            steps {
+                sh 'printenv'
+
+                echo '### Install deps ###'
+                sh 'npm install'
+
+                echo '### Running tests ###'
+                sh 'npm run test:all:ci'
+
+                echo '### Running build ###'
+                sh 'npm run build:ci'
+
+                echo '### Packaging App for Nexus ###'
+                sh 'npm run package'
+                sh 'npm run publish'
+                stash 'source'
+            }
+            // Post can be used both on individual stages and for the entire build.
+            post {
+                always {
+                    archive "**"
+                    // ADD TESTS REPORTS HERE
+                    junit 'test-report.xml'
+                    junit 'reports/server/mocha/test-results.xml'
+                    // publish html
+
+                }
+                success {
+                    echo "Git tagging"
+                    script {
+                      env.ENCODED_PSW=URLEncoder.encode(GIT_CREDENTIALS_PSW, "UTF-8")
+                    }
+                    sh'''
+                        git config --global user.email "jenkins@jmail.com"
+                        git config --global user.name "jenkins-ci"
+                        git tag -a ${JENKINS_TAG} -m "JENKINS automated commit"
+                        git push https://${GIT_CREDENTIALS_USR}:${ENCODED_PSW}@${GITLAB_DOMAIN}/${GITLAB_USERNAME}/${APP_NAME}.git --tags
+                    '''
+                }
+                failure {
+                    echo "FAILURE"
+                }
+            }
+        }
+
+        stage("node-bake") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                echo '### Get Binary from Nexus ###'
+                sh  '''
+                        rm -rf package-contents*
+                        curl -v -f http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${JENKINS_TAG}/package-contents.zip -o package-contents.zip
+                        unzip package-contents.zip
+                    '''
+                echo '### Create Linux Container Image from package ###'
+                sh  '''
+                        oc project ${PIPELINES_NAMESPACE} # probs not needed
+                        oc patch bc ${APP_NAME} -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"kind\\":\\"ImageStreamTag\\",\\"name\\":\\"${APP_NAME}:${JENKINS_TAG}\\"}}}}"
+                        oc start-build ${APP_NAME} --from-dir=package-contents/ --follow
+                    '''
+            }
+            // this post step chews up space. uncomment if you want all bake artefacts archived
+            // post {
+                //always {
+                    // archive "**"
+                //}
+            //}
+        }
+
+        stage("node-deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                script {
+                  openshift.withCluster() {
+                    openshift.withProject("${PROJECT_NAMESPACE}") {
+                      echo '### tag image for namespace ###'
+                      openshift.tag("${PIPELINES_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}", "${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### set env vars and image for deployment ###'
+                      openshift.raw("set","env","dc/${APP_NAME}","NODE_ENV=${NODE_ENV}")
+                      openshift.raw("set", "image", "dc/${APP_NAME}", "${APP_NAME}=image-registry.openshift-image-registry.svc:5000/${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### Rollout and Verify OCP Deployment ###'
+                      openshift.selector("dc", "${APP_NAME}").rollout().latest()
+                      openshift.selector("dc", "${APP_NAME}").rollout().status("-w")
+                      openshift.selector("dc", "${APP_NAME}").scale("--replicas=1")
+                      openshift.selector("dc", "${APP_NAME}").related('pods').untilEach("1".toInteger()) {
+                        return (it.object().status.phase == "Running")
+                      }
+                    }
+                  }
+                }
+            }
+        }
+    }
+}
+
+```
+
+<!-- tabs:end -->
 
 8. With this in place, commit the changes which should trigger a build.
 ```bash
@@ -200,18 +593,224 @@ npm run e2e:ide
 
 4. With tests executing successfully locally; let's add them to our Jenkins pipeline. To do this; we'll create a new stage in our `Jenkinsfile`. Create a new `stage` called `e2e test` to run after the `node-deploy stage`
 
-<kbd>📝 todolist/Jenkinsfile</kbd>
-```Jenksfile
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/Jenkinsfile</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
+```groovy
 stage("e2e test") {
       
 }
 ```
+
+#### ** Entire File **
+
+```groovy
+pipeline {
+
+    agent {
+        // label "" also could have been 'agent any' - that has the same meaning.
+        label "master"
+    }
+
+    environment {
+        // Global Vars
+        NAMESPACE_PREFIX="<YOUR_NAME>"
+        GITLAB_DOMAIN = "<GITLAB_FQDN>"
+        GITLAB_USERNAME = "<GITLAB_USERNAME>"
+
+        PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
+        APP_NAME = "todolist"
+
+        JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
+        JOB_NAME = "${JOB_NAME}".replace("/", "-")
+
+        GIT_SSL_NO_VERIFY = true
+        GIT_CREDENTIALS = credentials("${NAMESPACE_PREFIX}-ci-cd-git-auth")
+    }
+
+    // The options directive is for configuration that applies to the whole job.
+    options {
+        buildDiscarder(logRotator(numToKeepStr:'5'))
+        timeout(time: 15, unit: 'MINUTES')
+        ansiColor('xterm')
+        timestamps()
+    }
+
+    stages {
+        stage("prepare environment for master deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*master)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-test"
+                    env.NODE_ENV = "test"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("prepare environment for develop deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*develop)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-dev"
+                    env.NODE_ENV = "dev"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("node-build") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            steps {
+                sh 'printenv'
+
+                echo '### Install deps ###'
+                sh 'npm install'
+
+                echo '### Running tests ###'
+                sh 'npm run test:all:ci'
+
+                echo '### Running build ###'
+                sh 'npm run build:ci'
+
+                echo '### Packaging App for Nexus ###'
+                sh 'npm run package'
+                sh 'npm run publish'
+                stash 'source'
+            }
+            // Post can be used both on individual stages and for the entire build.
+            post {
+                always {
+                    archive "**"
+                    // ADD TESTS REPORTS HERE
+                    junit 'test-report.xml'
+                    junit 'reports/server/mocha/test-results.xml'
+                    // publish html
+
+                }
+                success {
+                    echo "Git tagging"
+                    script {
+                      env.ENCODED_PSW=URLEncoder.encode(GIT_CREDENTIALS_PSW, "UTF-8")
+                    }
+                    sh'''
+                        git config --global user.email "jenkins@jmail.com"
+                        git config --global user.name "jenkins-ci"
+                        git tag -a ${JENKINS_TAG} -m "JENKINS automated commit"
+                        git push https://${GIT_CREDENTIALS_USR}:${ENCODED_PSW}@${GITLAB_DOMAIN}/${GITLAB_USERNAME}/${APP_NAME}.git --tags
+                    '''
+                }
+                failure {
+                    echo "FAILURE"
+                }
+            }
+        }
+
+        stage("node-bake") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                echo '### Get Binary from Nexus ###'
+                sh  '''
+                        rm -rf package-contents*
+                        curl -v -f http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${JENKINS_TAG}/package-contents.zip -o package-contents.zip
+                        unzip package-contents.zip
+                    '''
+                echo '### Create Linux Container Image from package ###'
+                sh  '''
+                        oc project ${PIPELINES_NAMESPACE} # probs not needed
+                        oc patch bc ${APP_NAME} -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"kind\\":\\"ImageStreamTag\\",\\"name\\":\\"${APP_NAME}:${JENKINS_TAG}\\"}}}}"
+                        oc start-build ${APP_NAME} --from-dir=package-contents/ --follow
+                    '''
+            }
+            // this post step chews up space. uncomment if you want all bake artefacts archived
+            // post {
+                //always {
+                    // archive "**"
+                //}
+            //}
+        }
+
+        stage("node-deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                script {
+                  openshift.withCluster() {
+                    openshift.withProject("${PROJECT_NAMESPACE}") {
+                      echo '### tag image for namespace ###'
+                      openshift.tag("${PIPELINES_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}", "${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### set env vars and image for deployment ###'
+                      openshift.raw("set","env","dc/${APP_NAME}","NODE_ENV=${NODE_ENV}")
+                      openshift.raw("set", "image", "dc/${APP_NAME}", "${APP_NAME}=image-registry.openshift-image-registry.svc:5000/${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### Rollout and Verify OCP Deployment ###'
+                      openshift.selector("dc", "${APP_NAME}").rollout().latest()
+                      openshift.selector("dc", "${APP_NAME}").rollout().status("-w")
+                      openshift.selector("dc", "${APP_NAME}").scale("--replicas=1")
+                      openshift.selector("dc", "${APP_NAME}").related('pods').untilEach("1".toInteger()) {
+                        return (it.object().status.phase == "Running")
+                      }
+                    }
+                  }
+                }
+            }
+        }
+        stage("e2e test") {
+
+        }
+    }
+}
+
+```
+
+<!-- tabs:end -->
+
 ![e2e-stage-new](../images/exercise3/e2e-stage-new.png)
 
 5. Set the agent that this stage should execute on. In this case it will use the same `jenkins-agent-npm` that was used in the build stage. Set the steps needed to execute the tests and add the reporting location
 
-<kbd>📝 todolist/Jenkinsfile</kbd>
-```Jenksfile
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/Jenkinsfile</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
+```groovy
 stage("e2e test") {
             agent {
                 node {
@@ -237,6 +836,222 @@ stage("e2e test") {
             }
         }
 ```
+
+#### ** Entire File **
+
+```groovy
+pipeline {
+
+    agent {
+        // label "" also could have been 'agent any' - that has the same meaning.
+        label "master"
+    }
+
+    environment {
+        // Global Vars
+        NAMESPACE_PREFIX="<YOUR_NAME>"
+        GITLAB_DOMAIN = "<GITLAB_FQDN>"
+        GITLAB_USERNAME = "<GITLAB_USERNAME>"
+
+        PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
+        APP_NAME = "todolist"
+
+        JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
+        JOB_NAME = "${JOB_NAME}".replace("/", "-")
+
+        GIT_SSL_NO_VERIFY = true
+        GIT_CREDENTIALS = credentials("${NAMESPACE_PREFIX}-ci-cd-git-auth")
+    }
+
+    // The options directive is for configuration that applies to the whole job.
+    options {
+        buildDiscarder(logRotator(numToKeepStr:'5'))
+        timeout(time: 15, unit: 'MINUTES')
+        ansiColor('xterm')
+        timestamps()
+    }
+
+    stages {
+        stage("prepare environment for master deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*master)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-test"
+                    env.NODE_ENV = "test"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("prepare environment for develop deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*develop)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-dev"
+                    env.NODE_ENV = "dev"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("node-build") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            steps {
+                sh 'printenv'
+
+                echo '### Install deps ###'
+                sh 'npm install'
+
+                echo '### Running tests ###'
+                sh 'npm run test:all:ci'
+
+                echo '### Running build ###'
+                sh 'npm run build:ci'
+
+                echo '### Packaging App for Nexus ###'
+                sh 'npm run package'
+                sh 'npm run publish'
+                stash 'source'
+            }
+            // Post can be used both on individual stages and for the entire build.
+            post {
+                always {
+                    archive "**"
+                    // ADD TESTS REPORTS HERE
+                    junit 'test-report.xml'
+                    junit 'reports/server/mocha/test-results.xml'
+                    // publish html
+
+                }
+                success {
+                    echo "Git tagging"
+                    script {
+                      env.ENCODED_PSW=URLEncoder.encode(GIT_CREDENTIALS_PSW, "UTF-8")
+                    }
+                    sh'''
+                        git config --global user.email "jenkins@jmail.com"
+                        git config --global user.name "jenkins-ci"
+                        git tag -a ${JENKINS_TAG} -m "JENKINS automated commit"
+                        git push https://${GIT_CREDENTIALS_USR}:${ENCODED_PSW}@${GITLAB_DOMAIN}/${GITLAB_USERNAME}/${APP_NAME}.git --tags
+                    '''
+                }
+                failure {
+                    echo "FAILURE"
+                }
+            }
+        }
+
+        stage("node-bake") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                echo '### Get Binary from Nexus ###'
+                sh  '''
+                        rm -rf package-contents*
+                        curl -v -f http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${JENKINS_TAG}/package-contents.zip -o package-contents.zip
+                        unzip package-contents.zip
+                    '''
+                echo '### Create Linux Container Image from package ###'
+                sh  '''
+                        oc project ${PIPELINES_NAMESPACE} # probs not needed
+                        oc patch bc ${APP_NAME} -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"kind\\":\\"ImageStreamTag\\",\\"name\\":\\"${APP_NAME}:${JENKINS_TAG}\\"}}}}"
+                        oc start-build ${APP_NAME} --from-dir=package-contents/ --follow
+                    '''
+            }
+            // this post step chews up space. uncomment if you want all bake artefacts archived
+            // post {
+                //always {
+                    // archive "**"
+                //}
+            //}
+        }
+
+        stage("node-deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                script {
+                  openshift.withCluster() {
+                    openshift.withProject("${PROJECT_NAMESPACE}") {
+                      echo '### tag image for namespace ###'
+                      openshift.tag("${PIPELINES_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}", "${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### set env vars and image for deployment ###'
+                      openshift.raw("set","env","dc/${APP_NAME}","NODE_ENV=${NODE_ENV}")
+                      openshift.raw("set", "image", "dc/${APP_NAME}", "${APP_NAME}=image-registry.openshift-image-registry.svc:5000/${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### Rollout and Verify OCP Deployment ###'
+                      openshift.selector("dc", "${APP_NAME}").rollout().latest()
+                      openshift.selector("dc", "${APP_NAME}").rollout().status("-w")
+                      openshift.selector("dc", "${APP_NAME}").scale("--replicas=1")
+                      openshift.selector("dc", "${APP_NAME}").related('pods').untilEach("1".toInteger()) {
+                        return (it.object().status.phase == "Running")
+                      }
+                    }
+                  }
+                }
+            }
+        }
+        stage("e2e test") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+              unstash 'source'
+
+              echo '### Install deps ###'
+              sh 'npm install'
+
+              echo '### Running end to end tests ###'
+              sh 'npm run e2e:jenkins'
+            }
+            post {
+                always {
+                    junit 'reports/e2e/specs/*.xml'
+                }
+            }
+        }
+    }
+}
+
+```
+
+<!-- tabs:end -->
 
 6. With this in place, commit the changes to trigger a build and enhance our pipeline 
 ```bash
@@ -298,7 +1113,7 @@ git push -u origin feature/important-flag
 
 2.  Navigate to the `server/api/todo/todo.spec.js` file. This contains all of the existing todo list api tests. These are broken down into simple `describe("api definition", function(){})` blocks which is BDD speak for how the component being tested should behave. Inside of each `it("should do something ", function(){})` statements we use some snappy language to illustrate the expected behaviour of the test. For example a `GET` request of the api is described and tested for the return to be of type Array as follows.
 
-<kbd>📝 todolist/server/api/todo/todo.spec.js</kbd>
+<kbd><span style="color: #28b463; font-size: 12pt;">👀 todolist/server/api/todo/todo.spec.js</span></kbd>
 ```javascript
 describe("GET /api/todos", function() {
     it("should respond with JSON array", function(done) {
@@ -339,7 +1154,12 @@ npm run test:server
     * Check the `.expect()` clause is set to `.expect(200)`
     * Add a new test assertion to check that `res.body.important` is `true` below the `// YOUR TEST GO HERE` line.
 
-<kbd>📝 todolist/server/api/todo/todo.spec.js</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/server/api/todo/todo.spec.js</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```javascript
 // Exercise 3 test case!
 it("should mark todo as important and persist it", function(done) {
@@ -363,6 +1183,230 @@ it("should mark todo as important and persist it", function(done) {
 });
 ```
 
+#### ** Entire File **
+
+```javascript
+"use strict";
+
+const app = require("../../app");
+const request = require("supertest");
+require("should");
+
+describe("GET /api/todos", function() {
+  it("should respond with JSON array", function(done) {
+    request(app)
+      .get("/api/todos")
+      .expect(200)
+      .expect("Content-Type", /json/)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.body.should.be.instanceof(Array);
+        done();
+      });
+  });
+});
+
+describe("POST /api/todos", function() {
+  it("should create the todo and return with the todo", function(done) {
+    request(app)
+      .post("/api/todos")
+      .send({
+        title: "learn about endpoint/server side testing",
+        completed: false
+      })
+      .expect(201)
+      .expect("Content-Type", /json/)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.body.should.have.property("_id");
+        res.body.title.should.equal("learn about endpoint/server side testing");
+        res.body.completed.should.equal(false);
+        done();
+      });
+  });
+});
+
+describe("GET /api/todos/:id", function() {
+  let todoId;
+  beforeEach(function createObjectToUpdate(done) {
+    request(app)
+      .post("/api/todos")
+      .send({
+        title: "learn about endpoint/server side testing",
+        completed: false
+      })
+      .expect(201)
+      .expect("Content-Type", /json/)
+      .end(function(err, res) {
+        if (err) return done(err);
+        todoId = res.body._id;
+        done();
+      });
+  });
+  it("should update the todo", function(done) {
+    request(app)
+      .get("/api/todos/" + todoId)
+      .expect(200)
+      .expect("Content-Type", /json/)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.body._id.should.equal(todoId);
+        res.body.title.should.equal("learn about endpoint/server side testing");
+        res.body.completed.should.equal(false);
+        done();
+      });
+  });
+  it("should return 404 for valid mongo object id that does not exist", function(done) {
+    request(app)
+      .get("/api/todos/" + "abcdef0123456789ABCDEF01")
+      .expect(404)
+      .end(function(err) {
+        if (err) return done(err);
+        done();
+      });
+  });
+  it("should return 400 for invalid object ids", function(done) {
+    request(app)
+      .get("/api/todos/" + 123)
+      .expect(400)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.text.should.equal("not a valid mongo object id");
+        done();
+      });
+  });
+});
+
+describe("DELETE /api/todos/:id", function() {
+  let todoId;
+  beforeEach(function createObjectToUpdate(done) {
+    request(app)
+      .post("/api/todos")
+      .send({
+        title: "learn about endpoint/server side testing",
+        completed: false
+      })
+      .expect(201)
+      .expect("Content-Type", /json/)
+      .end(function(err, res) {
+        if (err) return done(err);
+        todoId = res.body._id;
+        done();
+      });
+  });
+  it("should delete the todo", function(done) {
+    request(app)
+      .delete("/api/todos/" + todoId)
+      .expect(204)
+      .end(function(err) {
+        if (err) return done(err);
+        done();
+      });
+  });
+  it("should return 404 for valid mongo object id that does not exist", function(done) {
+    request(app)
+      .delete("/api/todos/" + "abcdef0123456789ABCDEF01")
+      .expect(404)
+      .end(function(err) {
+        if (err) return done(err);
+        done();
+      });
+  });
+  it("should return 400 for invalid object ids", function(done) {
+    request(app)
+      .delete("/api/todos/" + 123)
+      .send({ title: "LOVE endpoint/server side testing!", completed: true })
+      .expect(400)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.text.should.equal("not a valid mongo object id");
+        done();
+      });
+  });
+});
+
+describe("PUT /api/todos/:id", function() {
+  let todoId;
+  beforeEach(function createObjectToUpdate(done) {
+    request(app)
+      .post("/api/todos")
+      .send({
+        title: "learn about endpoint/server side testing",
+        completed: false
+      })
+      .expect(201)
+      .expect("Content-Type", /json/)
+      .end(function(err, res) {
+        if (err) return done(err);
+        todoId = res.body._id;
+        done();
+      });
+  });
+  it("should update the todo", function(done) {
+    request(app)
+      .put("/api/todos/" + todoId)
+      .send({ title: "LOVE endpoint/server side testing!", completed: true })
+      .expect(200)
+      .expect("Content-Type", /json/)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.body.should.have.property("_id");
+        res.body.title.should.equal("LOVE endpoint/server side testing!");
+        res.body.completed.should.equal(true);
+        done();
+      });
+  });
+  it("should return 404 for valid mongo object id that does not exist", function(done) {
+    request(app)
+      .put("/api/todos/" + "abcdef0123456789ABCDEF01")
+      .send({ title: "LOVE endpoint/server side testing!", completed: true })
+      .expect(404)
+      .end(function(err) {
+        if (err) return done(err);
+        done();
+      });
+  });
+  it("should return 400 for invalid object ids", function(done) {
+    request(app)
+      .put("/api/todos/" + 123)
+      .send({ title: "LOVE endpoint/server side testing!", completed: true })
+      .expect(400)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.text.should.equal("not a valid mongo object id");
+        done();
+      });
+  });
+
+
+
+  // Exercise 3 test case!
+  it("should ....", function(done) {
+    request(app)
+      .put("/api/todos/" + todoId)
+      .send({
+        title: "LOVE endpoint/server side testing!",
+        completed: true,
+        important: true
+      })
+      .expect(200)
+      .expect("Content-Type", /json/)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.body.should.have.property("_id");
+        res.body.title.should.equal("LOVE endpoint/server side testing!");
+        // YOUR TEST GO HERE
+        res.body.important.should.equal(true);
+        done();
+      });
+  });
+
+});
+
+```
+
+<!-- tabs:end -->
+
 6.  Run your test. It should fail.
 ```bash
 npm run test:server
@@ -372,7 +1416,12 @@ npm run test:server
 
 7.  With our test now failing; let's implement the feature. This is quite a simple change - we first need to update the `server/api/todo/todo.model.js`. Add an additional property on the schema called `important` and make its type Boolean.
 
-<kbd>📝 todolist/server/api/todo/todo.model.js</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/server/api/todo/todo.model.js</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```javascript
 const TodoSchema = new Schema({
   title: String,
@@ -381,7 +1430,65 @@ const TodoSchema = new Schema({
 });
 ```
 
+#### ** Entire File **
+
+```javascript
+'use strict';
+
+const mongoose = require('mongoose'),
+    Schema = mongoose.Schema;
+
+const TodoSchema = new Schema({
+  title: String,
+  completed: Boolean,
+  important: Boolean
+});
+
+module.exports = mongoose.model('Todo', TodoSchema);
+```
+
+<!-- tabs:end -->
+
 8. Next we need to update the `server/config/seed.js` file so that the pre-generated todos have an important property. Add `important: false` below `completed: *` for each object. Don't forget to add a comma at the end of the `completed: *` line.
+
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/server/config/seed.js</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
+```javascript
+completed: false,
+important: false
+```
+
+#### ** Entire File **
+
+```javascript
+/**
+ * Populate DB with sample data on server start
+ * to disable, edit config/environment/index.js, and set `seedDB: false`
+ */
+
+'use strict';
+
+const Todo = require('../api/todo/todo.model');
+
+Todo.find({}).remove(function() {
+  Todo.create({
+    title : 'Learn some stuff about MongoDB',
+    completed: false,
+    important: false
+  }, {
+    title : 'Play with NodeJS',
+    completed: true,
+    important: false
+  });
+});
+
+```
+
+<!-- tabs:end -->
 
 ![api-add-seed-important](../images/exercise3/api-add-seed-important.png)
 
@@ -464,7 +1571,12 @@ npm run test:client -- --watch
 
 6. Let's implement the first test `it("should render a button with important flag"`. This test will assert if the button is present on the page and it contains the `.important-flag` CSS class. To implement this; add the `expect` statement as follows below the `// TODO - test goes here!` comment.  
 
-<kbd>📝 todolist/tests/unit/vue-components/TodoItem.spec.js</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/tests/unit/vue-components/TodoItem.spec.js</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```javascript
   it("should render a button with important flag", () => {
     const wrapper = mount(TodoItem, {
@@ -475,13 +1587,106 @@ npm run test:client -- --watch
   });
 ```
 
+#### ** Entire File **
+
+```javascript
+/* eslint-disable */
+import { shallow, mount, createLocalVue } from "@vue/test-utils";
+import Vuex from "vuex";
+import TodoItem from "@/components/TodoItem.vue";
+// import { expect } from 'chai'
+
+import * as all from "../setup.js";
+
+const localVue = createLocalVue();
+
+localVue.use(Vuex);
+
+const todoItem = {
+  title: "Love Front End testing :)",
+  completed: true
+};
+
+describe("TodoItem.vue", () => {
+  it("has the expected html structure", () => {
+    const wrapper = shallow(TodoItem, {
+      propsData: { todoItem }
+    });
+    // expect(wrapper.element).toMatchSnapshot();
+  });
+
+  it("Renders title as 'Love Front End testing :)'", () => {
+    const wrapper = shallow(TodoItem, {
+      propsData: { todoItem }
+    });
+    expect(wrapper.vm.todoItem.title).toMatch("Love Front End testing :)");
+  });
+
+  it("Renders completed as true", () => {
+    const wrapper = shallow(TodoItem, {
+      propsData: { todoItem }
+    });
+    expect(wrapper.vm.todoItem.completed).toEqual(true);
+  });
+});
+
+let importantTodo;
+let methods;
+
+describe("Important Flag button ", () => {
+  beforeEach(() => {
+    importantTodo = {
+      title: "Love Front End testing :)",
+      completed: true,
+      important: true
+    };
+    methods = { markImportant: jest.fn() };
+  });
+
+  it("should render a button with important flag", () => {
+    const wrapper = mount(TodoItem, {
+      propsData: { todoItem: importantTodo }
+    });
+    // TODO - test goes here!
+    expect(wrapper.find(".important-flag").exists()).toBe(true);
+  });
+  it("should set the colour to red when true", () => {
+    const wrapper = mount(TodoItem, {
+      propsData: { todoItem: importantTodo }
+    });
+    // TODO - test goes here!
+  });
+  it("should set the colour to not red when false", () => {
+    importantTodo.important = false;
+    const wrapper = mount(TodoItem, {
+      propsData: { todoItem: importantTodo }
+    });
+    // TODO - test goes here!
+  });
+  it("call markImportant when clicked", () => {
+    const wrapper = mount(TodoItem, {
+      methods,
+      propsData: { todoItem: importantTodo }
+    });
+    // TODO - test goes here!
+  });
+});
+```
+
+<!-- tabs:end -->
+
 7. Save the file. Observe that the test case has started failing because we have not yet implemented the feature!
 
 ![todoitem-fail-test](../images/exercise3/todoitem-fail-test.png)
 
 8. With a basic assertion in place, let's continue on to the next few tests. We want the important flag to be red when an item in the todolist is marked accordingly. Conversely we want it to be not red when false. Let's create a check for `.red-flag` CSS property to be present when important is true and not when false. Complete the `expect` statements in your test file as shown below for both tests.
 
-<kbd>📝 todolist/tests/unit/vue-components/TodoItem.spec.js</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/tests/unit/vue-components/TodoItem.spec.js</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```javascript
   it("should set the colour to red when true", () => {
     const wrapper = mount(TodoItem, {
@@ -500,9 +1705,106 @@ npm run test:client -- --watch
   });
 ```
 
+#### ** Entire File **
+
+```javascript
+/* eslint-disable */
+import { shallow, mount, createLocalVue } from "@vue/test-utils";
+import Vuex from "vuex";
+import TodoItem from "@/components/TodoItem.vue";
+// import { expect } from 'chai'
+
+import * as all from "../setup.js";
+
+const localVue = createLocalVue();
+
+localVue.use(Vuex);
+
+const todoItem = {
+  title: "Love Front End testing :)",
+  completed: true
+};
+
+describe("TodoItem.vue", () => {
+  it("has the expected html structure", () => {
+    const wrapper = shallow(TodoItem, {
+      propsData: { todoItem }
+    });
+    // expect(wrapper.element).toMatchSnapshot();
+  });
+
+  it("Renders title as 'Love Front End testing :)'", () => {
+    const wrapper = shallow(TodoItem, {
+      propsData: { todoItem }
+    });
+    expect(wrapper.vm.todoItem.title).toMatch("Love Front End testing :)");
+  });
+
+  it("Renders completed as true", () => {
+    const wrapper = shallow(TodoItem, {
+      propsData: { todoItem }
+    });
+    expect(wrapper.vm.todoItem.completed).toEqual(true);
+  });
+});
+
+let importantTodo;
+let methods;
+
+describe("Important Flag button ", () => {
+  beforeEach(() => {
+    importantTodo = {
+      title: "Love Front End testing :)",
+      completed: true,
+      important: true
+    };
+    methods = { markImportant: jest.fn() };
+  });
+
+  it("should render a button with important flag", () => {
+    const wrapper = mount(TodoItem, {
+      propsData: { todoItem: importantTodo }
+    });
+    // TODO - test goes here!
+    expect(wrapper.find(".important-flag").exists()).toBe(true);
+  });
+  it("should set the colour to red when true", () => {
+    const wrapper = mount(TodoItem, {
+      propsData: { todoItem: importantTodo }
+    });
+    // TODO - test goes here!
+    expect(wrapper.find(".red-flag").exists()).toBe(true);
+  });
+  it("should set the colour to not red when false", () => {
+    importantTodo.important = false;
+    const wrapper = mount(TodoItem, {
+      propsData: { todoItem: importantTodo }
+    });
+    // TODO - test goes here!
+    expect(wrapper.find(".red-flag").exists()).toBe(false);
+  });
+  it("call markImportant when clicked", () => {
+    const wrapper = mount(TodoItem, {
+      methods,
+      propsData: { todoItem: importantTodo }
+    });
+    // TODO - test goes here!
+  });
+});
+
+```
+
+<!-- tabs:end -->
+
 9. Finally, we want to make the flag clickable and for it to call a function to update the state. The final test in the `TodoItem.spec.js` we want to create should simulate this behaviour. Implement the `it("call markImportant when clicked", () ` test by first simulating the click of our important-flag and asserting the function `markImportant()` to write is executed.
 
-<kbd>📝 todolist/tests/unit/vue-components/TodoItem.spec.js</kbd>
+
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/tests/unit/vue-components/TodoItem.spec.js</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```javascript
   it("call markImportant when clicked", () => {
     const wrapper = mount(TodoItem, {
@@ -516,6 +1818,100 @@ npm run test:client -- --watch
   });
 ```
 
+#### ** Entire File **
+
+```javascript
+/* eslint-disable */
+import { shallow, mount, createLocalVue } from "@vue/test-utils";
+import Vuex from "vuex";
+import TodoItem from "@/components/TodoItem.vue";
+// import { expect } from 'chai'
+
+import * as all from "../setup.js";
+
+const localVue = createLocalVue();
+
+localVue.use(Vuex);
+
+const todoItem = {
+  title: "Love Front End testing :)",
+  completed: true
+};
+
+describe("TodoItem.vue", () => {
+  it("has the expected html structure", () => {
+    const wrapper = shallow(TodoItem, {
+      propsData: { todoItem }
+    });
+    // expect(wrapper.element).toMatchSnapshot();
+  });
+
+  it("Renders title as 'Love Front End testing :)'", () => {
+    const wrapper = shallow(TodoItem, {
+      propsData: { todoItem }
+    });
+    expect(wrapper.vm.todoItem.title).toMatch("Love Front End testing :)");
+  });
+
+  it("Renders completed as true", () => {
+    const wrapper = shallow(TodoItem, {
+      propsData: { todoItem }
+    });
+    expect(wrapper.vm.todoItem.completed).toEqual(true);
+  });
+});
+
+let importantTodo;
+let methods;
+
+describe("Important Flag button ", () => {
+  beforeEach(() => {
+    importantTodo = {
+      title: "Love Front End testing :)",
+      completed: true,
+      important: true
+    };
+    methods = { markImportant: jest.fn() };
+  });
+
+  it("should render a button with important flag", () => {
+    const wrapper = mount(TodoItem, {
+      propsData: { todoItem: importantTodo }
+    });
+    // TODO - test goes here!
+    expect(wrapper.find(".important-flag").exists()).toBe(true);
+  });
+  it("should set the colour to red when true", () => {
+    const wrapper = mount(TodoItem, {
+      propsData: { todoItem: importantTodo }
+    });
+    // TODO - test goes here!
+    expect(wrapper.find(".red-flag").exists()).toBe(true);
+  });
+  it("should set the colour to not red when false", () => {
+    importantTodo.important = false;
+    const wrapper = mount(TodoItem, {
+      propsData: { todoItem: importantTodo }
+    });
+    // TODO - test goes here!
+    expect(wrapper.find(".red-flag").exists()).toBe(false);
+  });
+  it("call markImportant when clicked", () => {
+    const wrapper = mount(TodoItem, {
+      methods,
+      propsData: { todoItem: importantTodo }
+    });
+    // TODO - test goes here!
+    const input = wrapper.find(".important-flag");
+    input.trigger("click");
+    expect(methods.markImportant).toHaveBeenCalled();
+  });
+});
+
+```
+
+<!-- tabs:end -->
+
 10. With our tests written for the feature's UI component, let's implement our code to pass the tests. Explore the `src/components/TodoItem.vue`. Each vue file is broken down into 3 sections
 
     * The `<template></template>` contains the HTML of our component. This could include references to other Components also
@@ -524,7 +1920,12 @@ npm run test:client -- --watch
 
 11. Underneath the `</md-list-item>` tag, let's add a new md-button. Add an `.important-flag` class on the `md-button` and put the svg of the flag provided inside it.
 
-<kbd>📝 todolist/src/components/TodoItem.vue</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/src/components/TodoItem.vue</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```html
     </md-list-item>
     <!-- TODO - SVG for use in Exercise3 -->
@@ -532,6 +1933,87 @@ npm run test:client -- --watch
         <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" ><path d="M0 0h24v24H0z" fill="none"/><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
     </md-button>
 ```
+
+#### ** Entire File **
+
+```html
+<template>
+  <div>
+    <div class="itemCardAndFlag">
+    <md-list-item
+      @click="markCompleted()"
+      >
+      <checkbox v-model="todoItem.completed" class="checkbox-completed"/>
+
+      <span class="md-list-item-text" :class="{'strike-through': todoItem.completed}">{{ todoItem.title }}</span>
+    </md-list-item>
+    <!-- TODO - SVG for use in Lab3 -->
+      <md-button class="important-flag">
+        <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" ><path d="M0 0h24v24H0z" fill="none"/><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+      </md-button>
+    </div>
+  </div>
+</template>
+<script>
+import Vue from "vue";
+import { Checkbox, Radio } from "vue-checkbox-radio";
+Vue.component("checkbox", Checkbox);
+Vue.component("radio", Radio);
+let biscuits;
+
+export default {
+  name: "TodoItem",
+  props: {
+    // type any object ;)
+    todoItem: {}
+  },
+  methods: {
+    markCompleted() {
+      this.$store.dispatch("updateTodo", { id: this.todoItem._id });
+      console.info("INFO - Mark todo as completed ", this.todoItem.completed);
+    },
+    markImportant() {
+      // TODO - FILL THIS OUT IN THE LAB EXERCISE
+    }
+  }
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+.md-list-item {
+  width: 320px;
+  max-width: 100%;
+  height: 50px;
+  display: inline-block;
+  overflow: auto;
+}
+
+.md-list-item-text {
+  padding-left: 0.5em;
+}
+
+.itemCardandFlag {
+  display: inline-block;
+}
+
+.strike-through {
+  text-decoration: line-through;
+  font-style: italic;
+}
+
+.important-flag {
+  height: 50px;
+  margin: 0px;
+}
+.red-flag {
+  fill: #cc0000;
+}
+</style>
+
+```
+
+<!-- tabs:end -->
 
 12. We should now see the first of our failing tests has started to pass. Running the app locally (using `npm run serve`) should show the flag appear in the UI. It is clickable but won't fire any events and the colour is not red as per our requirement. 
 
@@ -541,16 +2023,107 @@ npm run test:client -- --watch
 
 Let's continue to implement the colour change for the flag. On our `<svg/>` tag, add some logic to bind the css to the property of a `todo.important` by adding ` :class="{'red-flag': todoItem.important}"  `. This logic will apply the CSS class when `todo.important`  is true.
 
-<kbd>📝 todolist/src/components/TodoItem.vue</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/src/components/TodoItem.vue</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```html
 <md-button class="important-flag">
     <svg :class="{'red-flag': todoItem.important}"  height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" ><path d="M0 0h24v24H0z" fill="none"/><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
 </md-button>
 ```
 
+#### ** Entire File **
+
+```html
+<template>
+  <div>
+    <div class="itemCardAndFlag">
+    <md-list-item
+      @click="markCompleted()"
+      >
+      <checkbox v-model="todoItem.completed" class="checkbox-completed"/>
+
+        <span class="md-list-item-text" :class="{'strike-through': todoItem.completed}">{{ todoItem.title }}</span>
+      </md-list-item>
+      <!-- TODO - SVG for use in Lab3 -->
+        <md-button class="important-flag">
+          <svg :class="{'red-flag': todoItem.important}"  height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" ><path d="M0 0h24v24H0z" fill="none"/><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </md-button>
+    </div>
+  </div>
+</template>
+<script>
+import Vue from "vue";
+import { Checkbox, Radio } from "vue-checkbox-radio";
+Vue.component("checkbox", Checkbox);
+Vue.component("radio", Radio);
+let biscuits;
+
+export default {
+  name: "TodoItem",
+  props: {
+    // type any object ;)
+    todoItem: {}
+  },
+  methods: {
+    markCompleted() {
+      this.$store.dispatch("updateTodo", { id: this.todoItem._id });
+      console.info("INFO - Mark todo as completed ", this.todoItem.completed);
+    },
+    markImportant() {
+      // TODO - FILL THIS OUT IN THE LAB EXERCISE
+    }
+  }
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+.md-list-item {
+  width: 320px;
+  max-width: 100%;
+  height: 50px;
+  display: inline-block;
+  overflow: auto;
+}
+
+.md-list-item-text {
+  padding-left: 0.5em;
+}
+
+.itemCardandFlag {
+  display: inline-block;
+}
+
+.strike-through {
+  text-decoration: line-through;
+  font-style: italic;
+}
+
+.important-flag {
+  height: 50px;
+  margin: 0px;
+}
+.red-flag {
+  fill: #cc0000;
+}
+</style>
+
+```
+
+<!-- tabs:end -->
+
 13. More tests should now be passing. Let's wire the click of the flag to an event in Javascript. In the methods section of the `<script></script>` tags in the Vue file, implement the `markImportant()`. We want to wire this to the action to updateTodo, just like we have in the `markCompleted()` call above it. We also need to pass an additional property to this method called `important`
 
-<kbd>📝 todolist/src/components/TodoItem.vue</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/src/components/TodoItem.vue</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```javascript
     markImportant() {
       // TODO - FILL THIS OUT IN THE EXERCISE
@@ -559,15 +2132,186 @@ Let's continue to implement the colour change for the flag. On our `<svg/>` tag,
     }
 ```
 
+#### ** Entire File **
+
+```html
+<template>
+  <div>
+    <div class="itemCardAndFlag">
+    <md-list-item
+      @click="markCompleted()"
+      >
+      <checkbox v-model="todoItem.completed" class="checkbox-completed"/>
+
+        <span class="md-list-item-text" :class="{'strike-through': todoItem.completed}">{{ todoItem.title }}</span>
+      </md-list-item>
+      <!-- TODO - SVG for use in Lab3 -->
+        <md-button class="important-flag">
+          <svg :class="{'red-flag': todoItem.important}"  height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" ><path d="M0 0h24v24H0z" fill="none"/><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </md-button>
+    </div>
+  </div>
+</template>
+<script>
+import Vue from "vue";
+import { Checkbox, Radio } from "vue-checkbox-radio";
+Vue.component("checkbox", Checkbox);
+Vue.component("radio", Radio);
+let biscuits;
+
+export default {
+  name: "TodoItem",
+  props: {
+    // type any object ;)
+    todoItem: {}
+  },
+  methods: {
+    markCompleted() {
+      this.$store.dispatch("updateTodo", { id: this.todoItem._id });
+      console.info("INFO - Mark todo as completed ", this.todoItem.completed);
+    },
+    markImportant() {
+      // TODO - FILL THIS OUT IN THE LAB EXERCISE
+      this.$store.dispatch("updateTodo", {id: this.todoItem._id, important: true});
+      console.info("INFO - Mark todo as important ", this.todoItem.important);
+    }
+  }
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+.md-list-item {
+  width: 320px;
+  max-width: 100%;
+  height: 50px;
+  display: inline-block;
+  overflow: auto;
+}
+
+.md-list-item-text {
+  padding-left: 0.5em;
+}
+
+.itemCardandFlag {
+  display: inline-block;
+}
+
+.strike-through {
+  text-decoration: line-through;
+  font-style: italic;
+}
+
+.important-flag {
+  height: 50px;
+  margin: 0px;
+}
+.red-flag {
+  fill: #cc0000;
+}
+</style>
+
+```
+
+<!-- tabs:end -->
+
 14. Let's connect the click button in the DOM to the Javascript function we've just created. In the template, add a click handler to the md-button to call the function `markImportant()` by adding ` @click="markImportant()"` to the `<md-button>` tag
 
-<kbd>📝 todolist/src/components/TodoItem.vue</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/src/components/TodoItem.vue</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```html
     <!-- TODO - SVG for use in Exercise3 -->
     <md-button class="important-flag" @click="markImportant()">
         <svg :class="{'red-flag': todoItem.important}"  height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" ><path d="M0 0h24v24H0z" fill="none"/><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
     </md-button>
 ```
+
+#### ** Entire File **
+
+```html
+<template>
+  <div>
+    <div class="itemCardAndFlag">
+    <md-list-item
+      @click="markCompleted()"
+      >
+      <checkbox v-model="todoItem.completed" class="checkbox-completed"/>
+
+        <span class="md-list-item-text" :class="{'strike-through': todoItem.completed}">{{ todoItem.title }}</span>
+      </md-list-item>
+      <!-- TODO - SVG for use in Lab3 -->
+        <md-button class="important-flag" @click="markImportant()">
+          <svg :class="{'red-flag': todoItem.important}"  height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" ><path d="M0 0h24v24H0z" fill="none"/><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </md-button>
+    </div>
+  </div>
+</template>
+<script>
+import Vue from "vue";
+import { Checkbox, Radio } from "vue-checkbox-radio";
+Vue.component("checkbox", Checkbox);
+Vue.component("radio", Radio);
+let biscuits;
+
+export default {
+  name: "TodoItem",
+  props: {
+    // type any object ;)
+    todoItem: {}
+  },
+  methods: {
+    markCompleted() {
+      this.$store.dispatch("updateTodo", { id: this.todoItem._id });
+      console.info("INFO - Mark todo as completed ", this.todoItem.completed);
+    },
+    markImportant() {
+      // TODO - FILL THIS OUT IN THE LAB EXERCISE
+      this.$store.dispatch("updateTodo", {id: this.todoItem._id, important: true});
+      console.info("INFO - Mark todo as important ", this.todoItem.important);
+    }
+  }
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+.md-list-item {
+  width: 320px;
+  max-width: 100%;
+  height: 50px;
+  display: inline-block;
+  overflow: auto;
+}
+
+.md-list-item-text {
+  padding-left: 0.5em;
+}
+
+.itemCardandFlag {
+  display: inline-block;
+}
+
+.strike-through {
+  text-decoration: line-through;
+  font-style: italic;
+}
+
+.important-flag {
+  height: 50px;
+  margin: 0px;
+}
+.red-flag {
+  fill: #cc0000;
+}
+</style>
+
+```
+
+<!-- tabs:end -->
 
 15. Finally - we need to make it so that when a new todo item is created it will have an important property. Head to `src/store/actions.js` and add `important: false`  below `completed: false` in the `addTodo(){}` action.
 
@@ -595,7 +2339,12 @@ npm run serve:all
 
 19. We need to implement the `actions` and `mutations` for our feature. Let's start with the tests. Open the `tests/unit/javascript/actions.spec.js` and navigate to the bottom of the file. Our action should should commit the `MARK_TODO_IMPORTANT` to the mutations. Scroll to the end of the test file and implement the skeleton test by adding `expect(commit.firstCall.args[0]).toBe("MARK_TODO_IMPORTANT");` as the assertion.
 
-<kbd>📝 todolist/tests/unit/javascript/actions.spec.js</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/tests/unit/javascript/actions.spec.js</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```javascript
   it("should call MARK_TODO_IMPORTANT", done => {
     const commit = sinon.spy();
@@ -608,9 +2357,160 @@ npm run serve:all
   });
 ```
 
+#### ** Entire File **
+
+```javascript
+import actions from "@/store/actions";
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
+import sinon from "sinon";
+import config from "../../../src/config";
+
+const todos = [
+  { _id: 1, title: "learn testing", completed: true },
+  { _id: 2, title: "learn testing 2", completed: false }
+];
+let state;
+
+describe("loadTodos", () => {
+  beforeEach(() => {
+    let mock = new MockAdapter(axios);
+    mock.onGet(config.todoEndpoint).reply(200, todos);
+  });
+  it("should call commit to the mutation function twice", done => {
+    const commit = sinon.spy();
+    actions.loadTodos({ commit }).then(() => {
+      // console.log(commit)
+      expect(commit.calledTwice).toBe(true);
+      done();
+    });
+  });
+
+  it("should first call SET_LOADING", done => {
+    const commit = sinon.spy();
+    actions.loadTodos({ commit }).then(() => {
+      // console.log(commit.firstCall.args[0])
+      expect(commit.firstCall.args[0]).toBe("SET_TODOS");
+      done();
+    });
+  });
+  it("should second call SET_TODOS", done => {
+    const commit = sinon.spy();
+    actions.loadTodos({ commit }).then(() => {
+      // console.log(commit)
+      expect(commit.secondCall.args[0]).toBe("SET_LOADING");
+      done();
+    });
+  });
+});
+
+describe("addTodos", () => {
+  beforeEach(() => {
+    state = {};
+    let mock = new MockAdapter(axios);
+    // mock.onPost(/http:\/\/localhost:9000\/api\/todos\/.*/, {})
+    mock.onPost(config.todoEndpoint).reply(200, todos);
+  });
+  it("should call commit to the mutation function once", done => {
+    const commit = sinon.spy();
+    state.newTodo = "Learn some mocking";
+    actions.addTodo({ commit, state }).then(() => {
+      // console.log(commit)
+      expect(commit.calledOnce).toBe(true);
+      done();
+    });
+  });
+  it("should first call ADD_TODO", done => {
+    const commit = sinon.spy();
+    state.newTodo = "Learn some mocking";
+    actions.addTodo({ commit, state }).then(() => {
+      // console.log(commit.firstCall.args[0])
+      expect(commit.firstCall.args[0]).toBe("ADD_TODO");
+      done();
+    });
+  });
+});
+
+describe("setNewTodo", () => {
+  it("should call SET_NEW_TODO", () => {
+    const commit = sinon.spy();
+    actions.setNewTodo({ commit, todo: "learn stuff about mockin" });
+    expect(commit.firstCall.args[0]).toBe("SET_NEW_TODO");
+  });
+});
+
+describe("clearNewTodo", () => {
+  it("should call CLEAR_NEW_TODO", () => {
+    const commit = sinon.spy();
+    actions.clearNewTodo({ commit });
+    expect(commit.firstCall.args[0]).toBe("CLEAR_NEW_TODO");
+  });
+});
+
+describe("clearTodos", () => {
+  it("should call CLEAR_ALL_TODOS when all is true", () => {
+    const commit = sinon.spy();
+    state.todos = todos;
+    actions.clearTodos({ commit, state }, true);
+    expect(commit.firstCall.args[0]).toBe("CLEAR_ALL_TODOS");
+  });
+
+  it("should call CLEAR_ALL_DONE_TODOS when all is not passed", () => {
+    const commit = sinon.spy();
+    state.todos = todos;
+    actions.clearTodos({ commit, state });
+    expect(commit.firstCall.args[0]).toBe("CLEAR_ALL_DONE_TODOS");
+  });
+});
+
+describe("updateTodo", () => {
+  beforeEach(() => {
+    state = {};
+    let mock = new MockAdapter(axios);
+    mock.onPut(`${config.todoEndpoint}/1`).reply(200, todos);
+  });
+  it("should call commit to the mutation function once", done => {
+    const commit = sinon.spy();
+    state.todos = todos;
+    actions.updateTodo({ commit, state }, { id: 1 }).then(() => {
+      expect(commit.calledOnce).toBe(true);
+      done();
+    });
+  });
+  it("should call MARK_TODO_COMPLETED", done => {
+    const commit = sinon.spy();
+    state.todos = todos;
+    actions.updateTodo({ commit, state }, { id: 1 }).then(() => {
+      // console.log(commit.firstCall.args[0])
+      expect(commit.firstCall.args[0]).toBe("MARK_TODO_COMPLETED");
+      done();
+    });
+  });
+  it("should call MARK_TODO_IMPORTANT", done => {
+    const commit = sinon.spy();
+    state.todos = todos;
+    actions
+      .updateTodo({ commit, state }, { id: 1, important: true })
+      .then(() => {
+        // TODO - test goes here!
+        expect(commit.firstCall.args[0]).toBe("MARK_TODO_IMPORTANT");
+        done();
+      });
+  });
+});
+
+```
+
+<!-- tabs:end -->
+
 20.  We should now have more failing tests, let's fix this by adding the call from our action to the mutation method. Open the `src/store/actions.js` file and scroll to the bottom to the `updateTodo()` method. Complete the if block by adding `commit("MARK_TODO_IMPORTANT", i);` as shown below.
 
-<kbd>📝 todolist/src/store/actions.js</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/src/store/actions.js</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```javascript
 updateTodo({ commit, state }, { id, important }) {
     let i = state.todos.findIndex(todo => todo._id === id);
@@ -622,9 +2522,135 @@ updateTodo({ commit, state }, { id, important }) {
     }
 ```
 
+#### ** Entire File **
+
+```javascript
+import axios from "axios";
+import config from "@/config";
+
+const dummyData = [
+  {
+    _id: 0,
+    title: "Learn awesome things about Labs 🔬",
+    completed: false,
+    important: false
+  },
+  {
+    _id: 1,
+    title: "Learn about my friend Jenkins 🎉",
+    completed: true,
+    important: false
+  },
+  {
+    _id: 2,
+    title: "Drink Coffee ☕💩",
+    completed: false,
+    important: true
+  }
+];
+export default {
+  loadTodos({ commit }) {
+    return axios
+      .get(config.todoEndpoint)
+      .then(r => r.data)
+      .then(todos => {
+        commit("SET_TODOS", todos);
+        commit("SET_LOADING", false);
+      })
+      .catch(err => {
+        if (err) {
+          console.info("INFO - setting dummy data because of ", err);
+          commit("SET_TODOS", dummyData);
+          commit("SET_LOADING", false);
+        }
+      });
+  },
+  addTodo({ commit, state }) {
+    if (!state.newTodo) {
+      // do not add empty todos
+      return;
+    }
+    // debugger
+    const todo = {
+      title: state.newTodo,
+      completed: false
+    };
+    // console.info("TESTINT BLAH BLAH ", todo);
+    return axios
+      .post(config.todoEndpoint, todo)
+      .then(mongoTodo => {
+        commit("ADD_TODO", mongoTodo.data);
+      })
+      .catch(err => {
+        if (err) {
+          console.info("INFO - Adding dummy todo because of ", err);
+          let mongoTodo = todo;
+          mongoTodo._id = "fake-todo-item-" + Math.random();
+          commit("ADD_TODO", mongoTodo);
+        }
+      });
+  },
+  setNewTodo({ commit }, todo) {
+    // debugger
+    commit("SET_NEW_TODO", todo);
+  },
+  clearNewTodo({ commit }) {
+    commit("CLEAR_NEW_TODO");
+  },
+  clearTodos({ commit, state }, all) {
+    // 1 fire and forget or
+    const deleteStuff = id => {
+      axios.delete(config.todoEndpoint + "/" + id).then(data => {
+        console.info("INFO - item " + id + " deleted", data);
+      });
+    };
+
+    if (all) {
+      state.todos.map(todo => {
+        deleteStuff(todo._id);
+      });
+      commit("CLEAR_ALL_TODOS");
+    } else {
+      state.todos.map(todo => {
+        // axios remove all done by the id
+        if (todo.completed) {
+          deleteStuff(todo._id);
+        }
+      });
+      commit("CLEAR_ALL_DONE_TODOS");
+    }
+    //  2 return array of promises and resolve all
+  },
+  /* eslint: ignore */
+  updateTodo({ commit, state }, { id, important }) {
+    let i = state.todos.findIndex(todo => todo._id === id);
+    if (important) {
+      // TODO - add commit imporant here!
+      commit("MARK_TODO_IMPORTANT", i);
+    } else {
+      commit("MARK_TODO_COMPLETED", i);
+    }
+    // Fire and forget style backend update ;)
+    return axios
+      .put(config.todoEndpoint + "/" + state.todos[i]._id, state.todos[i])
+      .then(() => {
+        console.info("INFO - item " + id + " updated");
+      });
+  }
+};
+
+```
+
+<!-- tabs:end -->
+
 21.  Finally, let's implement the `mutation` for our feature. Again, starting with the tests... Open the `tests/unit/javascript/mutations.spec.js` to find our skeleton tests at the bottom of the file. Our mutation method is responsible for toggling the todo's `important` property between `true` and `false`. Let's implement the tests for this functionality by setting important to be true and calling the method expecting the inverse. Then let's set it to false and call the method expecting the inverse. Add the expectations below the `// TODO - test goes here!` comment as done previously.
 
-<kbd>📝 todolist/tests/unit/javascript/mutations.spec.js</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/tests/unit/javascript/mutations.spec.js</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```javascript
   it("it should MARK_TODO_IMPORTANT as false", () => {
     state.todos = importantTodos;
@@ -642,17 +2668,179 @@ updateTodo({ commit, state }, { id, important }) {
   });
 ```
 
+#### ** Entire File **
+
+```javascript
+import mutations from "@/store/mutations";
+
+let state;
+const todo = {
+  completed: true,
+  title: "testing sucks"
+};
+const newTodo = "biscuits";
+const doneTodos = [
+  {
+    completed: true,
+    title: "testing sucks"
+  },
+  {
+    completed: false,
+    title: "easy testing is fun"
+  }
+];
+const importantTodos = [
+  {
+    completed: true,
+    title: "testing sucks",
+    important: true
+  }
+];
+
+describe("Mutation tests", () => {
+  beforeEach(() => {
+    state = {};
+  });
+  it("sets the loading to true", () => {
+    mutations.SET_LOADING(state, true);
+    expect(state.loading).toBe(true);
+  });
+  it("sets the loading to false", () => {
+    mutations.SET_LOADING(state, false);
+    expect(state.loading).toBe(false);
+  });
+
+  it("sets all SET_TODOS", () => {
+    mutations.SET_TODOS(state, [todo]);
+    expect(state.todos.length).toBe(1);
+  });
+
+  it("SET_NEW_TODO", () => {
+    mutations.SET_NEW_TODO(state, newTodo);
+    expect(state.newTodo).toEqual(newTodo);
+  });
+
+  it("ADD_TODO", () => {
+    state.todos = [];
+    mutations.ADD_TODO(state, todo);
+    expect(state.todos.length).toBe(1);
+  });
+
+  it("CLEAR_NEW_TODO", () => {
+    state.newTodo = newTodo;
+    mutations.CLEAR_NEW_TODO(state, newTodo);
+    expect(state.newTodo).toEqual("");
+  });
+
+  it("CLEAR_NEW_TODO", () => {
+    state.newTodo = newTodo;
+    mutations.CLEAR_NEW_TODO(state);
+    expect(state.newTodo).toEqual("");
+  });
+
+  it("CLEAR_ALL_DONE_TODOS", () => {
+    state.todos = doneTodos;
+    mutations.CLEAR_ALL_DONE_TODOS(state);
+    expect(state.todos.length).toBe(1);
+    expect(state.todos[0].completed).toBe(false);
+  });
+
+  it("CLEAR_ALL_TODOS", () => {
+    state.todos = doneTodos;
+    mutations.CLEAR_ALL_TODOS(state);
+    expect(state.todos.length).toBe(0);
+  });
+
+  it("MARK_TODO_COMPLETED", () => {
+    state.todos = doneTodos;
+    mutations.MARK_TODO_COMPLETED(state, 0);
+    expect(state.todos[0].completed).toBe(false);
+    // check the reversy!
+    mutations.MARK_TODO_COMPLETED(state, 0);
+    expect(state.todos[0].completed).toBe(true);
+  });
+
+  it("it should MARK_TODO_IMPORTANT as false", () => {
+    state.todos = importantTodos;
+    // TODO - test goes here!
+    mutations.MARK_TODO_IMPORTANT(state, 0);
+    expect(state.todos[0].important).toBe(false);
+  });
+
+  it("it should MARK_TODO_IMPORTANT as true", () => {
+    state.todos = importantTodos;
+    // TODO - test goes here!
+    state.todos[0].important = false;
+    mutations.MARK_TODO_IMPORTANT(state, 0);
+    expect(state.todos[0].important).toBe(true);
+  });
+});
+
+```
+
+<!-- tabs:end -->
+
 22. With our tests running and failing, let's implement the feature to their spec. Open the `src/store/mutations.js` and add another function called `MARK_TODO_IMPORTANT` below the `MARK_TODO_COMPLETED` to toggle `todo.important` between true and false. 
 
 NOTE - add a `,` at the end of the `MARK_TODO_COMPLETED(){}` function call.
 
-<kbd>📝 todolist/src/store/mutations.js</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/src/store/mutations.js</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```javascript
   MARK_TODO_IMPORTANT(state, index) {
     console.log("INFO - MARK_TODO_IMPORTANT");
     state.todos[index].important = !state.todos[index].important;
   }
 ```
+
+#### ** Entire File **
+
+```javascript
+export default {
+  SET_LOADING(state, bool) {
+    console.log("INFO - Setting loading wheel");
+    state.loading = bool;
+  },
+  SET_TODOS(state, todos) {
+    console.log("INFO - Setting todos");
+    state.todos = todos;
+  },
+  SET_NEW_TODO(state, todo) {
+    console.log("INFO - Setting new todo");
+    state.newTodo = todo;
+  },
+  ADD_TODO(state, todo) {
+    console.log("INFO - Add todo", todo);
+    state.todos.push(todo);
+  },
+  CLEAR_NEW_TODO(state) {
+    console.log("INFO - Clearing new todo");
+    state.newTodo = "";
+  },
+  CLEAR_ALL_DONE_TODOS(state) {
+    console.log("INFO - Clearing all done todos");
+    state.todos = state.todos.filter(obj => obj.completed === false);
+  },
+  CLEAR_ALL_TODOS(state) {
+    console.log("INFO - Clearing all todos");
+    state.todos = [];
+  },
+  MARK_TODO_COMPLETED(state, index) {
+    console.log("INFO - MARK_TODO_COMPLETED");
+    state.todos[index].completed = !state.todos[index].completed;
+  },
+  MARK_TODO_IMPORTANT(state, index) {
+    console.log("INFO - MARK_TODO_IMPORTANT");
+    state.todos[index].important = !state.todos[index].important;
+  }
+};
+```
+
+<!-- tabs:end -->
 
 ![mark-todo-important](../images/exercise3/mark-todo-important.png)
 
@@ -697,7 +2885,8 @@ touch tests/e2e/specs/importantFlag.js
 
 2.  Open this new file in your code editor and set out the initial blank template for an e2e test as below:
 
-<kbd>📝 todolist/tests/e2e/specs/importantFlag.js</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/tests/e2e/specs/importantFlag.js</span></kbd>
+
 ```javascript
   module.exports = {
     "Testing important flag setting": browser => {
@@ -705,11 +2894,38 @@ touch tests/e2e/specs/importantFlag.js
     }
   };
 ```
+
 ![if-e2e-step1](../images/exercise3/if-e2e-step1.png)
 
 3.  Now get the test to access the todos page and wait for it to load. The url can be taken from `process.env.VUE_DEV_SERVER_URL`
 
-    ![if-e2e-step2](../images/exercise3/if-e2e-step2.png)
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/tests/e2e/specs/importantFlag.js</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
+```javascript
+browser
+  .url(process.env.VUE_DEV_SERVER_URL + '/#/todo')
+  .waitForElementVisible('body', 5000);
+```
+
+#### ** Entire File **
+
+```javascript
+module.exports = {
+  "Testing important flag setting": browser => {
+    browser
+      .url(process.env.VUE_DEV_SERVER_URL + '/#/todo')
+      .waitForElementVisible('body', 5000);
+  }
+};
+```
+
+<!-- tabs:end -->
+
+![if-e2e-step2](../images/exercise3/if-e2e-step2.png)
 
 4.  Write code to do the following:
     * Click the clear all button and then enter a value in the textbox to create a new item. 
@@ -722,7 +2938,12 @@ touch tests/e2e/specs/importantFlag.js
     <!-- ![if-e2e-step3](../images/exercise3/if-e2e-step3.png) -->
     ![if-e2e-step3a](../images/exercise3/if-e2e-step3a.png)
 
-<kbd>📝 src/components/XofYItems.vue</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 src/components/XofYItems.vue</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```html
   <template>
     <div>
@@ -735,9 +2956,132 @@ touch tests/e2e/specs/importantFlag.js
   </template>
 ```
 
+#### ** Entire File **
+
+```html
+<template>
+    <div>
+        <div class="xofyDone">
+            <span> {{sumDoneTodoItems(todos)}} out of {{this.todos.length}} done. </span>
+            <md-button class="md-raised" v-on:click="clearDoneTodos()">Clear Done</md-button>
+            <md-button id="clear-all" class="md-raised" v-on:click="clearTodos()">Clear all</md-button>
+        </div>
+    </div>
+</template>
+
+<script>
+import { mapGetters } from "vuex";
+
+export default {
+  name: "XofYItems",
+  computed: {
+    ...mapGetters(["todos"])
+  },
+  created() {
+    this.$store.dispatch("loadTodos");
+  },
+  methods: {
+    clearDoneTodos() {
+      this.$store.dispatch("clearTodos");
+    },
+    clearTodos() {
+      // NOTE - true = all todos
+      this.$store.dispatch("clearTodos", true);
+    },
+    sumDoneTodoItems(todos) {
+      return todos.reduce(
+        (result, tdItem) => (tdItem.completed ? result + 1 : result),
+        0
+      );
+    }
+  }
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+.xofyDone {
+  height: 52px;
+  line-height: 52px;
+  display: inline-block;
+}
+</style>
+<template>
+    <div>
+        <div class="xofyDone">
+            <span> {{sumDoneTodoItems(todos)}} out of {{this.todos.length}} done. </span>
+            <md-button class="md-raised" v-on:click="clearDoneTodos()">Clear Done</md-button>
+            <md-button id="clear-all" class="md-raised" v-on:click="clearTodos()">Clear all</md-button>
+        </div>
+    </div>
+</template>
+
+<script>
+import { mapGetters } from "vuex";
+
+export default {
+  name: "XofYItems",
+  computed: {
+    ...mapGetters(["todos"])
+  },
+  created() {
+    this.$store.dispatch("loadTodos");
+  },
+  methods: {
+    clearDoneTodos() {
+      this.$store.dispatch("clearTodos");
+    },
+    clearTodos() {
+      // NOTE - true = all todos
+      this.$store.dispatch("clearTodos", true);
+    },
+    sumDoneTodoItems(todos) {
+      return todos.reduce(
+        (result, tdItem) => (tdItem.completed ? result + 1 : result),
+        0
+      );
+    }
+  }
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+.xofyDone {
+  height: 52px;
+  line-height: 52px;
+  display: inline-block;
+}
+</style>
+```
+
+<!-- tabs:end -->
+
 6.  Write the following test code. The pauses allow for the body of the page to render the todo list before exercising the test code:
 
-<kbd>📝 todolist/tests/e2e/specs/importantFlag.js</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/tests/e2e/specs/importantFlag.js</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
+```javascript
+browser
+  .url(process.env.VUE_DEV_SERVER_URL + '/#/todo')
+  .waitForElementVisible("body", 5000)
+  .pause(5000)
+  .click('#clear-all')
+  .pause(2000)
+  .setValue('input',['set a todo',browser.Keys.ENTER])
+  .pause(2000)
+  .assert.elementPresent(".important-flag")
+  .assert.elementNotPresent(".red-flag")
+  .click('.important-flag')
+  .end();
+```
+
+#### ** Entire File **
+
 ```javascript
   module.exports = {
     "Testing important flag setting": browser => {
@@ -756,6 +3100,8 @@ touch tests/e2e/specs/importantFlag.js
     }
   };
 ```
+
+<!-- tabs:end -->
 
 7. Your final E2E test should look like the following:
 
