@@ -72,7 +72,7 @@ _____
       pre_steps:
         - role: casl-ansible/roles/openshift-imagetag
           vars:
-            source_img: "quay.io/rht-labs/jenkins-slave-zap:do500.v2"
+            source_img: "quay.io/rht-labs/jenkins-slave-zap:do500.v3"
             img_tag: "jenkins-agent-zap:latest"
         - role: casl-ansible/roles/openshift-labels
           vars:
