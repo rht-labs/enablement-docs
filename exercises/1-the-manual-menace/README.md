@@ -693,7 +693,7 @@ openshift_cluster_content:
             target_object: "imagestream"
             target_name: "jenkins-agent-npm"
       tags:
-        - jenkins0
+        - jenkins
 ```
 
 <!-- tabs:end -->
