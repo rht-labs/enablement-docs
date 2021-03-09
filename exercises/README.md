@@ -21,7 +21,7 @@ The following are the minimal hardware requirements for running the lab exercise
 * 80GB hard disk
 
 The lab exercises have been tested on the following operating systems
- * Fedora 29 or 30 64-bit x86_64
+ * Fedora 30 or 31 64-bit x86_64
  * Microsoft Windows 10 Pro 64-bit
  * macOS 10.14 "Mojave"
 
@@ -29,7 +29,7 @@ The following table lists the software requirements for running the lab exercise
 
  | Software | Version | Check |
  | -------- | ------- | ----- |
- | OCP CLI | v3.11 | $ oc version &#124; grep -i --color oc |
+ | OCP CLI | v4.5 | $ oc version &#124; grep -i --color oc |
  | Ansible | => v2.8 | $ ansible --version &#124; grep -i --color ansible |
  | Node.js | v8.x LTS | $ node -v |
  | Git Installed | | $ git --version |
@@ -38,7 +38,6 @@ The following table lists the software requirements for running the lab exercise
  | JDK | v1.8 | $ java -version |
  | Access to an OpenShift cluster | | `oc login -u <username> -p <password> <CLUSTER_URL>` |
  | Text editor such as Atom or Visual Studio Code <br><br> (The exercises were created using `VSCode`, so the screenshots will match its layout and color schemes) | - | - |
-
 
  <p class="tip">
  <b>NOTE</b> - You will need administrator or super user level access on your system to install the prerequisite software for all the three operating systems.
@@ -111,8 +110,8 @@ brew install ansible
 
 8. Download and uncompress the OpenShift 3.11 client binary archive. Copy the ***oc*** binary to ***/usr/local/bin*** folder on your system
 ```bash
-curl -L -O https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-mac.zip
-unzip openshift-origin-client-tools-v3.11.0-0cbc58b-mac.zip
+curl -L -O https://mirror.openshift.com/pub/openshift-v4/clients/oc/4.5/macosx/oc.tar.gz
+tar xzvf oc.tar.gz
 cp oc /usr/local/bin/
 chmod +x /usr/local/bin/oc
 ```
