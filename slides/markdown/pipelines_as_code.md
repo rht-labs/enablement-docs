@@ -33,7 +33,7 @@ creation.
 
 ### What new tools and frameworks will we use?
 * **Jenkinsfile**: a Jenkins pipeline can be described in this single file
-* **Jenkins Slave**: provides a flexible way to add compute nodes with
+* **Jenkins Agent**: provides a flexible way to add compute nodes with
 specific configurations to a Jenkins instance
 
 
