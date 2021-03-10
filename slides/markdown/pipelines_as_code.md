@@ -9,13 +9,49 @@ DO500 <!-- {_class="title-color"} -->
 
 
 
+### Everything As Code
+Everything as Code can be described as a methodology or practice which consists of 
+extending the idea of how applications are treated as code and applying these concepts 
+to all other IT components like operating systems, network configurations, and pipelines.
+
+
+
 ### Pipelines As Code
 #### _What Is It?_
-A Jenkins pipeline can be defined with code in a **Jenkinsfile**.
 * Based on the practice **everything as code**
-* Allows Jenkins jobs and configurations to be configured as code, creating
-automation around common tasks (no more point and click in Jenkins)
+* Allows pipelines jobs and configurations to be defined as code in order to 
+easily install and maintain them from a Git repository
 * Couples pipeline steps to exact commit, ensuring the ability to rebuild is there
+
+
+
+### Jenkins Pipelines as Code
+* A Jenkins pipeline can be defined with code in a **Jenkinsfile**.
+* Jenkins jobs and configurations could be configured as code, creating automation around common tasks (no more point and click in Jenkins)
+* Jenkinfiles are written in Groovy
+
+
+
+### Jenkins Pipelines as Code
+![BP4](images/pipelines/jenkins_pipeline_template.png)
+
+
+
+### Jenkins Pipelines as Code
+![BP4](images/pipelines/jenkins_pipeline_code.png)
+
+
+
+
+### Tekton Pipelines as Code
+* A Tekton pipeline can be defined with code in a **yaml files**.
+* Tekton tasks and resources could be configured as code
+* Tekton pipelines doesn't have a specific programing language
+
+
+
+### Tekton Pipelines as Code
+![BP4](images/pipelines/tekton_pipeline_yaml.png)
 
 
 
