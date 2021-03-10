@@ -1,27 +1,35 @@
-# Rogue Cluster
+# Frequently Asked Questions and Cheat Sheet
 
-> This section contains information needed when setting up the cluster, and a command line cheat sheet to help with completing exercises.
+> This section contains common information needed when working through the exercises and a command line cheat sheet to help with completing exercises.
 
 ---
 
-## Cluster Requirements
+## Frequently Asked Questions
 
-Learners will create 3 to 4 project namespaces running lightweight Node.js app \* 2 and a MongoDB in up to three of these namespace (dev, test, uat for example). The learners ci-cd namespace will house GitLab, Nexus and Jenkins as well as any agent pods used by Jenkins.
 
-- Jenkins requires 5Gi of Persistent Storage and 4Gi of RAM
-- GitLab requires 2Gi of storage and 2Gi of RAM
-- PostgreSQL requires 1Gi of Storage and 512Mi of RAM
-- Redis requires 512Mi of storage
-- Nexus requires 1Gi of storage.
+### How can I get into my CodeReady Workspace (assumes you have gone through Exercise 1, Part 1 where we created the cloud IDE)?
 
-## Cluster Access
+  - Navigate to the CodeReady workspaces link provided by your facilitators. Take note that this is not the exact same link as in Exercise 1, Part 1 which was used to deploy the cloud IDE. After navigating to the link, you should see a page similar to the picture below.
 
-- Learners are in LDAP and can access cluster via `oc login`
-- Learners have access to LDAP bind credentials to be able to auth against GitLab
+  ![code-ready-workspaces](../images/faq/codeready-workspace-entrypoint.png)
 
-## User privileges
+  - On the left nav bar under "Recent Workspaces", select the workspace that has `do500-id` (in the picture above, that's `do500-p4ze1`).
 
-- Learners deploying GitLab will require privileges to run SCC containers
+  - The workspace should then start up and when complete you should be back in the cloud IDE.
+
+### How do I get the OpenShift login token?
+
+  - Login to the cluster at the cluster URL provided.
+
+  - At the top right of the page after logging in, you should see your name. Click into that tab and under your name should be a `Copy Login Command` url that you should click.
+
+  ![ocp-login-token-link](../images/faq/ocp-token-link.png)
+
+  - You should then be prompted for your credentials. Click `ldap` and login using your cluster credentials.
+
+  - You should then see a `Display Token` link. Once you click that, you should copy the command under the `Log in with this token` header (it starts with `oc login` and you'll want to copy the full command including the `--token` and `--server` arguments).
+
+  - Paste the command in your cloud ide terminal. You should then be logged in. As a way to confirm, run `oc whoami` and you should see your username for the cluster.
 
 ## Labs Cheat Sheet
 
@@ -82,9 +90,6 @@ This cheat sheet will give you some of the most useful commands and tips which y
   - `man command1` will open the man pages (manual pages) for a particular command.
   - `man -k <search string>` will return a list of commands relevant to the search string you've entered.
   - If you want to know more about `man` try `man man` for more `man` on `man` information.
-
-- Run commands with root privileges
-  - `sudo command1` will run a command with escalated privileges. This is safer than logging on as root user.
 
 ## OpenShift 101
 
