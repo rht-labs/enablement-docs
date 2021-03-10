@@ -1,6 +1,6 @@
 # An Enslaved Hope
 
-> In this exercise we will introduce some new Jenkins slaves that will be used in later exercises. We will also look at an alternative approach to doing build pipelines by creating an OpenShift buildConfig that contains our Jenkinsfile.
+> In this exercise we will introduce some new Jenkins agents that will be used in later exercises. We will also look at an alternative approach to doing build pipelines by creating an OpenShift buildConfig that contains our Jenkinsfile.
 
 ![jenkins-fail-meme](../images/exercise4/jenkins-fail-meme.jpeg)
 [image-ref](https://memegenerator.net/instance/76565947/days-since-its-been-0-days-since-a-jenkins-fail)
@@ -19,7 +19,7 @@ _____
 As a learner you will be able to
 - Use a Jenkinsfile to create a declarative pipeline to build, bake and deploy the Todolist App
 - Identify the differences between scripted, declarative and DSL pipelines
-- Create Jenkins slave nodes for use in builds in future exercises
+- Create Jenkins agent nodes for use in builds in future exercises
 
 ## Tools and Frameworks
 
@@ -35,16 +35,16 @@ As a learner you will be able to
 _____
 
 <!-- ## 10,000 Ft View
-> The goal of this exercise is to move to using the Jenkinsfile in the todolist-api and todolist projects. Additionally we will create new slaves for use in the next exercise.
+> The goal of this exercise is to move to using the Jenkinsfile in the todolist-api and todolist projects. Additionally we will create new agents for use in the next exercise.
 
 1. On Jenkins; create a multibranch pipeline project to scan the GitLab endpoint for each app. Use the Jenkinsfile provided to run the stages. Replace `<YOUR_NAME>` with the appropriate variable.
 
-2. Create two new Jenkins slaves for the `OWASP ZAP` scanner and the `Arachni` WebCrawler -->
+2. Create two new Jenkins agents for the `OWASP ZAP` scanner and the `Arachni` WebCrawler -->
 
 ## Step by Step Instructions
 
-### Part 1 - Security Scanning Slaves
-> _This part of the exercise focuses on updating the `enablement-ci-cd` repo with some new jenkins-slave pods for use in future exercise. We will use two different methods to import these slaves, one by tagging a prebuilt image and two by building the image in the cluster_
+### Part 1 - Security Scanning Agents
+> _This part of the exercise focuses on updating the `enablement-ci-cd` repo with some new jenkins-agent pods for use in future exercise. We will use two different methods to import these agents, one by tagging a prebuilt image and two by building the image in the cluster_
 
 #### 1a - OWASP ZAP
 > _OWASP ZAP (Zed Attack Proxy) is a free open source security tool used for finding security vulnerabilities in web applications._
@@ -55,33 +55,33 @@ _____
 
 <kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
-# JENKINS SLAVES
-- object: jenkins-slave-nodes
+# JENKINS AGENTS
+- object: jenkins-agent-nodes
   content:
 ```
 
-3. The ZAP image we will use is pre-built and hosted on Quay. The Dockerfile used to built it can be found on the Red Hat Communities of Practice Containers Quickstarts repository, along with a host of other useful [Jenkins slaves](https://github.com/redhat-cop/containers-quickstarts/tree/master/jenkins-slaves). To save time, we will use a prebuilt image. As we did with our `jenkins-slave-npm`, let's add some `pre_steps` for the applier to pull this image into our cluster and label it for use in Jenkins.
+3. The ZAP image we will use is pre-built and hosted on Quay. The Dockerfile used to built it can be found on the Red Hat Communities of Practice Containers Quickstarts repository, along with a host of other useful [Jenkins agents](https://github.com/redhat-cop/containers-quickstarts/tree/master/jenkins-agents). To save time, we will use a prebuilt image. As we did with our `jenkins-agent-npm`, let's add some `pre_steps` for the applier to pull this image into our cluster and label it for use in Jenkins.
 
 <kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
-# JENKINS SLAVES
-- object: jenkins-slave-nodes
+# JENKINS AGENTS
+- object: jenkins-agent-nodes
   content:
-    - name: jenkins-slave-zap
+    - name: jenkins-agent-zap
       namespace: "{{ ci_cd_namespace }}"
       pre_steps:
         - role: casl-ansible/roles/openshift-imagetag
           vars:
-            source_img: "quay.io/rht-labs/jenkins-slave-zap:do500.v2"
-            img_tag: "jenkins-slave-zap:latest"
+            source_img: "quay.io/rht-labs/jenkins-slave-zap:do500.v3"
+            img_tag: "jenkins-agent-zap:latest"
         - role: casl-ansible/roles/openshift-labels
           vars:
             label: "role=jenkins-slave"
             target_object: "imagestream"
-            target_name: "jenkins-slave-zap"
+            target_name: "jenkins-agent-zap"
       tags:
-      - jenkins-slaves
-      - zap-slave
+      - jenkins-agents
+      - zap-agent
 ```
 ![zap-object](../images/exercise4/zap-object.png)
 
@@ -96,41 +96,40 @@ oc login -u <username> -p <password> <CLUSTER_URL>
 cd /projects/enablement-ci-cd
 ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
-     -e "filter_tags=zap-slave"
+     -e "filter_tags=zap-agent"
 ```
 
-5. Head to `<CLUSTER_URL>` on OpenShift and move to Builds > Images in your CI/CD project. You should see `jenkins-slave-zap` Image Stream has been imported.
+5. Head to `<CLUSTER_URL>` on OpenShift and move to Builds > Images in your CI/CD project. You should see `jenkins-agent-zap` Image Stream has been imported.
 ![zap-image-stream](../images/exercise4/zap-image-stream.png)
 
 #### 1b - Arachni Scan
 > _Arachni is a feature-full, modular, high-performance Ruby framework aimed towards helping penetration testers and administrators evaluate the security of web applications._
 
-1. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `arachni` and add the following variables to tell your template where to find the slave definition to be built.
+1. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `arachni` and add the following variables to tell your template where to find the agent definition to be built.
 
 <kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
 
   arachni:
     SOURCE_REPOSITORY_URL: "{{ cop_quickstarts }}"
-    SOURCE_CONTEXT_DIR: jenkins-slaves/jenkins-slave-arachni
-    BUILDER_IMAGE_NAME: registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:v3.11
-    NAME: jenkins-slave-arachni
+    SOURCE_CONTEXT_DIR: jenkins-agents/jenkins-agent-arachni
+    BUILDER_IMAGE_NAME: quay.io/openshift/origin-jenkins-agent-base:4.5
+    NAME: jenkins-agent-arachni
     SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
-    SLAVE_IMAGE_TAG: latest
-
 ```
+![arachni-object-parameters](../images/exercise4/arachni-object-parameters.png)
 
 2. Add the definition below underneath the Zap config
 
 <kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
 ```yaml
-    - name: jenkins-slave-arachni
-      template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
+    - name: jenkins-agent-arachni
+      template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/.openshift/templates/jenkins-agent-generic-template.yml"
       params_from_vars: "{{ arachni }}"
       namespace: "{{ ci_cd_namespace }}"
       tags:
-      - jenkins-slaves
-      - arachni-slave
+      - jenkins-agents
+      - arachni-agent
 ```
 ![arachni-object](../images/exercise4/arachni-object.png)
 
@@ -138,7 +137,7 @@ ansible-playbook apply.yml -e target=tools \
 ```bash
 ansible-playbook apply.yml -e target=tools \
      -i inventory/ \
-     -e "filter_tags=arachni-slave"
+     -e "filter_tags=arachni-agent"
 ```
 
 4. With these changes in place, push your changes to the `master` branch.
@@ -152,8 +151,8 @@ git commit -m "ADD - Arachni and Zap scanning images"
 git push
 ```
 
-5. Your OpenShift cluster should now show that the Arachni slave has been built in your `ci-cd` namepsace.
-![all-slaves](../images/exercise4/arachni-slave.png)
+5. Your OpenShift cluster should now show that the Arachni agent has been built in your `ci-cd` namepsace.
+![all-agents](../images/exercise4/arachni-agent.png)
 
 
 ### Part 2 - OCP Pipeline
@@ -170,6 +169,7 @@ cd /projects/todolist
 ```
 PIPELINE_SOURCE_REPOSITORY_URL=https://gitlab.<APPS_URL>/<GIT_USERNAME>/todolist.git
 PIPELINE_SOURCE_REPOSITORY_REF=develop
+PIPELINE_SOURCE_SECRET=git-auth
 NAME=todolist
 ```
 
