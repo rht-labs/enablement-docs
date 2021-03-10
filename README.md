@@ -5,8 +5,10 @@ This repo will house all the slides and lab exercises for the Enablement. It wil
 [Course Content](https://rht-labs.github.io/enablement-docs/#/)
 
 ## Slides
-
 Please navigate to the "Slides" folder and follow the ReadMe instructions on how to render and view the slides.
+
+## Requirements
+NodeJS is needed to run this project, you can download it from [NodeJS](https://nodejs.org/en/download/)
 
 ## Exercises
 
