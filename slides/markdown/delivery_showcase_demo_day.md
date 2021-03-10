@@ -12,12 +12,12 @@ DO500 <!-- {_class="title-color"} -->
 ### The Showcase
 #### _What is It?_
 * An event where stakeholders and interested parties are given a demonstration of
-recent work performed by a team.
+recent work performed by a team
 * The latest increment of the product with new features built by the team is
-showcased.
-* Provides an opportunity to review culture and practices used by the team.
+showcased
+* Provides an opportunity to review culture and practices used by the team
 * It is often performed at the end of an iteration but can be performed at key
-milestones in the life of the product.
+milestones in the life of the product
 
 
 
@@ -28,7 +28,7 @@ and iteratively built. Stakeholders can give feedback on the features as they
 are being built, suggest improvements, give ideas for new features, and catch
 problems early.
 
-Other benefits:
+**Other benefits**
 * Provides an open forum for channeling feedback from stakeholders to product
 leadership so that prioritization and future work can be adapted accordingly
 * Enables collaboration across all interested parties on a regular basis

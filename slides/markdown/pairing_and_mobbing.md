@@ -8,7 +8,7 @@ DO500 <!-- {_class="title-color"} -->
 <!--.slide: id="pair-mob" -->
 ### Pair Programming
 ![Pair Programming](images/PairAndMob/coaching-coders-coding-7374.jpg) <!-- {_class="inline-image"} -->
-**Pair programming** is a practice used in eXtreme Programming in which
+**Pair programming** is a practice used in e**X**treme **P**rogramming in which
 two programmers work together at one computer.
 
 
@@ -58,7 +58,7 @@ _Individual Drawing (Steven Tyler)_
 ### Exercise - Pairing and Mobbing
 _Pair Drawing (Steven Tyler)_
 1. Assemble in pairs.
-2. Each pair grab a medium post-it
+2. Each pair grab a medium post-it.
 3. Take turns drawing an element of Public Figure.
 
 
@@ -66,7 +66,7 @@ _Pair Drawing (Steven Tyler)_
 ### Exercise - Pairing and Mobbing
 _Mob Drawing (Steven Tyler)_
 1. Assemble in table groups.
-2. Each table use an easel post-it
+2. Each table use an easel post-it.
 3. Take turns drawing an element of Public Figure.
 
 
