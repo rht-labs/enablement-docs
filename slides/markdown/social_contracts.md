@@ -15,7 +15,7 @@ DO500 <!-- {_class="title-color"} -->
 #### _Effective Social Contracts are:_
 - Publicly displayed
 - Revisited regularly and amended if required
--  Binding on *all* parties
+- Binding on *all* parties
 - Signatories hold each other accountable
 
 
@@ -31,6 +31,7 @@ DO500 <!-- {_class="title-color"} -->
 ![Example Social Contract](images/Example_Social_Contract.png) <!-- {_class="inline-image"} -->
 - Core hours
 - No blame culture
+- No Rock Stars!
 - Timebox debates
 - Celebrate success!
 
@@ -49,4 +50,4 @@ DO500 <!-- {_class="title-color"} -->
 
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
 ### DevOps practices used in this section:
-- [Social Contracts](https://openpracticelibrary.com/practice/social-contract/)
+- [Social Contract](https://openpracticelibrary.com/practice/social-contract/)

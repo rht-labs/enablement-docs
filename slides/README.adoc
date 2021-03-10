@@ -1,6 +1,6 @@
 # DO500 Instructor Slides
 
-### Full setup
+## Full setup
 
 Some reveal.js features, like external Markdown and speaker notes, require that
 presentations run from a local web server. The following instructions will set
@@ -21,23 +21,23 @@ the reveal.js source code.
 [source, sh]
 [user@host path]$ npm install
 
-1. Serve the presentation and monitor source files for changes:
+5. Serve the presentation and monitor source files for changes:
 [source, sh]
 [user@host path]$ npm start
 
-1. Open <http://localhost:8000> to view your presentation.  You can change the
+6. Open <http://localhost:8000> to view your presentation.  You can change the
 port by using:
 [source, sh]
 [user@host path]$ npm start -- --port=8001
 
-### Folder Structure
+## Folder Structure
 
 - **css/** Core styles without which the project does not function
 - **js/** Like above but for JavaScript
 - **plugin/** Components that have been developed as extensions to reveal.js
 - **lib/** All other third party assets (JavaScript, CSS, fonts)
 
-### Printing to PDF
+## Printing to PDF
 
 1. Run the slides locally as described above.
 2. Open the slides in Chrome or Chromium.
@@ -55,4 +55,3 @@ done
 
 if you are using macOS the Google Chrome path is in 
 `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome`
-
