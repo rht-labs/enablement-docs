@@ -24,7 +24,12 @@
       subMaxLevel: 5,
       auto2top: true,
       search: 'auto',
-      notFoundPage: 'notThe404.md'
+      notFoundPage: 'notThe404.md',
+      copyCode: {
+        buttonText : 'Copy to clipboard',
+        errorText  : 'Error',
+        successText: 'Copied'
+      }
     }
   </script>
   <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
@@ -36,6 +41,7 @@
   <script src="//unpkg.com/prismjs/components/prism-yaml.min.js"></script>
   <script src="//unpkg.com/prismjs/components/prism-json.min.js"></script>
   <script src="//unpkg.com/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script src="https://unpkg.com/docsify-copy-code@2"></script>
 </body>
 
 </html>
