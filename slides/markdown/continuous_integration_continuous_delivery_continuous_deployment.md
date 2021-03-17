@@ -64,7 +64,7 @@ Continuous delivery (**CD**)  is an extension of continuous integration since it
 * Each change can be **potentially** ready for release to production
 * Builds upon the **continuous integration** practice
 * Consider automating release to a "demo" area
-* Typically implemented with an automation server such as Jenkins or Tekton
+* Typically implemented with an automation server such as Jenkins or CI/CD framework such as Tekton
 
 
 
