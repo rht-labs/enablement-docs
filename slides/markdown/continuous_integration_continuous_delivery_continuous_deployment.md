@@ -48,7 +48,7 @@ waiting for someone to manually test a giant code change
 * Each change can be **potentially** ready for release to production
 * Builds upon the **continuous integration** practice
 * Consider automating release to a "demo" area
-* Typically implemented with an automation server such as Jenkins or Tekton
+* Typically implemented with an automation server such as Jenkins or CI/CD framework such as Tekton
 
 
 
