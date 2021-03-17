@@ -12,7 +12,7 @@ DO500 <!-- {_class="title-color"} -->
 
 ### User Stories
 #### As a < type of user >, I want < some goal > so that < some reason >
-As an learner, I want to stay awake so that I can be attentive and listen to teacher
+As a learner, I want to stay awake so that I can be attentive and listen to teacher
 
 * A promise to create a conversation
   * Card
@@ -48,9 +48,9 @@ As an learner, I want to stay awake so that I can be attentive and listen to tea
 
 ### User Story Mapping
 #### _What is It?_
-* Frame the opportunity, goal, outcome, and value.
-* Tell the story of the product from left to right (user steps).
-* Go back and talk about and capture the details of each step.
+* Frame the opportunity, goal, outcome, and value
+* Tell the story of the product from left to right (user steps)
+* Go back and talk about and capture the details of each step
 
 
 
@@ -63,7 +63,7 @@ until you arrive at work.
 ### Exercise - Mapping Stories for "getting to work"
 1. As an individual, capture on stickies things you do from the moment you wake up
 until you arrive at work.
-2. As a team, add all activities to the story map and remove duplicates. If some are similar but slightly different, do not remove as duplicates
+2. As a team, add all activities to the story map and remove duplicates. If some are similar but slightly different, do not remove as duplicates.
 
 
 
@@ -71,7 +71,7 @@ until you arrive at work.
 1. As an individual, capture on stickies things you do from the moment you wake up
 until you arrive at work.
 2. As a team, add all activities to the story map.
-3. Cluster similar activities and capture themes above them
+3. Cluster similar activities and capture themes above them.
 
 
 
