@@ -26,7 +26,7 @@ DO500 <!-- {_class="title-color"} -->
 
 
 <!-- .slide: data-background-image="images/chef-background.png" class="white-style" -->
-### DevOps practices introduced in this section:
+### DevOps practices used in this section:
 - [Backlog](https://openpracticelibrary.com/practice/backlog-refinement/)
 - [Work Visualization](https://openpracticelibrary.com/practice/visualisation-of-work/)
 - [Burndown](https://openpracticelibrary.com/practice/burndown/)
