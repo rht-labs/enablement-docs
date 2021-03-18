@@ -241,12 +241,20 @@ cd enablement-ci-cd
 ansible-galaxy install -r requirements.yml --roles-path=roles
 ```
 
-11. Apply the inventory by logging into OpenShift on the terminal. You will need to retrieve a token first, by browsing to the token request page. This is also available from the `Copy Login Command` once you have logged into the OpenShift Web UI ([more information on the FAQ page here](../faq-page/README.md)). (`<CLUSTER_URL>` should be replaced with the one you've been provided by the instructor). Accept any insecure connection warning(s) from the cli 👍.
+11. Apply the inventory by logging into OpenShift on the terminal.
 
-You should see a screen like this
+You will need to retrieve a token first, by browsing to the token request page. This is available from the `OpenShift Web UI` ([more information on the FAQ page here](../faq-page/README.md)) once you are logged in.
+
+Go to the top right corner of your `Openshift Web UI` and click in your user name, then `Copy Login Command`.
+
+![ocp-copy-login-command](../images/exercise1/api-login-token-0.png)
+
+
+You will be asked to login again, then you should a screen similar to this one:
+
 ![api-login-token](../images/exercise1/api-login-token.png)
 
-Copy this command and run it in your cloud ide terminal to login:
+Copy the entire `oc login` command and run it in your cloud ide terminal to login. Accept any insecure connection warning(s) from the cli 👍.
 
 ```
 oc login --token=<Your Token> --server=<CLUSTER_URL>
