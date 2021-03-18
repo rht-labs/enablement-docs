@@ -12,8 +12,8 @@ DO500 <!-- {_class="title-color"} -->
 
 ### Continuous Integration
 #### _What is It?_
-* Developers submit small and frequent changes to the source code
-* Automated build and test steps are run to ensure code works as expected
+* Developers submit **small and frequent changes** to the source code
+* **Automated** build and test steps are run to ensure code works as expected
 * Developers are notified if anything fails and developers react quickly to fix
 
 These actions are repeated frequently ensuring that the code base can **continuously integrate**.
@@ -24,11 +24,11 @@ The tests and build steps are typically run in an automation server such as Jenk
 
 ### Continuous Integration
 #### _Why Use It?_
-* Automated testing reduces busy work and improves software quality.
-* Small, regular code commits reduce the number of integration problems.
-* Rapid feedback loops make it easier for new contributors to get started.
+* Automated testing reduces busy work and improves software quality
+* Small, regular code commits reduce the number of integration problems
+* Rapid feedback loops make it easier for new contributors to get started
 * Shipping of functional software in small increments is more enjoyable than
-waiting for someone to manually test a giant code change.
+waiting for someone to manually test a giant code change
 
 
 
@@ -48,7 +48,7 @@ waiting for someone to manually test a giant code change.
 * Each change can be **potentially** ready for release to production
 * Builds upon the **continuous integration** practice
 * Consider automating release to a "demo" area
-* Typically implemented with an automation server such as Jenkins
+* Typically implemented with an automation server such as Jenkins or CI/CD framework such as Tekton
 
 
 
@@ -69,7 +69,7 @@ waiting for someone to manually test a giant code change.
 ### Continuous Deployment
 #### _What is It?_
 * Software development practice
-* Development team maintains software so that it can be released to production at any moment
+* Development team maintains software so that it can be **released to production** at any moment
 * Builds upon the practices of **continuous integration** and **continuous delivery**
 * Software configuration and deployment orchestration becomes part of the
 development team's duty to maintain the software
@@ -90,10 +90,10 @@ development team's duty to maintain the software
 ### Continuous Deployment
 #### _How to Do It?_
 * Collaborate closely with everyone involved in deployment and delivery of software
-to production.
-* Automate everything as much as possible.
-* Build "feature toggles" or "dark launches" to allow for quick rollback if needed.
-* Provide adequate automated monitoring of the application.
+to production
+* Automate everything as much as possible
+* Build "feature toggles" or "dark launches" to allow for quick rollback if needed
+* Provide adequate automated monitoring of the application
 
 
 
@@ -105,9 +105,9 @@ to production.
 <!-- .slide: id="pre-attack-pipelines-summary"-->
 ## Summary
 #### Wrap-up
-* "Continuous Integration": Integrate several changes into a shared repo and rely heavily on testing to make sure that the changes and commits works and have passed all (unit testing / code quality / code conduct).
-* "Continuous Delivery": The goal is to have a working artifact that's ready to be deployed at any time. It relies on testing and automation to make sure that it has passed all functional tests and can be Manually deployed (push button)
-* "Continuous Deployment/Release": One step further now that we are sure that this is ready to deploy to production then we can rely on features toggle, dark launches or other deployment strategy to promote to other critical environments asap using these techniques for the new features/fixes won't risk the operation.
+* **Continuous Integration**: Integrate several changes into a shared repo and rely heavily on testing to make sure that the changes and commits works and have passed all (unit testing / code quality / code conduct).
+* **Continuous Delivery**: The goal is to have a working artifact that's ready to be deployed at any time. It relies on testing and automation to make sure that it has passed all functional tests and can be Manually deployed (push button).
+* **Continuous Deployment/Release**: One step further now that we are sure that this is ready to deploy to production then we can rely on features toggle, dark launches or other deployment strategy to promote to other critical environments asap using these techniques for the new features/fixes won't risk the operation.
 
 
 
@@ -145,7 +145,7 @@ and release management teams
 
 ### What new Tools and Frameworks will we use?
 * **Jenkins**: Open source build automation server that is highly customizable
-via plugins
+via plugins.
 * **Node.js**: Node.js(R) is a JavaScript runtime build on Chrome's V8 JavaScript
 engine. It uses an event-driven, non-blocking I/O model that makes it lightweight and efficient.
 * **MongoDB**: A data store for JSON-like documents giving flexibility to data structures.
@@ -167,5 +167,5 @@ Lab Exercise 2: _The Attack of the Pipelines_
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
 ### DevOps practices used in this section:
 - [Continuous Integration](https://openpracticelibrary.com/practice/continuous-integration)
-- [Continuous Deployment](https://openpracticelibrary.com/practice/continuous-deployment)
 - [Continuous Delivery](https://openpracticelibrary.com/practice/continuous-delivery)
+- [Continuous Deployment](https://openpracticelibrary.com/practice/continuous-deployment)

@@ -32,11 +32,11 @@ DO500 <!-- {_class="title-color"} -->
 
 | Scrum Event | Purpose |
 | --- | --- |
-| **Sprint Planning** | Commit to a set of defined work  as a team for the upcoming sprint cycle. The end result is the Sprint Backlog. |
+| **Sprint Planning** | Commit to a set of defined work as a team for the upcoming sprint cycle. The end result is the Sprint Backlog. |
 | **Daily Standup** | Daily sync to share common understanding of the goals, coordinate the team effort, report on progress of work, and to communicate problems and improvements. |
-| ** Sprint Review** | Review what was completed during the sprint with all relevant stakeholders to collect feedback. |
-| ** Sprint Retrospective** | Help teams reflect on their internal team process with the goal to continuously improve. |
-| ** Sprint ** | A time boxed event that brings the team towards the goal set for that iteration and ends with reviewing the product increment. |
+| **Sprint Review** | Review what was completed during the sprint with all relevant stakeholders to collect feedback. |
+| **Sprint Retrospective** | Help teams reflect on their internal team process with the goal to continuously improve. |
+| **Sprint** | A time boxed event that brings the team towards the goal set for that iteration and ends with reviewing the product increment. |
 
 
 
@@ -60,7 +60,7 @@ In Your Groups
 2. Record your estimate for an iteration.
 3. Pass the balls for one minute.
 4. Record the actual score.
-5. Reflect on your group strategy
+5. Reflect on your group strategy.
 
 
 
