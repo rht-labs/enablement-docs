@@ -63,7 +63,7 @@ This section includes a procedure to build a container image locally, publish it
 Before starting, please take special attention to the following requirements:
 
 * An OCP Cluster installed and be logged with a project admin user
-* A quay.io or another external image repository account with _push_ rights (*It is also required to push this new image in a publish repository)
+* A quay.io or another external image repository account with _push_ rights (* It is also required to push this new image in a publish repository)
 * Podman installed in your laptop 
 
 Once the requirements have been met, it is time to execute the following steps:
