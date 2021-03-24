@@ -56,3 +56,55 @@ done
 if you are using macOS the Google Chrome path is in 
 `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome`
 
+### Deploy in OCP
+
+This section includes a procedure to build a container image locally, publish it to an external image registry and run this new container image in Openshift. The main objetive is to make accessible the do500 slides though an Openshift Application. 
+
+Before starting, please take special attention to the following requirements:
+
+* An OCP Cluster installed and be logged with a project admin user
+* A quay.io or another external image repository account with _push_ rights (*It is also required to push this new image in a publish repository)
+* Podman installed in your laptop 
+
+Once the requirements have been met, it is time to execute the following steps:
+
+1. Clone the reveal.js repository
+[source, sh]
+[user@host path]$ git clone https://github.com/rht-labs/enablement-docs
+
+2. Navigate to the slides folder
+[source, sh]
+[user@host path]$ cd slides
+
+3. Modify params in _deploy_slides_ocp.sh_ script
+[source, sh]
+[user@host path]$ vi _deploy_slides_ocp.sh_
+# Params
+REGISTRY_SERVER=xxxxx
+REGISTRY_PROJECT=xxxx
+...
+VERSION=xxxx
+...
+
+4. Execute _deploy_slides_ocp.sh_ script
+[source, sh]
+[user@host path]$ sh deploy_slides_ocp.sh
+STEP 1: FROM quay.io/fedora/fedora:32-x86_64
+STEP 2: RUN dnf install -y git npm bzip2
+--> Using cache a32c8255e2ca1792c52b6ab5b79a2a0ef71cbc5396b7c5ef96dece76035e31da
+--> a32c8255e2c
+STEP 3: ADD . /slides/
+--> aa8f2614ed5
+STEP 4: WORKDIR /slides
+--> 342693824e3
+...
+...
+...
+NAME           HOST/PORT                                            PATH   SERVICES       PORT       TERMINATION   WILDCARD
+slides         slides-do500.apps.labs.sandbox37.opentlc.com                slides         8000-tcp                 None
+
+NOTE: It is important to increment the image version every new build in order to have change and version control 
+
+Once the process is finished, the script displays the public Openshift Application route (e.g. http://slides-do500.apps.labs.sandbox37.opentlc.com) which can be used to access slides via web browser.
+
+It is important to bear in mind that it is possible to run this procedure several times and it will update the slides automatically every time.
