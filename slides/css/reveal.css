@@ -1589,3 +1589,11 @@ body {
 
 .zoomed .reveal .roll span:after {
   visibility: hidden; }
+
+.custom-image{
+  text-align: center !important;
+  margin: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  max-width: 800px !important;
+}

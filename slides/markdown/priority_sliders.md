@@ -33,9 +33,9 @@ DO500 <!-- {_class="title-color"} -->
 ![Priority Sliders Example](images/example-priority-sliders.jpg) <!-- {_class="inline-image"} -->
 #### In table groups, work together to:
   1. Draw a 5 heading priority slider chart
-  2. Consider the  areas identified from Target Outcomes practice
+  2. Consider the areas identified from Target Outcomes practice
   3. Discuss where you agree as a team the priorities, 1 to 5
-  4. Note no priority can be the same level and trade-offs must occur.
+  4. Note no priority can be the same level and trade-offs must occur
 
 
 

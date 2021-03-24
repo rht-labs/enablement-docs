@@ -17,7 +17,7 @@ Retrospectives are practice used by their teams to **reflect** on their way of w
 
 <!-- {_class="fragment" data-fragment-index="1"} -->"*At regular intervals, the team reflects on how to become more effective, then tunes and adjusts its behavior accordingly*"
 
-<!-- {_class="fragment" data-fragment-index="1"} --> **- 12th Principle of the Agile Manifesto**
+<!-- {_class="fragment" data-fragment-index="1"} --> **- 12th Principle of the Agile Manifesto -**
 
 
 
@@ -92,6 +92,12 @@ abilities, the resources available, and the situation at hand."**
 
 
 
+### Exercise - Daily Retrospective
+Reflect on the first day of class, and make adjustments to continuously improve
+
+
+
+<!-- .slide: data-background-image="images/chef-background.png" class="white-style" -->
 ### DevOps practices used in this section:
 - [Retrospectives](https://openpracticelibrary.com/practice/retrospectives/)
 - [Realtime Retrospective](https://openpracticelibrary.com/practice/realtime-retrospective/)
