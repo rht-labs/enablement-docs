@@ -54,24 +54,14 @@ As a learner, I want to stay awake so that I can be attentive and listen to teac
 
 
 
-### Exercise - Mapping Stories for "getting to work"
-1. As an individual, capture on stickies things you do from the moment you wake up
-until you arrive at work.
 
+### Exercise -  Mapping Stories for "getting to work"
+*Scenario* -> You woke up late and you must get to an early morning meeting at work
+and cannot miss it. What **must** you do to prepare for work and get there on time?
+1. As an individual, capture on stickies things you do from the moment you wake up until you arrive at work<!-- {_class="fragment"  data-fragment-index="1"} -->
+2. As a team, add all activities to the story map and remove duplicates. If some are similar but slightly different, do not remove as duplicates<!-- {_class="fragment"  data-fragment-index="2"} -->
+3. Cluster similar activities and capture themes above them<!-- {_class="fragment"  data-fragment-index="3"} -->
 
-
-### Exercise - Mapping Stories for "getting to work"
-1. As an individual, capture on stickies things you do from the moment you wake up
-until you arrive at work.
-2. As a team, add all activities to the story map and remove duplicates. If some are similar but slightly different, do not remove as duplicates.
-
-
-
-### Exercise - Mapping Stories for "getting to work"
-1. As an individual, capture on stickies things you do from the moment you wake up
-until you arrive at work.
-2. As a team, add all activities to the story map.
-3. Cluster similar activities and capture themes above them.
 
 
 
@@ -100,14 +90,14 @@ minimally viable product.
 
 
 ### Exercise - Value Slicing for "getting to work"
-Scenario: You woke up late and you must get to an early morning meeting at work
+*Scenario* -> You woke up late and you must get to an early morning meeting at work
 and cannot miss it. What **must** you do to prepare for work and get there on time?
 
 1. As a team, draw a line on the user story mapping board representing what
-must be done.
-2. Discuss which stories are absolutely necessary given the scenario.
+must be done<!-- {_class="fragment"  data-fragment-index="1"} -->
+2. Discuss which stories are absolutely necessary given the scenario<!-- {_class="fragment"  data-fragment-index="2"} -->
 3. Move stories below the line that are not absolutely necessary based on
-consensus of the team.
+consensus of the team<!-- {_class="fragment"  data-fragment-index="3"} -->
 
 
 
