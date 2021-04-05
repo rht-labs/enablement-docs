@@ -28,11 +28,6 @@ DO500 <!-- {_class="title-color"} -->
 
 
 
-### Exercise - Daily Retrospective
-Reflect on the first day of class, and make adjustments to continuously improve
-
-
-
 <!-- .slide: data-background-image="images/chef-background.png" class="white-style" -->
 ### DevOps practices used in this section:
 - [Information Radiators](https://openpracticelibrary.com/practice/visualisation-of-work/)

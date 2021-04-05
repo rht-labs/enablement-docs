@@ -4,6 +4,7 @@
 [image-ref](https://www.cloudbees.com/blog/get-ripped-jenkins-docker-industrial-strength-continuous-delivery)
 
 ## Learner Outcomes
+
 * Provide an immersive experience for students through practical application of DevOps culture using modern software development practices.
 
 * Allow students to experience the cultural shift they need to make in order to begin a successful DevOps journey.
@@ -11,11 +12,14 @@
 ## Cluster Information
 
 An OpenShift Cluster is required to complete the lab exercises. Students will receive by email (and by the instructors on site) the following information regarding the OpenShift cluster:
+
  - <**CLUSTER_URL**> -- OpenShift Webconsole/API Server URL
  - <**APPS_URL**> -- Wildcard subdomain for the exposed applications deployed in the Cluster
 
 ## Learner Pre-requisites
+
 The following are the minimal hardware requirements for running the lab exercises in this course
+
 * 64-bit Intel Core i5/i7 CPU or equivalent with virtualization extensions enabled
 * 4GB memory
 * 80GB hard disk
@@ -47,24 +51,28 @@ The following table lists the software requirements for running the lab exercise
 ### Linux
 
 1. Enable the nodejs 8 modules in Fedora and install the latest nodejs 8.x LTS release.
+
 ```bash
 dnf module enable nodejs:8
 dnf module install -y nodejs:8
 ```
+
 or use the [node-version-manager](https://github.com/nvm-sh/nvm#install--update-script) to control your node versions across multiple projects.
 
-
 2. Install OpenJDK version 1.8.
+
 ```bash
 dnf install java-1.8.0-openjdk-devel
 ```
 
 3. Install Chromium version 70 or higher.
+
 ```bash
 dnf install chromium
 ```
 
 4. Install Docker, Git and Ansible.
+
 ```bash
 dnf install git ansible docker
 systemctl enable docker
@@ -72,6 +80,7 @@ systemctl start docker
 ```
 
 5. enable non-root user access to docker
+
 ```bash
 groupadd docker
 systemctl restart docker
@@ -79,17 +88,21 @@ usermod -aG docker $USER
 ```
 
 6. Install the OpenShift 3.11 client binary.
+
 ```bash
 dnf install origin-clients
 ```
 
 ### macOS
+
 1. Install HomeBrew for macOS by following the installation instructions at https://brew.sh/
 
 2. Install Node.js version 8.x LTS using the brew command, and follow the instructions to add the **node** binary to the **PATH** environment variable.
+
 ```bash
 brew install node@8
 ```
+
 or use the [node-version-manager](https://github.com/nvm-sh/nvm#install--update-script) to control your node versions across multiple projects.
 
 3. Install JDK version 1.8 for MacOS by using the installer from the Oracle website at https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
@@ -99,16 +112,19 @@ or use the [node-version-manager](https://github.com/nvm-sh/nvm#install--update-
 5. Install Docker for Mac by following the instructions from https://store.docker.com/editions/community/docker-ce-desktop-mac
 
 6. Install Git using brew
+
 ```bash
 brew install git
 ```
 
 7. You need Ansible version 2.8 or greater to run the exercise playbooks. If you have not installed Ansible, or have an older version, install or upgrade it using brew
+
 ```bash
 brew install ansible
 ```
 
 8. Download and uncompress the OpenShift 3.11 client binary archive. Copy the ***oc*** binary to ***/usr/local/bin*** folder on your system
+
 ```bash
 curl -L -O https://mirror.openshift.com/pub/openshift-v4/clients/oc/4.5/macosx/oc.tar.gz
 tar xzvf oc.tar.gz
@@ -155,23 +171,29 @@ Windows will restart a couple of times after enabling Hyper-V and continue with 
 11. Execute the following commands in the ***Windows Command Prompt*** to run Ansible playbooks on Windows systems:
 
 * Pull the container image containing the tools and utilities that are required for running Ansible playbooks:
+
 ```bash
 docker pull quay.io/redhat/do500-toolbox
 ```
+
 * Create a working directory under your ***C:\*** drive to store the lab exercise files and Ansible playbooks
+
 ```bash
 mkdir C:\do500-workspace
 ```
 
 * Launch the container and run a quick test:
+
 ```bash
 docker run -it -v C:/do500-workspace:/home/tool-box/workarea:Z quay.io/redhat/do500-toolbox /bin/bash
 ```
+
 <p class="tip">
 <b>NOTE</b> - When you launch the container for the very first time, you will be prompted by Docker, as well as the Windows security subsystem to allow read and write access to the ***C:\do500-workspace*** directory. Allow read and write access to this directory by entering your Windows username and password when prompted.
 </p>
 
 * Once you are inside the container, you can log in to the OpenShift cluster using the OpenShift ***oc*** command-line client, and verify that Ansible is installed:
+
 ```bash
 bash-4.4$ oc login -u <username> -p <password> <CLUSTER_URL>
 bash-4.4$ oc version
@@ -182,11 +204,14 @@ bash-4.4$ exit
 Your instructor will provide the ***username*** and ***password*** information for the OpenShift cluster when you are ready to run the lab exercises.
 
 ## Git and Containers 101
+
  - Git tutorial covering the basics - https://try.github.io/
  - Handy guide for those new to containers - https://developers.redhat.com/blog/2018/02/22/container-terminology-practical-introduction/
 
 ## Setup your IDE
+
 The following plug-ins are useful for providing syntax highlighting for various lab files:
+
  - YAML Syntax Highlighter
  - Autosave
  - JavaScript Syntax Highlighter
