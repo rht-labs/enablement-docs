@@ -308,7 +308,7 @@ NOTE - a good practice for teams is to try and increase the code coverage metric
 </p>
 
 
-### Opional Exercise - Nightly light performance testing
+### Optional Exercise - Nightly light performance testing
 > _In this part of the exercise, we will execute light performance tasks in our API to collect data about throughput time in hopes if the API ever has some `Sam` quality code checked in, we will spot it_
 
 An arbitrary value for the APIs to respond in has been chosen. It is set in the `todolist/tasks/perf-test.js` file. In this exercise we will get Jenkins to execute the tests and fail based on the score set there!
