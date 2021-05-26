@@ -1,4 +1,4 @@
-# An Enslaved Hope
+# A GNU Hope
 
 > In this exercise we will introduce some new Jenkins agents that will be used in later exercises. We will also look at an alternative approach to doing build pipelines by creating an OpenShift buildConfig that contains our Jenkinsfile.
 
