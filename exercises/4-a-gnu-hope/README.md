@@ -1,4 +1,4 @@
-# A GNU Hope
+# An GNU Hope
 
 > In this exercise we will introduce some new Jenkins agents that will be used in later exercises. We will also look at an alternative approach to doing build pipelines by creating an OpenShift buildConfig that contains our Jenkinsfile.
 
@@ -62,7 +62,12 @@ _____
 
 3. The ZAP image we will use is pre-built and hosted on Quay. The Dockerfile used to built it can be found on the Red Hat Communities of Practice Containers Quickstarts repository, along with a host of other useful [Jenkins agents](https://github.com/redhat-cop/containers-quickstarts/tree/master/jenkins-agents). To save time, we will use a prebuilt image. As we did with our `jenkins-agent-npm`, let's add some `pre_steps` for the applier to pull this image into our cluster and label it for use in Jenkins.
 
-<kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 inventory/host_vars/ci-cd-tooling.yml</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```yaml
 # JENKINS AGENTS
 - object: jenkins-agent-nodes
@@ -72,7 +77,7 @@ _____
       pre_steps:
         - role: casl-ansible/roles/openshift-imagetag
           vars:
-            source_img: "quay.io/rht-labs/jenkins-slave-zap:do500.v3"
+            source_img: "quay.io/rht-labs/jenkins-slave-zap:do500.v2"
             img_tag: "jenkins-agent-zap:latest"
         - role: casl-ansible/roles/openshift-labels
           vars:
@@ -83,6 +88,81 @@ _____
       - jenkins-agents
       - zap-agent
 ```
+
+#### ** Entire File **
+
+```yaml
+---
+ci_cd:
+  IMAGE_STREAM_NAMESPACE: "{{ ci_cd_namespace }}"
+
+ansible_connection: local
+
+openshift_cluster_content:
+- galaxy_requirements:
+  - "{{ inventory_dir }}/../exercise-requirements.yml"
+- object: ci-cd-tooling
+  content:
+    - name: "nexus"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/nexus/nexus-deployment-template.yml"
+      params: "{{ playbook_dir }}/params/nexus"
+      tags:
+        - nexus
+    - name: "jenkins-mongodb"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/mongodb-ephemeral.yml"
+      params: "{{ playbook_dir }}/params/mongodb"
+      tags:
+        - mongodb
+    - name: "jenkins"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/jenkins/jenkins-persistent-template.yml"
+      params: "{{ playbook_dir }}/params/jenkins"
+      post_steps:
+        - role: casl-ansible/roles/openshift-imagetag
+          vars:
+            source_img: "quay.io/rht-labs/enablement-npm:latest"
+            img_tag: "jenkins-agent-npm:latest"
+        - role: casl-ansible/roles/openshift-labels
+          vars:
+            label: "role=jenkins-slave"
+            target_object: "imagestream"
+            target_name: "jenkins-agent-npm"
+      tags:
+        - jenkins
+- object: ci-cd-builds
+  content:
+    - name: "jenkins-s2i"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/jenkins-s2i-build-template-with-secret.yml"
+      params: "{{ playbook_dir }}/params/jenkins-s2i"
+      params_from_vars: "{{ ci_cd }}"
+      tags:
+        - jenkins
+# JENKINS AGENTS
+- object: jenkins-agent-nodes
+  content:
+    - name: jenkins-agent-zap
+      namespace: "{{ ci_cd_namespace }}"
+      pre_steps:
+        - role: casl-ansible/roles/openshift-imagetag
+          vars:
+            source_img: "quay.io/rht-labs/jenkins-slave-zap:do500.v2"
+            img_tag: "jenkins-agent-zap:latest"
+        - role: casl-ansible/roles/openshift-labels
+          vars:
+            label: "role=jenkins-slave"
+            target_object: "imagestream"
+            target_name: "jenkins-agent-zap"
+      tags:
+      - jenkins-agents
+      - zap-agent
+
+```
+
+<!-- tabs:end -->
+
 ![zap-object](../images/exercise4/zap-object.png)
 
 4. Run the ansible playbook filtering with tag `zap` so only the zap build pods are run.
@@ -107,21 +187,110 @@ ansible-playbook apply.yml -e target=tools \
 
 1. Create an object in `inventory/host_vars/ci-cd-tooling.yml` called `arachni` and add the following variables to tell your template where to find the agent definition to be built.
 
-<kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
-```yaml
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 inventory/host_vars/ci-cd-tooling.yml</span></kbd>
 
-  arachni:
-    SOURCE_REPOSITORY_URL: "{{ cop_quickstarts }}"
-    SOURCE_CONTEXT_DIR: jenkins-agents/jenkins-agent-arachni
-    BUILDER_IMAGE_NAME: quay.io/openshift/origin-jenkins-agent-base:4.5
-    NAME: jenkins-agent-arachni
-    SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
+<!-- tabs:start -->
+
+#### ** Important Part **
+
+```yaml
+arachni:
+  SOURCE_REPOSITORY_URL: "{{ cop_quickstarts }}"
+  SOURCE_CONTEXT_DIR: jenkins-agents/jenkins-agent-arachni
+  BUILDER_IMAGE_NAME: quay.io/openshift/origin-jenkins-agent-base:4.5
+  NAME: jenkins-agent-arachni
+  SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
 ```
+
+#### ** Entire File **
+
+```yaml
+---
+ci_cd:
+  IMAGE_STREAM_NAMESPACE: "{{ ci_cd_namespace }}"
+
+arachni:
+  SOURCE_REPOSITORY_URL: "{{ cop_quickstarts }}"
+  SOURCE_CONTEXT_DIR: jenkins-agents/jenkins-agent-arachni
+  BUILDER_IMAGE_NAME: quay.io/openshift/origin-jenkins-agent-base:4.5
+  NAME: jenkins-agent-arachni
+  SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
+
+ansible_connection: local
+
+openshift_cluster_content:
+- galaxy_requirements:
+  - "{{ inventory_dir }}/../exercise-requirements.yml"
+- object: ci-cd-tooling
+  content:
+    - name: "nexus"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/nexus/nexus-deployment-template.yml"
+      params: "{{ playbook_dir }}/params/nexus"
+      tags:
+        - nexus
+    - name: "jenkins-mongodb"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/mongodb-ephemeral.yml"
+      params: "{{ playbook_dir }}/params/mongodb"
+      tags:
+        - mongodb
+    - name: "jenkins"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/jenkins/jenkins-persistent-template.yml"
+      params: "{{ playbook_dir }}/params/jenkins"
+      post_steps:
+        - role: casl-ansible/roles/openshift-imagetag
+          vars:
+            source_img: "quay.io/rht-labs/enablement-npm:latest"
+            img_tag: "jenkins-agent-npm:latest"
+        - role: casl-ansible/roles/openshift-labels
+          vars:
+            label: "role=jenkins-slave"
+            target_object: "imagestream"
+            target_name: "jenkins-agent-npm"
+      tags:
+        - jenkins
+- object: ci-cd-builds
+  content:
+    - name: "jenkins-s2i"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/jenkins-s2i-build-template-with-secret.yml"
+      params: "{{ playbook_dir }}/params/jenkins-s2i"
+      params_from_vars: "{{ ci_cd }}"
+      tags:
+        - jenkins
+- object: jenkins-agent-nodes
+  content:
+    - name: jenkins-agent-zap
+      namespace: "{{ ci_cd_namespace }}"
+      pre_steps:
+        - role: casl-ansible/roles/openshift-imagetag
+          vars:
+            source_img: "quay.io/rht-labs/jenkins-slave-zap:do500.v2"
+            img_tag: "jenkins-agent-zap:latest"
+        - role: casl-ansible/roles/openshift-labels
+          vars:
+            label: "role=jenkins-slave"
+            target_object: "imagestream"
+            target_name: "jenkins-agent-zap"
+      tags:
+      - jenkins-agents
+      - zap-agent
+```
+
+<!-- tabs:end -->
+
 ![arachni-object-parameters](../images/exercise4/arachni-object-parameters.png)
 
 2. Add the definition below underneath the Zap config
 
-<kbd>📝 *inventory/host_vars/ci-cd-tooling.yml*</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 inventory/host_vars/ci-cd-tooling.yml</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```yaml
     - name: jenkins-agent-arachni
       template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/.openshift/templates/jenkins-agent-generic-template.yml"
@@ -131,6 +300,93 @@ ansible-playbook apply.yml -e target=tools \
       - jenkins-agents
       - arachni-agent
 ```
+
+#### ** Entire File **
+
+```yaml
+---
+ci_cd:
+  IMAGE_STREAM_NAMESPACE: "{{ ci_cd_namespace }}"
+
+arachni:
+  SOURCE_REPOSITORY_URL: "{{ cop_quickstarts }}"
+  SOURCE_CONTEXT_DIR: jenkins-agents/jenkins-agent-arachni
+  BUILDER_IMAGE_NAME: quay.io/openshift/origin-jenkins-agent-base:4.5
+  NAME: jenkins-agent-arachni
+  SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
+
+ansible_connection: local
+
+openshift_cluster_content:
+- galaxy_requirements:
+  - "{{ inventory_dir }}/../exercise-requirements.yml"
+- object: ci-cd-tooling
+  content:
+    - name: "nexus"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/nexus/nexus-deployment-template.yml"
+      params: "{{ playbook_dir }}/params/nexus"
+      tags:
+        - nexus
+    - name: "jenkins-mongodb"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/mongodb-ephemeral.yml"
+      params: "{{ playbook_dir }}/params/mongodb"
+      tags:
+        - mongodb
+    - name: "jenkins"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ openshift_templates_raw }}/{{ openshift_templates_raw_version_tag }}/jenkins/jenkins-persistent-template.yml"
+      params: "{{ playbook_dir }}/params/jenkins"
+      post_steps:
+        - role: casl-ansible/roles/openshift-imagetag
+          vars:
+            source_img: "quay.io/rht-labs/enablement-npm:latest"
+            img_tag: "jenkins-agent-npm:latest"
+        - role: casl-ansible/roles/openshift-labels
+          vars:
+            label: "role=jenkins-slave"
+            target_object: "imagestream"
+            target_name: "jenkins-agent-npm"
+      tags:
+        - jenkins
+- object: ci-cd-builds
+  content:
+    - name: "jenkins-s2i"
+      namespace: "{{ ci_cd_namespace }}"
+      template: "{{ playbook_dir }}/templates/jenkins-s2i-build-template-with-secret.yml"
+      params: "{{ playbook_dir }}/params/jenkins-s2i"
+      params_from_vars: "{{ ci_cd }}"
+      tags:
+        - jenkins
+- object: jenkins-agent-nodes
+  content:
+    - name: jenkins-agent-zap
+      namespace: "{{ ci_cd_namespace }}"
+      pre_steps:
+        - role: casl-ansible/roles/openshift-imagetag
+          vars:
+            source_img: "quay.io/rht-labs/jenkins-slave-zap:do500.v2"
+            img_tag: "jenkins-agent-zap:latest"
+        - role: casl-ansible/roles/openshift-labels
+          vars:
+            label: "role=jenkins-slave"
+            target_object: "imagestream"
+            target_name: "jenkins-agent-zap"
+      tags:
+      - jenkins-agents
+      - zap-agent
+    - name: jenkins-agent-arachni
+      template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/.openshift/templates/jenkins-agent-generic-template.yml"
+      params_from_vars: "{{ arachni }}"
+      namespace: "{{ ci_cd_namespace }}"
+      tags:
+      - jenkins-agents
+      - arachni-agent
+```
+
+<!-- tabs:end -->
+
 ![arachni-object](../images/exercise4/arachni-object.png)
 
 3. Run the ansible playbook filtering with tag `arachni` so only the arachni build pods are run.
@@ -175,7 +431,12 @@ NAME=todolist
 
 4. Create a new object in `.openshift-applier/inventory/group_vars/all.yml` to drive the `ocp-pipeline` template with the parameters file you've just created. It can be put under the existing `todolist-build` object.
 
-<kbd>📝 *.openshift-applier/inventory/group_vars/all.yml*</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 .openshift-applier/inventory/group_vars/all.yml</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```yaml
   - name: todolist-pipeline
     template: "{{ playbook_dir }}/templates/ocp-pipeline.yml"
@@ -184,6 +445,83 @@ NAME=todolist
     tags:
     - pipeline
 ```
+
+#### ** Entire File **
+
+```yaml
+---
+app_name: todolist
+
+build:
+  NAME: '{{ app_name }}'
+deploy:
+  dev:
+    PIPELINES_NAMESPACE: '{{ ci_cd_namespace }}'
+    NAME: '{{ app_name }}'
+    NAMESPACE: '{{ dev_namespace }}'
+    DEPLOYER_USER: jenkins
+    NODE_ENV: dev
+  test:
+    PIPELINES_NAMESPACE: '{{ ci_cd_namespace }}'
+    NAME: '{{ app_name }}'
+    NAMESPACE: '{{ test_namespace }}'
+    DEPLOYER_USER: jenkins
+    NODE_ENV: test
+
+db:
+  MONGODB_DATABASE: '{{ app_name }}'
+
+openshift_cluster_content:
+  - object: app-builds
+    content:
+      - name: todolist-build
+        template: '{{ playbook_dir }}/templates/todolist-build.yml'
+        params_from_vars: '{{ build }}'
+        namespace: '{{ ci_cd_namespace }}'
+        tags:
+          - build
+      - name: todolist-pipeline
+        template: "{{ playbook_dir }}/templates/ocp-pipeline.yml"
+        params: "{{ playbook_dir }}/params/ocp-pipeline"
+        namespace: "{{ ci_cd_namespace }}"
+        tags:
+        - pipeline
+  - object: deploy-dev
+    content:
+      - name: todolist
+        template: '{{ playbook_dir }}/templates/todolist-deploy.yml'
+        params_from_vars: '{{ deploy.dev }}'
+        namespace: '{{ dev_namespace }}'
+        tags:
+          - deploy
+          - dev
+      - name: todolist-db
+        template: '{{ playbook_dir }}/templates/mongodb.yml'
+        params_from_vars: '{{ db }}'
+        namespace: '{{ dev_namespace }}'
+        tags:
+          - deploy
+          - dev
+  - object: deploy-test
+    content:
+      - name: todolist
+        template: '{{ playbook_dir }}/templates/todolist-deploy.yml'
+        params_from_vars: '{{ deploy.test }}'
+        namespace: '{{ test_namespace }}'
+        tags:
+          - deploy
+          - test
+      - name: todolist-db
+        template: '{{ playbook_dir }}/templates/mongodb.yml'
+        params_from_vars: '{{ db }}'
+        namespace: '{{ test_namespace }}'
+        tags:
+          - deploy
+          - test
+```
+
+<!-- tabs:end -->
+
 ![ocp-pipeline-applier](../images/exercise4/ocp-pipeline-applier.png)
 
 5. Log in to OpenShift using the `oc` client, and use the OpenShift Applier to create the cluster content

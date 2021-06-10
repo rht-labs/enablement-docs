@@ -74,7 +74,12 @@ _____
 
 3. Create a new stage called `Security Scan` underneath the `stage("e2e test") { }` section as shown below. This is a parallel stage which will allow us to define additional `stages() {}` inside of it. We will add two stages in there, one for `Zap` and one for `Arachni`. The contents of the `e2e test` have been removed for simplicity.
 
-<kbd>📝 *todolist/Jenkinsfile*</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/Jenkinsfile</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```groovy
         stage("e2e test") {
             // ... stuff in here ....
@@ -91,9 +96,239 @@ _____
         }
 ```
 
+#### ** Entire File **
+
+```groovy
+pipeline {
+
+    agent {
+        // label "" also could have been 'agent any' - that has the same meaning.
+        label "master"
+    }
+
+    environment {
+        // Global Vars
+        NAMESPACE_PREFIX="<YOUR_NAME>"
+        GITLAB_DOMAIN = "<GITLAB_FQDN>"
+        GITLAB_USERNAME = "<GITLAB_USERNAME>"
+
+        PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
+        APP_NAME = "todolist"
+
+        JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
+        JOB_NAME = "${JOB_NAME}".replace("/", "-")
+
+        GIT_SSL_NO_VERIFY = true
+        GIT_CREDENTIALS = credentials("${NAMESPACE_PREFIX}-ci-cd-git-auth")
+    }
+
+    // The options directive is for configuration that applies to the whole job.
+    options {
+        buildDiscarder(logRotator(numToKeepStr:'5'))
+        timeout(time: 15, unit: 'MINUTES')
+        ansiColor('xterm')
+        timestamps()
+    }
+
+    stages {
+        stage("prepare environment for master deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*master)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-test"
+                    env.NODE_ENV = "test"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("prepare environment for develop deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*develop)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-dev"
+                    env.NODE_ENV = "dev"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("node-build") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            steps {
+                sh 'printenv'
+
+                echo '### Install deps ###'
+                sh 'npm install'
+
+                echo '### Running tests ###'
+                sh 'npm run test:all:ci'
+
+                echo '### Running build ###'
+                sh 'npm run build:ci'
+
+                echo '### Packaging App for Nexus ###'
+                sh 'npm run package'
+                sh 'npm run publish'
+                stash 'source'
+            }
+            // Post can be used both on individual stages and for the entire build.
+            post {
+                always {
+                    archive "**"
+                    // ADD TESTS REPORTS HERE
+                    junit 'test-report.xml'
+                    junit 'reports/server/mocha/test-results.xml'
+                    // publish html
+
+                }
+                success {
+                    echo "Git tagging"
+                    script {
+                      env.ENCODED_PSW=URLEncoder.encode(GIT_CREDENTIALS_PSW, "UTF-8")
+                    }
+                    sh'''
+                        git config --global user.email "jenkins@jmail.com"
+                        git config --global user.name "jenkins-ci"
+                        git tag -a ${JENKINS_TAG} -m "JENKINS automated commit"
+                        git push https://${GIT_CREDENTIALS_USR}:${ENCODED_PSW}@${GITLAB_DOMAIN}/${GITLAB_USERNAME}/${APP_NAME}.git --tags
+                    '''
+                }
+                failure {
+                    echo "FAILURE"
+                }
+            }
+        }
+
+        stage("node-bake") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                echo '### Get Binary from Nexus ###'
+                sh  '''
+                        rm -rf package-contents*
+                        curl -v -f http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${JENKINS_TAG}/package-contents.zip -o package-contents.zip
+                        unzip package-contents.zip
+                    '''
+                echo '### Create Linux Container Image from package ###'
+                sh  '''
+                        oc project ${PIPELINES_NAMESPACE} # probs not needed
+                        oc patch bc ${APP_NAME} -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"kind\\":\\"ImageStreamTag\\",\\"name\\":\\"${APP_NAME}:${JENKINS_TAG}\\"}}}}"
+                        oc start-build ${APP_NAME} --from-dir=package-contents/ --follow
+                    '''
+            }
+            // this post step chews up space. uncomment if you want all bake artefacts archived
+            // post {
+                //always {
+                    // archive "**"
+                //}
+            //}
+        }
+
+        stage("node-deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                script {
+                  openshift.withCluster() {
+                    openshift.withProject("${PROJECT_NAMESPACE}") {
+                      echo '### tag image for namespace ###'
+                      openshift.tag("${PIPELINES_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}", "${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### set env vars and image for deployment ###'
+                      openshift.raw("set","env","dc/${APP_NAME}","NODE_ENV=${NODE_ENV}")
+                      openshift.raw("set", "image", "dc/${APP_NAME}", "${APP_NAME}=image-registry.openshift-image-registry.svc:5000/${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### Rollout and Verify OCP Deployment ###'
+                      openshift.selector("dc", "${APP_NAME}").rollout().latest()
+                      openshift.selector("dc", "${APP_NAME}").rollout().status("-w")
+                      openshift.selector("dc", "${APP_NAME}").scale("--replicas=1")
+                      openshift.selector("dc", "${APP_NAME}").related('pods').untilEach("1".toInteger()) {
+                        return (it.object().status.phase == "Running")
+                      }
+                    }
+                  }
+                }
+            }
+        }
+        stage("e2e test") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+              unstash 'source'
+
+              echo '### Install deps ###'
+              sh 'npm install'
+
+              echo '### Running end to end tests ###'
+              sh 'npm run e2e:jenkins'
+            }
+            post {
+                always {
+                    junit 'reports/e2e/specs/*.xml'
+                }
+            }
+        }
+        stage('Security Scan') {
+            parallel {
+                stage('OWASP Scan') {
+
+                }
+                stage('Arachni') {
+
+                }
+            }
+        }
+    }
+}
+```
+
+<!-- tabs:end -->
+
 4. Let's start filling out the configuration for the OWASP Zap scan first. We will set the label to our agent created in previous exercise and a `when` condition to only execute the job when on either the master or develop branch.
 
-<kbd>📝 *todolist/Jenkinsfile*</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/Jenkinsfile</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```groovy
 stage('OWASP Scan') {
     agent {
@@ -107,9 +342,246 @@ stage('OWASP Scan') {
 }
 ```
 
+#### ** Entire File **
+
+```groovy
+pipeline {
+
+    agent {
+        // label "" also could have been 'agent any' - that has the same meaning.
+        label "master"
+    }
+
+    environment {
+        // Global Vars
+        NAMESPACE_PREFIX="<YOUR_NAME>"
+        GITLAB_DOMAIN = "<GITLAB_FQDN>"
+        GITLAB_USERNAME = "<GITLAB_USERNAME>"
+
+        PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
+        APP_NAME = "todolist"
+
+        JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
+        JOB_NAME = "${JOB_NAME}".replace("/", "-")
+
+        GIT_SSL_NO_VERIFY = true
+        GIT_CREDENTIALS = credentials("${NAMESPACE_PREFIX}-ci-cd-git-auth")
+    }
+
+    // The options directive is for configuration that applies to the whole job.
+    options {
+        buildDiscarder(logRotator(numToKeepStr:'5'))
+        timeout(time: 15, unit: 'MINUTES')
+        ansiColor('xterm')
+        timestamps()
+    }
+
+    stages {
+        stage("prepare environment for master deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*master)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-test"
+                    env.NODE_ENV = "test"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("prepare environment for develop deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*develop)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-dev"
+                    env.NODE_ENV = "dev"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("node-build") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            steps {
+                sh 'printenv'
+
+                echo '### Install deps ###'
+                sh 'npm install'
+
+                echo '### Running tests ###'
+                sh 'npm run test:all:ci'
+
+                echo '### Running build ###'
+                sh 'npm run build:ci'
+
+                echo '### Packaging App for Nexus ###'
+                sh 'npm run package'
+                sh 'npm run publish'
+                stash 'source'
+            }
+            // Post can be used both on individual stages and for the entire build.
+            post {
+                always {
+                    archive "**"
+                    // ADD TESTS REPORTS HERE
+                    junit 'test-report.xml'
+                    junit 'reports/server/mocha/test-results.xml'
+                    // publish html
+
+                }
+                success {
+                    echo "Git tagging"
+                    script {
+                      env.ENCODED_PSW=URLEncoder.encode(GIT_CREDENTIALS_PSW, "UTF-8")
+                    }
+                    sh'''
+                        git config --global user.email "jenkins@jmail.com"
+                        git config --global user.name "jenkins-ci"
+                        git tag -a ${JENKINS_TAG} -m "JENKINS automated commit"
+                        git push https://${GIT_CREDENTIALS_USR}:${ENCODED_PSW}@${GITLAB_DOMAIN}/${GITLAB_USERNAME}/${APP_NAME}.git --tags
+                    '''
+                }
+                failure {
+                    echo "FAILURE"
+                }
+            }
+        }
+
+        stage("node-bake") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                echo '### Get Binary from Nexus ###'
+                sh  '''
+                        rm -rf package-contents*
+                        curl -v -f http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${JENKINS_TAG}/package-contents.zip -o package-contents.zip
+                        unzip package-contents.zip
+                    '''
+                echo '### Create Linux Container Image from package ###'
+                sh  '''
+                        oc project ${PIPELINES_NAMESPACE} # probs not needed
+                        oc patch bc ${APP_NAME} -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"kind\\":\\"ImageStreamTag\\",\\"name\\":\\"${APP_NAME}:${JENKINS_TAG}\\"}}}}"
+                        oc start-build ${APP_NAME} --from-dir=package-contents/ --follow
+                    '''
+            }
+            // this post step chews up space. uncomment if you want all bake artefacts archived
+            // post {
+                //always {
+                    // archive "**"
+                //}
+            //}
+        }
+
+        stage("node-deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                script {
+                  openshift.withCluster() {
+                    openshift.withProject("${PROJECT_NAMESPACE}") {
+                      echo '### tag image for namespace ###'
+                      openshift.tag("${PIPELINES_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}", "${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### set env vars and image for deployment ###'
+                      openshift.raw("set","env","dc/${APP_NAME}","NODE_ENV=${NODE_ENV}")
+                      openshift.raw("set", "image", "dc/${APP_NAME}", "${APP_NAME}=image-registry.openshift-image-registry.svc:5000/${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### Rollout and Verify OCP Deployment ###'
+                      openshift.selector("dc", "${APP_NAME}").rollout().latest()
+                      openshift.selector("dc", "${APP_NAME}").rollout().status("-w")
+                      openshift.selector("dc", "${APP_NAME}").scale("--replicas=1")
+                      openshift.selector("dc", "${APP_NAME}").related('pods').untilEach("1".toInteger()) {
+                        return (it.object().status.phase == "Running")
+                      }
+                    }
+                  }
+                }
+            }
+        }
+        stage("e2e test") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+              unstash 'source'
+
+              echo '### Install deps ###'
+              sh 'npm install'
+
+              echo '### Running end to end tests ###'
+              sh 'npm run e2e:jenkins'
+            }
+            post {
+                always {
+                    junit 'reports/e2e/specs/*.xml'
+                }
+            }
+        }
+        stage('Security Scan') {
+            parallel {
+                stage('OWASP Scan') {
+                    agent {
+                        node {
+                            label "jenkins-agent-zap"
+                        }
+                    }
+                    when {
+                        expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+                    }
+                }
+                stage('Arachni') {
+
+                }
+            }
+        }
+    }
+}
+```
+
+<!-- tabs:end -->
+
 5.  Add a `step` with a `sh` command to run the tool by passing in the URL of the app we're going to test.
 
-<kbd>📝 *todolist/Jenkinsfile*</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/Jenkinsfile</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```groovy
 stage('OWASP Scan') {
         agent {
@@ -130,9 +602,254 @@ stage('OWASP Scan') {
 }
 ```
 
+#### ** Entire File **
+
+```groovy
+pipeline {
+
+    agent {
+        // label "" also could have been 'agent any' - that has the same meaning.
+        label "master"
+    }
+
+    environment {
+        // Global Vars
+        NAMESPACE_PREFIX="<YOUR_NAME>"
+        GITLAB_DOMAIN = "<GITLAB_FQDN>"
+        GITLAB_USERNAME = "<GITLAB_USERNAME>"
+
+        PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
+        APP_NAME = "todolist"
+
+        JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
+        JOB_NAME = "${JOB_NAME}".replace("/", "-")
+
+        GIT_SSL_NO_VERIFY = true
+        GIT_CREDENTIALS = credentials("${NAMESPACE_PREFIX}-ci-cd-git-auth")
+    }
+
+    // The options directive is for configuration that applies to the whole job.
+    options {
+        buildDiscarder(logRotator(numToKeepStr:'5'))
+        timeout(time: 15, unit: 'MINUTES')
+        ansiColor('xterm')
+        timestamps()
+    }
+
+    stages {
+        stage("prepare environment for master deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*master)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-test"
+                    env.NODE_ENV = "test"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("prepare environment for develop deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*develop)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-dev"
+                    env.NODE_ENV = "dev"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("node-build") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            steps {
+                sh 'printenv'
+
+                echo '### Install deps ###'
+                sh 'npm install'
+
+                echo '### Running tests ###'
+                sh 'npm run test:all:ci'
+
+                echo '### Running build ###'
+                sh 'npm run build:ci'
+
+                echo '### Packaging App for Nexus ###'
+                sh 'npm run package'
+                sh 'npm run publish'
+                stash 'source'
+            }
+            // Post can be used both on individual stages and for the entire build.
+            post {
+                always {
+                    archive "**"
+                    // ADD TESTS REPORTS HERE
+                    junit 'test-report.xml'
+                    junit 'reports/server/mocha/test-results.xml'
+                    // publish html
+
+                }
+                success {
+                    echo "Git tagging"
+                    script {
+                      env.ENCODED_PSW=URLEncoder.encode(GIT_CREDENTIALS_PSW, "UTF-8")
+                    }
+                    sh'''
+                        git config --global user.email "jenkins@jmail.com"
+                        git config --global user.name "jenkins-ci"
+                        git tag -a ${JENKINS_TAG} -m "JENKINS automated commit"
+                        git push https://${GIT_CREDENTIALS_USR}:${ENCODED_PSW}@${GITLAB_DOMAIN}/${GITLAB_USERNAME}/${APP_NAME}.git --tags
+                    '''
+                }
+                failure {
+                    echo "FAILURE"
+                }
+            }
+        }
+
+        stage("node-bake") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                echo '### Get Binary from Nexus ###'
+                sh  '''
+                        rm -rf package-contents*
+                        curl -v -f http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${JENKINS_TAG}/package-contents.zip -o package-contents.zip
+                        unzip package-contents.zip
+                    '''
+                echo '### Create Linux Container Image from package ###'
+                sh  '''
+                        oc project ${PIPELINES_NAMESPACE} # probs not needed
+                        oc patch bc ${APP_NAME} -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"kind\\":\\"ImageStreamTag\\",\\"name\\":\\"${APP_NAME}:${JENKINS_TAG}\\"}}}}"
+                        oc start-build ${APP_NAME} --from-dir=package-contents/ --follow
+                    '''
+            }
+            // this post step chews up space. uncomment if you want all bake artefacts archived
+            // post {
+                //always {
+                    // archive "**"
+                //}
+            //}
+        }
+
+        stage("node-deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                script {
+                  openshift.withCluster() {
+                    openshift.withProject("${PROJECT_NAMESPACE}") {
+                      echo '### tag image for namespace ###'
+                      openshift.tag("${PIPELINES_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}", "${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### set env vars and image for deployment ###'
+                      openshift.raw("set","env","dc/${APP_NAME}","NODE_ENV=${NODE_ENV}")
+                      openshift.raw("set", "image", "dc/${APP_NAME}", "${APP_NAME}=image-registry.openshift-image-registry.svc:5000/${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### Rollout and Verify OCP Deployment ###'
+                      openshift.selector("dc", "${APP_NAME}").rollout().latest()
+                      openshift.selector("dc", "${APP_NAME}").rollout().status("-w")
+                      openshift.selector("dc", "${APP_NAME}").scale("--replicas=1")
+                      openshift.selector("dc", "${APP_NAME}").related('pods').untilEach("1".toInteger()) {
+                        return (it.object().status.phase == "Running")
+                      }
+                    }
+                  }
+                }
+            }
+        }
+        stage("e2e test") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+              unstash 'source'
+
+              echo '### Install deps ###'
+              sh 'npm install'
+
+              echo '### Running end to end tests ###'
+              sh 'npm run e2e:jenkins'
+            }
+            post {
+                always {
+                    junit 'reports/e2e/specs/*.xml'
+                }
+            }
+        }
+        stage('Security Scan') {
+            parallel {
+                stage('OWASP Scan') {
+                    agent {
+                        node {
+                            label "jenkins-agent-zap"
+                        }
+                    }
+                    when {
+                        expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+                    }
+                    steps {
+                        sh '''
+                            export REPORT_DIR="$WORKSPACE/"
+                            /zap/zap-baseline.py -r index.html -t https://${E2E_TEST_ROUTE} || return_code=$?
+                            echo "exit value was  - " $return_code
+                        '''
+                    }
+                }
+                stage('Arachni') {
+
+                }
+            }
+        }
+    }
+}
+
+```
+
+<!-- tabs:end -->
+
 6.  Finally add the reporting for Jenkins in `post` hook of our Declarative Pipeline. This is to report the findings of the scan in Jenkins as an HTML report.
 
-<kbd>📝 *todolist/Jenkinsfile*</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/Jenkinsfile</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```groovy
 stage('OWASP Scan') {
     agent {
@@ -157,7 +874,7 @@ stage('OWASP Scan') {
               allowMissing: false,
               alwaysLinkToLastBuild: false,
               keepAll: true,
-              reportDir: '/zap/wrk/',
+              reportDir: '',
               reportFiles: 'index.html',
               reportName: 'Zap Branniscan'
             ]
@@ -166,9 +883,266 @@ stage('OWASP Scan') {
 }
 ```
 
+#### ** Entire File **
+
+```groovy
+pipeline {
+
+    agent {
+        // label "" also could have been 'agent any' - that has the same meaning.
+        label "master"
+    }
+
+    environment {
+        // Global Vars
+        NAMESPACE_PREFIX="<YOUR_NAME>"
+        GITLAB_DOMAIN = "<GITLAB_FQDN>"
+        GITLAB_USERNAME = "<GITLAB_USERNAME>"
+
+        PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
+        APP_NAME = "todolist"
+
+        JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
+        JOB_NAME = "${JOB_NAME}".replace("/", "-")
+
+        GIT_SSL_NO_VERIFY = true
+        GIT_CREDENTIALS = credentials("${NAMESPACE_PREFIX}-ci-cd-git-auth")
+    }
+
+    // The options directive is for configuration that applies to the whole job.
+    options {
+        buildDiscarder(logRotator(numToKeepStr:'5'))
+        timeout(time: 15, unit: 'MINUTES')
+        ansiColor('xterm')
+        timestamps()
+    }
+
+    stages {
+        stage("prepare environment for master deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*master)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-test"
+                    env.NODE_ENV = "test"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("prepare environment for develop deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*develop)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-dev"
+                    env.NODE_ENV = "dev"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("node-build") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            steps {
+                sh 'printenv'
+
+                echo '### Install deps ###'
+                sh 'npm install'
+
+                echo '### Running tests ###'
+                sh 'npm run test:all:ci'
+
+                echo '### Running build ###'
+                sh 'npm run build:ci'
+
+                echo '### Packaging App for Nexus ###'
+                sh 'npm run package'
+                sh 'npm run publish'
+                stash 'source'
+            }
+            // Post can be used both on individual stages and for the entire build.
+            post {
+                always {
+                    archive "**"
+                    // ADD TESTS REPORTS HERE
+                    junit 'test-report.xml'
+                    junit 'reports/server/mocha/test-results.xml'
+                    // publish html
+
+                }
+                success {
+                    echo "Git tagging"
+                    script {
+                      env.ENCODED_PSW=URLEncoder.encode(GIT_CREDENTIALS_PSW, "UTF-8")
+                    }
+                    sh'''
+                        git config --global user.email "jenkins@jmail.com"
+                        git config --global user.name "jenkins-ci"
+                        git tag -a ${JENKINS_TAG} -m "JENKINS automated commit"
+                        git push https://${GIT_CREDENTIALS_USR}:${ENCODED_PSW}@${GITLAB_DOMAIN}/${GITLAB_USERNAME}/${APP_NAME}.git --tags
+                    '''
+                }
+                failure {
+                    echo "FAILURE"
+                }
+            }
+        }
+
+        stage("node-bake") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                echo '### Get Binary from Nexus ###'
+                sh  '''
+                        rm -rf package-contents*
+                        curl -v -f http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${JENKINS_TAG}/package-contents.zip -o package-contents.zip
+                        unzip package-contents.zip
+                    '''
+                echo '### Create Linux Container Image from package ###'
+                sh  '''
+                        oc project ${PIPELINES_NAMESPACE} # probs not needed
+                        oc patch bc ${APP_NAME} -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"kind\\":\\"ImageStreamTag\\",\\"name\\":\\"${APP_NAME}:${JENKINS_TAG}\\"}}}}"
+                        oc start-build ${APP_NAME} --from-dir=package-contents/ --follow
+                    '''
+            }
+            // this post step chews up space. uncomment if you want all bake artefacts archived
+            // post {
+                //always {
+                    // archive "**"
+                //}
+            //}
+        }
+
+        stage("node-deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                script {
+                  openshift.withCluster() {
+                    openshift.withProject("${PROJECT_NAMESPACE}") {
+                      echo '### tag image for namespace ###'
+                      openshift.tag("${PIPELINES_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}", "${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### set env vars and image for deployment ###'
+                      openshift.raw("set","env","dc/${APP_NAME}","NODE_ENV=${NODE_ENV}")
+                      openshift.raw("set", "image", "dc/${APP_NAME}", "${APP_NAME}=image-registry.openshift-image-registry.svc:5000/${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### Rollout and Verify OCP Deployment ###'
+                      openshift.selector("dc", "${APP_NAME}").rollout().latest()
+                      openshift.selector("dc", "${APP_NAME}").rollout().status("-w")
+                      openshift.selector("dc", "${APP_NAME}").scale("--replicas=1")
+                      openshift.selector("dc", "${APP_NAME}").related('pods').untilEach("1".toInteger()) {
+                        return (it.object().status.phase == "Running")
+                      }
+                    }
+                  }
+                }
+            }
+        }
+        stage("e2e test") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+              unstash 'source'
+
+              echo '### Install deps ###'
+              sh 'npm install'
+
+              echo '### Running end to end tests ###'
+              sh 'npm run e2e:jenkins'
+            }
+            post {
+                always {
+                    junit 'reports/e2e/specs/*.xml'
+                }
+            }
+        }
+        stage('Security Scan') {
+            parallel {
+                stage('OWASP Scan') {
+                    agent {
+                        node {
+                            label "jenkins-agent-zap"
+                        }
+                    }
+                    when {
+                        expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+                    }
+                    steps {
+                        sh '''
+                            export REPORT_DIR="$WORKSPACE/"
+                            /zap/zap-baseline.py -r index.html -t https://${E2E_TEST_ROUTE} || return_code=$?
+                            echo "exit value was  - " $return_code
+                        '''
+                    }
+                    post {
+                        always {
+                          // publish html
+                          publishHTML target: [
+                              allowMissing: false,
+                              alwaysLinkToLastBuild: false,
+                              keepAll: true,
+                              reportDir: '',
+                              reportFiles: 'index.html',
+                              reportName: 'Zap Branniscan'
+                            ]
+                        }
+                    }
+                }
+                stage('Arachni') {
+
+                }
+            }
+        }
+    }
+}
+```
+
+<!-- tabs:end -->
+
 7. Let's add our Arachni Scan to the second part of the parallel block. The main difference between these sections is Jenkins will report an XML report too for failing the build accordingly. Below is the snippet for the Arachni scanning.
 
-<kbd>📝 *todolist/Jenkinsfile*</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/Jenkinsfile</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```groovy
     stage('Arachni') {
         agent {
@@ -201,6 +1175,285 @@ stage('OWASP Scan') {
         }
     }
 ```
+
+#### ** Entire File **
+
+```groovy
+pipeline {
+
+    agent {
+        // label "" also could have been 'agent any' - that has the same meaning.
+        label "master"
+    }
+
+    environment {
+        // Global Vars
+        NAMESPACE_PREFIX="<YOUR_NAME>"
+        GITLAB_DOMAIN = "<GITLAB_FQDN>"
+        GITLAB_USERNAME = "<GITLAB_USERNAME>"
+
+        PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
+        APP_NAME = "todolist"
+
+        JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
+        JOB_NAME = "${JOB_NAME}".replace("/", "-")
+
+        GIT_SSL_NO_VERIFY = true
+        GIT_CREDENTIALS = credentials("${NAMESPACE_PREFIX}-ci-cd-git-auth")
+    }
+
+    // The options directive is for configuration that applies to the whole job.
+    options {
+        buildDiscarder(logRotator(numToKeepStr:'5'))
+        timeout(time: 15, unit: 'MINUTES')
+        ansiColor('xterm')
+        timestamps()
+    }
+
+    stages {
+        stage("prepare environment for master deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*master)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-test"
+                    env.NODE_ENV = "test"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("prepare environment for develop deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*develop)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-dev"
+                    env.NODE_ENV = "dev"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("node-build") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            steps {
+                sh 'printenv'
+
+                echo '### Install deps ###'
+                sh 'npm install'
+
+                echo '### Running tests ###'
+                sh 'npm run test:all:ci'
+
+                echo '### Running build ###'
+                sh 'npm run build:ci'
+
+                echo '### Packaging App for Nexus ###'
+                sh 'npm run package'
+                sh 'npm run publish'
+                stash 'source'
+            }
+            // Post can be used both on individual stages and for the entire build.
+            post {
+                always {
+                    archive "**"
+                    // ADD TESTS REPORTS HERE
+                    junit 'test-report.xml'
+                    junit 'reports/server/mocha/test-results.xml'
+                    // publish html
+
+                }
+                success {
+                    echo "Git tagging"
+                    script {
+                      env.ENCODED_PSW=URLEncoder.encode(GIT_CREDENTIALS_PSW, "UTF-8")
+                    }
+                    sh'''
+                        git config --global user.email "jenkins@jmail.com"
+                        git config --global user.name "jenkins-ci"
+                        git tag -a ${JENKINS_TAG} -m "JENKINS automated commit"
+                        git push https://${GIT_CREDENTIALS_USR}:${ENCODED_PSW}@${GITLAB_DOMAIN}/${GITLAB_USERNAME}/${APP_NAME}.git --tags
+                    '''
+                }
+                failure {
+                    echo "FAILURE"
+                }
+            }
+        }
+
+        stage("node-bake") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                echo '### Get Binary from Nexus ###'
+                sh  '''
+                        rm -rf package-contents*
+                        curl -v -f http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${JENKINS_TAG}/package-contents.zip -o package-contents.zip
+                        unzip package-contents.zip
+                    '''
+                echo '### Create Linux Container Image from package ###'
+                sh  '''
+                        oc project ${PIPELINES_NAMESPACE} # probs not needed
+                        oc patch bc ${APP_NAME} -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"kind\\":\\"ImageStreamTag\\",\\"name\\":\\"${APP_NAME}:${JENKINS_TAG}\\"}}}}"
+                        oc start-build ${APP_NAME} --from-dir=package-contents/ --follow
+                    '''
+            }
+            // this post step chews up space. uncomment if you want all bake artefacts archived
+            // post {
+                //always {
+                    // archive "**"
+                //}
+            //}
+        }
+
+        stage("node-deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                script {
+                  openshift.withCluster() {
+                    openshift.withProject("${PROJECT_NAMESPACE}") {
+                      echo '### tag image for namespace ###'
+                      openshift.tag("${PIPELINES_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}", "${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### set env vars and image for deployment ###'
+                      openshift.raw("set","env","dc/${APP_NAME}","NODE_ENV=${NODE_ENV}")
+                      openshift.raw("set", "image", "dc/${APP_NAME}", "${APP_NAME}=image-registry.openshift-image-registry.svc:5000/${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### Rollout and Verify OCP Deployment ###'
+                      openshift.selector("dc", "${APP_NAME}").rollout().latest()
+                      openshift.selector("dc", "${APP_NAME}").rollout().status("-w")
+                      openshift.selector("dc", "${APP_NAME}").scale("--replicas=1")
+                      openshift.selector("dc", "${APP_NAME}").related('pods').untilEach("1".toInteger()) {
+                        return (it.object().status.phase == "Running")
+                      }
+                    }
+                  }
+                }
+            }
+        }
+        stage("e2e test") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+              unstash 'source'
+
+              echo '### Install deps ###'
+              sh 'npm install'
+
+              echo '### Running end to end tests ###'
+              sh 'npm run e2e:jenkins'
+            }
+            post {
+                always {
+                    junit 'reports/e2e/specs/*.xml'
+                }
+            }
+        }
+        stage('Security Scan') {
+            parallel {
+                stage('OWASP Scan') {
+                    agent {
+                        node {
+                            label "jenkins-agent-zap"
+                        }
+                    }
+                    when {
+                        expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+                    }
+                    steps {
+                        sh '''
+                            export REPORT_DIR="$WORKSPACE/"
+                            /zap/zap-baseline.py -r index.html -t https://${E2E_TEST_ROUTE} || return_code=$?
+                            echo "exit value was  - " $return_code
+                        '''
+                    }
+                    post {
+                        always {
+                          // publish html
+                          publishHTML target: [
+                              allowMissing: false,
+                              alwaysLinkToLastBuild: false,
+                              keepAll: true,
+                              reportDir: '',
+                              reportFiles: 'index.html',
+                              reportName: 'Zap Branniscan'
+                            ]
+                        }
+                    }
+                }
+                stage('Arachni') {
+                    agent {
+                        node {
+                            label "jenkins-agent-arachni"
+                        }
+                    }
+                    when {
+                        expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+                    }
+                    steps {
+                        sh '''
+                            /arachni/bin/arachni https://${E2E_TEST_ROUTE} --report-save-path=arachni-report.afr
+                            /arachni/bin/arachni_reporter arachni-report.afr --reporter=xunit:outfile=report.xml --reporter=html:outfile=web-report.zip
+                            unzip web-report.zip -d arachni-web-report
+                        '''
+                    }
+                    post {
+                        always {
+                            junit 'report.xml'
+                            publishHTML target: [
+                                allowMissing: false,
+                                alwaysLinkToLastBuild: false,
+                                keepAll: true,
+                                reportDir: 'arachni-web-report',
+                                reportFiles: 'index.html',
+                                reportName: 'Arachni Web Crawl'
+                                ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+<!-- tabs:end -->
 
 8. With this config in place, commit your code (from your terminal). Wait for a few minutes until a new build in Jenkins is triggered:
 
@@ -236,7 +1489,12 @@ NOTE - your build may have failed, or marked as unstable because of the a securi
 
 2. Open the `Jenkinsfile` in the root of the project; move to the `stage("node-build"){ ... }` section. In the `post` section add a block for producing a `HTML` report as part of our builds. This is all that is needed for Jenkins to report the coverage stats.
 
-<kbd>📝 *Jenkinsfile*</kbd>
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/Jenkinsfile</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```groovy
     // Post can be used both on individual stages and for the entire build.
     post {
@@ -255,13 +1513,595 @@ NOTE - your build may have failed, or marked as unstable because of the a securi
         }
 ```
 
+#### ** Entire File **
+
+```groovy
+pipeline {
+
+    agent {
+        // label "" also could have been 'agent any' - that has the same meaning.
+        label "master"
+    }
+
+    environment {
+        // Global Vars
+        NAMESPACE_PREFIX="<YOUR_NAME>"
+        GITLAB_DOMAIN = "<GITLAB_FQDN>"
+        GITLAB_USERNAME = "<GITLAB_USERNAME>"
+
+        PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
+        APP_NAME = "todolist"
+
+        JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
+        JOB_NAME = "${JOB_NAME}".replace("/", "-")
+
+        GIT_SSL_NO_VERIFY = true
+        GIT_CREDENTIALS = credentials("${NAMESPACE_PREFIX}-ci-cd-git-auth")
+    }
+
+    // The options directive is for configuration that applies to the whole job.
+    options {
+        buildDiscarder(logRotator(numToKeepStr:'5'))
+        timeout(time: 15, unit: 'MINUTES')
+        ansiColor('xterm')
+        timestamps()
+    }
+
+    stages {
+        stage("prepare environment for master deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*master)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-test"
+                    env.NODE_ENV = "test"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("prepare environment for develop deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*develop)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-dev"
+                    env.NODE_ENV = "dev"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("node-build") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            steps {
+                sh 'printenv'
+
+                echo '### Install deps ###'
+                sh 'npm install'
+
+                echo '### Running tests ###'
+                sh 'npm run test:all:ci'
+
+                echo '### Running build ###'
+                sh 'npm run build:ci'
+
+                echo '### Packaging App for Nexus ###'
+                sh 'npm run package'
+                sh 'npm run publish'
+                stash 'source'
+            }
+            // Post can be used both on individual stages and for the entire build.
+            post {
+                always {
+                    archive "**"
+                    // ADD TESTS REPORTS HERE
+                    junit 'test-report.xml'
+                    junit 'reports/server/mocha/test-results.xml'
+                    // publish html
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'reports/coverage',
+                        reportFiles: 'index.html',
+                        reportName: 'Code Coverage'
+                    ]
+                }
+                success {
+                    echo "Git tagging"
+                    script {
+                      env.ENCODED_PSW=URLEncoder.encode(GIT_CREDENTIALS_PSW, "UTF-8")
+                    }
+                    sh'''
+                        git config --global user.email "jenkins@jmail.com"
+                        git config --global user.name "jenkins-ci"
+                        git tag -a ${JENKINS_TAG} -m "JENKINS automated commit"
+                        git push https://${GIT_CREDENTIALS_USR}:${ENCODED_PSW}@${GITLAB_DOMAIN}/${GITLAB_USERNAME}/${APP_NAME}.git --tags
+                    '''
+                }
+                failure {
+                    echo "FAILURE"
+                }
+            }
+        }
+
+        stage("node-bake") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                echo '### Get Binary from Nexus ###'
+                sh  '''
+                        rm -rf package-contents*
+                        curl -v -f http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${JENKINS_TAG}/package-contents.zip -o package-contents.zip
+                        unzip package-contents.zip
+                    '''
+                echo '### Create Linux Container Image from package ###'
+                sh  '''
+                        oc project ${PIPELINES_NAMESPACE} # probs not needed
+                        oc patch bc ${APP_NAME} -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"kind\\":\\"ImageStreamTag\\",\\"name\\":\\"${APP_NAME}:${JENKINS_TAG}\\"}}}}"
+                        oc start-build ${APP_NAME} --from-dir=package-contents/ --follow
+                    '''
+            }
+            // this post step chews up space. uncomment if you want all bake artefacts archived
+            // post {
+                //always {
+                    // archive "**"
+                //}
+            //}
+        }
+
+        stage("node-deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                script {
+                  openshift.withCluster() {
+                    openshift.withProject("${PROJECT_NAMESPACE}") {
+                      echo '### tag image for namespace ###'
+                      openshift.tag("${PIPELINES_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}", "${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### set env vars and image for deployment ###'
+                      openshift.raw("set","env","dc/${APP_NAME}","NODE_ENV=${NODE_ENV}")
+                      openshift.raw("set", "image", "dc/${APP_NAME}", "${APP_NAME}=image-registry.openshift-image-registry.svc:5000/${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### Rollout and Verify OCP Deployment ###'
+                      openshift.selector("dc", "${APP_NAME}").rollout().latest()
+                      openshift.selector("dc", "${APP_NAME}").rollout().status("-w")
+                      openshift.selector("dc", "${APP_NAME}").scale("--replicas=1")
+                      openshift.selector("dc", "${APP_NAME}").related('pods').untilEach("1".toInteger()) {
+                        return (it.object().status.phase == "Running")
+                      }
+                    }
+                  }
+                }
+            }
+        }
+        stage("e2e test") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+              unstash 'source'
+
+              echo '### Install deps ###'
+              sh 'npm install'
+
+              echo '### Running end to end tests ###'
+              sh 'npm run e2e:jenkins'
+            }
+            post {
+                always {
+                    junit 'reports/e2e/specs/*.xml'
+                }
+            }
+        }
+        stage('Security Scan') {
+            parallel {
+                stage('OWASP Scan') {
+                    agent {
+                        node {
+                            label "jenkins-agent-zap"
+                        }
+                    }
+                    when {
+                        expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+                    }
+                    steps {
+                        sh '''
+                            export REPORT_DIR="$WORKSPACE/"
+                            /zap/zap-baseline.py -r index.html -t https://${E2E_TEST_ROUTE} || return_code=$?
+                            echo "exit value was  - " $return_code
+                        '''
+                    }
+                    post {
+                        always {
+                          // publish html
+                          publishHTML target: [
+                              allowMissing: false,
+                              alwaysLinkToLastBuild: false,
+                              keepAll: true,
+                              reportDir: '',
+                              reportFiles: 'index.html',
+                              reportName: 'Zap Branniscan'
+                            ]
+                        }
+                    }
+                }
+                stage('Arachni') {
+                    agent {
+                        node {
+                            label "jenkins-agent-arachni"
+                        }
+                    }
+                    when {
+                        expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+                    }
+                    steps {
+                        sh '''
+                            /arachni/bin/arachni https://${E2E_TEST_ROUTE} --report-save-path=arachni-report.afr
+                            /arachni/bin/arachni_reporter arachni-report.afr --reporter=xunit:outfile=report.xml --reporter=html:outfile=web-report.zip
+                            unzip web-report.zip -d arachni-web-report
+                        '''
+                    }
+                    post {
+                        always {
+                            junit 'report.xml'
+                            publishHTML target: [
+                                allowMissing: false,
+                                alwaysLinkToLastBuild: false,
+                                keepAll: true,
+                                reportDir: 'arachni-web-report',
+                                reportFiles: 'index.html',
+                                reportName: 'Arachni Web Crawl'
+                                ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+<!-- tabs:end -->
+
 3. To get the linting working; we will add a new step to our `stage("node-build"){ }` section to lint the JavaScript code. Continuing in the `Jenkinsfile`, After the `npm install`; add a command to run the linting.
+
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 todolist/Jenkinsfile</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
 ```groovy
 echo '### Install deps ###'
 sh 'npm install'
 echo '### Running linting ###'
 sh 'npm run lint'
 ```
+
+#### ** Entire File **
+
+```groovy
+pipeline {
+
+    agent {
+        // label "" also could have been 'agent any' - that has the same meaning.
+        label "master"
+    }
+
+    environment {
+        // Global Vars
+        NAMESPACE_PREFIX="<YOUR_NAME>"
+        GITLAB_DOMAIN = "<GITLAB_FQDN>"
+        GITLAB_USERNAME = "<GITLAB_USERNAME>"
+
+        PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
+        APP_NAME = "todolist"
+
+        JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
+        JOB_NAME = "${JOB_NAME}".replace("/", "-")
+
+        GIT_SSL_NO_VERIFY = true
+        GIT_CREDENTIALS = credentials("${NAMESPACE_PREFIX}-ci-cd-git-auth")
+    }
+
+    // The options directive is for configuration that applies to the whole job.
+    options {
+        buildDiscarder(logRotator(numToKeepStr:'5'))
+        timeout(time: 15, unit: 'MINUTES')
+        ansiColor('xterm')
+        timestamps()
+    }
+
+    stages {
+        stage("prepare environment for master deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*master)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-test"
+                    env.NODE_ENV = "test"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("prepare environment for develop deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+              expression { GIT_BRANCH ==~ /(.*develop)/ }
+            }
+            steps {
+                script {
+                    // Arbitrary Groovy Script executions can do in script tags
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-dev"
+                    env.NODE_ENV = "dev"
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
+                }
+            }
+        }
+        stage("node-build") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            steps {
+                sh 'printenv'
+
+                echo '### Install deps ###'
+                sh 'npm install'
+
+                echo '### Running linting ###'
+                sh 'npm run lint'
+
+                echo '### Running tests ###'
+                sh 'npm run test:all:ci'
+
+                echo '### Running build ###'
+                sh 'npm run build:ci'
+
+                echo '### Packaging App for Nexus ###'
+                sh 'npm run package'
+                sh 'npm run publish'
+                stash 'source'
+            }
+            // Post can be used both on individual stages and for the entire build.
+            post {
+                always {
+                    archive "**"
+                    // ADD TESTS REPORTS HERE
+                    junit 'test-report.xml'
+                    junit 'reports/server/mocha/test-results.xml'
+                    // publish html
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'reports/coverage',
+                        reportFiles: 'index.html',
+                        reportName: 'Code Coverage'
+                    ]
+                }
+                success {
+                    echo "Git tagging"
+                    script {
+                      env.ENCODED_PSW=URLEncoder.encode(GIT_CREDENTIALS_PSW, "UTF-8")
+                    }
+                    sh'''
+                        git config --global user.email "jenkins@jmail.com"
+                        git config --global user.name "jenkins-ci"
+                        git tag -a ${JENKINS_TAG} -m "JENKINS automated commit"
+                        git push https://${GIT_CREDENTIALS_USR}:${ENCODED_PSW}@${GITLAB_DOMAIN}/${GITLAB_USERNAME}/${APP_NAME}.git --tags
+                    '''
+                }
+                failure {
+                    echo "FAILURE"
+                }
+            }
+        }
+
+        stage("node-bake") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                echo '### Get Binary from Nexus ###'
+                sh  '''
+                        rm -rf package-contents*
+                        curl -v -f http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${JENKINS_TAG}/package-contents.zip -o package-contents.zip
+                        unzip package-contents.zip
+                    '''
+                echo '### Create Linux Container Image from package ###'
+                sh  '''
+                        oc project ${PIPELINES_NAMESPACE} # probs not needed
+                        oc patch bc ${APP_NAME} -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"kind\\":\\"ImageStreamTag\\",\\"name\\":\\"${APP_NAME}:${JENKINS_TAG}\\"}}}}"
+                        oc start-build ${APP_NAME} --from-dir=package-contents/ --follow
+                    '''
+            }
+            // this post step chews up space. uncomment if you want all bake artefacts archived
+            // post {
+                //always {
+                    // archive "**"
+                //}
+            //}
+        }
+
+        stage("node-deploy") {
+            agent {
+                node {
+                    label "master"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+                script {
+                  openshift.withCluster() {
+                    openshift.withProject("${PROJECT_NAMESPACE}") {
+                      echo '### tag image for namespace ###'
+                      openshift.tag("${PIPELINES_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}", "${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### set env vars and image for deployment ###'
+                      openshift.raw("set","env","dc/${APP_NAME}","NODE_ENV=${NODE_ENV}")
+                      openshift.raw("set", "image", "dc/${APP_NAME}", "${APP_NAME}=image-registry.openshift-image-registry.svc:5000/${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}")
+
+                      echo '### Rollout and Verify OCP Deployment ###'
+                      openshift.selector("dc", "${APP_NAME}").rollout().latest()
+                      openshift.selector("dc", "${APP_NAME}").rollout().status("-w")
+                      openshift.selector("dc", "${APP_NAME}").scale("--replicas=1")
+                      openshift.selector("dc", "${APP_NAME}").related('pods').untilEach("1".toInteger()) {
+                        return (it.object().status.phase == "Running")
+                      }
+                    }
+                  }
+                }
+            }
+        }
+        stage("e2e test") {
+            agent {
+                node {
+                    label "jenkins-agent-npm"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+              unstash 'source'
+
+              echo '### Install deps ###'
+              sh 'npm install'
+
+              echo '### Running end to end tests ###'
+              sh 'npm run e2e:jenkins'
+            }
+            post {
+                always {
+                    junit 'reports/e2e/specs/*.xml'
+                }
+            }
+        }
+        stage('Security Scan') {
+            parallel {
+                stage('OWASP Scan') {
+                    agent {
+                        node {
+                            label "jenkins-agent-zap"
+                        }
+                    }
+                    when {
+                        expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+                    }
+                    steps {
+                        sh '''
+                            export REPORT_DIR="$WORKSPACE/"
+                            /zap/zap-baseline.py -r index.html -t https://${E2E_TEST_ROUTE} || return_code=$?
+                            echo "exit value was  - " $return_code
+                        '''
+                    }
+                    post {
+                        always {
+                          // publish html
+                          publishHTML target: [
+                              allowMissing: false,
+                              alwaysLinkToLastBuild: false,
+                              keepAll: true,
+                              reportDir: '',
+                              reportFiles: 'index.html',
+                              reportName: 'Zap Branniscan'
+                            ]
+                        }
+                    }
+                }
+                stage('Arachni') {
+                    agent {
+                        node {
+                            label "jenkins-agent-arachni"
+                        }
+                    }
+                    when {
+                        expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+                    }
+                    steps {
+                        sh '''
+                            /arachni/bin/arachni https://${E2E_TEST_ROUTE} --report-save-path=arachni-report.afr
+                            /arachni/bin/arachni_reporter arachni-report.afr --reporter=xunit:outfile=report.xml --reporter=html:outfile=web-report.zip
+                            unzip web-report.zip -d arachni-web-report
+                        '''
+                    }
+                    post {
+                        always {
+                            junit 'report.xml'
+                            publishHTML target: [
+                                allowMissing: false,
+                                alwaysLinkToLastBuild: false,
+                                keepAll: true,
+                                reportDir: 'arachni-web-report',
+                                reportFiles: 'index.html',
+                                reportName: 'Arachni Web Crawl'
+                                ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+<!-- tabs:end -->
 
 4. Save the `Jenkinsfile` and commit it to trigger a build with some more enhancements.
 ```bash
@@ -279,12 +2119,101 @@ git push
 
 6. Fix the error identified by the linter by commenting out the offending line.
 
-<kbd>📝 src/components/TodoItem.vue</kbd>
-```html
+<kbd><span style="color: #e74c3c; font-size: 12pt;">📝 src/components/TodoItem.vue</span></kbd>
+
+<!-- tabs:start -->
+
+#### ** Important Part **
+
+```javascript
     Vue.component("checkbox", Checkbox);
     Vue.component("radio", Radio);
     // let biscuits;
 ```
+
+#### ** Entire File **
+
+```html
+<template>
+  <div>
+    <div class="itemCardAndFlag">
+    <md-list-item
+      @click="markCompleted()"
+      >
+      <checkbox v-model="todoItem.completed" class="checkbox-completed"/>
+
+        <span class="md-list-item-text" :class="{'strike-through': todoItem.completed}">{{ todoItem.title }}</span>
+      </md-list-item>
+      <!-- TODO - SVG for use in Lab3 -->
+        <md-button class="important-flag" @click="markImportant()">
+          <svg :class="{'red-flag': todoItem.important}"  height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" ><path d="M0 0h24v24H0z" fill="none"/><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </md-button>
+    </div>
+  </div>
+</template>
+<script>
+import Vue from "vue";
+import { Checkbox, Radio } from "vue-checkbox-radio";
+Vue.component("checkbox", Checkbox);
+Vue.component("radio", Radio);
+// let biscuits;
+
+export default {
+  name: "TodoItem",
+  props: {
+    // type any object ;)
+    todoItem: {}
+  },
+  methods: {
+    markCompleted() {
+      this.$store.dispatch("updateTodo", { id: this.todoItem._id });
+      console.info("INFO - Mark todo as completed ", this.todoItem.completed);
+    },
+    markImportant() {
+      // TODO - FILL THIS OUT IN THE LAB EXERCISE
+      this.$store.dispatch("updateTodo", {id: this.todoItem._id, important: true});
+      console.info("INFO - Mark todo as important ", this.todoItem.important);
+    }
+  }
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+.md-list-item {
+  width: 320px;
+  max-width: 100%;
+  height: 50px;
+  display: inline-block;
+  overflow: auto;
+}
+
+.md-list-item-text {
+  padding-left: 0.5em;
+}
+
+.itemCardandFlag {
+  display: inline-block;
+}
+
+.strike-through {
+  text-decoration: line-through;
+  font-style: italic;
+}
+
+.important-flag {
+  height: 50px;
+  margin: 0px;
+}
+.red-flag {
+  fill: #cc0000;
+}
+</style>
+
+
+```
+
+<!-- tabs:end -->
 
 7. Save the `TodoItem.vue` and Commit and push your changes to trigger a new build.
 
