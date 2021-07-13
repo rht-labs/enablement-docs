@@ -1,17 +1,29 @@
 # The Manual Menace
 
-> In this exercise learners will use Ansible to drive automated provisioning of Projects in OpenShift, Git, Jenkins and Nexus.
+> In this exercise, learners will use Ansible to drive automated provisioning of Projects in OpenShift, Git, Jenkins and Nexus.
 
 ![automation-xkcd](https://imgs.xkcd.com/comics/automation.png)
 [image-ref](https://xkcd.com/)
 
 ## Exercise Intro
 
-In this exercise we will use automation tooling to create Project namespaces for our `CI/CD` tooling along with the `dev` and `test` namespaces for our deployments to live. We do this manually using the OpenShift CLI; but as we go from cluster to cluster or project to project Dev and Ops teams often find themselves having to redo these tasks again and again. Configuring our cluster using code; we can easily store this in Git and repeat the process again and again. By minimising the time taken to do these repetitive tasks we can accelerate our ability to deliver value to our customers; working on the hard problems they face.
+In this exercise, we will create `dev` and `test` environments to deploy a to-do list application that we will work on later in the course.
+We will also deploy a `ci-cd` namespace that will provide tools to build and test our to-do list app.
+We could do this manually using the OpenShift CLI. However, if we only use the CLI, we will not have a way to redeploy the environment if something goes wrong or if we want to move the the environments to a different server.
+We would need to manually reconfigure the server each time we make a repair or move to a new server.
+Configuring our cluster using code, we can easily save our configurations and create a copy of our environments anywhere in a matter of a few clicks.
+By minimising the time taken to do these repetitive tasks, we accelerate our ability to deliver value to the customer, and we can focus more on improving the product, rather than fixing issues with our deployment environments.
 
-This exercise uses Ansible to drive the creation of the cluster content. In particular; we'll use an implementation called the [OpenShift Applier](https://github.com/redhat-cop/openshift-applier). Once the project namespace have been created; we will add some tools to support CI/CD such as Jenkins, Git and Nexus. These tools will be needed by later lessons to automate the build and deploy of our apps. Again; we will use OpenShift Templates and drive their creation in the cluster using Ansible. To prove things are working, finally we'll delete all our content and re-apply the inventory to re-create our cluster's content.
+This exercise uses Ansible to drive the creation of the cluster content.
+In particular, we will use an implementation called [OpenShift Applier](https://github.com/redhat-cop/openshift-applier).
 
-#### Why is config-as-code important?
+First, we will create the `dev`, `test`, and `ci-cd` environments.
+`dev` and `test` will be where the to-do list application will be deployed.
+In the `ci-cd` namespace, we will add some tools to support CI/CD (Continuous integration/continuous delivery) such as Jenkins, GitLab, and Nexus.
+These tools will be used in following exercises to automate the build and deployment of our apps.
+We will use OpenShift Templates to define the applications that we are deploying, and then we will use `Ansible` to tell OpenShift to deploy the templates. To prove things are working, we will delete all our content and re-apply the inventory to re-create the tools and environments we defined.
+
+#### Why is Configuration-as-Code important?
 
 - Assurance - Prevents unwanted config changes from people making arbitrary changes to environments. No more Snowflake servers!
 - Traceability - Committing config as code means a user has approved and changes can be tracked.
@@ -249,7 +261,6 @@ Go to the top right corner of your `Openshift Web UI` and click in your user nam
 
 ![ocp-copy-login-command](../images/exercise1/api-login-token-0.png)
 
-
 You will be asked to login again, then you should a screen similar to this one:
 
 ![api-login-token](../images/exercise1/api-login-token.png)
@@ -265,6 +276,7 @@ oc login --token=<Your Token> --server=<CLUSTER_URL>
 ```bash
 ansible-playbook apply.yml -i inventory/ -e target=bootstrap
 ```
+
 where the `-e target=bootstrap` is passing an additional variable specifying that we run the `bootstrap` group of the inventory.
 
 <p class="tip">
