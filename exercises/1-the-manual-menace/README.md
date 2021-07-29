@@ -82,7 +82,7 @@ If you're feeling confident and don't want to follow the step-by-step guide thes
 2. Your instructor _may_ have created your cloud IDE for you - if so, login directly to the url provided and move on to Part 2. If not, you will need to create your cloud ide environment now. Open a web and navigate to the following URL, replacing `<CODEREADY-LINK>` with the URL provided by your instructor:
 
 ```
-https://<CODEREADY-LINK>/f?url=https://raw.githubusercontent.com/rht-labs/enablement-framework/main/do500-devfile.yml
+https://<CODEREADY-LINK>/f?url=https://raw.githubusercontent.com/rht-labs/enablement-framework/v1.0.0/do500-devfile.yml
 ```
 
 <p class="tip">
