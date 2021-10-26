@@ -7,7 +7,7 @@
 
 ## Exercise Intro
 
-In this exercise we will use automation tooling to create Project namespaces for our `CI/CD` tooling along with the `dev` and `test` namespaces for our deployments to live. We do this manually using the OpenShift CLI; but as we go from cluster to cluster or project to project Dev and Ops teams often find themselves having to redo these tasks again and again. Configuring our cluster using code; we can easily store this in Git and repeat the process again and again. By minimising the time taken to do these repetitive tasks we can accelerate our ability to deliver value to our customers; working on the hard problems they face.
+In this exercise we will use automation tooling to create Project namespaces for our `CI/CD` tooling along with the `dev` and `test` namespaces for our deployments to live. We do this manually using the OpenShift CLI; but as we go from cluster to cluster or project to project Dev and Ops teams often find themselves having to redo these tasks again and again. Configuring our cluster using code; we can easily store this in Git and repeat the process again and again. By minimizing the time taken to do these repetitive tasks we can accelerate our ability to deliver value to our customers; working on the hard problems they face.
 
 This exercise uses Ansible to drive the creation of the cluster content. In particular; we'll use an implementation called the [OpenShift Applier](https://github.com/redhat-cop/openshift-applier). Once the project namespace have been created; we will add some tools to support CI/CD such as Jenkins, Git and Nexus. These tools will be needed by later lessons to automate the build and deploy of our apps. Again; we will use OpenShift Templates and drive their creation in the cluster using Ansible. To prove things are working, finally we'll delete all our content and re-apply the inventory to re-create our cluster's content.
 
@@ -31,7 +31,7 @@ As a learner you will be able to
 
 - [GitLab](https://about.gitlab.com/) - Community driven Git server now with integrated DevOps Toolchain.
 - [Nexus](https://www.sonatype.com/nexus-repository-sonatype) - Repository manager for storing lots of application types. Can also host `npm` and `Docker` registries.
-- [Jenkins](https://jenkins.io/) - OpenSource Build automation server. Highly customisable with plugins.
+- [Jenkins](https://jenkins.io/) - OpenSource Build automation server. Highly customizable with plugins.
 - [Ansible](https://www.ansible.com/) - IT Automation tool used to provision and manage state of cloud and physical infrastructure.
 - [OpenShift Applier](https://github.com/redhat-cop/openshift-applier) - Used to apply OpenShift objects to an OpenShift Cluster.
 - [Eclipse Che](https://www.eclipse.org/che/) - A cloud ide accessible from your browser, we use a version called [`CodeReady Workspaces`](https://developers.redhat.com/products/codeready-workspaces/overview)
@@ -117,7 +117,7 @@ https://<CODEREADY-LINK>/f?url=https://raw.githubusercontent.com/rht-labs/enable
 
 ![projects-initial](../images/exercise1/projects-initial.png)
 
-2. Open the `enablement-ci-cd` folder in your cloud ide (or your favourite editor if using a local machine). The project is laid out as follows
+2. Open the `enablement-ci-cd` folder in your cloud ide (or your favorite editor if using a local machine). The project is laid out as follows
 
 ```
 .
@@ -229,7 +229,7 @@ And make sure that your default terminal is set to `zsh`:
 echo "zsh" >> ~/.bashrc
 ```
 
-9.  Change to the `enablement-ci-cd` directory
+9.  Change to the `enablement-ci-cd` directory (if you are not already there)
 
 ```bash
 cd enablement-ci-cd
@@ -563,7 +563,7 @@ git commit -m "Adding Jenkins and Jenkins s2i"
 git push
 ```
 
-9. Now your code is commited; run the OpenShift Applier to add the config to the cluster
+9. Now your code is committed; run the OpenShift Applier to add the config to the cluster
 
 ```bash
 ansible-playbook apply.yml -e target=tools \
