@@ -603,7 +603,7 @@ git push
 ![multibranch-select-git](../images/exercise4/multibranch-select-git.png)
 
 7. Fill in the Git settings with your `todolist` GitLab url and set the credentials as you've done before. `https://gitlab.<APPS_URL>/<YOUR_NAME>/todolist.git`
-![multibranch-git](../images/exercise4/multibranch-git.png)
+![multibranch-git](../images/exercise2/multibranch-git.png)
 
 8. Set the `Scan Multibranch Pipeline Triggers` to be Scan by webhook and set the token to be `todolist` as we set at the beginning of the exercise. This will trigger the job to scan for changes in the repo when there are pushes. 
 ![multibranch-webhook](../images/exercise2/multibranch-webhook.png)
