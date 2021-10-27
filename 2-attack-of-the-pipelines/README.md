@@ -32,7 +32,7 @@ As a learner by the end of this lesson you will be able to:
 ## Tools and Frameworks
 > The following tools are used throughout this exercise. Familiarity with them is not required but knowing what they are may help. You will not need to install Vue or MongoDB. They are taken care of by our `todolist` app.
 
-1. [Jenkins](https://jenkins.io/) - OpenSource build automation server; highly customisable through plugins
+1. [Jenkins](https://jenkins.io/) - OpenSource build automation server; highly customizable through plugins
 2. [Node.js](https://nodejs.org/en/) - Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient. Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
 3. [MongoDB](https://www.mongodb.com/what-is-mongodb) - MongoDB stores data in flexible, JSON-like documents, meaning fields can vary from document to document and data structure can be changed over time
 4. [VueJS](https://vuejs.org/) - Vue (pronounced /vjuː/, like view) is a progressive framework for building user interfaces. It is designed from the ground up to be incrementally adoptable, and can easily scale between a library and a framework depending on different use cases. It consists of an approachable core library that focuses on the view layer only, and an ecosystem of supporting libraries that helps you tackle complexity in large Single-Page Applications.
@@ -470,7 +470,7 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
 
 2. This job will take in the BUILD_TAG from the previous one so check the `This project is parameterized` box on the General tab.
     * Add string parameter type
-    * set the Name to `BUILD_TAG`. This will be available to the job as an Enviroment Variable.
+    * set the Name to `BUILD_TAG`. This will be available to the job as an Environment Variable.
     * You can set `dev-todolist-build.` as the default value for ease when triggering manually.
     * The description is not required but a handy one for reference would be `${JOB_NAME}.${BUILD_NUMBER} of previous build e.g. dev-todolist-build.1232`
 <p class="tip">
@@ -486,7 +486,7 @@ BUILD_TAG=${JOB_NAME}.${BUILD_NUMBER}
 
 4. There is no Git or SCM needed for this job so move down to the Build Environment and tick `Delete workspace before build starts`
 
-5. Move on to the Build section and select `Add build step`. From the dropdown select `Execute shell`. On the box the appears; insert the following, to pull the package from Nexus. We patch the BuildConfig with the Jenkins Tag to get traceablility from feature to source code to built item. Finally; the oc start-build command is run:
+5. Move on to the Build section and select `Add build step`. From the dropdown select `Execute shell`. On the box the appears; insert the following, to pull the package from Nexus. We patch the BuildConfig with the Jenkins Tag to get traceability from feature to source code to built item. Finally; the oc start-build command is run:
 Remember to replace `<YOUR_NAME>` accordingly.
 ```bash
 #!/bin/bash
@@ -531,7 +531,7 @@ echo "### END DEPLOY IMAGE ###"
 2. On the view that loads; Give the new view a sensible name like `dev-todolist-pipeline` and select Build Pipeline View
 ![new-pipeline](../images/exercise2/new-pipeline.png)
 
-3. Set the Pipeline Flow's Inital Job to `dev-todolist-build` and save.
+3. Set the Pipeline Flow's Initial Job to `dev-todolist-build` and save.
 ![pipeline-flow](../images/exercise2/pipeline-flow.png)
 
 4. You should now see the pipeline view. Run the pipeline by hitting run (you can move onto the next part while it is running as it may take some time).
@@ -541,7 +541,8 @@ echo "### END DEPLOY IMAGE ###"
     <b>NOTE</b> - The pipeline may fail on the first run. In such cases, re-run the pipeline once more and the three stages will run successfully and show three green cards.
 </p>
 
-5. To check the deployment in OpenShift; open the web console and go to your `dev` namespace. You should see the deployment was successful; hit the URL to open the app and play with the deployed.
+5. To check the deployment in OpenShift; open the web console and go to your `dev` namespace. You should see the deployment was successful; hit the URL (the arrow icon) to open the app and play with the deployed.
+
 ![ocp-deployment](../images/exercise2/ocp-deployment.png)
 
 ### Part 4 - The Jenkinsfile
