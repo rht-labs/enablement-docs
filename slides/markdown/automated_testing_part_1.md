@@ -1,7 +1,62 @@
 <!-- .slide: data-background-image="images/RH_NewBrand_Background.png" -->
 ## DevOps Culture and Practice <!-- {_class="course-title"} -->
-### Automated Testing Part 1 <!-- {_class="title-color"} -->
+### DDD, BDD & TDD <!-- {_class="title-color"} -->
 DO500 <!-- {_class="title-color"} -->
+
+
+
+<!-- .slide: id="ddd" -->
+## Domain Driven Design
+
+
+
+### Domain Driven Design
+#### _What Is It?_
+Domain-driven design (DDD) is an approach to developing software for complex 
+needs by deeply connecting the implementation to an evolving model of the core 
+business concepts.
+
+
+
+![DDD](images/tdd/ddd.png)
+
+
+
+### Domain Driven Design
+#### _How Does It Help?_
+* Placing the project's primary focus on the core domain and domain logic
+* Basing complex designs on a model of the domain
+* Initiating a creative collaboration between technical and domain experts to iteratively 
+refine a conceptual model that addresses particular domain problems
+* Bridge the gap between domain experts and developers by using the same language to 
+create the same understanding
+
+
+
+<!-- .slide: id="bdd" -->
+## Behavior Driven Development
+
+
+
+### Behavior Driven Development
+#### _What Is It?_
+Behavior-Driven Development (BDD) is a Test-First, Agile Testing practice 
+that provides Built-In Quality by defining (and potentially automating) tests 
+before, or as part of, specifying system behavior. 
+
+
+
+![BDD](images/tdd/bdd.jpg)
+
+
+
+### Behavior Driven Development
+#### _How Does It Help?_
+* Creates a shared understanding of requirements between 
+the business and the Agile Teams
+* Helps guide development, decrease rework, and increase flow
+* Creates business-facing scenarios that attempt to describe the behavior of a 
+Story, Feature, or Capability from a user's perspective.
 
 
 
@@ -22,6 +77,10 @@ This practice is particularly powerful when combined with
 
 
 
+![TDD](images/tdd/tdd.jpg)
+
+
+
 ### Test Driven Development
 #### _How Does It Help?_
 * Creates a detailed specification for the code
@@ -32,6 +91,11 @@ This practice is particularly powerful when combined with
 
 
 ![TDD](images/tdd/TDD_Lifecycle.png)
+
+
+
+### DDD & BDD & TDD
+![TDD](images/tdd/ddd-bdd-tdd.jpg)
 
 
 
