@@ -243,9 +243,9 @@ ansible-galaxy install -r requirements.yml --roles-path=roles
 
 11. Apply the inventory by logging into OpenShift on the terminal.
 
-You will need to retrieve a token first, by browsing to the token request page. This is available from the `OpenShift Web UI` ([more information on the FAQ page here](../faq-page/README.md)) once you are logged in.
+You will need to retrieve a token first, by browsing to the token request page. This is available from the `OpenShift Web UI` ([more information on the FAQ page here](/faq-page/README.md)) once you are logged in.
 
-Go to the top right corner of your `Openshift Web UI` and click in your user name, then `Copy Login Command`.
+Go to the top right corner of your `OpenShift Web UI` and click in your user name, then `Copy Login Command`.
 
 ![ocp-copy-login-command](../images/exercise1/api-login-token-0.png)
 
