@@ -328,8 +328,10 @@ An arbitrary value for the APIs to respond in has been chosen. It is set in the 
 5. Set the `Color ANSI Console Output` on the Build Environment section.
 
 6. Click `Add build step` and select `Execute shell` and add the following to it, replacing `<YOUR_NAME>` as expected. We will just test the `create` and `show` API for the moment. We are grabbing the response code of the perf-test to keep Jenkins running both shells steps and then exiting with whichever fails:
+
 ```bash
-export E2E_TEST_ROUTE=todolist-<YOUR_NAME>-dev.<APPS_URL>
+export NODE_TLS_REJECT_UNAUTHORIZED='0'
+export E2E_TEST_ROUTE=todolist-team5-dev.apps.sogei-1.emea-1.rht-labs.com
 npm install
 set +e
 npm run perf-test:create
