@@ -1,59 +1,59 @@
 <!-- .slide: data-background-image="images/RH_NewBrand_Background.png"  -->
 
 ## DevOps Culture and Practice <!-- {_class="course-title"} -->
-### Agile Ice Breakers <!-- {_class="title-color"} -->
+### Agile : briser la glace  <!-- {_class="title-color"} -->
 DO500 <!-- {_class="title-color"} -->
 
 
 
-## Why Ice Breakers?
-- An effective way of starting a team-building event
-- Help people get to know each other
+## Pourquoi briser la glace ?
+- Un moyen efficace de lancer un événement de renforcement de la cohésion d'équipe
+- Aidez les gens à se connaître
 
-**When?**   
-- Participants come from different backgrounds
-- People need to bond quickly so as to work towards a common goal
-- A team is newly formed
+**Quand?**
+- Les participants viennent d'horizons différents
+- Les personnes doivent se lier rapidement afin de travailler à un objectif commun.
+- Une équipe est nouvellement formée
 
 
 
-## Animals
+## Animaux
 <!-- .slide: data-background-image="images/chef-background.png" class="white-style" -->
 
 
 
-## What is it?
+## Qu'est ce que c'est?
 ![Draw an animal](images/animals.png)<!-- {_class="inline-image"} -->
-Draw a simple representation of an animal that you feel represents your current mood. Hang on to these.
+Dessinez une représentation simple d'un animal qui, selon vous, représente votre humeur du moment. Conservez le précieusement.
 
 
 
-## Exercise - Back to the Animals!
-Introduce yourself to the group and share your animal.
-- What is your name?<!-- {_class="fragment"  data-fragment-index="1"} -->
-- Where are you from?<!-- {_class="fragment"  data-fragment-index="2"} -->
-- What is your current role in your organization?<!-- {_class="fragment"  data-fragment-index="3"} -->
-- Show and Tell: your animal drawing<!-- {_class="fragment"  data-fragment-index="4"} -->
+## Exercice - Retour aux animaux!
+Présentez-vous au groupe et parlez de votre animal.
+- Quel est votre nom ? <!-- {_class="fragment"  data-fragment-index="1"} -->
+- D'où venez-vous ?<!-- {_class="fragment"  data-fragment-index="2"} -->
+- Quel est votre rôle actuel dans votre organisation ?<!-- {_class="fragment"  data-fragment-index="3"} -->
+- Montrez et racontez : le dessin de votre animal <!-- {_class="fragment"  data-fragment-index="4"} -->
 
 
 
-## Faces
+## Visages
 <!-- .slide: data-background-image="images/chef-background.png" class="white-style" -->
 
 
 
-## What is it?
-Meet your classmates by collaboratively drawing each others faces.
+## Qu'est ce que c'est?
+Faites connaissance avec les autres participants de la classe en dessinant ensemble les visages de chacun.
 ![Faces](images/faces.png)
 
 
 
-## Exercise - Back to the Faces!
-Firstly, Take a big sticker and sharpie and write down your name. By rounds:
-- Pass the sticker to the classmate on the right<!-- {_class="fragment"  data-fragment-index="1"} -->
-- Define 30 seconds timer<!-- {_class="fragment"  data-fragment-index="2"} -->
-- Draw a part of the sticker owner's face (eyes, eyebrows, nose, mouth, ears and hair)<!-- {_class="fragment"  data-fragment-index="3"} -->
-- Share the result<!-- {_class="fragment"  data-fragment-index="4"} -->
+## Exercice - retour aux visages!
+Tout d'abord, prenez un grand post-it et écrivez votre nom. Ensuite chacun son tour:
+- Passer le post-it au participant de droite<!-- {_class="fragment"  data-fragment-index="1"} -->
+- Régler le minuteur à 30 secondes<!-- {_class="fragment"  data-fragment-index="2"} -->
+- Dessinez une partie du visage du propriétaire du post-it (yeux, sourcils, nez, bouche, oreilles et cheveux)<!-- {_class="fragment"  data-fragment-index="3"} -->
+- Partager le résultat<!-- {_class="fragment"  data-fragment-index="4"} -->
 
 
 

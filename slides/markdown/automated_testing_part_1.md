@@ -11,11 +11,10 @@ DO500 <!-- {_class="title-color"} -->
 
 
 ### Domain Driven Design
-#### _What Is It?_
-Domain-driven design (DDD) is an approach to developing software for complex 
-needs by deeply connecting the implementation to an evolving model of the core 
-business concepts.
-
+#### _Qu'est ce que le DDD ? _
+Domain-driven design (DDD) est une approche de développement logiciels pour des besoins 
+complexes en reliant profondément l'implémentation à un modèle évolutif des principaux concepts 
+fondamentaux de l'entreprise.
 
 
 ![DDD](images/tdd/ddd.png)
@@ -23,13 +22,12 @@ business concepts.
 
 
 ### Domain Driven Design
-#### _How Does It Help?_
-* Placing the project's primary focus on the core domain and domain logic
-* Basing complex designs on a model of the domain
-* Initiating a creative collaboration between technical and domain experts to iteratively 
-refine a conceptual model that addresses particular domain problems
-* Bridge the gap between domain experts and developers by using the same language to 
-create the same understanding
+#### _Comment cela peut-il aider ? _
+* En plaçant la priorité du projet sur le coeur et la logique du domaine.
+* Baser les conceptions complexes sur un modèle du domaine.
+* Initier une collaboration créative entre les experts techniques et les experts du domaine pour affiner de manière itérative un modèle conceptuel qui répond aux besoins métier. 
+* Combler le fossé entre les experts du domaine et les développeurs en utilisant le même langage pour créer la même compréhension. 
+pour créer la même compréhension
 
 
 
@@ -39,10 +37,8 @@ create the same understanding
 
 
 ### Behavior Driven Development
-#### _What Is It?_
-Behavior-Driven Development (BDD) is a Test-First, Agile Testing practice 
-that provides Built-In Quality by defining (and potentially automating) tests 
-before, or as part of, specifying system behavior. 
+#### _Qu'est ce que le BDD_
+Behavior-Driven Development (BDD) c'est d'abord tester. Cette pratique de test Agile fournit une qualité intégrée en définissant (et potentiellement en automatisant) les tests  avant, ou dans le cadre de la spécification du comportement du système. 
 
 
 
@@ -51,12 +47,11 @@ before, or as part of, specifying system behavior.
 
 
 ### Behavior Driven Development
-#### _How Does It Help?_
-* Creates a shared understanding of requirements between 
-the business and the Agile Teams
-* Helps guide development, decrease rework, and increase flow
-* Creates business-facing scenarios that attempt to describe the behavior of a 
-Story, Feature, or Capability from a user's perspective.
+####  _Comment cela peut-il aider ? _
+* Créer une compréhension partagée des exigences entre le métier et les équipes Agile
+* Aide à guider le développement, à réduire le retravail et à augmenter la vélocité.
+* Crée des scénarios orientés business qui tentent de décrire le comportement d'une histoire, d'une fonctionnalité ou d'une capacité d'un point de vue de l'utilisateur. 
+
 
 
 
@@ -66,14 +61,14 @@ Story, Feature, or Capability from a user's perspective.
 
 
 ### Test Driven Development
-#### _What Is It?_
-Test Driven Development (TDD) is a software development process that relies on
-the repetition of a very short development cycle.
-Requirements are turned into test cases, where the software is developed to pass
-the tests.
+#### _Qu'est ce que le TDD_
+Test Driven Development (TDD) iest un processus de développement logiciel qui repose sur
+la répétition d'un cycle de développement très court.
+Les exigences sont transformées en cas de test, et le logiciel est développé pour passer les tests.
+les tests.
 
-This practice is particularly powerful when combined with
-**Continuous Integration**.
+Cette pratique est particulièrement puissante lorsqu'elle est combinée avec
+**Intégration continue**.
 
 
 
@@ -82,11 +77,11 @@ This practice is particularly powerful when combined with
 
 
 ### Test Driven Development
-#### _How Does It Help?_
-* Creates a detailed specification for the code
-* Gives fast feedback
-* Indicates whether the last change has broken previously working code
-* Allows the design to evolve and adapt as understanding of the problem evolves
+####  _Comment cela peut-il aider ? _
+* Crée une spécification détaillée pour le code
+* Donne un retour rapide
+* Indique si la dernière modification a cassé le code qui fonctionnait auparavant.
+* Permet à la conception d'évoluer et de s'adapter à mesure que la compréhension du problème évolue.
 
 
 
@@ -100,82 +95,77 @@ This practice is particularly powerful when combined with
 
 
 <!-- .slide: id="revenge-automated-testing" -->
-## Revenge of the Automated Testing
-### Part 1
+## La revanche des tests automatisés
+### Partie 1
 
 
 
-### Lab Exercise 3: Revenge of the Automated Testing
-This lab helps us:
-* Understand the "why" behind Test Driven Development (TDD)
-* Implement a feature using TDD for the front end and back end of the application
-* Write end-to-end tests for a feature and run them through continuous integration
+### Lab Exercice 3: La revanche des tests automatisés
+Ce lab nous aide à :
+* Comprendre le "pourquoi" du développement piloté par les tests (TDD).
+* Implémenter une fonctionnalité en utilisant TDD pour le front-end et le back-end de l'application.
+* Écrire des tests de bout en bout pour une fonctionnalité et les exécuter par intégration continue.
 
 
 
-### What new Tools and Frameworks will we use?
-* **Jest**: zero configuration testing platform to test JavaScript code
-* **Vue Test Utils**: the official testing utility library for Vue.js
-* **Nightwatch.js**: easy to use Node.js based end-to-end testing solution for
-browser based apps. It uses the powerful W3C WebDriver API to perform commands
-and assertions on DOM elements
-* **Mocha**: feature-rich JavaScript test framework running on Node.js and in
-the browser, making asynchronous testing simple and fun
-* **Sinon**: standalone test spies, stubs, and mocks for JavaScript. Works with
-any unit testing framework
+### Quels sont les nouveaux outils et Frameworks que nous utiliserons ?
+* **Jest** : plateforme de test sans configuration pour tester le code JavaScript.
+* **Vue Test Utils** : la bibliothèque officielle d'utilitaires de test pour Vue.js.
+* **Nightwatch.js** : solution de test de bout en bout basée sur Node.js et facile à utiliser pour les applications web. Utilise la puissante API W3C WebDriver pour exécuter des commandes et des assertions sur les éléments DOM.
+**Mocha** : Framework de test JavaScript riche en fonctionnalités fonctionnant sur Node.js et dans le navigateur  rendant les tests asynchrones simples et amusants.
+* **Sinon**: outil standlone de spies, stubs, and mocks test pour JavaScript. Fonctionne avec beaucoup de Frameworks de test.
 
 
-
-### The Big Picture
+### La Big Picture
 ![BP3](images/tdd/bp-3-revenge-automated-testing.jpg)
 
 
 
-### Let's Go!!!
-Lab Exercise 3: _Revenge of the Automated Testing_
+### C'est parti!!!
+Lab Exercice 3: _La revanche des tests automatisés_
 Part 1
 
 
 
 <!-- .slide: id="revenge-automated-testing-part-2" -->
-## Revenge of the Automated Testing
+## La revanche des tests automatisés
 ### Part 2
-Test Driven Development (TDD) in LEGO
+Test Driven Development (TDD) en LEGO
 
-Credit to [Gargoyle Software](http://www.gargoylesoftware.com/ex/lego_tdd)
-
-
-
-### Intent
-Demonstrate the concepts behind TDD.
-
-How we write the test before we write code and how that forces our design to emerge.
+De [Gargoyle Software](http://www.gargoylesoftware.com/ex/lego_tdd)
 
 
 
-### TDD Lifecylce
-![TDD-Simplified](https://i0.wp.com/s3.amazonaws.com/production-wordpress-assets/blog/wp-content/uploads/2017/04/11100523/TDD.jpg?zoom=2&fit=400%2C237&ssl=1)
+### Enjeux
+Démontrer les concepts derrière TDD.
 
-Red - Write a small test that fails <!-- {_class="fragment" style="color: red" data-fragment-index="1"} -->
-
-Green - Do the minimum to make the test pass <!-- {_class="fragment" style="color: green" data-fragment-index="2"} -->
-
-Refactor - Eliminate duplication & make it beautiful <!-- {_class="fragment" data-fragment-index="3"} -->
+Comment nous écrivons le test avant d'écrire le code et comment cela force notre conception à émerger.
 
 
 
-### TDD Lifecycle
-![Circle of life](https://media.giphy.com/media/DvMHwFYLVHlZe/giphy.gif)  <!-- {_class="" style="height:450px"} -->
+### TDD cycle de vie
+![TDD-Simplifié](https://i0.wp.com/s3.amazonaws.com/production-wordpress-assets/blog/wp-content/uploads/2017/04/11100523/TDD.jpg?zoom=2&fit=400%2C237&ssl=1)
+
+Rouge - Ecrire un petit test qui échoue s <!-- {_class="fragment" style="color: red" data-fragment-index="1"} -->
+
+Vert - Faire le minimum pour que le test soit réussi.  <!-- {_class="fragment" style="color: green" data-fragment-index="2"} -->
+
+Refactor - Éliminez les duplications et embellissez le tout.  <!-- {_class="fragment" data-fragment-index="3"} -->
 
 
 
-### Prepare your environment
-Our program is made of Lego. Get your equipment ready for coding
+### TDD cycle de vie
+![Le cercle de la vie](https://media.giphy.com/media/DvMHwFYLVHlZe/giphy.gif)  <!-- {_class="" style="height:450px"} -->
+
+
+
+### Préparez votre environnement
+Notre programme est fait de Lego. Préparez votre équipement pour le codage
 ![lego-space](images/tdd/lego-620x349.jpg)
 
 
 
-### 2 Simple Rules for Lego TDD
+### 2 Règles simples pour le TDD en Lego
 KISS - Keep It Simple Stupid  <!-- {_class="fragment"  data-fragment-index="1"} -->
 
 YAGNI - You Ain't Gonna Need It!  <!-- {_class="fragment"  data-fragment-index="2"} -->
@@ -185,47 +175,47 @@ YAGNI - You Ain't Gonna Need It!  <!-- {_class="fragment"  data-fragment-index="
 
 
 
-### Pair Builds
-![pairs](https://i.ebayimg.com/images/g/pfgAAOSw3NtbJ57f/s-l1600.jpg) <!-- {_class="" style="height:450px"} -->
+### Constructions des binômes
+![paires](https://i.ebayimg.com/images/g/pfgAAOSw3NtbJ57f/s-l1600.jpg) <!-- {_class="" style="height:450px"} -->
 
 
 
-### The Steps
-1. One person in the pair will write a test, in the form of a question, on a sticky note and place it on the table. For example "Is there a person?". <!-- {_class="fragment"  data-fragment-index="1"} -->
-2. The other person will then implement something in LEGO that passes that test. <!-- {_class="fragment" data-fragment-index="2"} -->
-3. When the first person is satisfied that the test is passing, they switch positions. <!-- {_class="fragment" data-fragment-index="3"} -->
-4. Now the second person writes a test and puts it on the table and the first person implements in LEGO. <!-- {_class="fragment" data-fragment-index="4"} -->
+### Les étapes
+1. Une personne du binôme écrit un test, sous forme de question, sur une note autocollante et la place sur la table. Par exemple : "Y a-t-il une personne ?". <!-- {_class="fragment"  data-fragment-index="1"} -->
+2. L'autre personne implémentera ensuite quelque chose en LEGO qui passe ce test. <!-- {_class="fragment" data-fragment-index="2"} -->
+3. Lorsque la première personne est satisfaite et de la réussite du test, elle change de position. <!-- {_class="fragment" data-fragment-index="3"} -->
+4. Maintenant, la deuxième personne écrit un test et le pose sur la table et la première personne le met en œuvre en LEGO. <!-- {_class="fragment" data-fragment-index="4"} -->
 
 
 
-### Some example tests
+### Quelques exemples de tests
 
 ![TDD](images/tdd/lego-tdd-1.jpg) <!-- {_class="inline-image"} -->
-- Is there a person in the program? <!-- {_class="fragment" data-fragment-index="1"} -->
-- Is there a house in the program? <!-- {_class="fragment" data-fragment-index="2"} -->
-- Is there a window on a wall of the house? <!-- {_class="fragment" data-fragment-index="3"} -->
-- Is it true that the house is taller than the person? <!-- {_class="fragment" data-fragment-index="4"} -->
-- The house is wider than the person? <!-- {_class="fragment" data-fragment-index="5"} -->
-- Is it true that the house has 2 connected walls <!-- {_class="fragment" data-fragment-index="6"} -->
-- Can the person enter the house? <!-- {_class="fragment" data-fragment-index="7"} -->
+- Y a-t-il une personne dans le programme ?  <!-- {_class="fragment" data-fragment-index="1"} -->
+- Y a-t-il une maison dans le programme ? <!-- {_class="fragment" data-fragment-index="2"} -->
+- Y a-t-il une fenêtre sur un mur de la maison ? <!-- {_class="fragment" data-fragment-index="3"} -->
+- Est-il vrai que la maison est plus grande que la personne ?  <!-- {_class="fragment" data-fragment-index="4"} -->
+- La maison est plus large que la personne ?  <!-- {_class="fragment" data-fragment-index="5"} -->
+- Est-il vrai que la maison a 2 murs reliés<!-- {_class="fragment" data-fragment-index="6"} -->
+- la Personne peut-elle entrer dans la maison ? <!-- {_class="fragment" data-fragment-index="7"} -->
 
 
 
-### The Game Begins!
+### Le jeu commence !
 
- - The business requirement is to include the following in our program:
-       1. a person
-       2. an animal
-       3. a plant
-       4. a vehicle
-       5. a building.
- - There may only be one "broken" test at a time. All previous tests must continue to pass. <!-- {_class="fragment" data-fragment-index="1"} -->
- - Nothing must be built in LEGO if there wasn't a failing test that forced that to exist. <!-- {_class="fragment" data-fragment-index="2"} -->
- - After each test is passing, the people switch roles. <!-- {_class="fragment" data-fragment-index="4"} -->
+ - Le besoin métier est d'inclure les éléments suivants dans notre programme :
+       1. une personne
+       2. un animal
+       3. une plante
+       4. un véhicule
+       5. un bâtiment.
+-  Il ne peut y avoir qu'un seul test "cassé" à la fois. Tous les tests précédents doivent continuer à passer. <!-- {_class="fragment" data-fragment-index="1"} -->
+- Rien ne doit être construit en LEGO s'il n'y avait pas un test défaillant qui a forcé cela à exister. <!-- {_class="fragment" data-fragment-index="2"} -->
+- Après que chaque test soit passé, les gens changent de rôle. <!-- {_class="fragment" data-fragment-index="4"} -->
 
 
 
-### Debrief
+### Débriefing
 <!-- speaker info
 Sometimes people will build something new that breaks an existing test and they either won't have noticed or won't have cared. If this is the case then discuss why tests must always be passing.
 
@@ -234,27 +224,26 @@ Generally not everyone will have done this. They'll be so busy creating interest
 Have each pair demo two or three of their features. Have them read out the test first and then point out how that was implemented in their model. Stress the fact that if there isn't a test for a given feature, we don't care about it.
 Many times people will have built cool things that they didn't have tests for. We stress again that in TDD, we don't build anything until the test has forced us to do that.
  -->
- - What did you observe? How did that feel?
- - Did everyone complete the five base requirements listed above?
- - Are all tests currently passing?
+- Qu'avez-vous observé ? Qu'avez-vous ressenti ?
+- Tout le monde a-t-il rempli les cinq exigences de base énumérées ci-dessus ?
+- Tous les tests sont-ils actuellement réussis ?
 
 
-
-### Team Builds
+### Constructions d'équipes
 ![teams-at-work](https://www.businessdevelopmentcompany.co.nz/wp-content/uploads/2017/07/Being-a-team-member-768x510.jpg)
 
 
 
-### The Game Begins Again!
+### Le jeu recommence !
 
 ![TDD](images/tdd/lego-tdd-2.png) <!-- {_class="inline-image" style="height:500px"} -->
- - As a table; Pick a project to build. Projects should be something complex that has lots of different kinds of things in it. Some examples if you're stuck could include _A Zoo_, _Shopping Center_, _a spaceship_ or _a city_.
- - All tests at the table must continue to pass at all times, regardless of which pair wrote them.  <!-- {_class="fragment" data-fragment-index="1"} -->
- - This time is that the implementation has to be integrated with the main project in the center of the table. <!-- {_class="fragment" data-fragment-index="2"} -->
+- Toute une table ; Choisissez un projet à construire. Les projets doivent être complexes et contenir plusieurs types de choses différentes. Si vous êtes bloqués, vous pouvez par exemple choisir _un zoo_, _un centre commercial_, _un vaisseau spatial_ ou _une ville_._.
+- Tous les tests de la table doivent continuer à réussir à tout moment, quelle que soit la paire qui les a écrits. <!-- {_class="fragment" data-fragment-index="1"} -->
+- Cette fois, c'est la mise en œuvre qui doit être intégrée au projet principal, au centre de la table.<!-- {_class="fragment" data-fragment-index="2"} -->
 
 
 
-### Debrief
+### Débriefing
 
 <!-- Speaker notes
 What did you observe?
@@ -266,19 +255,19 @@ Once a team built a zoo and then didn't complete the fencing around the lion enc
 Did you have any conflicts where a new feature from one pair broke a test from another? What did you do about that?
 Was your final design different than you expected? Discuss.
  -->
- - What did you observe?
- - Look around your table. Are all the tests still passing?
- - Are there tests that you should have that are missing?
- - Did you have any conflicts where a new feature from one pair broke a test from another? What did you do about that?
- - Was your final design different than you expected?
+ - Qu'avez-vous observé ?
+ - Regardez autour de votre table. Tous les tests passent-ils encore ?
+ - Y a-t-il des tests que vous devriez avoir et qui sont manquants ?
+ - Avez-vous eu des conflits où une nouvelle fonctionnalité d'une binôme a cassé un test d'une autre binôme ? Qu'avez-vous fait à ce sujet ?
+ - Votre conception finale était-elle différente de ce que vous aviez prévu ?
 
 
 
-## A Little Competition
+## Un peu de compétition
 
 
 
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
-### DevOps practices used in this section:
+### Pratiques DevOps utilisées dans cette section :
 - [Test Driven Development](https://openpracticelibrary.com/practice/test-driven-development/)
 - [Continuous Integration](https://openpracticelibrary.com/practice/continuous-integration/)

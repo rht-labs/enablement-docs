@@ -1,24 +1,25 @@
 <!-- .slide: data-background-image="images/RH_NewBrand_Background.png"  -->
 ## DevOps Culture and Practice <!-- {_class="course-title"} -->
-### Agile Animals <!-- {_class="title-color"} -->
+### Animaux Agile <!-- {_class="title-color"} -->
 DO500 <!-- {_class="title-color"} -->
 
 
 
-## Exercise - Animals
-![Draw an animal](images/animals.png)<!-- {_class="inline-image"} -->
-Draw a simple representation of an animal that you feel represents your current mood. Hang on to these.
+## Exercice - Animaux Agile <!-- {_class="title-color"} -->
+![Dessine un animal](images/animals.png)<!-- {_class="inline-image"} -->
+Dessinez une représentation simple d'un animal qui, selon vous, représente votre humeur du moment. 
+Conservez le précieusement.
 
 
 
-## Back to the Animals!
-Introduce yourself to the group and share your animal.
-- What is your name?
-- Where are you from?
-- What is your current role in your organization?
-- Show and Tell: your animal drawing
+## Retour aux animaux!
+Présentez-vous au groupe et parlez de votre animal.
+- Quel est votre nom ?
+- D'où venez-vous ?
+- Quel est votre rôle actuel dans votre organisation ?
+- Montrez et racontez : le dessin de votre animal
 
 
 
 <!-- .slide: data-background-image="images/chef-background.png" class="white-style" -->
-### DevOps practices used in this section:
+### DevOps practices utilisées dans cette section :
