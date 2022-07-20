@@ -116,7 +116,7 @@ Ce lab nous aide à :
 * **Sinon**: outil standlone de spies, stubs, and mocks test pour JavaScript. Fonctionne avec beaucoup de Frameworks de test.
 
 
-### La Big Picture
+### La vue d'ensemble
 ![BP3](images/tdd/bp-3-revenge-automated-testing.jpg)
 
 

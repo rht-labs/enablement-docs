@@ -10,10 +10,10 @@ DO500 <!-- {_class="title-color"} -->
 
 
 
-### Traditional Software Configuration
-1. Manually install the operating system.
-2. Manually install the software packages needed.
-3. Modify the software configuration files by hand.
+### Configuration logicielle traditionnelle
+1. Installez manuellement le système d'exploitation.
+2. Installez manuellement les paquets de logiciels nécessaires.
+3. Modifier manuellement les fichiers de configuration des logiciels.
 4. ...
 
 
@@ -30,32 +30,29 @@ DO500 <!-- {_class="title-color"} -->
 
 
 ### Configuration As Code
-#### _Benefits_
-* Central authority for configuration
-* Available through source control
-  * Traceability
-  * History and Diffs
-* Configuration drift detection and correction
-  * Prevents unwanted config changes
-  * No more Snowflake servers
-* Phoenix Server: burn it all to the ground and bring it back exactly the
-way it was!
+#### _Bénéfices__
+* Autorité centrale pour la configuration
+* Disponible via le système de contrôle des sources
+  * Traçabilité
+  * Historique et dérives
+* Détection et correction des dérives de configuration
+  * Empêche les changements de configuration non désirés
+  * Plus de serveurs Snowflake
+* Serveur Phoenix : brûlez tout et remettez tout exactement comme avant ! Exactement comme il était !
 
 
 
 ### Everything As Code
-The practice of **Everything as Code** goes even further than configuration as code. All
-manual steps should be scripted, automated, and checked into a source control
-management system.
+La pratique de **Everything as Code** va encore plus loin que la configuration en tant que code. Toutes les étapes manuelles doivent être scriptées, automatisées et vérifiées dans un système de gestion de source.
 
 
 
 <!--.slide: id="manual-menace" -->
-## The Manual Menace
+## La menace manuelle
 
 
 
-### Lab Exercise 1: The Manual Menace
+### Lab Exercice 1: La menace manuelle
 * This exercise is all about automation and **configuration-as-code**.
 * This exercise is aimed at the creation of the supporting tooling that will be
 used to support the rest of the exercises using code.
@@ -67,6 +64,15 @@ populate them with Git, Jenkins, and Nexus using code.
   2. Create and administer project namespaces in OpenShift.
   3. Deploy commonly used applications to support the development process.
 
+* Cet exercice porte sur l'automatisation et la **configuration-as-code**.
+* Cet exercice est axé sur la création de l'outil d'aide qui sera utilisé pour faciliter le reste des exercices en utilisant du code.
+* L'objectif final est de créer une collection de projets/namespaces et de les alimnenter avec Git, Jenkins et Nexus en utilisant du code.
+* En tant qu'apprenant, vous serez en mesure de :
+  1. Exécuter l'application [openshift-applier](https://github.com/redhat-cop/openshift-applier/)  pour automatiser la création de contenu de cluster.
+  2. Créer et administrer des namespaces/projets dans OpenShift.
+  3. Déployer des applications couramment utilisées pour soutenir le processus de développement.
+
+
 
 
 ![AnsibleEngine](images/PairAndMob/ansible.png)
@@ -77,34 +83,30 @@ populate them with Git, Jenkins, and Nexus using code.
 
 
 
-### What new Tools and Frameworks will we use?
-* **OpenShift Container Platform**: Red Hat's cloud application deployment and
-hosting platform
-* **GitLab**: Community-driven Git server now with integrated DevOps toolchain
-* **Nexus**: Repository manager for storing lots of application types
-  * Can host npm and container registries
-* **Jenkins**: Open source build automation server that is highly customizable with plugins
-* **Ansible**: Red Hat's IT automation tool used to provision and manage the
-state of cloud and physical infrastructure
-* **openshift-applier**: A set of Ansible playbooks/roles to apply OpenShift
-objects to an OpenShift cluster
+### Quels sont les nouveaux outils et frameworks que nous utiliserons ?
+* **OpenShift Container Platform**: La plateforme de déploiement et d'hébergement d'applications cloud de Red Hat
+* **GitLab**: Serveur Git géré par la communauté, désormais doté d'une chaîne d'outils DevOps intégrée.
+* **Nexus**: Gestionnaire de référentiel pour le stockage de nombreux types d'applications.
+  *  Peut héberger des dépôts de npm et de conteneurs
+* **Jenkins**: Serveur d'automatisation de construction open source qui est hautement personnalisable avec des plugins.
+* **Ansible**: Outil d'automatisation informatique de Red Hat utilisé pour provisionner et gérer l'état de l'infrastructure physique et du cloud.
+* **openshift-applier**: Un ensemble de playbooks/rôles Ansible pour appliquer les objets OpenShift à un cluster OpenShift
 
 
 
-## The Big Picture
+## La vue d'ensemble
 ![BP1](images/bp-1-manual-menace.jpg)
 
 
 
-## Verify Your Lab Environment
+## Vérifiez l'environnement de votre lab
 
 
-
-### Let's Go!!!
-Lab Exercise 1: _The Manual Menace_
+### C'est parti ! !!
+Lab Exercice 1: _La menace manuelle_
 
 
 
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
-### DevOps practices used in this section:
+### Pratiques DevOps utilisées dans cette section :
 - [Everything As Code](https://openpracticelibrary.com/practice/everything-as-code/)

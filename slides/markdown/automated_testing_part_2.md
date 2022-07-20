@@ -1,24 +1,24 @@
 <!-- .slide: data-background-image="images/RH_NewBrand_Background.png" -->
 ## DevOps Culture and Practice <!-- {_class="course-title"} -->
-### Automated Testing Part 2 <!-- {_class="title-color"} -->
+###T ests automatisés - Partie 2<!-- {_class="title-color"} -->
 DO500 <!-- {_class="title-color"} -->
 
 
 
-## Walk the Walls
+## Marche sur les murs
 
 
 
-## Practice Review
+## Revue des pratiques
 
 
 
-### Let's Go!!!
-Lab Exercise 3: _Revenge of the Automated Testing_
+#### C'est parti ! !!
+Lab Exercice 3: _La revanche des tests automatisés_
 Part 2
 
 
 
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
-### DevOps practices used in this section:
+### Les pratiques DevOps utilisées dans cette section :
 - [Test Driven Development](https://openpracticelibrary.com/practice/test-driven-development/)

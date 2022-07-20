@@ -1,66 +1,62 @@
 <!-- .slide: data-background-image="images/RH_NewBrand_Background.png" -->
 ## DevOps Culture and Practice <!-- {_class="course-title"} -->
-### Build Monitoring <!-- {_class="title-color"} -->
+### Faire le Monitoring du build <!-- {_class="title-color"} -->
 DO500 <!-- {_class="title-color"} -->
 
 
 
-## Walk the Walls
+## Marche sur les murs
 
 
 
 <!-- .slide: id="build-monitor" -->
-## Build Monitoring
+## Faire le Monitoring du build
 
 
 
-### Build Monitoring
-#### _What Is It?_
-Build monitors allow the visualization of automated build processes.
+### Faire le Monitoring du build
+#### _Qu'est-ce que c'est ?_
+Le monitoring de build  permet de visualiser les processus de construction automatisés.
 
 
 
-### Build Monitoring
-#### _How Does It Help?_
-* Provides instant feedback to teams regarding the current status of the build
-* Tightens the feedback loop by having vital information needed by teams available at all times
-* Motivates teams to fix problems together
+### Faire le Monitoring de build
+#### _Comment cela aide-t-il ?_
+* Fournit un retour d'information instantané aux équipes concernant l'état actuel de la construction.
+* Resserre la boucle de feedback en ayant des informations vitales nécessaires aux équipes disponibles à tout moment.
+* Motive les équipes à résoudre les problèmes ensemble
 
 
 
 <!-- .slide: id="return-monitoring" -->
-## Return of the Monitoring
+## Le Retour du monitoring
+
+
+### Lab Exercice 6: Le Retour du monitoring
+Dans cet exercice, nous allons créer un monitoring de build pour afficher tous nos travaux
+dans un seul affichage visuel et aussi des vues de pipeline. Nous allons ensuite ajouter la cause des
+des échecs de construction pour chaque job au monitoring. Cela vous permettra de voir rapidement
+rapidement pourquoi un build particulier échoue et de le réparer plus rapidement.
 
 
 
-### Lab Exercise 6: Return of the Monitoring
-In this exercise we will be creating a build monitor to display all of our jobs
-in one visual display as well as pipeline views. We will then add the cause of
-build failures for each job to the monitors. This will allow you to rapidly
-see why a particular build is failing and fix it faster.
+### Quels nouveaux outils et cadres de travail utiliserons-nous ?
+* **Build Monitor Plugin**: Fournit une vue très visible de l'état des travaux Jenkins sélectionnés.
+* **Build Fail Analyzer**: Analyse les causes des échecs de construction et les présente sur la page de construction.
+* **Pipeline Aggregator View**: Permet aux utilisateurs de visualiser l'historique de leurs
 
 
 
-### What new Tools and Frameworks will we use?
-* **Build Monitor Plugin**: provides a highly visible view of the status of
-selected Jenkins jobs.
-* **Build Fail Analyzer**: analyzes the causes of failed builds and presents
-the causes on the build page.
-* **Pipeline Aggregator View**: allows the users to view the history of their
-pipelines with stage information
-
-
-
-### The Big Picture
+### La vue d'ensemble
 ![BP6](images/bp-6-return-monitoring.jpg)
 
 
 
-### Let's Go!!!
-Lab Exercise 6: _Return of the Monitoring_
+#### C'est parti ! !!
+Lab Exercice 6: _Le Retour du monitoring_
 
 
 
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
-### DevOps practices used in this section:
+### Les pratiques DevOps utilisées dans cette section :
 - [Visualization of Work](https://openpracticelibrary.com/practice/visualisation-of-work/)
