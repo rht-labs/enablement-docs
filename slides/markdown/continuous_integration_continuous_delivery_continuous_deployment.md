@@ -1,40 +1,38 @@
 <!-- .slide: data-background-image="images/RH_NewBrand_Background.png" -->
 ## DevOps Culture and Practice <!-- {_class="course-title"} -->
-### Continuous Integration, Delivery, and Deployment <!-- {_class="title-color"} -->
+### Int&eacute;gration, livraison et d&eacute;ploiement continus  <!-- {_class="title-color"} -->
 DO500 <!-- {_class="title-color"} -->
 
 
 
 <!-- .slide: id="continuous-integration" -->
-## Continuous Integration
+## Int&eacute;gration Continue
 
 
 
-### Continuous Integration
-Continuous Integration (**CI**) is a development practice where developers integrate code into a shared repository frequently, 
-preferably several times a day
+### Int&eacute;gration Continue
+L'int&eacute;gration continue (**CI**) est une pratique de d&eacute;veloppement o&ugrave; les d&eacute;veloppeurs int&egrave;grent le code dans un r&eacute;f&eacute;rentiel partag&eacute; fr&eacute;quemment, 
+de pr&eacute;f&eacute;rence plusieurs fois par jour
 
-These actions are repeated frequently ensuring that the code base can **continuously integrate**
-
-
-
-### Continuous Integration
-#### _What is It?_
-* Developers submit **small and frequent changes** to the source code
-* **Automated** build and test steps are run to ensure code works as expected
-* Developers are notified if anything fails and developers react quickly to fix
-* The tests and build steps are typically run in an automation server (Tekton, Jenkins, GitLab CI/CD, Apache Airflow...)
+Ces actions sont r&eacute;p&eacute;t&eacute;es fr&eacute;quemment, ce qui garantit que la base de code peut **s'int&eacute;grer en continu**.
 
 
 
-### Continuous Integration
-#### _Why Use It?_
-* Automated testing reduces busy work and improves software quality.
-* Small, regular code commits reduce the number of integration problems.
-* Rapid feedback loops make it easier for new contributors to get started.
-* Shipping of functional software in small increments is more enjoyable than 
-waiting for someone to manually test a giant code change.
+### Int&eacute;gration Continue
+#### _Qu'est-ce que c'est ?_
+* Les d&eacute;veloppeurs soumettent de **petites et fr&eacute;quentes modifications** au code source.
+* Des &eacute;tapes de construction et de test **automatis&eacute;es sont ex&eacute;cut&eacute;es** pour garantir que le code fonctionne comme pr&eacute;vu.
+* Les d&eacute;veloppeurs sont inform&eacute;s si quelque chose &eacute;choue et peuvent r&eacute;agir rapidement pour r&eacute;parer.
+* Les tests et les &eacute;tapes de construction sont g&eacute;n&eacute;ralement ex&eacute;cut&eacute;s dans un serveur d'automatisation (Tekton, Jenkins, GitLab CI/CD, Apache Airflow...).
 
+
+
+### Int&eacute;gration Continue
+#### _Pourquoi l'utiliser ?_
+* Les tests automatis&eacute;s r&eacute;duisent la charge de travail et am&eacute;liorent la qualit&eacute; des logiciels.
+* Les petites modifications r&eacute;guli&egrave;res du code r&eacute;duisent le nombre de probl&egrave;mes d'int&eacute;gration.
+* Les boucles de feedback rapides facilitent le d&eacute;marrage des nouveaux contributeurs.
+* La livraison de logiciels fonctionnels par petits incr&eacute;ments est plus agr&eacute;able que d'attendre que quelqu'un teste manuellement un &eacute;norme projet. 
 
 
 
@@ -49,151 +47,148 @@ waiting for someone to manually test a giant code change.
 
 
 <!-- .slide: id="continuous-delivery"-->
-## Continuous Delivery
+## Int&eacute;gration Continue
 
 
 
-### Continuous Delivery
-Continuous delivery (**CD**)  is an extension of continuous integration since it automatically deploys all code changes to a testing and/or production environment after the build stage. 
+### Livraison continue
+La livraison continue (**CD**) est une extension de l'int&eacute;gration continue puisqu'elle d&eacute;ploiement automatiquement toutes les modifications du code dans un environnement de test et/ou de production apr&egrave;s la phase de construction. . 
 
 
 
-### Continuous Delivery
-#### _What is It?_
-* A software engineering practice
-* Each change can be **potentially** ready for release to production
-* Builds upon the **continuous integration** practice
-* Consider automating release to a "demo" area
-* Typically implemented with an automation server such as Jenkins or Tekton
+### Livraison continue
+#### _WQu'est-ce que c'est ?_
+* Une pratique de g&eacute;nie logiciel
+* Chaque changement peut &ecirc;tre **potentiellement** pr&ecirc;t pour la mise en production.
+* Les builds s'appuient sur la pratique de l'int&eacute;gration continue.
+* Envisage d'automatiser la mise en production dans une zone de "d&eacute;monstration".
+* G&eacute;n&eacute;ralement mis en œuvre avec un serveur d'automatisation tel que Jenkins ou Tekton.
 
 
 
-### Continuous Delivery
-#### _Why Use It?_
-* Automation reduces the manual work required to do a release
-* Faster feedback cycles from quality engineers, product owners, and stakeholders
-* Produces a happier operations team
-* Prepares the way for push button deployments
+### Livraison continue
+#### _Pourquoi l'utiliser ?_
+* L'automatisation r&eacute;duit le travail manuel n&eacute;cessaire pour effectuer une mise en production.
+* Les cycles de feedback des ing&eacute;nieurs qualit&eacute;, des propri&eacute;taires de produits et des parties prenantes sont plus rapides.
+* L'&eacute;quipe d'exploitation est plus heureuse
+* Pr&eacute;pare la voie aux d&eacute;ploiements par bouton poussoir.
 
 
 
 <!--.slide: id="continuous-deploymen" -->
-## Continuous Deployment
+## D&eacute;ploiement continu
 
 
 
 
-### Continuous Deployment
-Continuous deployment (**CD**) is a strategy for software releases wherein any code that has been committed which passes the automated testing phase is automatically released into the production environment, making changes that are visible to the software's users
+### D&eacute;ploiement continu
+Le d&eacute;ploiement continu (**CD**) est une strat&eacute;gie de publication de logiciels dans laquelle tout code engag&eacute; qui passe la phase de test automatis&eacute; est automatiquement publi&eacute; dans l'environnement de production, apportant des changements visibles pour les utilisateurs du logiciel.
 
 
 
-
-### Continuous Deployment
-#### _What is It?_
-* Software development practice
-* Development team maintains software so that it can be **released to production** at any moment
-* Builds upon the practices of **continuous integration** and **continuous delivery**
-* Software configuration and deployment orchestration becomes part of the
-development team's duty to maintain the software
-
-
-
-### Continuous Deployment
-#### _Why Use It?_
-* Team maintains deployable code and configuration over new features
-* Fast feedback from end users
-* Features can be pushed out after completion
-* Enforces best practice of **eveything as code**
-* Configuration and deployment orchestration needs to be part of automation
-* Enables quick rollbacks and recovery from failures
+### D&eacute;ploiement continu
+#### _Qu'est-ce que c'est ?_
+* Pratique du d&eacute;veloppement de logiciels
+* L'&eacute;quipe de d&eacute;veloppement maintient le logiciel afin qu'il puisse &ecirc;tre mis en production &agrave; tout moment.
+* S'appuie sur les pratiques d' **int&eacute;gration continue** et de **livraison continue**.
+* L'orchestration de la configuration et du d&eacute;ploiement du logiciel fait partie du devoir de l'&eacute;quipe de d&eacute;veloppement de maintenir le logiciel en production.
+l'obligation de l'&eacute;quipe de d&eacute;veloppement de maintenir le logiciel
 
 
 
-### Continuous Deployment
-#### _How to Do It?_
-* Collaborate closely with everyone involved in deployment and delivery of software
-to production
-* Automate everything as much as possible
-* Build "feature toggles" or "dark launches" to allow for quick rollback if needed
-* Provide adequate automated monitoring of the application
+### D&eacute;ploiement continu
+#### _Pourquoi l'utiliser ?_
+* L'&eacute;quipe maintient un code et une configuration d&eacute;ployables pour les nouvelles fonctionnalit&eacute;s.
+* Retour rapide des utilisateurs finaux
+* Les fonctionnalit&eacute;s peuvent &ecirc;tre d&eacute;ploy&eacute;es une fois termin&eacute;es
+* Application de la bonne pratique de ***eveything as code**.
+* L'orchestration de la configuration et du d&eacute;ploiement doit faire partie de l'automatisation.
+* Permet des retours en arri&egrave;re rapides et la r&eacute;cup&eacute;ration des &eacute;checs.
 
 
 
-<!-- .slide: id="pre-attack-pipelines-summary"-->
-## Summary
+### D&eacute;ploiement continu
+#### _Comment faire ?_
+* Collaborer &eacute;troitement avec toutes les personnes impliqu&eacute;es dans le d&eacute;ploiement et la livraison de logiciels
+&agrave; la production
+* Automatiser tout autant que possible
+* Construire des "fonctionnalit&eacute;s &agrave; bascule" ou des "dark launches" pour permettre un retour en arri&egrave;re rapide si n&eacute;cessaire.
+* Fournir une surveillance automatis&eacute;e ad&eacute;quate de l'application
 
 
 
 <!-- .slide: id="pre-attack-pipelines-summary"-->
-## Summary
-#### Wrap-up
-* **Continuous Integration**: Integrate several changes into a shared repo and rely heavily on testing to make sure that the changes and commits works and have passed all (unit testing / code quality / code conduct).
-* **Continuous Delivery**: The goal is to have a working artifact that's ready to be deployed at any time. It relies on testing and automation to make sure that it has passed all functional tests and can be Manually deployed (push button).
-* **Continuous Deployment/Release**: One step further now that we are sure that this is ready to deploy to production then we can rely on features toggle, dark launches or other deployment strategy to promote to other critical environments asap using these techniques for the new features/fixes won't risk the operation.
+## R&eacute;sum&eacute;
 
 
 
-## Summary
+<!-- .slide: id="pre-attack-pipelines-summary"-->
+## R&eacute;sum&eacute;
+#### R&eacute;capitulation
+* **Continuous Integration**: Int&eacute;grer plusieurs changements dans un repo partag&eacute; et s'appuyer fortement sur les tests pour s'assurer que les changements et les commits fonctionnent et ont tous r&eacute;ussi (tests unitaires / qualit&eacute; du code / conduite du code).
+* **Continuous Delivery**:  L'objectif est d'avoir un artefact op&eacute;rationnel pr&ecirc;t &agrave; &ecirc;tre d&eacute;ploy&eacute; &agrave; tout moment. Il s'appuie sur les tests et l'automatisation pour s'assurer qu'il a pass&eacute; tous les tests fonctionnels et peut &ecirc;tre d&eacute;ploy&eacute; manuellement (bouton poussoir).
+* **Continuous Deployment/Release**: OUne &eacute;tape suppl&eacute;mentaire : maintenant que nous sommes sûrs qu'il est pr&ecirc;t &agrave; &ecirc;tre d&eacute;ploy&eacute; en production, nous pouvons nous appuyer sur des features toggle, dark launches ou d'autres strat&eacute;gies de d&eacute;ploiement pour le promouvoir dans d'autres environnements critiques d&egrave;s que possible.
+
+
+
+## R&eacute;sum&eacute;
 ![Pipeline](images/cicd/cdcd.png)
 
 
 
 <!-- .slide: id="attack-pipelines"-->
-## The Attack of the Pipelines
+## L'attaque des pipelines
 
 
 
-### Lab Exercise 2: The Attack of the Pipelines
-* This exercise is all about creating a pathway to production from source
-to a live application
-* We explore the sample TO DO List application
-* We create a Jenkins pipeline to build and deploy our code
-* As a learner you will be able to:
-  1. Build and run the full stack of the TO DO List application locally
-  2. Create an un-gated pipeline using the Jenkins user interface for
-  the backend and frontend of the application
-  3. Add branching to the pipeline to target a specific OpenShift namespace
+### Lab Exercice 2: L'attaque des pipelines
+* Cet exercice consiste &agrave; cr&eacute;er un chemin vers la production, depuis le code source &agrave; une application en production
+* Nous explorons l'exemple de l'application TO DO List
+* Nous cr&eacute;ons un pipeline Jenkins pour construire et d&eacute;ployer notre code.
+* En tant qu'apprenant, vous serez capable de :
+  1. Construire et ex&eacute;cuter la pile compl&egrave;te de l'application TO DO List localement.
+  2.  Cr&eacute;er un pipeline sans barri&egrave;re en utilisant l'interface utilisateur de Jenkins pour
+  le backend et le frontend de l'application
+  3. Ajouter des branches au pipeline pour cibler un espace de noms OpenShift sp&eacute;cifique.
 
 
 
 
-### Why are pipelines important and how do they help?
-* A pathway to production:
-  * Puts the product in the hands of the customer more quickly
-  * Enables seamless and repeatable deployments
-  * Using a more production-like infrastructure increases assurance of quality
-  * "We have already done it"-behavior reduces risk of going live
-* Assurance: drive up code quality and remove the need for dedicated deployment
-and release management teams
-* Freedom: allow developers to take ownership of how and when code gets built and shipped
-* Reliability: pipelines execute the same way each and every time they are run
+
+### Pourquoi les pipelines sont-ils importants et en quoi sont-ils utiles ?
+* Un chemin vers la production :
+  * Met le produit dans les mains du client plus rapidement
+  * Permet des d&eacute;ploiements transparents et r&eacute;p&eacute;tables.
+  * L'utilisation d'une infrastructure plus proche de la production augmente l'assurance de la qualit&eacute;.
+  * Le comportement "Nous l'avons d&eacute;j&agrave; fait" r&eacute;duit le risque de mise en production.
+* Assurance : augmente la qualit&eacute; du code et supprime le besoin d'&eacute;quipes d&eacute;di&eacute;es au d&eacute;ploiement et &agrave; la gestion des versions.
+et de gestion des versions
+* Libert&eacute; : permet aux d&eacute;veloppeurs de s'approprier comment et quand le code est construit et exp&eacute;di&eacute;.
+* Fiabilit&eacute; : les pipelines s'ex&eacute;cutent de la m&ecirc;me mani&egrave;re &agrave; chaque fois qu'ils sont ex&eacute;cut&eacute;s.
 
 
 
-### What new Tools and Frameworks will we use?
-* **Jenkins**: Open source build automation server that is highly customizable
-via plugins.
-* **Node.js**: Node.js(R) is a JavaScript runtime build on Chrome's V8 JavaScript
-engine. It uses an event-driven, non-blocking I/O model that makes it lightweight and efficient.
-* **MongoDB**: A data store for JSON-like documents giving flexibility to data structures.
-* **VueJS**: A progressive framework for building user interfaces known as single-page
-applications.
+### Quels nouveaux outils et cadres de travail utiliserons-nous ?
+* **Jenkins** : Serveur d'automatisation de construction open source qui est hautement personnalisable
+via des plugins.
+**Node.js** : Node.js(R) est un moteur d'ex&eacute;cution JavaScript bas&eacute; sur le moteur JavaScript V8 de Chrome.
+de Chrome. Il utilise un mod&egrave;le d'E/S non bloquant et pilot&eacute; par les &eacute;v&eacute;nements qui le rend l&eacute;ger et efficace.
+**MongoDB** : Une base de donn&eacute;es NOSQL documents JSON offrant une flexibilit&eacute; aux structures de donn&eacute;es.
+**VueJS** : Un framework progressif pour la construction d'interfaces utilisateur connues sous le nom d'applications single-page d'applications.
 
 
-
-### The Big Picture
+### La vue d'ensemble
 ![BP2](images/cicd/bp-2-attack-pipelines.jpg)
 
 
 
-### Let's Go!!!
-Lab Exercise 2: _The Attack of the Pipelines_
+### C'est parti ! !!
+Lab Exercice 2: _L'attaque des pipelines_
 
 
 
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
-### DevOps practices used in this section:
+### Les pratiques DevOps utilis&eacute;es dans cette section:
 - [Continuous Integration](https://openpracticelibrary.com/practice/continuous-integration)
 - [Continuous Delivery](https://openpracticelibrary.com/practice/continuous-delivery)
 - [Continuous Deployment](https://openpracticelibrary.com/practice/continuous-deployment)

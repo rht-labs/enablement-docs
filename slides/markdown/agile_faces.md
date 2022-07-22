@@ -11,4 +11,4 @@ Faites connaissance avec les autres participants de la classe en dessinant ensem
 
 
 <!-- .slide: data-background-image="images/chef-background.png" class="white-style" -->
-### DevOps practices utlisée dans cette section
+### DevOps practices utlis&eacute;e dans cette section

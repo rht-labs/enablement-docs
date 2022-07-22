@@ -7,21 +7,21 @@ DO500 <!-- {_class="title-color"} -->
 
 ### Traitement par Batch 
 #### _Qu'est-ce que c'est ?_
-* Faire du traitement en  parallèle
-* Généralement exécuté selon un calendrier ou des périodes spécifiques.
+* Faire du traitement en  parall&egrave;le
+* G&eacute;n&eacute;ralement ex&eacute;cut&eacute; selon un calendrier ou des p&eacute;riodes sp&eacute;cifiques.
 
 
 
 ### Traitement par Batch 
 #### _Comment peut-on l'utiliser ?_
-* Help identify Work In Progress limits
-* Show flow of work through the team/system
+* Aider &agrave; identifier les limites du travail en cours
+* Montrer le flux de travail &agrave; travers l' &eacute;quipe/le syst&egrave;me
 
 
 
 ### Exercice - Traitement par Batch 
 
-1. Répartissez-vous en équipes et expérimentez le traitement par lots à l'aide de jetons de poker.
+1. R&eacute;partissez-vous en &eacute;quipes et exp&eacute;rimentez le traitement par lots &agrave; l'aide de jetons de poker.
 2. Suivez les instructions de l'animateur.
 
 [The Penny Game](https://www.leanagiletraining.com/better-agile/agile-penny-game-rules/)

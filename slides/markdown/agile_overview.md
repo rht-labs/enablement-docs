@@ -18,7 +18,7 @@ _R&eacute;pondre &agrave; la question "Qu'est qu'Agile?"_
 
 
 <!-- .slide: id="agile"-->
-### D'o&Ugrave; vient la m&eacute;thode agile ?
+### D'o&ugrave; vient la m&eacute;thode agile ?
 F&eacute;vrier 2001 : Snowbird Resort, Utah, &eacute;tats-Unis
 ![Utah](images/Agile/USA_UT.png) <!-- {_class="inline-image"} -->
 * 17 d&eacute;veloppeurs logiciel.
@@ -48,14 +48,13 @@ F&eacute;vrier 2001 : Snowbird Resort, Utah, &eacute;tats-Unis
 * Accueillir l'&eacute;volution des besoins, m&ecirc;me &agrave; un stade avanc&eacute; du d&eacute;veloppement. Les processus agiles exploitent le changement pour donner un avantage concurrentiel du client.
 * Livrer fr&eacute;quemment des logiciels fonctionnels, de quelques semaines &agrave; quelques mois, avec une pr&eacute;f&eacute;rence pour les d&eacute;lais les plus courts.
 * Les personnes du m&eacute;tier et les d&eacute;veloppeurs doivent travailler ensemble quotidiennement tout au long du projet.
-
 * Construire des projets autour d'individus motiv&eacute;s. Donnez-leur l'environnement et le soutien dont ils ont besoin, et faites-leur confiance pour faire le travail.
 * La m&eacute;thode la plus efficiente et la plus efficace pour transmettre des informations &agrave; une &eacute;quipe de d&eacute;veloppement et au sein de celle-ci est la conversation en face &agrave; face.
 
 
 
 
-### 12 principes du manifeste Agile (suite)
+#### 12 principes du manifeste Agile (suite)
 * Un logiciel fonctionnel est la principale mesure du progr&egrave;s.
 * Les processus agiles favorisent le d&eacute;veloppement durable. Les sponsors, les d&eacute;veloppeurs et les utilisateurs devraient &ecirc;tre en mesure de toujours maintenir un rythme constant.
 * L'attention constante port&eacute;e &agrave; l'excellence technique et &agrave; une bonne conception renforce l'agilit&eacute;.

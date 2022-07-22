@@ -16,15 +16,15 @@ DO500 <!-- {_class="title-color"} -->
 
 ### Faire le Monitoring du build
 #### _Qu'est-ce que c'est ?_
-Le monitoring de build  permet de visualiser les processus de construction automatisés.
+Le monitoring de build  permet de visualiser les processus de construction automatis&eacute;s.
 
 
 
 ### Faire le Monitoring de build
 #### _Comment cela aide-t-il ?_
-* Fournit un retour d'information instantané aux équipes concernant l'état actuel de la construction.
-* Resserre la boucle de feedback en ayant des informations vitales nécessaires aux équipes disponibles à tout moment.
-* Motive les équipes à résoudre les problèmes ensemble
+* Fournit un retour d'information instantan&eacute; aux &eacute;quipes concernant l'&eacute;tat actuel de la construction.
+* Resserre la boucle de feedback en ayant des informations vitales n&eacute;cessaires aux &eacute;quipes disponibles &agrave; tout moment.
+* Motive les &eacute;quipes &agrave; r&eacute;soudre les probl&egrave;mes ensemble
 
 
 
@@ -33,16 +33,16 @@ Le monitoring de build  permet de visualiser les processus de construction autom
 
 
 ### Lab Exercice 6: Le Retour du monitoring
-Dans cet exercice, nous allons créer un monitoring de build pour afficher tous nos travaux
+Dans cet exercice, nous allons cr&eacute;er un monitoring de build pour afficher tous nos travaux
 dans un seul affichage visuel et aussi des vues de pipeline. Nous allons ensuite ajouter la cause des
-des échecs de construction pour chaque job au monitoring. Cela vous permettra de voir rapidement
-rapidement pourquoi un build particulier échoue et de le réparer plus rapidement.
+des &eacute;checs de construction pour chaque job au monitoring. Cela vous permettra de voir rapidement
+rapidement pourquoi un build particulier &eacute;choue et de le r&eacute;parer plus rapidement.
 
 
 
 ### Quels nouveaux outils et cadres de travail utiliserons-nous ?
-* **Build Monitor Plugin**: Fournit une vue très visible de l'état des travaux Jenkins sélectionnés.
-* **Build Fail Analyzer**: Analyse les causes des échecs de construction et les présente sur la page de construction.
+* **Build Monitor Plugin**: Fournit une vue tr&egrave;s visible de l'&eacute;tat des travaux Jenkins s&eacute;lectionn&eacute;s.
+* **Build Fail Analyzer**: Analyse les causes des &eacute;checs de construction et les pr&eacute;sente sur la page de construction.
 * **Pipeline Aggregator View**: Permet aux utilisateurs de visualiser l'historique de leurs
 
 
@@ -58,5 +58,5 @@ Lab Exercice 6: _Le Retour du monitoring_
 
 
 <!-- .slide: data-background-image="images/chef-background.png", class="white-style" -->
-### Les pratiques DevOps utilisées dans cette section :
+### Les pratiques DevOps utilis&eacute;es dans cette section :
 - [Visualization of Work](https://openpracticelibrary.com/practice/visualisation-of-work/)
