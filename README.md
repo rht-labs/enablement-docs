@@ -1,3 +1,10 @@
+## 🏁 No Longer Being Maintained - DO500 Old Content 🌇
+This project is being deprecated and will no longer receive updates or contributions. OpenShift has moved on to version 4.x and this project was used when enabling on Red Hat OpenShift 3.x
+
+For new TL500 content which uses Tekton, GitOps etc checkout the links here
+ - 🐙 [TL500 - Tech Exercise Source](https://github.com/rht-labs/tech-exercise)  🐙
+ - ⚓️ [TL500 - Deployed Exercises](http://rht-labs.com/tech-exercise)  ⚓️
+
 # Red Hat Open Innovation Labs Enablement Materials
 
 This repo will house all the slides and lab exercises for the Enablement. It will also be used to track issues, features and new additions to the Enablement.
